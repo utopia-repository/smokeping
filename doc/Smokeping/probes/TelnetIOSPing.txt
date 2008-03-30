@@ -216,4 +216,4 @@ NNOOTTEESS
 
 
 
-2.0.4                             2005-d1o0c-:1:2Smokeping::probes::TelnetIOSPing(3)
+2.0.5                             2005-d1o1c-:1:6Smokeping::probes::TelnetIOSPing(3)

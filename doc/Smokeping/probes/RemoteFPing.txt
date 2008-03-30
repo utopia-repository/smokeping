@@ -20,7 +20,6 @@ SSYYNNOOPPSSIISS
         rhost = my.pinger.host # mandatory
         ruser = foo
         step = 300
-        timeout = 1.5
 
         # [...]
 
@@ -129,24 +128,13 @@ VVAARRIIAABBLLEESS
        step
            Duration of the base interval that this probe should use, if dif-
            ferent from the one specified in the 'Database' section. Note that
-           the step in the RRD files is fixed when they are originally
-           generated, and if you change the step parameter afterwards, you'll
-           have to delete the old RRD files or somehow convert them. (This
-           variable is only applicable if the variable 'concurrentprobes' is
-           set in the 'General' section.)
+           the step in the RRD files is fixed when they are originally gener-
+           ated, and if you change the step parameter afterwards, you'll have
+           to delete the old RRD files or somehow convert them. (This variable
+           is only applicable if the variable 'concurrentprobes' is set in the
+           'General' section.)
 
            Example value: 300
-
-       timeout
-           The fping "-t" parameter, but in (possibly fractional) seconds
-           rather than milliseconds, for consistency with other Smokeping
-           probes. From _f_p_i_n_g(1):
-
-           Initial target timeout. In the default mode, this is  the  amount
-           of  time  that ping waits for a response to its first request.
-           Successive timeouts are multiplied by the backoff factor.
-
-           Example value: 1.5
 
 AAUUTTHHOORRSS
         Luis F Balbinot <hades@inf.ufrgs.br>
@@ -178,4 +166,4 @@ BBUUGGSS
 
 
 
-2.0.4                             2005-10d-o1c2::Smokeping::probes::RemoteFPing(3)
+2.0.5                             2005-11d-o1c6::Smokeping::probes::RemoteFPing(3)

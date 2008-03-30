@@ -15,6 +15,12 @@
 
 	<li><a href="#name">NAME</a></li>
 	<li><a href="#overview">OVERVIEW</a></li>
+	<li><a href="#2_0_4_to_2_0_5">2.0.4 to 2.0.5</a></li>
+	<ul>
+
+		<li><a href="#fping_smokeping__probes__fping"><a href="./Smokeping/probes/FPing.html">FPing</a></a></li>
+	</ul>
+
 	<li><a href="#2_0_1_to_2_0_2">2.0.1 to 2.0.2</a></li>
 	<ul>
 
@@ -61,6 +67,18 @@ to it from the previous release.</p>
 <p>An official list of changes with each release can be found in the CHANGES
 file in the Smokeping distribution. This document tries to complement
 that with upgrading instructions etc.</p>
+<p>
+</p>
+<hr />
+<h1><a name="N2_0_4_to_2_0_5">2.0.4 to 2.0.5</a></h1>
+<p>
+</p>
+<h2><a name="fping_smokeping__probes__fping"></a><a href="././Smokeping/probes/FPing.html">FPing</a></h2>
+<p>The 'timeout' variable has been removed.
+It was used to give the <code>fping</code> command the <code>-t</code> parameter,
+but as this parameter is only effective in <code>fping</code>'s <em>default</em> mode,
+while Smokeping uses the <em>counting</em> mode (<code>-c</code>), it never actually
+did anything.</p>
 <p>
 </p>
 <hr />

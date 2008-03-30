@@ -129,7 +129,7 @@
 .\" ========================================================================
 .\"
 .IX Title "doc::Smokeping::probes::FPing6 3"
-.TH doc::Smokeping::probes::FPing6 3 "2005-10-12" "2.0.4" "SmokePing"
+.TH doc::Smokeping::probes::FPing6 3 "2005-11-16" "2.0.5" "SmokePing"
 .SH "NAME"
 Smokeping::probes::FPing6 \- FPing6 Probe for SmokePing
 .SH "SYNOPSIS"
@@ -142,7 +142,7 @@ Smokeping::probes::FPing6 \- FPing6 Probe for SmokePing
 \& +FPing6
 .Ve
 .PP
-.Vb 8
+.Vb 7
 \& binary = /usr/bin/fping6 # mandatory
 \& hostinterval = 1.5
 \& mininterval = 0.001
@@ -150,7 +150,6 @@ Smokeping::probes::FPing6 \- FPing6 Probe for SmokePing
 \& packetsize = 5000
 \& pings = 20
 \& step = 300
-\& timeout = 1.5
 .Ve
 .PP
 .Vb 1
@@ -245,15 +244,6 @@ files or somehow convert them. (This variable is only applicable if
 the variable 'concurrentprobes' is set in the 'General' section.)
 .Sp
 Example value: 300
-.IP "timeout" 4
-.IX Item "timeout"
-The fping \*(L"\-t\*(R" parameter, but in (possibly fractional) seconds rather than
-milliseconds, for consistency with other Smokeping probes. From \fIfping\fR\|(1):
-.Sp
-Initial target timeout. In the default mode, this is  the  amount  of  time  that
-ping waits for a response to its first request.  Successive timeouts are multiplied by the backoff factor.
-.Sp
-Example value: 1.5
 .SH "AUTHORS"
 .IX Header "AUTHORS"
 Tobias Oetiker <tobi@oetiker.ch>

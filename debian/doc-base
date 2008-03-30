@@ -1,4 +1,5 @@
 Document: smokeping
+Author: Tobi Oetiker and Niko Tyni
 Title: smokeping
 Abstract:  SmokePing is a latency logging and graphing system. It consists of
  a daemon process which organizes the latency measurements and a CGI
@@ -10,4 +11,4 @@ Index: /usr/share/doc/smokeping/html/smokeping.html
 Files: /usr/share/doc/smokeping/html/*
 
 Format: text
-Files: /usr/share/doc/smokeping/*.txt*
+Files: /usr/share/doc/smokeping/txt/*.txt*

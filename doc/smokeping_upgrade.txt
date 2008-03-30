@@ -29,6 +29,15 @@ OOVVEERRVVIIEEWW
        document tries to complement that with upgrading instruc-
        tions etc.
 
+22..00..44 ttoo 22..00..55
+       FFPPiinngg
+
+       The 'timeout' variable has been removed.  It was used to
+       give the "fping" command the "-t" parameter, but as this
+       parameter is only effective in "fping"'s _d_e_f_a_u_l_t mode,
+       while Smokeping uses the _c_o_u_n_t_i_n_g mode ("-c"), it never
+       actually did anything.
+
 22..00..11 ttoo 22..00..22
        EEddggee--ttrriiggggeerreedd aalleerrttss
 
@@ -186,11 +195,11 @@ OOVVEERRVVIIEEWW
            curl exit code.  The default timeout of this probe has
            been raised to 10 seconds.
 
-           The command line is now executed without an interven-
-           ing /bin/sh, and so quotes are not needed anymore
-           around the User-Agent string (the "agent" parameter).
-           Smokeping will complain if it notices quotes around
-           the string.
+           The command line is now executed without an
+           intervening /bin/sh, and so quotes are not needed any-
+           more around the User-Agent string (the "agent" parame-
+           ter).  Smokeping will complain if it notices quotes
+           around the string.
 
            Any extra arguments for "curl" can now be specified in
            the "extraargs" variable.
@@ -308,4 +317,4 @@ SSEEEE AALLSSOO
 
 
 
-2.0.4                       2005-10-03       SMOKEPING_UPGRADE(7)
+2.0.5                       2005-11-14       SMOKEPING_UPGRADE(7)

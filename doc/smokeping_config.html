@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>smokeping_config</title>
-<link rev="made" href="mailto:root@localhost" />
+<link rev="made" href="mailto:dws@ee.ethz.ch" />
 </head>
 
 <body style="background-color: white">
@@ -48,7 +48,7 @@ Its location must be hardcoded in the smokeping script and smokeping.cgi.</p>
 <p>The contents of this manual is generated directly from the configuration
 file parser.</p>
 <p>The Parser for the Configuration file is written using David Schweikers
-Config::Grammar module. Read all about it in <a href="././Config/Grammar.html">the Config::Grammar manpage</a>.</p>
+Config::Grammar module. Read all about it in <a href="./Config/Grammar.html">the Config::Grammar manpage</a>.</p>
 <p>The Configuration file has a tree-like structure with section headings at
 various levels. It also contains variable assignments and tables.</p>
 <p>Warning: this manual is rather long. See <a href="././smokeping_examples.html">the smokeping_examples manpage</a>
@@ -2797,8 +2797,6 @@ Default value: mininterval = 0.01
 
 </dt><dt><strong><strong>step</strong></strong><br />
 
-</dt><dt><strong><strong>timeout</strong></strong><br />
-
 </dt></dl>
 <p>Syntax changes for subsection <strong>/[-_0-9a-zA-Z]+/</strong></p>
 <p>The following new variables are valid:</p>
@@ -2843,12 +2841,6 @@ This variable <em>inherits</em> its value from the parent section if nothing is 
 
 <p></p>
 </dd><dt><strong><strong>step</strong></strong><br />
-
-</dt><dd>
-This variable <em>inherits</em> its value from the parent section if nothing is specified here.
-
-<p></p>
-</dd><dt><strong><strong>timeout</strong></strong><br />
 
 </dt><dd>
 This variable <em>inherits</em> its value from the parent section if nothing is specified here.
@@ -2879,8 +2871,6 @@ Default value: mininterval = 0.01
 
 </dt><dt><strong><strong>step</strong></strong><br />
 
-</dt><dt><strong><strong>timeout</strong></strong><br />
-
 </dt></dl>
 <p>Syntax changes for subsection <strong>/[-_0-9a-zA-Z]+/</strong></p>
 <p>The following new variables are valid:</p>
@@ -2925,12 +2915,6 @@ This variable <em>inherits</em> its value from the parent section if nothing is 
 
 <p></p>
 </dd><dt><strong><strong>step</strong></strong><br />
-
-</dt><dd>
-This variable <em>inherits</em> its value from the parent section if nothing is specified here.
-
-<p></p>
-</dd><dt><strong><strong>timeout</strong></strong><br />
 
 </dt><dd>
 This variable <em>inherits</em> its value from the parent section if nothing is specified here.
@@ -3140,6 +3124,15 @@ Default value: forks = 5
 <pre>
  (This variable can be overridden target-specifically in the Targets section.)</pre>
 
+</dd><dt><strong><a name="item_scope"><strong>scope</strong></a></strong><br />
+
+</dt><dd>
+<pre>
+ (This variable can be overridden target-specifically in the Targets section.)</pre>
+
+</dd><dd>
+<p>Default value: scope = sub</p>
+
 </dd><dt><strong><a name="item_start_tls"><strong>start_tls</strong></a></strong><br />
 
 </dt><dd>
@@ -3241,6 +3234,15 @@ This variable <em>inherits</em> its value from the parent section if nothing is 
 
 </dt><dd>
 This variable <em>inherits</em> its value from the parent section if nothing is specified here.
+
+<p></p>
+</dd><dt><strong><strong>scope</strong></strong><br />
+
+</dt><dd>
+This variable <em>inherits</em> its value from the parent section if nothing is specified here.
+
+</dd><dd>
+<p>Default value: scope = sub</p>
 
 <p></p>
 </dd><dt><strong><strong>start_tls</strong></strong><br />
@@ -3464,8 +3466,6 @@ Default value: mininterval = 0.01
 
 </dt><dt><strong><strong>step</strong></strong><br />
 
-</dt><dt><strong><strong>timeout</strong></strong><br />
-
 </dt></dl>
 <p>Syntax changes for subsection <strong>/[-_0-9a-zA-Z]+/</strong></p>
 <p>The following new variables are valid:</p>
@@ -3528,12 +3528,6 @@ This variable <em>inherits</em> its value from the parent section if nothing is 
 
 <p></p>
 </dd><dt><strong><strong>step</strong></strong><br />
-
-</dt><dd>
-This variable <em>inherits</em> its value from the parent section if nothing is specified here.
-
-<p></p>
-</dd><dt><strong><strong>timeout</strong></strong><br />
 
 </dt><dd>
 This variable <em>inherits</em> its value from the parent section if nothing is specified here.
@@ -3886,11 +3880,11 @@ Currently the pattern types <strong>rtt</strong> and <strong>loss</strong> and <
 
 </dd><dd>
 <p>Matchers are plugin modules that extend the alert conditions.  Known
-matchers are <a href="././Smokeping/matchers/Avgratio.html">Avgratio</a>, <a href="././Smokeping/matchers/Median.html">Median</a>.</p>
+matchers are <a href="./Smokeping/matchers/Avgratio.html">Avgratio</a>, <a href="./Smokeping/matchers/Median.html">Median</a>.</p>
 
 </dd><dd>
 <p>See the documentation of the corresponding matcher module
-(eg. <a href="././Smokeping/matchers/Avgratio.html">the Smokeping::matchers::Avgratio manpage</a>) for instructions on
+(eg. <a href="./Smokeping/matchers/Avgratio.html">the Smokeping::matchers::Avgratio manpage</a>) for instructions on
 configuring it.</p>
 
 <p></p>
@@ -5152,6 +5146,8 @@ The following new variables are valid:
 
 </dt><dt><strong><strong>port</strong></strong><br />
 
+</dt><dt><strong><strong>scope</strong></strong><br />
+
 </dt><dt><strong><strong>start_tls</strong></strong><br />
 
 </dt><dt><strong><strong>timeout</strong></strong><br />
@@ -5205,6 +5201,12 @@ This variable <em>inherits</em> its value from the parent section if nothing is 
 
 <p></p>
 </dd><dt><strong><strong>port</strong></strong><br />
+
+</dt><dd>
+This variable <em>inherits</em> its value from the parent section if nothing is specified here.
+
+<p></p>
+</dd><dt><strong><strong>scope</strong></strong><br />
 
 </dt><dd>
 This variable <em>inherits</em> its value from the parent section if nothing is specified here.

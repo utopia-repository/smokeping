@@ -18,7 +18,6 @@ Smokeping::probes::RemoteFPing - Remote FPing Probe for SmokePing
  rhost = my.pinger.host # mandatory
  ruser = foo
  step = 300
- timeout = 1.5
 
  # [...]
 
@@ -143,16 +142,6 @@ files or somehow convert them. (This variable is only applicable if
 the variable 'concurrentprobes' is set in the 'General' section.)
 
 Example value: 300
-
-=item timeout
-
-The fping "-t" parameter, but in (possibly fractional) seconds rather than
-milliseconds, for consistency with other Smokeping probes. From fping(1):
-
-Initial target timeout. In the default mode, this is  the  amount  of  time  that
-ping waits for a response to its first request.  Successive timeouts are multiplied by the backoff factor.
-
-Example value: 1.5
 
 =back
 

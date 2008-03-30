@@ -177,4 +177,4 @@ SSEEEE AALLSSOO
 
 
 
-2.0.4                             2005-1d0o-c1:2:Smokeping::probes::EchoPingHttp(3)
+2.0.5                             2005-1d1o-c1:6:Smokeping::probes::EchoPingHttp(3)

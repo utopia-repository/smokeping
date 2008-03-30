@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>smokeping_examples</title>
-<link rev="made" href="mailto:root@localhost" />
+<link rev="made" href="mailto:dws@ee.ethz.ch" />
 </head>
 
 <body style="background-color: white">
@@ -50,7 +50,7 @@ non-functional.</p>
 <a href="././smokeping_config.html">the smokeping_config manpage</a> and in the documentation of the
 corresponding probe, if applicable.</p>
 <p>This manual is automatically generated from the Smokeping source code,
-specifically the <a href="././Smokeping/Examples.html">Smokeping::Examples</a> module.</p>
+specifically the <a href="./Smokeping/Examples.html">Smokeping::Examples</a> module.</p>
 <p>
 </p>
 <hr />
@@ -542,7 +542,7 @@ URL.
  
  + FPing
  
- binary = /usr/bin/fping</pre>
+ binary = /usr/sepp/bin/fping</pre>
 
 </dd><dt><strong>Probe explanation</strong><br />
 
@@ -559,25 +559,10 @@ It is included in the examples as well for the sake of completeness.
  
  probe = FPing
  
- ## You have to edit and uncomment all what you want below this.
- # Please, refer to smokeping_config man page for more info
- # The given adresses aren't real to avoid DoS.
- 
  menu = Top
  title = Network Latency Grapher
- remark = Welcome to the SmokePing website of 'A poorly \
-        mantained site running Debian.'
- 
- + Local
- 
- menu = Local
- title = Local Network
- 
- ++ LocalMachine
- 
- menu = Local Machine
- title = This own machine
- host = localhost
+ remark = Welcome to the SmokePing website of xxx Company. \
+          Here you will learn all about the latency of our network.
  
  + World
  
@@ -595,64 +580,64 @@ It is included in the examples as well for the sake of completeness.
  title =Swiss Connectivity
  alerts = bigloss,someloss,startloss
  
- # ++++ SBB
- #
- # menu = SBB/CFF/FFS
- # title =Swiss Federal Railways Webserver
- # host = www.railway-server.abc
+ ++++ SBB
+ 
+ menu = SBB/CFF/FFS
+ title =Swiss Federal Railways Webserver
+ host = www.railway-server.abc
  
  
- # ++++ Tiscali
- #
- # menu = Tiscali Web
- # title = Tiscali Webserver www.tiscali.abc
- # host = www.tiscali-web.abc
+ ++++ Tiscali
+ 
+ menu = Tiscali Web
+ title = Tiscali Webserver www.tiscali.abc
+ host = www.tiscali-web.abc
  
  +++ UK
  
  menu = United Kingdom
  title = United Kingdom
  
- # ++++ UCL
- #
- # menu = UCL
- # title = UCL
- # host = www.ucl-abc.acc.uk
+ ++++ UCL
+ 
+ menu = UCL
+ title = UCL
+ host = www.ucl-abc.acc.uk
  
  ++ USA
  
  menu = North America
  title =North American Connectivity
  
- # +++ MIT
+ +++ MIT
  
- # menu = MIT
- # title = Massachusetts Institute of Technology Webserver
- # host = www.gurkoman.ybc
+ menu = MIT
+ title = Massachusetts Institute of Technology Webserver
+ host = www.gurkoman.ybc
  
- # +++ IU
- # 
- # menu = IU
- # title = Indiana University
- # host = www.iu.ali
+ +++ IU
  
- # +++ UCB
- #
- # menu = U. C. Berkeley
- # title = U. C. Berkeley Webserver
- # host = www.berkly.udi
+ menu = IU
+ title = Indiana University
+ host = www.iu.ali
  
- # +++ UCSD
- #
- # menu = U. C. San Diego
- # title = U. C. San Diego Webserver
- # host = www.ucsdddar.art
+ +++ UCB
  
- # +++ Sun
- #
- # menu = Sun Microsystems
- # title = Sun Microsystems Webserver
- # host = www.sun-web.com</pre>
+ menu = U. C. Berkeley
+ title = U. C. Berkeley Webserver
+ host = www.berkly.udi
+ 
+ +++ UCSD
+ 
+ menu = U. C. San Diego
+ title = U. C. San Diego Webserver
+ host = www.ucsdddar.art
+ 
+ +++ Sun
+ 
+ menu = Sun Microsystems
+ title = Sun Microsystems Webserver
+ host = www.sun-web.com</pre>
 
 </dd><dt><strong>Target explanation</strong><br />
 

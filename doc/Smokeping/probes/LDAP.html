@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>Smokeping/probes/LDAP</title>
-<link rev="made" href="mailto:root@localhost" />
+<link rev="made" href="mailto:dws@ee.ethz.ch" />
 </head>
 
 <body style="background-color: white">
@@ -56,6 +56,7 @@
  password = mypass
  pings = 5
  port = 389
+ scope = one
  start_tls = 1
  timeout = 10
  version = 3</pre>
@@ -79,6 +80,7 @@
  password = mypass
  pings = 5
  port = 389
+ scope = one
  start_tls = 1
  timeout = 10
  version = 3</pre>
@@ -243,6 +245,18 @@ TCP port of the LDAP server
 
 </dd><dd>
 <p>Example value: 389</p>
+
+<p></p>
+</dd><dt><strong><a name="item_scope">scope</a></strong><br />
+
+</dt><dd>
+The scope of the query. Can be either 'base', 'one' or 'sub'. See the Net::LDAP documentation for details.
+
+</dd><dd>
+<p>Example value: one</p>
+
+</dd><dd>
+<p>Default value: sub</p>
 
 <p></p>
 </dd><dt><strong><a name="item_start_tls">start_tls</a></strong><br />

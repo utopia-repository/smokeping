@@ -129,7 +129,7 @@
 .\" ========================================================================
 .\"
 .IX Title "SMOKEPING_UPGRADE 7"
-.TH SMOKEPING_UPGRADE 7 "2005-10-03" "2.0.4" "SmokePing"
+.TH SMOKEPING_UPGRADE 7 "2005-11-14" "2.0.5" "SmokePing"
 .SH "NAME"
 smokeping_upgrade \- Notes on upgrading Smokeping
 .SH "OVERVIEW"
@@ -152,6 +152,15 @@ to it from the previous release.
 An official list of changes with each release can be found in the \s-1CHANGES\s0
 file in the Smokeping distribution. This document tries to complement
 that with upgrading instructions etc.
+.SH "2.0.4 to 2.0.5"
+.IX Header "2.0.4 to 2.0.5"
+.Sh "FPing"
+.IX Subsection "FPing"
+The 'timeout' variable has been removed.
+It was used to give the \f(CW\*(C`fping\*(C'\fR command the \f(CW\*(C`\-t\*(C'\fR parameter,
+but as this parameter is only effective in \f(CW\*(C`fping\*(C'\fR's \fIdefault\fR mode,
+while Smokeping uses the \fIcounting\fR mode (\f(CW\*(C`\-c\*(C'\fR), it never actually
+did anything.
 .SH "2.0.1 to 2.0.2"
 .IX Header "2.0.1 to 2.0.2"
 .Sh "Edge-triggered alerts"

@@ -1,3 +1,20 @@
+smokeping (2.0.5-1) unstable; urgency=low
+
+  [ Niko Tyni ]
+  * New upstream version
+    + use the 'cgiurl' variable for all CGI self-refering links
+      (Closes: #339019)
+  * debian/doc-base:
+    + add document authors
+    + fix the text document directory
+  * debian/postrm:
+    + use 'deluser --system' to delete the user at purge time.
+
+  [ Jose Carlos Garcia Sogo ]
+  * Merged smokeping--*--2.0.5 branches from Niko's repo.
+
+ -- Jose Carlos Garcia Sogo <jsogo@debian.org>  Wed, 16 Nov 2005 23:35:23 +0100
+
 smokeping (2.0.4-1) unstable; urgency=low
 
   [ Niko Tyni ]

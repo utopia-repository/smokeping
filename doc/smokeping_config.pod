@@ -2243,8 +2243,6 @@ Default value: mininterval = 0.01
 
 =item B<step>
 
-=item B<timeout>
-
 =back
 
 Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
@@ -2282,10 +2280,6 @@ This variable I<inherits> its value from the parent section if nothing is specif
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<step>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<timeout>
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -2317,8 +2311,6 @@ Default value: mininterval = 0.01
 
 =item B<step>
 
-=item B<timeout>
-
 =back
 
 Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
@@ -2356,10 +2348,6 @@ This variable I<inherits> its value from the parent section if nothing is specif
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<step>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<timeout>
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -2525,6 +2513,12 @@ Default value: mininterval = 1
 
  (This variable can be overridden target-specifically in the Targets section.)
 
+=item B<scope>
+
+ (This variable can be overridden target-specifically in the Targets section.)
+
+Default value: scope = sub
+
 =item B<start_tls>
 
  (This variable can be overridden target-specifically in the Targets section.)
@@ -2600,6 +2594,12 @@ This variable I<inherits> its value from the parent section if nothing is specif
 =item B<port>
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<scope>
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+Default value: scope = sub
 
 =item B<start_tls>
 
@@ -2779,8 +2779,6 @@ Default value: mininterval = 0.01
 
 =item B<step>
 
-=item B<timeout>
-
 =back
 
 Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
@@ -2830,10 +2828,6 @@ This variable I<inherits> its value from the parent section if nothing is specif
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<step>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<timeout>
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -4355,6 +4349,8 @@ The following new variables are valid:
 
 =item B<port>
 
+=item B<scope>
+
 =item B<start_tls>
 
 =item B<timeout>
@@ -4400,6 +4396,10 @@ This variable I<inherits> its value from the parent section if nothing is specif
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<port>
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<scope>
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 

@@ -1,4 +1,4 @@
-SMOKEPING.DIST(1)                  SmokePing                 SMOKEPING.DIST(1)
+SMOKEPING.DIST(1)           SmokePing           SMOKEPING.DIST(1)
 
 
 
@@ -49,22 +49,25 @@ SSYYNNOOPPSSIISS
                        With --check : check the syntax of the generated examples.
 
 DDEESSCCRRIIPPTTIIOONN
-       The ssmmookkeeppiinngg tool is the commandline part of the SmokePing system. Its
-       main function is to run as a daemon and send Pings to all the Targets
-       you have specified in the Config file. When you call ssmmookkeeppiinngg without
-       arguments it will start as a daemon and do its work.
+       The ssmmookkeeppiinngg tool is the commandline part of the
+       SmokePing system. Its main function is to run as a daemon
+       and send Pings to all the Targets you have specified in
+       the Config file. When you call ssmmookkeeppiinngg without arguments
+       it will start as a daemon and do its work.
 
-       If called with an argument, then further functions can be activated, as
-       seen in the Synopsis above. The ----eemmaaiill function is explained in the
-       documentation on the config file.
+       If called with an argument, then further functions can be
+       activated, as seen in the Synopsis above. The ----eemmaaiill
+       function is explained in the documentation on the config
+       file.
 
-       The ----ffiilltteerr option allows you to run the daemon on a big config file,
-       but have the config file filtered and only measure the entries that
-       pass the filter. This is useful for remote measurement. Run Smokeping
-       with two exclusive filters in two locations and rsync the rrds back to
-       the webserver host where you run the cgi. Filters act on the section
-       names in the config file. Multiple section names are concatenated with
-       // like path names:
+       The ----ffiilltteerr option allows you to run the daemon on a big
+       config file, but have the config file filtered and only
+       measure the entries that pass the filter. This is useful
+       for remote measurement. Run Smokeping with two exclusive
+       filters in two locations and rsync the rrds back to the
+       webserver host where you run the cgi. Filters act on the
+       section names in the config file. Multiple section names
+       are concatenated with // like path names:
 
         *** targets ***
         + A
@@ -85,10 +88,11 @@ DDEESSCCRRIIPPTTIIOONN
 
         --filter=/A
 
-       Filters follow regular expression syntax. The are always anchored at
-       the tip of the string.  by adding a !! to the front of the filter string
-       you negate it. Matching entries will be excluded from monitoring.  Mul-
-       tiple ----ffiilltteerr arguments can be used to assemble complex filters:
+       Filters follow regular expression syntax. The are always
+       anchored at the tip of the string.  by adding a !! to the
+       front of the filter string you negate it. Matching entries
+       will be excluded from monitoring.  Multiple ----ffiilltteerr argu-
+       ments can be used to assemble complex filters:
 
          --filter=/A --filter=/B
 
@@ -98,27 +102,27 @@ DDEESSCCRRIIPPTTIIOONN
 
        would include all but /B/C.
 
-       The ----mmaakkeeppoodd does get used internally to produce the documentation on
-       the SmokePing configuration file.
+       The ----mmaakkeeppoodd does get used internally to produce the doc-
+       umentation on the SmokePing configuration file.
 
-       Please refer to the installation document for detailed setup instruc-
-       tions.
+       Please refer to the installation document for detailed
+       setup instructions.
 
 SSEETTUUPP
-       When installing SmokePing, this file has to be adjusted to fit your
-       local system. Three paths have to be entered.
+       When installing SmokePing, this file has to be adjusted to
+       fit your local system. Three paths have to be entered.
 
        One pointing to your rrrrddttooooll installation
 
         use lib qw(/usr/pack/rrdtool-1.0.33-to/lib/perl);
 
-       One pointing to the place where you have installed the SmokePing
-       libraries
+       One pointing to the place where you have installed the
+       SmokePing libraries
 
         use lib qw(/home/oetiker/public_html/smokeping/lib);
 
-       The third path is the argument to the Smokeping::main command. It
-       points to the SmokePing configuration file.
+       The third path is the argument to the Smokeping::main com-
+       mand. It points to the SmokePing configuration file.
 
         use Smokeping;
         Smokeping::main("/home/oetiker/.smokeping/config");
@@ -127,23 +131,26 @@ CCOOPPYYRRIIGGHHTT
        Copyright (c) 2002 by Tobias Oetiker. All right reserved.
 
 LLIICCEENNSSEE
-       This program is free software; you can redistribute it and/or modify it
-       under the terms of the GNU General Public License as published by the
-       Free Software Foundation; either version 2 of the License, or (at your
-       option) any later version.
+       This program is free software; you can redistribute it
+       and/or modify it under the terms of the GNU General Public
+       License as published by the Free Software Foundation;
+       either version 2 of the License, or (at your option) any
+       later version.
 
-       This program is distributed in the hope that it will be useful, but
-       WITHOUT ANY WARRANTY; without even the implied warranty of MER-
-       CHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General
-       Public License for more details.
+       This program is distributed in the hope that it will be
+       useful, but WITHOUT ANY WARRANTY; without even the implied
+       warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+       PURPOSE.  See the GNU General Public License for more
+       details.
 
-       You should have received a copy of the GNU General Public License along
-       with this program; if not, write to the Free Software Foundation, Inc.,
-       675 Mass Ave, Cambridge, MA 02139, USA.
+       You should have received a copy of the GNU General Public
+       License along with this program; if not, write to the Free
+       Software Foundation, Inc., 675 Mass Ave, Cambridge, MA
+       02139, USA.
 
 AAUUTTHHOORR
        Tobias Oetiker <tobi@oetiker.ch>
 
 
 
-2.0.4                             2005-10-12                 SMOKEPING.DIST(1)
+2.0.5                       2005-11-14          SMOKEPING.DIST(1)
