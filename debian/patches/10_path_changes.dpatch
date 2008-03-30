@@ -2,7 +2,7 @@
 ## 10_path_changes.dpatch by Jose Carlos Garcia Sogo <jsogo@debian.org>
 ##
 ## All lines beginning with `## DP:' are a description of the patch.
-## DP: No description.
+## DP: Debian-specific pathnames.
 
 @DPATCH@
 diff -urNad smokeping-2.2.4~/Makefile smokeping-2.2.4/Makefile

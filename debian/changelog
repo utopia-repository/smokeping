@@ -1,3 +1,14 @@
+smokeping (2.2.7-2) unstable; urgency=low
+
+  * debian/patches/30_jszoom.dpatch: fix a javascript error
+    on pages without a zoom widget. (Closes: #457071)
+  * Change my maintainer email address.
+  * Upgrade to Standards-Version 3.7.3. No changes needed.
+  * Add two short patch descriptions in debian/patches.
+  * Don't install an empty /usr/bin directory.
+
+ -- Niko Tyni <ntyni@debian.org>  Sun, 23 Dec 2007 20:57:49 +0200
+
 smokeping (2.2.7-1) unstable; urgency=low
 
   * New upstream release

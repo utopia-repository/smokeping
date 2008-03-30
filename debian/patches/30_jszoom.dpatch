@@ -1,0 +1,29 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 30_jszoom.dpatch by Niko Tyni <ntyni@debian.org>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: Fix a javascript error on pages without a zoom widget. (#457071)
+
+@DPATCH@
+diff -urNad smokeping-git~/htdocs/cropper/smokeping-zoom.js smokeping-git/htdocs/cropper/smokeping-zoom.js
+--- smokeping-git~/htdocs/cropper/smokeping-zoom.js	2007-09-17 23:46:04.000000000 +0300
++++ smokeping-git/htdocs/cropper/smokeping-zoom.js	2007-12-23 20:46:46.000000000 +0200
+@@ -79,8 +79,9 @@
+            window, 
+            'load', 
+            function() { 
+-               myCropper = new Cropper.Img( 
+-                               'zoom', 
++               if ( $('zoom') != null ){
++                 myCropper = new Cropper.Img(
++                                'zoom',
+                                         { 
+                                                 minHeight: $('zoom').getDimensions().height,
+                                                 maxHeight: $('zoom').getDimensions().height,
+@@ -88,5 +89,6 @@
+                                         } 
+                                 ) 
+                    }
++                }
+            );
+ 

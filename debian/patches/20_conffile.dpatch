@@ -2,7 +2,7 @@
 ## 20_conffile.dpatch by Jose Carlos Garcia Sogo <jsogo@debian.org>
 ##
 ## All lines beginning with `## DP:' are a description of the patch.
-## DP: No description.
+## DP: Default Debian configuration file
 
 @DPATCH@
 diff -urNad smokeping-2.2.4~/etc/config.dist smokeping-2.2.4/etc/config.dist
