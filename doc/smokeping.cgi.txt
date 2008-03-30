@@ -1,4 +1,4 @@
-SMOKEPING.CGI(1)            SmokePing            SMOKEPING.CGI(1)
+SMOKEPING.CGI.DIST(1)       SmokePing       SMOKEPING.CGI.DIST(1)
 
 
 
@@ -43,7 +43,7 @@ SSEETTUUPP
 
         Smokeping::cgi("/home/oetiker/.smokeping/config");
 
-       The third path is the argument to the Smokeping::main com-
+       The third path is the argument to the Smokeping::cgi com-
        mand. It points to the SmokePing configuration file.
 
 CCOOPPYYRRIIGGHHTT
@@ -68,8 +68,8 @@ LLIICCEENNSSEE
        02139, USA.
 
 AAUUTTHHOORR
-       Tobias Oetiker <tobi\@oetiker.ch>
+       Tobias Oetiker <tobi@oetiker.ch>
 
 
 
-1.42                        2002-02-26           SMOKEPING.CGI(1)
+2.0.2                       2005-09-18      SMOKEPING.CGI.DIST(1)

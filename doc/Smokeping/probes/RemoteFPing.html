@@ -1,0 +1,264 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Smokeping/probes/RemoteFPing</title>
+<link rev="made" href="mailto:dws@ee.ethz.ch" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+<!--
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#variables">VARIABLES</a></li>
+	<li><a href="#authors">AUTHORS</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#bugs">BUGS</a></li>
+</ul>
+-->
+<!-- INDEX END -->
+
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Smokeping::probes::RemoteFPing - Remote FPing Probe for SmokePing</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ *** Probes ***</pre>
+<pre>
+ +RemoteFPing</pre>
+<pre>
+ binary = /usr/bin/ssh # mandatory
+ hostinterval = 1.5
+ mininterval = 0.001
+ offset = 50%
+ packetsize = 5000
+ pings = 20
+ rbinary = /usr/bin/fping # mandatory
+ rhost = my.pinger.host # mandatory
+ ruser = foo
+ step = 300
+ timeout = 1.5</pre>
+<pre>
+ # [...]</pre>
+<pre>
+ *** Targets ***</pre>
+<pre>
+ probe = RemoteFPing # if this should be the default probe</pre>
+<pre>
+ # [...]</pre>
+<pre>
+ + mytarget
+ # probe = RemoteFPing # if the default probe is something else
+ host = my.host</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>Integrates the remote execution of FPing via ssh/rsh into smokeping.
+The variable <strong>binary</strong> must point to your copy of the ssh/rsh program.
+The variable <strong>rbinary</strong> must point to your copy of the fping program 
+at the remote end.</p>
+<p>
+</p>
+<hr />
+<h1><a name="variables">VARIABLES</a></h1>
+<p>Supported probe-specific variables:</p>
+<dl>
+<dt><strong><a name="item_binary">binary</a></strong><br />
+
+</dt><dd>
+This variable specifies the path of the remote shell program (usually ssh,
+rsh or remsh). Any other script or binary that can be called as
+
+</dd><dd>
+<p>binary [ -l ruser ] rhost rbinary</p>
+
+</dd><dd>
+<p>may be used.</p>
+
+</dd><dd>
+<p>Example value: /usr/bin/ssh</p>
+
+</dd><dd>
+<p>This setting is mandatory.</p>
+
+<p></p>
+</dd><dt><strong><a name="item_hostinterval">hostinterval</a></strong><br />
+
+</dt><dd>
+The fping ``-p'' parameter, but in (possibly fractional) seconds rather than
+milliseconds, for consistency with other Smokeping probes. From fping(1):
+
+</dd><dd>
+<p>This parameter sets the time that fping  waits between successive packets
+to an individual target.</p>
+
+</dd><dd>
+<p>Example value: 1.5</p>
+
+<p></p>
+</dd><dt><strong><a name="item_mininterval">mininterval</a></strong><br />
+
+</dt><dd>
+The fping ``-i'' parameter, but in (probably fractional) seconds rather than
+milliseconds, for consistency with other Smokeping probes. From fping(1):
+
+</dd><dd>
+<p>The minimum amount of time between sending a ping packet to any target.</p>
+
+</dd><dd>
+<p>Example value: 0.001</p>
+
+</dd><dd>
+<p>Default value: 0.01</p>
+
+<p></p>
+</dd><dt><strong><a name="item_offset">offset</a></strong><br />
+
+</dt><dd>
+If you run many probes concurrently you may want to prevent them from
+hitting your network all at the same time. Using the probe-specific
+offset parameter you can change the point in time when each probe will
+be run. Offset is specified in % of total interval, or alternatively as
+'random', and the offset from the 'General' section is used if nothing
+is specified here. Note that this does NOT influence the rrds itself,
+it is just a matter of when data acqusition is initiated.
+(This variable is only applicable if the variable 'concurrentprobes' is set
+in the 'General' section.)
+
+</dd><dd>
+<p>Example value: 50%</p>
+
+<p></p>
+</dd><dt><strong><a name="item_packetsize">packetsize</a></strong><br />
+
+</dt><dd>
+The ping packet size (in the range of 12-64000 bytes).
+
+</dd><dd>
+<p>Example value: 5000</p>
+
+<p></p>
+</dd><dt><strong><a name="item_pings">pings</a></strong><br />
+
+</dt><dd>
+How many pings should be sent to each target, if different from the global
+value specified in the Database section. Note that the number of pings in
+the RRD files is fixed when they are originally generated, and if you
+change this parameter afterwards, you'll have to delete the old RRD
+files or somehow convert them.
+
+</dd><dd>
+<p>Example value: 20</p>
+
+<p></p>
+</dd><dt><strong><a name="item_rbinary">rbinary</a></strong><br />
+
+</dt><dd>
+The location of your fping binary.
+
+</dd><dd>
+<p>Example value: /usr/bin/fping</p>
+
+</dd><dd>
+<p>This setting is mandatory.</p>
+
+<p></p>
+</dd><dt><strong><a name="item_rhost">rhost</a></strong><br />
+
+</dt><dd>
+The <strong>rhost</strong> option specifies the remote device from where fping will
+be launched.
+
+</dd><dd>
+<p>Example value: my.pinger.host</p>
+
+</dd><dd>
+<p>This setting is mandatory.</p>
+
+<p></p>
+</dd><dt><strong><a name="item_ruser">ruser</a></strong><br />
+
+</dt><dd>
+The (optional) <strong>ruser</strong> option allows you to specify the remote user,
+if different from the one running the smokeping daemon.
+
+</dd><dd>
+<p>Example value: foo</p>
+
+<p></p>
+</dd><dt><strong><a name="item_step">step</a></strong><br />
+
+</dt><dd>
+Duration of the base interval that this probe should use, if different
+from the one specified in the 'Database' section. Note that the step in
+the RRD files is fixed when they are originally generated, and if you
+change the step parameter afterwards, you'll have to delete the old RRD
+files or somehow convert them. (This variable is only applicable if
+the variable 'concurrentprobes' is set in the 'General' section.)
+
+</dd><dd>
+<p>Example value: 300</p>
+
+<p></p>
+</dd><dt><strong><a name="item_timeout">timeout</a></strong><br />
+
+</dt><dd>
+The fping ``-t'' parameter, but in (possibly fractional) seconds rather than
+milliseconds, for consistency with other Smokeping probes. From fping(1):
+
+</dd><dd>
+<p>Initial target timeout. In the default mode, this is  the  amount  of  time  that
+ping waits for a response to its first request.  Successive timeouts are multiplied by the backoff factor.</p>
+
+</dd><dd>
+<p>Example value: 1.5</p>
+
+<p></p></dd></dl>
+<p>
+</p>
+<hr />
+<h1><a name="authors">AUTHORS</a></h1>
+<pre>
+ Luis F Balbinot &lt;hades@inf.ufrgs.br&gt;</pre>
+<pre>
+ Niko Tyni &lt;ntyni@iki.fi&gt;</pre>
+<pre>
+ derived from Smokeping::probes::FPing by</pre>
+<pre>
+ Tobias Oetiker &lt;tobi@oetiker.ch&gt;</pre>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p>It is important to make sure that you can access the remote machine
+without a password prompt, otherwise this probe will not work properly.
+To test just try something like this:</p>
+<pre>
+    $ ssh foo@HostA.foobar.com fping HostB.barfoo.com</pre>
+<p>The next thing you see must be fping's output.</p>
+<p>The <strong>rhost</strong>, <strong>ruser</strong> and <strong>rbinary</strong> variables used to be configured in
+the Targets section of the first target or its parents They were moved
+to the Probes section, because the variables aren't really target-specific
+(all the targets are measured with the same parameters). The Targets
+sections aren't recognized anymore.</p>
+<p>
+</p>
+<hr />
+<h1><a name="bugs">BUGS</a></h1>
+<p>This functionality should be in a generic 'remote execution' module
+so that it could be used for the other probes too.</p>
+
+</body>
+
+</html>

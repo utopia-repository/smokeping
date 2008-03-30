@@ -1,0 +1,188 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Smokeping/probes/basefork</title>
+<link rev="made" href="mailto:dws@ee.ethz.ch" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+<!--
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#overview">OVERVIEW</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#variables">VARIABLES</a></li>
+	<li><a href="#authors">AUTHORS</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+-->
+<!-- INDEX END -->
+
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Smokeping::probes::basefork - Yet Another Base Class for implementing SmokePing Probes</p>
+<p>
+</p>
+<hr />
+<h1><a name="overview">OVERVIEW</a></h1>
+<p>Like Smokeping::probes::basevars, but supports the probe-specific property `forks'
+to determine how many processes should be run concurrently. The
+targets are pinged one at a time, and the number of pings sent can vary
+between targets.</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ *** Probes ***</pre>
+<pre>
+ +basefork</pre>
+<pre>
+ forks = 5
+ offset = 50%
+ step = 300
+ timeout = 15</pre>
+<pre>
+ # The following variables can be overridden in each target section
+ pings = 5</pre>
+<pre>
+ # [...]</pre>
+<pre>
+ *** Targets ***</pre>
+<pre>
+ probe = basefork # if this should be the default probe</pre>
+<pre>
+ # [...]</pre>
+<pre>
+ + mytarget
+ # probe = basefork # if the default probe is something else
+ host = my.host
+ pings = 5</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>Not all pinger programs support testing multiple hosts in a single go like
+fping(1). If the measurement takes long enough, there may be not enough time 
+perform all the tests in the time available. For example, if the test takes
+30 seconds, measuring ten hosts already fills up the SmokePing default 
+five minute step.</p>
+<p>Thus, it may be necessary to do some of the tests concurrently. This module
+defines the <strong>ping</strong> method that forks the requested number of concurrent 
+processes and calls the <strong>pingone</strong> method that derived classes must provide.</p>
+<p>The <strong>pingone</strong> method is called with one argument: a hash containing
+the target that is to be measured. The contents of the hash are
+described in <em>Smokeping::probes::basevars</em>(3pm).</p>
+<p>The number of concurrent processes is determined by the probe-specific 
+variable `forks' and is 5 by default. If there are more 
+targets than this value, another round of forks is done after the first 
+processes are finished. This continues until all the targets have been
+tested.</p>
+<p>The timeout in which each child has to finish is set to 5 seconds
+multiplied by the maximum number of 'pings' of the targets. You can set
+the base timeout differently if you want to, using the timeout property
+of the probe in the master config file (this again will be multiplied
+by the maximum number of pings). The probe itself can also provide
+another default value if desired by modifying the _default value of
+the timeout variable.</p>
+<p>If the child isn't finished when the timeout occurs, it 
+will be killed along with any processes it has started.</p>
+<p>The number of pings sent can be specified in the target-specific variable
+'pings'.</p>
+<p>
+</p>
+<hr />
+<h1><a name="variables">VARIABLES</a></h1>
+<p>Supported probe-specific variables:</p>
+<dl>
+<dt><strong><a name="item_forks">forks</a></strong><br />
+
+</dt><dd>
+Run this many concurrent processes at maximum
+
+</dd><dd>
+<p>Example value: 5</p>
+
+</dd><dd>
+<p>Default value: 5</p>
+
+<p></p>
+</dd><dt><strong><a name="item_offset">offset</a></strong><br />
+
+</dt><dd>
+If you run many probes concurrently you may want to prevent them from
+hitting your network all at the same time. Using the probe-specific
+offset parameter you can change the point in time when each probe will
+be run. Offset is specified in % of total interval, or alternatively as
+'random', and the offset from the 'General' section is used if nothing
+is specified here. Note that this does NOT influence the rrds itself,
+it is just a matter of when data acqusition is initiated.
+(This variable is only applicable if the variable 'concurrentprobes' is set
+in the 'General' section.)
+
+</dd><dd>
+<p>Example value: 50%</p>
+
+<p></p>
+</dd><dt><strong><a name="item_step">step</a></strong><br />
+
+</dt><dd>
+Duration of the base interval that this probe should use, if different
+from the one specified in the 'Database' section. Note that the step in
+the RRD files is fixed when they are originally generated, and if you
+change the step parameter afterwards, you'll have to delete the old RRD
+files or somehow convert them. (This variable is only applicable if
+the variable 'concurrentprobes' is set in the 'General' section.)
+
+</dd><dd>
+<p>Example value: 300</p>
+
+<p></p>
+</dd><dt><strong><a name="item_timeout">timeout</a></strong><br />
+
+</dt><dd>
+How long a single 'ping' takes at maximum
+
+</dd><dd>
+<p>Example value: 15</p>
+
+</dd><dd>
+<p>Default value: 5</p>
+
+<p></p></dd></dl>
+<p>Supported target-specific variables:</p>
+<dl>
+<dt><strong><a name="item_pings">pings</a></strong><br />
+
+</dt><dd>
+How many pings should be sent to each target, if different from the global
+value specified in the Database section. Note that the number of pings in
+the RRD files is fixed when they are originally generated, and if you
+change this parameter afterwards, you'll have to delete the old RRD
+files or somehow convert them.
+
+</dd><dd>
+<p>Example value: 5</p>
+
+<p></p></dd></dl>
+<p>
+</p>
+<hr />
+<h1><a name="authors">AUTHORS</a></h1>
+<p>Niko Tyni &lt;<a href="mailto:ntyni@iki.fi">ntyni@iki.fi</a>&gt;</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="./../../Smokeping/probes/basevars.html">the Smokeping::probes::basevars manpage</a>, <a href="./../../Smokeping/probes/EchoPing.html">the Smokeping::probes::EchoPing manpage</a></p>
+
+</body>
+
+</html>

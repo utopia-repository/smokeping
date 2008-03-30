@@ -1,0 +1,190 @@
+# This Smokeping example configuration file was automatically generated.
+#
+# Everything up to the Probes section is derived from a common template file.
+# See the Probes and Targets sections for the actual example.
+#
+# This example is included in the smokeping_examples document.
+
+# Note that all IP addresses in this file are false, to prevent some
+# machine falling uder a deadly DOS storm because all users keep
+# the same addresses in their config.
+
+*** General ***
+
+owner    = Joe Random
+contact  = joe@some.place.xyz
+mailhost = smtp.mailhost.abc
+sendmail = /usr/lib/sendmail
+imgcache = /home/oetiker/public_html/.simg
+imgurl   = ../.simg
+datadir  = /home/oetiker/data/projects/AADJ-smokeping/dist/var
+piddir  = /home/oetiker/data/projects/AADJ-smokeping/dist/var
+cgiurl   = http://people.ee.ethz.ch/~oetiker/smokeping/smokeping.cgi
+smokemail = /home/oetiker/data/projects/AADJ-smokeping/dist/etc/smokemail.dist
+tmail = /home/oetiker/data/projects/AADJ-smokeping/dist/etc/tmail.dist
+# specify this to get syslog logging
+syslogfacility = local0
+# each probe is now run in its own process
+# disable this to revert to the old behaviour
+# concurrentprobes = no
+
+*** Alerts ***
+to = admin@company.xy
+from = smokealert@company.xy
+
++bigloss
+type = loss
+# in percent
+pattern = ==0%,==0%,==0%,==0%,>0%,>0%,>0%
+comment = suddenly there is packet loss
+
++someloss
+type = loss
+# in percent
+pattern = >0%,*12*,>0%,*12*,>0%
+comment = loss 3 times  in a row
+
++startloss
+type = loss
+# in percent
+pattern = ==S,>0%,>0%,>0%
+comment = loss at startup
+
++rttdetect
+type = rtt
+# in milli seconds
+pattern = <10,<10,<10,<10,<10,<100,>100,>100,>100
+comment = routing mesed up again ?
+
+*** Database ***
+
+step     = 300
+pings    = 20
+
+# consfn mrhb steps total
+
+AVERAGE  0.5   1  1008
+AVERAGE  0.5  12  4320
+    MIN  0.5  12  4320
+    MAX  0.5  12  4320
+AVERAGE  0.5 144   720
+    MAX  0.5 144   720
+    MIN  0.5 144   720
+
+*** Presentation ***
+
+template = /home/oetiker/data/projects/AADJ-smokeping/dist/etc/basepage.html.dist
+
++ overview 
+
+width = 600
+height = 50
+range = 10h
+
++ detail
+
+width = 600
+height = 200
+unison_tolerance = 2
+
+"Last 3 Hours"    3h
+"Last 30 Hours"   30h
+"Last 10 Days"    10d
+"Last 400 Days"   400d
+
+# (The actual example starts here.)
+
+*** Probes ***
+
+# This example explains the difference between probe- and target-specific
+# variables. We use the Curl probe for this.
+# 
+# Every probe supports at least some probe-specific variables. The values
+# of these variables are common to all the targets of the probe, and
+# they can only be configured in the Probes section. In this case, 
+# the probe-specific variables are "binary" and "step".
+# 
+# Target-specific variables are supported by most probes, the most notable
+# exception being the FPing probe and its derivatives. Target-specific
+# variables can have different values for different targets. They can be
+# configured in both Probes and Targets sections. The values assigned in the
+# Probes section function become default values that can be overridden
+# in the Targets section. 
+# 
+# The documentation of each probe states which of its variables are
+# probe-specific and which are target-specific.
+# 
+# In this case the "urlformat" variable is a target-specific one.  It is
+# also quite uncommon, because it can contain a placeholder for the "host"
+# variable in the Targets section. This is not a general feature, its
+# usage is only limited to the "urlformat" variable and the "%host%" escape.
+# 
+# (The reason why the FPing probe does not support target-specific variables
+# is simply the fact that the fping program measures all its targets in one
+# go, so they all have the same parameters. The other probes ping their targets
+# one at a time.)
+
++ Curl
+# probe-specific variables
+binary = /usr/bin/curl
+step = 60
+
+# a default for this target-specific variable
+urlformat = http://%host/
+
+*** Targets ***
+
+# The target tree is divided into an HTTP branch and an FTP one.
+# The servers "myhost1.example" and "myhost2.example" are probed
+# in both. The third server, "myhost3.example", only has an HTTP
+# server, and it's in a non-standard port (8080).
+# 
+# The "urlformat" variable is specified for the whole FTP branch
+# as "ftp://%host%/". For the HTTP branch, the default from the
+# Probes section is used, except for myhost3, which overrides
+# it to tag the port number into the URL. 
+# 
+# The myhost3 assignment could just as well have included the hostname
+# verbatim (ie. urlformat = http://myhost3.example:8080/) instead of
+# using the %host% placeholder, but the host variable would still have
+# been required (even though it wouldn't have been used for anything).
+
+probe = Curl
+menu = Top
+title = Network Latency Grapher
+remark = Welcome to this SmokePing website.
+
++ HTTP
+menu = http
+title = HTTP latency 
+
+++ myhost1
+menu = myhost1
+title = HTTP latency for myhost1
+host = myhost1.example
+
+++ myhost2
+menu = myhost2
+title = HTTP latency for myhost2
+host = myhost2.example
+
+++ myhost3
+menu = myhost3
+title = HTTP latency for myhost3 (port 8080!)
+host = myhost3.example
+urlformat = http://%host%:8080/
+
++ FTP
+menu = ftp
+title = FTP latency
+urlformat = ftp://%host%/
+
+++ myhost1
+menu = myhost1
+title = FTP latency for myhost1
+host = myhost1.example
+
+++ myhost2
+menu = myhost2
+title = FTP latency for myhost2
+host = myhost2.example

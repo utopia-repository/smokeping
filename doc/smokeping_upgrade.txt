@@ -1,0 +1,304 @@
+SMOKEPING_UPGRADE(7)        SmokePing        SMOKEPING_UPGRADE(7)
+
+
+
+NNAAMMEE
+       smokeping_upgrade - Notes on upgrading Smokeping
+
+OOVVEERRVVIIEEWW
+       This document tries to list incompatible or otherwise
+       user-visible changes in Smokeping versions, with instruc-
+       tions on how to fix any possible problems. It also sporad-
+       ically mentions new features and the like.
+
+       The document currently starts with changes from 1.34 to
+       1.37. If you run into problems with upgrading from earlier
+       versions, please send a description of the problems,
+       preferably with notes on how to fix them, to the
+       "smokeping-users" mailing list, so they can be added to
+       this document.  The same applies to any problems you find
+       with current versions that are not documented here, of
+       course. Patch submissions against the POD source of this
+       file are most appreciated.
+
+       If a version is not listed, there are no known problems in
+       upgrading to it from the previous release.
+
+       An official list of changes with each release can be found
+       in the CHANGES file in the Smokeping distribution. This
+       document tries to complement that with upgrading instruc-
+       tions etc.
+
+22..00..11 ttoo 22..00..22
+       EEddggee--ttrriiggggeerreedd aalleerrttss
+
+       The alert notifications can now optionally be sent only
+       when the state of the alert changes. This means that only
+       the first match of the alert generates a notification,
+       subsequent matches don't. When the alert is cleared, ie.
+       there's no match anymore, another notification is sent.
+
+       This behaviour is enabled by the "edgetrigger" variable in
+       the "Alerts" section. The old behaviour (which sends a
+       notification on each match) is the default.
+
+11..4400 ttoo 22..00
+       The biggest change with the 2.0 release is that the con-
+       figuration file is now parsed much more strictly. This
+       should result in (hopefully understandable) error messages
+       making the configuration less of the trial-and-error vari-
+       ety than it used to be. It also automates the generation
+       of the configuration documentation from the source code,
+       so the docs are now more accurate.
+
+       A smaller change worth mentioning is the inclusion of the
+       tSmoke script (contributed by Dan McGinn-Combs) for send-
+       ing summary emails on daily and weekly system status. Note
+       that it needs the new 'tmail' variable to be defined in
+       the config file.
+
+       CCOONNFFIIGGUURRAATTIIOONN
+
+       The configuration syntax has stayed mostly the same,
+       except for the issues below.
+
+       PROBE_CONF
+           The PROBE_CONF subsections have been deprecated. All
+           the target-specific variables are now configured in
+           the same section as the target is. Just deleting the
+
+           ++ PROBE_CONF
+
+           lines should fix this (for any number of '+', obvi-
+           ously.)
+
+           The existence of a PROBE_CONF section makes smokeping
+           exit with an error message at parse time.
+
+           Note for distributors: these lines could easily be
+           removed automatically during upgrade.
+
+       Variable order
+           The "probe" variable must now be set before any vari-
+           ables that depend on the selected probe. This is
+           because setting "probe" modifies the grammar of the
+           rest of the section dynamically at parse time.
+
+           Additionally, "probe" must now precede "host", for
+           reasons that have to do with the current implementa-
+           tion of mandatory variable checking.
+
+           Both of these errors are recognized at parse time and
+           produce error messages accordingly.
+
+           Note for distributors: the "smokeping" command now has
+           a new '--check' option that can be used to verify the
+           syntax of the configuration file. It might be a good
+           idea to do this on upgrade and give the user an
+           explanatory note if the verification fails.
+
+       Target-specific variables in the Probes section
+           This is not an incompatible change, but it is men-
+           tioned here nevertheless.  Target-specific variables
+           can now be specified in the Probes section as well,
+           and the values given become defaults for all the tar-
+           gets.
+
+       Timeouts
+           The "timeout" variable in the Probes section is now
+           the maximum time expected for oonnee ping to take. Previ-
+           ously it was the maximum time allowed for all the
+           pings to one target.  This is an incompatible change,
+           but the code now works in the way it was documented to
+           work even in 1.38.
+
+           Those probes offering a target-specific "timeout"
+           variable will get a default for it from the Probes
+           section, as noted in the previous item.  This should
+           ensure that probes that enforce the ping timeout them-
+           selves (most do) will not get killed due to timeout
+           before they have a chance to do it.
+
+       Matchers
+           The matcher modules have been renamed to start with a
+           capital letter, to differentiate the actual modules
+           from the base classes. You have to capitalize the
+           matcher name in the pattern definition accordingly.
+
+       Minimum number of pings
+           The "pings" variable now has an enforced minimum value
+           of 3, as the whole design of Smokeping is based on the
+           idea of sending several probes and measuring and visu-
+           alizing the variation between them.
+
+       RRD parameter checking
+           Smokeping now checks at startup that the parameters of
+           any existing RRD files match those specified in the
+           configuration file. If there is a discrepancy, it will
+           try to fix the situation and refuse to start if it
+           can't.
+
+           This situation is most likely to happen if you have
+           modified the "pings" variable in your configuration
+           file. You'll then have to delete the old RRD file or
+           somehow convert it to use the new parameters.  The
+           "rrdtune" command might be helpful here.
+
+       Configurable location for DYNAMIC-related files
+           There is now a new configuration variable, "dyndir",
+           that can be used to specify the location of the
+           DYNAMIC-related files (.adr and .snmp).  These files
+           used to be kept under "datadir" along with the RRD
+           files, but since they need to be writable by the web
+           server, it may be useful to separate these.
+
+           If "dyndir" is not specified, Smokeping will use the
+           "datadir" value as the default. This should ensure
+           that no existing setups will break.
+
+       In addition to this, some probes have had minor incompati-
+       ble changes to their configuration.
+
+       RemoteFPing
+           The "rbinary" variable is now mandatory. This is a
+           side effect from a bigger change: the probe is now
+           derived from the FPing probe and supports all the
+           variables FPing does.
+
+       FPing6
+           This probe is also now derived from FPing and supports
+           all the variables FPing does.
+
+       Curl
+           The URL that will be used is now specified with the
+           variable "urlformat" instead of "url". The new vari-
+           able can (and usually should) include a placeholder
+           for the "host" variable of each target as "%host%",
+           eg. "urlformat = http://%host%/".  The new variable is
+           mandatory.
+
+           The change was made to fix the confusing situation
+           where the "host" variable was required for each actual
+           target, but it didn't actually have any effect (as the
+           server to be probed came from the "url" variable.)
+
+           Timeouts are now recognized properly by looking at the
+           curl exit code.  The default timeout of this probe has
+           been raised to 10 seconds.
+
+           The command line is now executed without an interven-
+           ing /bin/sh, and so quotes are not needed anymore
+           around the User-Agent string (the "agent" parameter).
+           Smokeping will complain if it notices quotes around
+           the string.
+
+           Any extra arguments for "curl" can now be specified in
+           the "extraargs" variable.
+
+       EchoPingHttp
+           The default timeout of this probe has been raised to
+           10 seconds.
+
+       EchoPingHttps
+           The default timeout of this probe has been raised to
+           10 seconds.
+
+       EchoPingIcp
+           The "url" variable is now mandatory, as the old
+           default "/" didn't make sense because it's relative
+           rather than absolute.
+
+       LDAP
+           The "filter" variable is now mandatory, as Net::LDAP
+           bails out without it.
+
+           The "sleeptime" variable was changed to "mininterval"
+           and its semantics were changed accordingly (it's now
+           the minimum time between two queries rather than the
+           time slept between the end of one and the start of the
+           another.)
+
+       Radius
+           The "sleeptime" variable was changed to "mininterval"
+           and its semantics were changed accordingly. See the
+           LDAP explanation above.
+
+       AnotherDNS
+           The "sleeptime" variable was changed to "mininterval"
+           and its semantics were changed accordingly. See the
+           LDAP explanation above. Additionally, the time is now
+           specified in seconds rather than microseconds.
+
+       AnotherSSH
+           The "sleeptime" variable was changed to "mininterval"
+           and its semantics were changed accordingly. See the
+           LDAP explanation above. Additionally, the time is now
+           specified in seconds rather than microseconds.
+
+       TelnetIOSPing
+           The name of this probe was changed: it now starts with
+           a capital letter like all the others do.
+
+           The "target" variable was removed. The target should
+           now be specified in the "host" variable, like it is
+           with all the other probes.
+
+11..3388 ttoo 11..4400
+       The new navigation feature
+           The big visible difference between 1.38 and 1.40 is
+           the new browser navigation feature: when clicking on
+           the graphs in detail view you can select different
+           time ranges for the graph. The creation of this fea-
+           ture has been sponsored by BeverlyCorp.com.
+
+11..3344 ttoo 11..3377
+       The RemoteFPing probe
+           The configuration of this probe was moved from the
+           Targets section to the Probes section, as all the
+           variables are really probe-specific. The moved vari-
+           ables were "rhost", "rbinary" and "rhost".
+
+       Logging changes
+           The "smokeping" daemon now warns at startup if syslog
+           support is not turned on in the config file. This is
+           because many diagnostic messages will otherwise get
+           lost.
+
+       Concurrent probes
+           Each probe now runs in its own process, instead of
+           them all running sequentially in one process. This
+           makes it possible to specify different step lengths
+           for different probes. You can get the old behaviour
+           back by setting 'concurrentprobes = no'.
+
+CCOOPPYYRRIIGGHHTT
+       Copyright 2005 by Niko Tyni.
+
+LLIICCEENNSSEE
+       This program is free software; you can redistribute it
+       and/or modify it under the terms of the GNU General Public
+       License as published by the Free Software Foundation;
+       either version 2 of the License, or (at your option) any
+       later version.
+
+       This program is distributed in the hope that it will be
+       useful, but WITHOUT ANY WARRANTY; without even the implied
+       warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+       PURPOSE.  See the GNU General Public License for more
+       details.
+
+       You should have received a copy of the GNU General Public
+       License along with this program; if not, write to the Free
+       Software Foundation, Inc., 675 Mass Ave, Cambridge, MA
+       02139, USA.
+
+AAUUTTHHOORR
+       Niko Tyni <ntyni@iki.fi>
+
+SSEEEE AALLSSOO
+       The other Smokeping documents, especially smokeping_con-
+       fig.
+
+
+
+2.0.2                       2005-09-20       SMOKEPING_UPGRADE(7)

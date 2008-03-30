@@ -1,0 +1,89 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>doc/Smokeping/Examples</title>
+<link rev="made" href="mailto:dws@ee.ethz.ch" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+<!--
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#overview">OVERVIEW</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#bugs">BUGS</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+	<li><a href="#license">LICENSE</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+</ul>
+-->
+<!-- INDEX END -->
+
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Smokeping::Examples - A module for generating the smokeping_examples document</p>
+<p>
+</p>
+<hr />
+<h1><a name="overview">OVERVIEW</a></h1>
+<p>This module generates <a href="./../smokeping_examples.html">the smokeping_examples manpage</a> and the example
+configuration files distributed with Smokeping. It is supposed to be
+invoked from the smokeping distribution top directory, as it will need
+the <code>etc/config.dist</code> template configuration file and will create files
+in the directories <code>doc</code> and <code>doc/examples</code>.</p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>The entry point to the module is the <code>make</code> subroutine. It takes one optional
+parameter, <code>check</code>, that makes the module run a syntax check for all the
+created example configuration files.</p>
+<p>
+</p>
+<hr />
+<h1><a name="bugs">BUGS</a></h1>
+<p>This module uses more or less internal functions from <a href="./../Smokeping.html">Smokeping.pm</a>. It's a 
+separate module only because the latter is much too big already.</p>
+<p>It should be possible to include POD markup in the configuration explanations
+and have this module filter them away for the config files.</p>
+<p>It might be nice for the probe module authors to be able to provide an
+example configuration as part of the probe module instead of having to
+modify Smokeping::Examples too.</p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright 2005 by Niko Tyni.</p>
+<p>
+</p>
+<hr />
+<h1><a name="license">LICENSE</a></h1>
+<p>This program is free software; you can redistribute it
+and/or modify it under the terms of the GNU General Public
+License as published by the Free Software Foundation; either
+version 2 of the License, or (at your option) any later
+version.</p>
+<p>This program is distributed in the hope that it will be
+useful, but WITHOUT ANY WARRANTY; without even the implied
+warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+PURPOSE.  See the GNU General Public License for more
+details.</p>
+<p>You should have received a copy of the GNU General Public
+License along with this program; if not, write to the Free
+Software Foundation, Inc., 675 Mass Ave, Cambridge, MA
+02139, USA.</p>
+<p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>Niko Tyni &lt;<a href="mailto:ntyni@iki.fi">ntyni@iki.fi</a>&gt;</p>
+
+</body>
+
+</html>

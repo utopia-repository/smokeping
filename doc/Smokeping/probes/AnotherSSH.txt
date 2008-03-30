@@ -1,0 +1,149 @@
+doc::Smokeping::probes::AnothSdemorocSk:Se:HPS(im3no)gkeping::probes::AnotherSSH(3)
+
+
+
+NNAAMMEE
+       Smokeping::probes::AnotherSSH - Another SSH probe
+
+SSYYNNOOPPSSIISS
+        *** Probes ***
+
+        +AnotherSSH
+
+        forks = 5
+        offset = 50%
+        step = 300
+
+        # The following variables can be overridden in each target section
+        greeting = SSH-Latency-Measurement-Sorry-for-this-logmessage
+        interval = established
+        mininterval = 0.5
+        pings = 5
+        port = 22
+        timeout = 5
+
+        # [...]
+
+        *** Targets ***
+
+        probe = AnotherSSH # if this should be the default probe
+
+        # [...]
+
+        + mytarget
+        # probe = AnotherSSH # if the default probe is something else
+        host = my.host
+        greeting = SSH-Latency-Measurement-Sorry-for-this-logmessage
+        interval = established
+        mininterval = 0.5
+        pings = 5
+        port = 22
+        timeout = 5
+
+DDEESSCCRRIIPPTTIIOONN
+       Latency measurement using SSH. This generates Logfile mes-
+       sages on the other Host, so get permission from the owner
+       first!
+
+VVAARRIIAABBLLEESS
+       Supported probe-specific variables:
+
+       forks
+           Run this many concurrent processes at maximum
+
+           Example value: 5
+
+           Default value: 5
+
+       offset
+           If you run many probes concurrently you may want to
+           prevent them from hitting your network all at the same
+           time. Using the probe-specific offset parameter you
+           can change the point in time when each probe will be
+           run. Offset is specified in % of total interval, or
+           alternatively as 'random', and the offset from the
+           'General' section is used if nothing is specified
+           here. Note that this does NOT influence the rrds
+           itself, it is just a matter of when data acqusition is
+           initiated.  (This variable is only applicable if the
+           variable 'concurrentprobes' is set in the 'General'
+           section.)
+
+           Example value: 50%
+
+       step
+           Duration of the base interval that this probe should
+           use, if different from the one specified in the
+           'Database' section. Note that the step in the RRD
+           files is fixed when they are originally generated, and
+           if you change the step parameter afterwards, you'll
+           have to delete the old RRD files or somehow convert
+           them. (This variable is only applicable if the vari-
+           able 'concurrentprobes' is set in the 'General' sec-
+           tion.)
+
+           Example value: 300
+
+       Supported target-specific variables:
+
+       greeting
+           Greeting string to send to the SSH Server. This will
+           appear in the Logfile.  Use this to make clear, who
+           you are and what you are doing to avoid confusion.
+
+           Also, don't use something that is a valid version
+           string. This probe assumes that the connection gets
+           terminated because of protocol mismatch.
+
+           Default value: SSH-Latency-Measurement-Sorry-for-this-
+           logmessage
+
+       interval
+           The interval to be measured. One of:
+
+           connect
+               Interval between _c_o_n_n_e_c_t_(_) and the greeting string
+               from the host.
+
+           established
+               Interval between our greeting message and the end
+               of the connection because of Protocol mismatch.
+               This is the default.
+
+           complete
+               From _c_o_n_n_e_c_t_(_) to the end of the connection.
+
+           Default value: established
+
+       mininterval
+           Minimum interval between the start of two connection
+           attempts in (possibly fractional) seconds.
+
+           Default value: 0.5
+
+       pings
+           How many pings should be sent to each target, if dif-
+           ferent from the global value specified in the Database
+           section. Note that the number of pings in the RRD
+           files is fixed when they are originally generated, and
+           if you change this parameter afterwards, you'll have
+           to delete the old RRD files or somehow convert them.
+
+           Example value: 5
+
+       port
+           Connect to this port.
+
+           Default value: 22
+
+       timeout
+           Timeout for the connection.
+
+           Default value: 5
+
+AAUUTTHHOORRSS
+       Christoph Heine <Christoph.Heine@HaDiKo.DE>
+
+
+
+2.0.2                       2d0o0c5:-:0S9m-o2k0eping::probes::AnotherSSH(3)

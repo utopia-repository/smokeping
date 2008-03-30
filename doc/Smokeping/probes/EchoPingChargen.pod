@@ -1,0 +1,179 @@
+=head1 NAME
+
+Smokeping::probes::EchoPingChargen - an echoping(1) probe for SmokePing
+
+=head1 OVERVIEW
+
+Measures TCP chargen (port 19) roundtrip times for SmokePing.
+
+=head1 SYNOPSIS
+
+ *** Probes ***
+
+ +EchoPingChargen
+
+ binary = /usr/bin/echoping
+ forks = 5
+ offset = 50%
+ step = 300
+
+ # The following variables can be overridden in each target section
+ extraopts = -some-letter-the-author-did-not-think-of
+ fill = A
+ ipversion = 4
+ pings = 5
+ priority = 6
+ size = 510
+ timeout = 1
+ tos = 0xa0
+ waittime = 1
+
+ # [...]
+
+ *** Targets ***
+
+ probe = EchoPingChargen # if this should be the default probe
+
+ # [...]
+
+ + mytarget
+ # probe = EchoPingChargen # if the default probe is something else
+ host = my.host
+ extraopts = -some-letter-the-author-did-not-think-of
+ fill = A
+ ipversion = 4
+ pings = 5
+ priority = 6
+ size = 510
+ timeout = 1
+ tos = 0xa0
+ waittime = 1
+
+=head1 VARIABLES
+
+Supported probe-specific variables:
+
+=over
+
+=item binary
+
+The location of your echoping binary.
+
+Default value: /usr/bin/echoping
+
+=item forks
+
+Run this many concurrent processes at maximum
+
+Example value: 5
+
+Default value: 5
+
+=item offset
+
+If you run many probes concurrently you may want to prevent them from
+hitting your network all at the same time. Using the probe-specific
+offset parameter you can change the point in time when each probe will
+be run. Offset is specified in % of total interval, or alternatively as
+'random', and the offset from the 'General' section is used if nothing
+is specified here. Note that this does NOT influence the rrds itself,
+it is just a matter of when data acqusition is initiated.
+(This variable is only applicable if the variable 'concurrentprobes' is set
+in the 'General' section.)
+
+Example value: 50%
+
+=item step
+
+Duration of the base interval that this probe should use, if different
+from the one specified in the 'Database' section. Note that the step in
+the RRD files is fixed when they are originally generated, and if you
+change the step parameter afterwards, you'll have to delete the old RRD
+files or somehow convert them. (This variable is only applicable if
+the variable 'concurrentprobes' is set in the 'General' section.)
+
+Example value: 300
+
+=back
+
+Supported target-specific variables:
+
+=over
+
+=item extraopts
+
+Any extra options specified here will be passed unmodified to echoping(1).
+
+Example value: -some-letter-the-author-did-not-think-of
+
+=item fill
+
+The "-f" echoping(1) option.
+
+Example value: A
+
+=item ipversion
+
+The IP protocol used. Possible values are "4" and "6". 
+Passed to echoping(1) as the "-4" or "-6" options.
+
+Example value: 4
+
+=item pings
+
+How many pings should be sent to each target, if different from the global
+value specified in the Database section. Note that the number of pings in
+the RRD files is fixed when they are originally generated, and if you
+change this parameter afterwards, you'll have to delete the old RRD
+files or somehow convert them.
+
+Example value: 5
+
+=item priority
+
+The "-p" echoping(1) option.
+
+Example value: 6
+
+=item size
+
+The "-s" echoping(1) option.
+
+Example value: 510
+
+=item timeout
+
+The "-t" echoping(1) option.
+
+Example value: 1
+
+Default value: 5
+
+=item tos
+
+The "-P" echoping(1) option.
+
+Example value: 0xa0
+
+=item waittime
+
+The "-w" echoping(1) option.
+
+Example value: 1
+
+=back
+
+
+=head1 AUTHORS
+
+Niko Tyni <ntyni@iki.fi>
+
+=head1 NOTES
+
+The I<udp> variable is not supported.
+
+=head1 SEE ALSO
+
+L<Smokeping::probes::EchoPing>
+
+=cut

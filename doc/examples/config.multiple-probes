@@ -1,0 +1,169 @@
+# This Smokeping example configuration file was automatically generated.
+#
+# Everything up to the Probes section is derived from a common template file.
+# See the Probes and Targets sections for the actual example.
+#
+# This example is included in the smokeping_examples document.
+
+# Note that all IP addresses in this file are false, to prevent some
+# machine falling uder a deadly DOS storm because all users keep
+# the same addresses in their config.
+
+*** General ***
+
+owner    = Joe Random
+contact  = joe@some.place.xyz
+mailhost = smtp.mailhost.abc
+sendmail = /usr/lib/sendmail
+imgcache = /home/oetiker/public_html/.simg
+imgurl   = ../.simg
+datadir  = /home/oetiker/data/projects/AADJ-smokeping/dist/var
+piddir  = /home/oetiker/data/projects/AADJ-smokeping/dist/var
+cgiurl   = http://people.ee.ethz.ch/~oetiker/smokeping/smokeping.cgi
+smokemail = /home/oetiker/data/projects/AADJ-smokeping/dist/etc/smokemail.dist
+tmail = /home/oetiker/data/projects/AADJ-smokeping/dist/etc/tmail.dist
+# specify this to get syslog logging
+syslogfacility = local0
+# each probe is now run in its own process
+# disable this to revert to the old behaviour
+# concurrentprobes = no
+
+*** Alerts ***
+to = admin@company.xy
+from = smokealert@company.xy
+
++bigloss
+type = loss
+# in percent
+pattern = ==0%,==0%,==0%,==0%,>0%,>0%,>0%
+comment = suddenly there is packet loss
+
++someloss
+type = loss
+# in percent
+pattern = >0%,*12*,>0%,*12*,>0%
+comment = loss 3 times  in a row
+
++startloss
+type = loss
+# in percent
+pattern = ==S,>0%,>0%,>0%
+comment = loss at startup
+
++rttdetect
+type = rtt
+# in milli seconds
+pattern = <10,<10,<10,<10,<10,<100,>100,>100,>100
+comment = routing mesed up again ?
+
+*** Database ***
+
+step     = 300
+pings    = 20
+
+# consfn mrhb steps total
+
+AVERAGE  0.5   1  1008
+AVERAGE  0.5  12  4320
+    MIN  0.5  12  4320
+    MAX  0.5  12  4320
+AVERAGE  0.5 144   720
+    MAX  0.5 144   720
+    MIN  0.5 144   720
+
+*** Presentation ***
+
+template = /home/oetiker/data/projects/AADJ-smokeping/dist/etc/basepage.html.dist
+
++ overview 
+
+width = 600
+height = 50
+range = 10h
+
++ detail
+
+width = 600
+height = 200
+unison_tolerance = 2
+
+"Last 3 Hours"    3h
+"Last 30 Hours"   30h
+"Last 10 Days"    10d
+"Last 400 Days"   400d
+
+# (The actual example starts here.)
+
+*** Probes ***
+
+# Here we have three probes: FPing for the regular ICMP pings,
+# DNS for name server latency measurement and EchoPingHttp
+# for web servers.
+# 
+# The FPing probe runs with the default parameters, except that the ICMP
+# packet size is 1000 bytes instead of the default 56 bytes.
+# 
+# The DNS and EchoPingHttp probes have been configured to be a bit more
+# gentle with the servers, as they only do 5 queries (pings) instead of the
+# default 20 (or whatever is specified in the Database section). However,
+# DNS queries are made more often: 5 queries every 3 minutes instead of
+# every 5 minutes.
+
++ FPing
+binary = /usr/bin/fping
+packetsize = 1000
+
++ DNS
+binary = /usr/bin/dig
+lookup = name.example
+pings = 5
+step = 180
+
++ EchoPingHttp
+pings = 5
+url = /test-url
+
+*** Targets ***
+
+# The target tree has been divided by the probe used. This does not have
+# to be the case: every target (sub)section can use a different probe,
+# and the same probe can be used in different parts of the config tree.
+
+probe = FPing
+menu = Top
+title = Network Latency Grapher
+remark = Welcome to this SmokePing website.
+
++ network
+menu = Net latency
+title = Network latency (ICMP pings)
+
+++ myhost1
+host = myhost1.example
+++ myhost2
+host = myhost2.example
+
++ services
+menu = Service latency
+title = Service latency (DNS, HTTP)
+
+++ DNS
+probe = DNS
+menu = DNS latency
+title = Service latency (DNS)
+
++++ dns1
+host = dns1.example
+
++++ dns2
+host = dns2.example
+
+++ HTTP
+menu = HTTP latency
+title = Service latency (HTTP)
+
++++ www1
+host = www1.example
+
++++ www2
+host = www2.example

@@ -1,0 +1,165 @@
+# This Smokeping example configuration file was automatically generated.
+#
+# Everything up to the Probes section is derived from a common template file.
+# See the Probes and Targets sections for the actual example.
+#
+# This example is included in the smokeping_examples document.
+
+# Note that all IP addresses in this file are false, to prevent some
+# machine falling uder a deadly DOS storm because all users keep
+# the same addresses in their config.
+
+*** General ***
+
+owner    = Joe Random
+contact  = joe@some.place.xyz
+mailhost = smtp.mailhost.abc
+sendmail = /usr/lib/sendmail
+imgcache = /home/oetiker/public_html/.simg
+imgurl   = ../.simg
+datadir  = /home/oetiker/data/projects/AADJ-smokeping/dist/var
+piddir  = /home/oetiker/data/projects/AADJ-smokeping/dist/var
+cgiurl   = http://people.ee.ethz.ch/~oetiker/smokeping/smokeping.cgi
+smokemail = /home/oetiker/data/projects/AADJ-smokeping/dist/etc/smokemail.dist
+tmail = /home/oetiker/data/projects/AADJ-smokeping/dist/etc/tmail.dist
+# specify this to get syslog logging
+syslogfacility = local0
+# each probe is now run in its own process
+# disable this to revert to the old behaviour
+# concurrentprobes = no
+
+*** Alerts ***
+to = admin@company.xy
+from = smokealert@company.xy
+
++bigloss
+type = loss
+# in percent
+pattern = ==0%,==0%,==0%,==0%,>0%,>0%,>0%
+comment = suddenly there is packet loss
+
++someloss
+type = loss
+# in percent
+pattern = >0%,*12*,>0%,*12*,>0%
+comment = loss 3 times  in a row
+
++startloss
+type = loss
+# in percent
+pattern = ==S,>0%,>0%,>0%
+comment = loss at startup
+
++rttdetect
+type = rtt
+# in milli seconds
+pattern = <10,<10,<10,<10,<10,<100,>100,>100,>100
+comment = routing mesed up again ?
+
+*** Database ***
+
+step     = 300
+pings    = 20
+
+# consfn mrhb steps total
+
+AVERAGE  0.5   1  1008
+AVERAGE  0.5  12  4320
+    MIN  0.5  12  4320
+    MAX  0.5  12  4320
+AVERAGE  0.5 144   720
+    MAX  0.5 144   720
+    MIN  0.5 144   720
+
+*** Presentation ***
+
+template = /home/oetiker/data/projects/AADJ-smokeping/dist/etc/basepage.html.dist
+
++ overview 
+
+width = 600
+height = 50
+range = 10h
+
++ detail
+
+width = 600
+height = 200
+unison_tolerance = 2
+
+"Last 3 Hours"    3h
+"Last 30 Hours"   30h
+"Last 10 Days"    10d
+"Last 400 Days"   400d
+
+# (The actual example starts here.)
+
+*** Probes ***
+
+# This example demonstrates the concept of probe instances. The FPingLarge
+# and FPingNormal probes are independent of each other, they just use
+# the same module, FPing. FPingNormal uses the default parameters, and
+# so does FPingLarge except for the 5 kilobyte packetsize. Both use the
+# same fping binary, and its path is configured FPing top section. 
+# 
+# The 'offset' parameters make sure the probes don't run at the same time -
+# FPingNormal is run every 'full' 5 minutes (eg. 8:00, 8:05, 8:10 and so on,
+# in wallclock time) while FPingLarge is run halfway through these intervals
+# (eg. 8:02:30, 8:07:30 etc.)
+# 
+# The top FPing section does not define a probe in itself because it
+# has subsections. If we really wanted to have one probe named "FPing",
+# we could do so by making a subsection by that name.
+
++ FPing
+binary = /usr/bin/fping
+
+++ FPingNormal
+offset = 0%
+
+++ FPingLarge
+packetsize = 5000
+offset = 50%
+
+*** Targets ***
+
+# The target section shows two host, myhost1.example and myhost2.example,
+# being pinged with two differently sized ICMP packets. This time the tree
+# is divided by the target host rather than the probe.
+
+probe = FPingNormal
+menu = Top
+title = Network Latency Grapher
+remark = Welcome to this SmokePing website.
+
++ network
+menu = Net latency
+title = Network latency (ICMP pings)
+
+++ myhost1
+menu = myhost1
+title = ICMP latency for myhost1
+
++++ normal
+title = Normal packetsize (56 bytes)
+probe = FPingNormal
+host = myhost1.example
+
++++ large
+title = Large packetsize (5000 bytes)
+probe = FPingLarge
+host = myhost1.example
+
+++ myhost2
+menu = myhost2
+title = ICMP latency for myhost2
+
++++ normal
+title = Normal packetsize (56 bytes)
+probe = FPingNormal
+host = myhost2.example
+
++++ large
+title = Large packetsize (5000 bytes)
+probe = FPingLarge
+host = myhost2.example

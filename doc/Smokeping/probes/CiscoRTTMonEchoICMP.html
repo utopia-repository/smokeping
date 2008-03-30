@@ -1,0 +1,256 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Smokeping/probes/CiscoRTTMonEchoICMP</title>
+<link rev="made" href="mailto:dws@ee.ethz.ch" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+<!--
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#variables">VARIABLES</a></li>
+	<li><a href="#authors">AUTHORS</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<ul>
+
+		<li><a href="#ios_versions">IOS VERSIONS</a></li>
+		<li><a href="#installation">INSTALLATION</a></li>
+	</ul>
+
+	<li><a href="#bugs">BUGS</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+-->
+<!-- INDEX END -->
+
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Smokeping::probes::CiscoRTTMonEchoICMP - Probe for SmokePing</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ *** Probes ***</pre>
+<pre>
+ +CiscoRTTMonEchoICMP</pre>
+<pre>
+ forks = 5
+ offset = 50%
+ step = 300
+ timeout = 15</pre>
+<pre>
+ # The following variables can be overridden in each target section
+ ioshost = RTTcommunity@Myrouter.foobar.com.au # mandatory
+ iosint = 10.33.22.11
+ packetsize = 56
+ pings = 5
+ tos = 160</pre>
+<pre>
+ # [...]</pre>
+<pre>
+ *** Targets ***</pre>
+<pre>
+ probe = CiscoRTTMonEchoICMP # if this should be the default probe</pre>
+<pre>
+ # [...]</pre>
+<pre>
+ + mytarget
+ # probe = CiscoRTTMonEchoICMP # if the default probe is something else
+ host = my.host
+ ioshost = RTTcommunity@Myrouter.foobar.com.au # mandatory
+ iosint = 10.33.22.11
+ packetsize = 56
+ pings = 5
+ tos = 160</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>A probe for smokeping, which uses the ciscoRttMon MIB functionality (``Service Assurance Agent'', ``SAA'') of Cisco IOS to measure ICMP echo (``ping'') roundtrip times between a Cisco router and any IP address.</p>
+<p>
+</p>
+<hr />
+<h1><a name="variables">VARIABLES</a></h1>
+<p>Supported probe-specific variables:</p>
+<dl>
+<dt><strong><a name="item_forks">forks</a></strong><br />
+
+</dt><dd>
+Run this many concurrent processes at maximum
+
+</dd><dd>
+<p>Example value: 5</p>
+
+</dd><dd>
+<p>Default value: 5</p>
+
+<p></p>
+</dd><dt><strong><a name="item_offset">offset</a></strong><br />
+
+</dt><dd>
+If you run many probes concurrently you may want to prevent them from
+hitting your network all at the same time. Using the probe-specific
+offset parameter you can change the point in time when each probe will
+be run. Offset is specified in % of total interval, or alternatively as
+'random', and the offset from the 'General' section is used if nothing
+is specified here. Note that this does NOT influence the rrds itself,
+it is just a matter of when data acqusition is initiated.
+(This variable is only applicable if the variable 'concurrentprobes' is set
+in the 'General' section.)
+
+</dd><dd>
+<p>Example value: 50%</p>
+
+<p></p>
+</dd><dt><strong><a name="item_step">step</a></strong><br />
+
+</dt><dd>
+Duration of the base interval that this probe should use, if different
+from the one specified in the 'Database' section. Note that the step in
+the RRD files is fixed when they are originally generated, and if you
+change the step parameter afterwards, you'll have to delete the old RRD
+files or somehow convert them. (This variable is only applicable if
+the variable 'concurrentprobes' is set in the 'General' section.)
+
+</dd><dd>
+<p>Example value: 300</p>
+
+<p></p>
+</dd><dt><strong><a name="item_timeout">timeout</a></strong><br />
+
+</dt><dd>
+How long a single 'ping' takes at maximum
+
+</dd><dd>
+<p>Example value: 15</p>
+
+</dd><dd>
+<p>Default value: 5</p>
+
+<p></p></dd></dl>
+<p>Supported target-specific variables:</p>
+<dl>
+<dt><strong><a name="item_ioshost">ioshost</a></strong><br />
+
+</dt><dd>
+The (mandatory) ioshost parameter specifies the Cisco router, which will
+execute the pings, as well as the SNMP community string on the router.
+
+</dd><dd>
+<p>Example value: <a href="mailto:RTTcommunity@Myrouter.foobar.com.au">RTTcommunity@Myrouter.foobar.com.au</a></p>
+
+</dd><dd>
+<p>This setting is mandatory.</p>
+
+<p></p>
+</dd><dt><strong><a name="item_iosint">iosint</a></strong><br />
+
+</dt><dd>
+The (optional) iosint parameter is the source address for the pings
+sent. This should be one of the active (!) IP addresses of the router to
+get results. IOS looks up the target host address in the forwarding table
+and then uses the <code>interface(s)</code> listed there to send the ping packets. By
+default IOS uses the (primary) IP address on the sending interface as
+source address for a ping. The RTTMon MIB versions before IOS 12.0(3)T
+didn't support this parameter.
+
+</dd><dd>
+<p>Example value: 10.33.22.11</p>
+
+<p></p>
+</dd><dt><strong><a name="item_packetsize">packetsize</a></strong><br />
+
+</dt><dd>
+The packetsize parameter lets you configure the packetsize for the pings
+sent. The minimum is 8, the maximum 16392. Use the same number as with
+fping, if you want the same packet sizes being used on the network.
+
+</dd><dd>
+<p>Default value: 56</p>
+
+<p></p>
+</dd><dt><strong><a name="item_pings">pings</a></strong><br />
+
+</dt><dd>
+How many pings should be sent to each target, if different from the global
+value specified in the Database section. Note that the number of pings in
+the RRD files is fixed when they are originally generated, and if you
+change this parameter afterwards, you'll have to delete the old RRD
+files or somehow convert them.
+
+</dd><dd>
+<p>Example value: 5</p>
+
+<p></p>
+</dd><dt><strong><a name="item_tos">tos</a></strong><br />
+
+</dt><dd>
+The (optional) tos parameter specifies the value of the ToS byte in
+the IP header of the pings. Multiply DSCP values times 4 and Precedence
+values times 32 to calculate the ToS values to configure, e.g. ToS 160
+corresponds to a DSCP value 40 and a Precedence value of 5. The RTTMon
+MIB versions before IOS 12.0(3)T didn't support this parameter.
+
+</dd><dd>
+<p>Example value: 160</p>
+
+</dd><dd>
+<p>Default value: 0</p>
+
+<p></p></dd></dl>
+<p>
+</p>
+<hr />
+<h1><a name="authors">AUTHORS</a></h1>
+<p>Joerg.Kummer at Roche.com</p>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p>
+</p>
+<h2><a name="ios_versions">IOS VERSIONS</a></h2>
+<p>It is highly recommended to use this probe with routers running IOS 12.0(3)T or higher and to test it on less critical routers first. I managed to crash a router with 12.0(9) quite consistently ( in IOS lingo 12.0(9) is older code than 12.0(3)T ). I did not observe crashes on higher IOS releases, but messages on the router like the one below, when multiple processes concurrently accessed the same router (this case was IOS 12.1(12b) ):</p>
+<p>Aug 20 07:30:14: %RTT-3-SemaphoreBadUnlock: %RTR: Attempt to unlock semaphore by wrong RTR process 70, locked by 78</p>
+<p>Aug 20 07:35:15: %RTT-3-SemaphoreInUse: %RTR: Could not obtain a lock for RTR. Process 80</p>
+<p>
+</p>
+<h2><a name="installation">INSTALLATION</a></h2>
+<p>To install this probe copy ciscoRttMonMIB.pm files to ($SMOKEPINGINSTALLDIR)/lib/Smokeping and CiscoRTTMonEchoICMP.pm to ($SMOKEPINGINSTALLDIR)/lib/Smokeping/probes. V0.97 or higher of Simon Leinen's SNMP_Session.pm is required.</p>
+<p>The <code>router(s)</code> must be configured to allow read/write SNMP access. Sufficient is:</p>
+<pre>
+        snmp-server community RTTCommunity RW
+ 
+If you want to be a bit more restrictive with SNMP write access to the router, then consider configuring something like this</pre>
+<pre>
+        access-list 2 permit 10.37.3.5
+        snmp-server view RttMon ciscoRttMonMIB included
+        snmp-server community RTTCommunity view RttMon RW 2</pre>
+<p>The above configuration grants SNMP read-write only to 10.37.3.5 (the smokeping host) and only to the ciscoRttMon MIB tree. The probe does not need access to SNMP variables outside the RttMon tree.</p>
+<p>
+</p>
+<hr />
+<h1><a name="bugs">BUGS</a></h1>
+<p>The probe sends unnecessary pings, i.e. more than configured in the ``pings'' variable, because the RTTMon MIB only allows to set a total time for all pings in one measurement run (one ``life''). Currently the probe sets the life duration to ``pings''*2+3 seconds (2 secs is the ping timeout value hardcoded into this probe).</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="http://people.ee.ethz.ch/~oetiker/webtools/smokeping/">http://people.ee.ethz.ch/~oetiker/webtools/smokeping/</a></p>
+<p><a href="http://www.switch.ch/misc/leinen/snmp/perl/">http://www.switch.ch/misc/leinen/snmp/perl/</a></p>
+<p>The best source for background info on SAA is Cisco's documentation on <a href="http://www.cisco.com">http://www.cisco.com</a> and the CISCO-RTTMON-MIB documentation, which is available at:
+<a href="ftp://ftp.cisco.com/pub/mibs/v2/CISCO-RTTMON-MIB.my">ftp://ftp.cisco.com/pub/mibs/v2/CISCO-RTTMON-MIB.my</a></p>
+
+</body>
+
+</html>
