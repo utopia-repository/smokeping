@@ -1,0 +1,17 @@
+#!/usr/sepp/bin/speedy -w
+# -*-perl-*-
+
+use lib qw(/usr/pack/rrdtool-1.0.33-to/lib/perl);
+use lib qw(/home/oetiker/data/projects/AADJ-smokeping/dist/lib);
+
+use Smokeping 1.6;
+
+Smokeping::cgi("/home/oetiker/data/projects/AADJ-smokeping/dist/etc/config");
+
+
+BEGIN {
+    if ($ENV{SERVER_SOFTWARE}) {
+        $SIG{__WARN__} = sub { print "<pre>Warning: ".(shift)."</pre>"; };
+        $SIG{__DIE__} = sub { print "<pre>Error: ".(shift)."</pre>"; exit 1 }
+    };
+}

@@ -1,0 +1,66 @@
+<HTML>
+<HEAD>
+<TITLE>EchoPingHttps.pm</TITLE>
+<LINK REV="made" HREF="mailto:karrer@iis.ee.ethz.ch">
+</HEAD>
+
+<BODY>
+
+<A NAME="__index__"></A>
+<!-- INDEX BEGIN -->
+<!--
+
+<UL>
+
+	<LI><A HREF="#name">NAME</A></LI>
+	<LI><A HREF="#overview">OVERVIEW</A></LI>
+	<LI><A HREF="#synopsys">SYNOPSYS</A></LI>
+	<LI><A HREF="#description">DESCRIPTION</A></LI>
+	<LI><A HREF="#author">AUTHOR</A></LI>
+	<LI><A HREF="#see also">SEE ALSO</A></LI>
+</UL>
+-->
+<!-- INDEX END -->
+
+<P>
+<H1><A NAME="name">NAME</A></H1>
+<P>probes::EchoPingHttps - an <CODE>echoping(1)</CODE> probe for SmokePing</P>
+<P>
+<HR>
+<H1><A NAME="overview">OVERVIEW</A></H1>
+<P>Measures HTTPS (HTTP over SSL) roundtrip times (web servers and caches) for
+SmokePing.</P>
+<P>
+<HR>
+<H1><A NAME="synopsys">SYNOPSYS</A></H1>
+<PRE>
+ *** Probes ***
+ + EchoPingHttps</PRE>
+<PRE>
+ binary = /usr/bin/echoping # mandatory</PRE>
+<PRE>
+ *** Targets ***</PRE>
+<PRE>
+ probe = EchoPingHttps</PRE>
+<PRE>
+ + PROBE_CONF
+ url = / 
+ ignore-cache = yes
+ force-revalidate = no
+ port = 443 # default value anyway</PRE>
+<P>
+<HR>
+<H1><A NAME="description">DESCRIPTION</A></H1>
+<P>As EchoPingHttp(3pm), but SSL-enabled.</P>
+<P>
+<HR>
+<H1><A NAME="author">AUTHOR</A></H1>
+<P>Niko Tyni &lt;<A HREF="mailto:ntyni@iki.fi">ntyni@iki.fi</A>&gt;</P>
+<P>
+<HR>
+<H1><A NAME="see also">SEE ALSO</A></H1>
+<P><CODE>EchoPingHttp(3pm)</CODE></P>
+
+</BODY>
+
+</HTML>

@@ -1,0 +1,18 @@
+probes::base(3)             SmokePing             probes::base(3)
+
+
+
+NNNNAAAAMMMMEEEE
+       probes::base - Base Class for implementing SmokePing
+       Probes
+
+OOOOVVVVEEEERRRRVVVVIIIIEEEEWWWW
+       For the time being, please use the probes::FPing for
+       inspiration when implementing your own probes.
+
+AAAAUUUUTTTTHHHHOOOORRRR
+       Tobias Oetiker <tobi@oetiker.ch>
+
+
+
+2002-03-09                     1.6                probes::base(3)

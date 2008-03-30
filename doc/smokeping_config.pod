@@ -1,0 +1,564 @@
+### fping seems to report in 0.1 miliseconds
+=head1 NAME
+
+smokeping.config - Reference for the SmokePing Config File
+
+=head1 OVERVIEW
+
+SmokePing takes its configuration from a single central configuration file.
+Its location must be hardcoded in the smokeping script and smokeping.cgi.
+
+The contents of this manual is generated directly from the configuration
+file parser.
+
+The Parser for the Configuration file is written using David Schweikers
+ParseConfig module. Read all about it in L<ISG::ParseConfig>.
+
+The Configuration file has a tree-like structure with section headings at
+various levels. It also contains variable assignements and tables.
+
+=head1 REFERENCE
+
+The text below describes the syntax of the SmokePing configuration file.
+
+=head2 *** General *** I<(mandatory section)>
+
+General configuration values valid for the whole SmokePing setup.
+
+
+The following variables can be set in this section:
+
+=over
+
+=item B<owner> I<(mandatory setting)>
+
+Name of the person responsible for this smokeping installation.
+
+
+=item B<imgcache> I<(mandatory setting)>
+
+A directory which is visible on your webserver where SmokePing can cache graphs.
+
+
+=item B<imgurl> I<(mandatory setting)>
+
+Either an absolute URL to the B<imgcache> directory or one relative to the directory where you keep the
+SmokePing cgi.
+
+
+=item B<datadir> I<(mandatory setting)>
+
+The directory where SmokePing can keep its rrd files.
+
+
+=item B<piddir> I<(mandatory setting)>
+
+The directory where SmokePing keeps its pid when demonised.
+
+
+=item B<sendmail>
+
+Path to your sendmail binary. It will be used for sending mails in connection with the support of DYNAMIC addresses.			     
+
+
+=item B<smokemail> I<(mandatory setting)>
+
+Path to the mail template for DYNAMIC hosts. This mail template
+must contain keywords of the form B<E<lt>##>I<keyword>B<##E<gt>>. There is a sample
+template included with SmokePing.
+
+
+=item B<cgiurl> I<(mandatory setting)>
+
+Complete URL path of the SmokePing.cgi
+
+
+=item B<mailhost>
+
+Instead of using sendmail, you can specify the name of an smtp server 
+and use perl's Net::SMTP module to send mail to DYNAMIC host owners (see below).
+
+
+=item B<contact> I<(mandatory setting)>
+
+Mail address of the person responsible for this smokeping installation.
+
+
+=back
+
+=head2 *** Database *** I<(mandatory section)>
+
+Describes the properties of the round robin database for storing the
+SmokePing data. Note that it is not possible to edit existing RRDs
+by changeing the entries in the cfg file.
+
+
+The following variables can be set in this section:
+
+=over
+
+=item B<step> I<(mandatory setting)>
+
+Duration of the base operation interval of SmokePing in seconds.
+SmokePing will venture out every B<step> seconds to ping your target hosts.
+
+
+=item B<pings> I<(mandatory setting)>
+
+How many pings should be sent to each target. Suggested: 20 pings.
+
+
+=back
+
+This section also contains a table describing the setup of the
+SmokePing database. Below are reasonable defaults. Only change them if
+you know rrdtool and its workings. Each row in the table describes one RRA.
+
+ # cons   xff steps rows
+ AVERAGE  0.5   1   1008
+ AVERAGE  0.5  12   4320
+     MIN  0.5  12   4320
+     MAX  0.5  12   4320
+ AVERAGE  0.5 144    720
+     MAX  0.5 144    720
+     MIN  0.5 144    720
+
+
+
+=over
+
+=item column 0
+
+Consolidation method.
+
+
+=item column 1
+
+What part of the consolidated intervals must be known to warrant a known entry.
+
+
+=item column 2
+
+How many B<steps> to consolidate into for each RRA entry.
+
+
+=item column 3
+
+How many B<rows> this RRA should have.
+
+
+=back
+
+=head2 *** Presentation *** I<(mandatory section)>
+
+Defines how the SmokePing data should be presented.
+
+
+The following variables can be set in this section:
+
+=over
+
+=item B<template> I<(mandatory setting)>
+
+The webpage template must contain keywords of the form 
+B<E<lt>##>I<keyword>B<##E<gt>>. There is a sample
+template included with SmokePing; use it as the basis for your
+experiments. Default template contains a pointer to the SmokePing
+counter and homepage. I would be glad if you would not remove this as
+it gives me an indication as to how widely used the tool is.
+
+
+=item B<charset>
+
+By default, SmokePing assumes the 'iso-8859-15' character set. If you use
+something else, this is the place to speak up.
+
+
+=back
+
+The following sections are valid on level 1:
+
+=over
+
+=item B<+overview> I<(mandatory section)>
+
+The Overview section defines how the Overview graphs should look.
+
+
+The following variables can be set in this section:
+
+=over
+
+=item B<width> I<(mandatory setting)>
+
+Width of the Overview Graphs.
+
+
+=item B<height> I<(mandatory setting)>
+
+Height of the Overview Graphs.
+
+
+=item B<range>
+
+How much time should be depicted in the Overview graph. Time must be specified
+as a number followed by a letter which specifies the unit of time. Known units are:
+B<s>econds, B<m>inutes, B<h>ours, B<d>days, B<w>eeks, B<y>ears.
+
+
+=item B<max_rtt>
+
+Any roundtrip time larger than this value will cropped in the overview graph
+
+
+=item B<median_color>
+
+By default the median line is drawn in red. Override it here with a hex color
+in the format I<rrggbb>.
+
+
+=item B<strftime>
+
+Use posix strftime to format the timestamp in the left hand
+lower corner of the overview graph
+
+
+=back
+
+=item B<+detail> I<(mandatory section)>
+
+The following variables can be set in this section:
+
+=over
+
+=item B<width> I<(mandatory setting)>
+
+How many pixels wide should detail graphs be
+
+=item B<height> I<(mandatory setting)>
+
+How many pixels high should detail graphs be
+
+=item B<logarithmic>
+
+should the graphs be shown in a logarithmic scale (yes/no)
+
+=item B<unison_tolerance>
+
+if a graph is more than this factor of the median 'max' it drops out of the unison scaling algorithm. A factor of two would mean that any graph with a max either less than half or more than twice the median 'max' will be dropped from unison scaling
+
+=item B<max_rtt>
+
+Any roundtrip time larger than this value will cropped in the detail graph
+
+
+=item B<strftime>
+
+Use posix strftime to format the timestamp in the left hand
+lower corner of the detail graph
+
+
+=back
+
+The detailed display can contain several graphs of different resolution. In this
+table you can specify the resolution of each graph.
+
+Example:
+
+ "Last 3 Hours"    3h
+ "Last 30 Hours"   30h
+ "Last 10 Days"    10d
+ "Last 400 Days"   400d
+
+
+
+=over
+
+=item column 0
+
+Description of the particular resolution.
+
+
+=item column 1
+
+How much time should be depicted. The format is the same as for the B<age>  parameter of the Overview section.
+
+
+=back
+
+The following sections are valid on level 2:
+
+=over
+
+=item B<++loss_colors>
+
+In the Detail view, the color of the median line depends
+the amount of lost packets. SmokePing comes with a reasonable default setting,
+but you may choose to disagree. The table below
+lets you specify your own coloring.
+
+Example:
+
+ Loss Color   Legend
+ 1    00ff00    "<1"
+ 3    0000ff    "<3"
+ 1000 ff0000    ">=3"
+
+
+
+=over
+
+=item column 0
+
+Activate when the lossrate is larger of equal to this number
+
+
+=item column 1
+
+Color for this range.
+
+
+=item column 2
+
+Description for this range.
+
+
+=back
+
+=item B<++uptime_colors>
+
+When monitoring a host with DYNAMIC addressing, SmokePing will keep track of how long
+the machine is able to keep the same IP address. This time is plotted as a color
+in the graphs background. SmokePing comes with a reasonable default setting,
+but you may choose to disagree. The table below
+lets you specify your own coloring
+
+Example:
+
+ Uptime Color     Legend
+ 3600    00ff00   "<1h"
+ 86400   0000ff   "<1d"
+ 604800  ff0000   "<1w"
+ 1000000000000 ffff00   ">1w"
+
+Uptime is in days!
+
+
+
+=over
+
+=item column 0
+
+Activate when uptime in days is larger of equal to this number
+
+
+=item column 1
+
+Color for this uptime range range.
+
+
+=item column 2
+
+Description for this range.
+
+
+=back
+
+=back
+
+=back
+
+=head2 *** Probes *** I<(mandatory section)>
+
+The Probes Section configures Probe modules. Probe modules integrate an external ping command into SmokePing. Check the documentation of the Ping module for configuration details.
+
+
+The following sections are valid on level 1:
+
+=over
+
+=item B<+/[-_0-9a-zA-Z]+/>
+
+Each module can take specific configuration information from this area. The jumble of letters above is a regular expression defining legal module names.
+
+
+The following variables can be set in this section:
+
+=over
+
+=item B</[-_0-9a-zA-Z]+/>
+
+Each module defines which
+variables it wants to accept. So this expression here just defines legal variable names.
+
+=back
+
+=back
+
+=head2 *** Targets *** I<(mandatory section)>
+
+The Target Section defines the actual work of SmokePing. It contains a hierarchical list
+of hosts which mark the endpoints of the network connections the system should monitor.
+Each section can contain one host as well as other sections.
+
+
+The following variables can be set in this section:
+
+=over
+
+=item B<probe> I<(mandatory setting)>
+
+The name of the probe module to be used for this host. The value of
+this variable gets propagated
+
+
+=item B<menu> I<(mandatory setting)>
+
+Menu entry for this section
+
+
+=item B<title> I<(mandatory setting)>
+
+Title of the page when it is displayed.
+
+
+=item B<remark>
+
+An optional remark on the current section. It gets displayed on the webpage.
+
+
+=back
+
+The following sections are valid on level 1:
+
+=over
+
+=item B<+PROBE_CONF>
+
+Probe specific variables. 
+
+
+The following variables can be set in this section:
+
+=over
+
+=item B</[-_0-9a-zA-Z]+/>
+
+Should be found in the documentation of the
+corresponding probe. The values get propagated. If a child
+node uses the same Probe as the parent.
+
+
+=back
+
+=item B<+/[-_0-9a-zA-Z]+/>
+
+Each target section can contain information about a host to monitor as
+well as further target sections. Most variables have already been
+described above. The expression above defines legal names for target
+sections.
+
+
+The following variables can be set in this section:
+
+=over
+
+=item B<probe>
+
+=item B<menu> I<(mandatory setting)>
+
+=item B<title> I<(mandatory setting)>
+
+=item B<note>
+
+Some information about this entry which does NOT get displayed on the web.
+
+
+=item B<email>
+
+This is the contact address for the owner of the current host. In connection with the B<DYNAMIC> hosts,
+the address will be used for sending the belowmentioned script.
+
+
+=item B<host>
+
+Can either contain the name of a target host or the string B<DYNAMIC>.
+
+In the second case, the target machine has a dynamic IP address and
+thus is required to regularly contact the SmokePing server to verify
+its IP address.  When starting SmokePing with the commandline argument
+B<--email> it will add a secret password to each of the B<DYNAMIC>
+host lines and send a script to the owner of each host. This script
+must be started regularly on the host in question to make sure
+SmokePing monitors the right box. If the target machine supports
+SNMP SmokePing will also query the hosts
+sysContact, sysName and sysLocation properties to make sure it is
+still the same host.
+
+
+=item B<remark>
+
+=back
+
+The following sections are valid on level 2:
+
+=over
+
+=item B<++PROBE_CONF>
+
+Probe specific variables. 
+
+
+The following variables can be set in this section:
+
+=over
+
+=item B</[-_0-9a-zA-Z]+/>
+
+Should be found in the documentation of the
+corresponding probe. The values get propagated. If a child
+node uses the same Probe as the parent.
+
+
+=back
+
+=item B<++/[-_0-9a-zA-Z]+/>
+
+Each target section can contain information about a host to monitor as
+well as further target sections. Most variables have already been
+described above. The expression above defines legal names for target
+sections.
+
+
+=back
+
+=back
+
+=head1 COPYRIGHT
+
+Copyright (c) 2001 by Tobias Oetiker. All right reserved.
+
+=head1 LICENSE
+
+This program is free software; you can redistribute it
+and/or modify it under the terms of the GNU General Public
+License as published by the Free Software Foundation; either
+version 2 of the License, or (at your option) any later
+version.
+
+This program is distributed in the hope that it will be
+useful, but WITHOUT ANY WARRANTY; without even the implied
+warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+PURPOSE.  See the GNU General Public License for more
+details.
+
+You should have received a copy of the GNU General Public
+License along with this program; if not, write to the Free
+Software Foundation, Inc., 675 Mass Ave, Cambridge, MA
+02139, USA.
+
+=head1 AUTHOR
+
+Tobias Oetiker E<lt>tobi@oetiker.chE<gt>
+
+=cut

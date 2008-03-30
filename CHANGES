@@ -1,0 +1,134 @@
+2002/03/27 -- 1.6
+
+* fixed bug in monitoring function where targets that
+  had subtargets on the same level were ignored ... -- tobi
+
+* in basefork.pm test if IO::Select knows has_error() but not
+  has_exception() -- Jan Ludewig <chaot@isch.de>
+
+* improve handling of PID file, cases where it could not be read or written
+  wer not handlie gracefully -- Jan Ludewig <chaot@isch.de>
+
+* remove --help and --man option they never worked ...
+
+2002/03/10 -- 1.5
+
+* missed one module in the distribution ...
+
+2002/03/09 -- 1.4
+
+* make sure FPing does not hand if no targets are defined.
+
+* new mandatory config option piddir to specify where the pid file
+  should be -- Jose Carlos Garcia Sogo <jsogo@debian.org>
+  **** INCOMPATIBLE CHANGE ****
+
+* EchoPing probes contributed by Niko Tyni <ntyni@cc.helsinki.fi>
+  there is a webpage on http://www.helsinki.fi/~ntyni/smokeping/
+
+2002/03/01 -- 1.3
+
+* fixed messed up links in distribution archive ...
+
+2002/03/01 -- 1.2
+
+* improve error messages in probe setup
+
+* be smarter about detecting fping reporting unit. -- Kai <spdev@vega.fur.com>
+
+2002/02/12 -- 1.1
+
+* make detailed view colors work even if number of pings is not even
+
++INCOMPATIBLE CHANGE+ modified the definition of smokelogo and rrdlogo in the
+    webtemplate file. he tags now provide the image tage and the anchor
+    around. Please modify your template accordingly
+
+* Toby Weingartner provided some patches to clean up error messages
+
+* removed default sites from config file to protect the innocent.
+
+* detect probe loading failiours
+
+2002/02/09 -- 1.0
+
+* made basepage links stand out ...
+
+2002/01/31 -- 0.99.18
+* Fixed loss color config handling and documentation
+
+2002/01/28 -- 0.99.17
+* Get description of Ping from Probe
+* Fixed quote parsing in config parser
+
+2002/01/27 -- 0.99.16
+* fixed unison scaling ... I was picking the wrong value as median.
+* do not refuse to start if a host is missing from DNS ... just complain
+
+2002/01/27 -- 0.99.15
+* now the color works you have to use rrggbb not #rrggbb
+* added scrftime configurable to format time in lower
+  righthand corner of the graph
+
+
+2002/01/27 -- 0.99.14
+* guess [0-f] does not work it should be [0-9a-f]
+
+2002/01/26 -- 0.99.13
+* switched back to normal scaling for overview graphs
+* added average and latest median rtt numbers to graph
+* added more color settings to graph
+* allow configuration of loss and uptime colors (not tested)
+
+2002/01/23 -- 0.99.12
+* Use -alt-y-scaling for better grid in overview graphs
+* Added max_rtt to overview graphs
+
+2002/01/22 -- 0.99.11
+
+* files which must be modified are now named *.dist (thanks paul)
+* added maxrtt configurable
+* introduced new colors for link uptime using INF
+* added thin black line 'connecting the 'measurements'
+
+2002/01/20 -- 0.99.10
+
+* Added cache file for graph.max values ... this will improve unison scaling
+  in lazy mode
+* changed drawing of madian to AREA and STACK to take into account that this
+  is not anything contious we are looking at but samples ...
+
+
+2002/01/17 -- 0.99.9
+
+* allow --nodaemon as well 
+* added new configurables lograrithic and unison_tolerance
+  this should help smokeping deal better with spikes
+
+2002/01/03 -- 0.99.8
+* Change colors for LOSS display ... make small losses simpler to see
+* Sort Graphs in Overview
+* --nodemon option
+* Allow cgi urls with https://
+
+2001/11/17 -- 0.99.7
+
+* Make DYNAMIC work with hosts who do not support snmp
+* do not print anything from FPing.pm if used from CGI
+
+2001/11/03 -- 0.99.6
+
+* updated the default basepage.html to include automatic reload and cache expiery ... -- Me
+* smokeping.cgi adds header information to the webpage with expiery and charset -- Me
+* split the pod docs off the smokeping and smokeping.cgi scripts -- Me
+* created a special version of fping where configure works ... added it to the
+  download area of smokeping. -- Me
+* spell fixes for Smokepin.pm (smokeping_config.pod) -- S. William Schulz <ss@ssLinux.com>
+
+2001/11/01 -- 0.99.5
+
+* Deal with nan as well as NaN -- Me
+* Deal with DYNAMIC hosts who do not allow for SNMP -- Me
+* mkdir needs a mode (0755) -- S. William Schulz <ss@ssLinux.com>
+* Determine is fping reports in miliseconds or in 0.1 miliseconds -- Me
+* Wait for 3 seconds when restarting ... 

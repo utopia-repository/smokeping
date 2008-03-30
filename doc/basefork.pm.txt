@@ -1,0 +1,61 @@
+probes::basefork(3)         SmokePing         probes::basefork(3)
+
+
+
+NNNNAAAAMMMMEEEE
+       probes::basefork - Yet Another Base Class for implementing
+       SmokePing Probes
+
+OOOOVVVVEEEERRRRVVVVIIIIEEEEWWWW
+       Like probes::basevars, but supports the probe-specific
+       property `forks' to determine how many processes should be
+       run concurrently.
+
+SSSSYYYYNNNNOOOOPPPPSSSSYYYYSSSS
+        *** Probes ***
+
+        + MyForkingProbe
+        # run this many concurrent processes
+        forks = 10
+
+        + MyOtherForkingProbe
+        # we don't want any concurrent processes at all for some reason.
+        forks = 1
+
+
+DDDDEEEESSSSCCCCRRRRIIIIPPPPTTTTIIIIOOOONNNN
+       Not all pinger programs support testing multiple hosts in
+       a single go like _f_p_i_n_g(1). If the measurement takes long
+       enough, there may be not enough time perform all the tests
+       in the time available. For example, if the test takes 30
+       seconds, measuring ten hosts already fills up the
+       SmokePing default five minute step.
+
+       Thus, it may be necessary to do some of the tests concur-
+       rently. This module defines the ppppiiiinnnngggg method that forks the
+       requested number of concurrent processes and calls the
+       ppppiiiinnnnggggoooonnnneeee method that derived classes must provide.
+
+       The ppppiiiinnnnggggoooonnnneeee method is called with one argument: a hash
+       containing the target that is to be measured. The contents
+       of the hash are described in _p_r_o_b_e_s_:_:_b_a_s_e_v_a_r_s(3pm).
+
+       The number of concurrent processes is determined by the
+       probe-specific variable `forks' and is 5 by default. If
+       there are more targets than this value, another round of
+       forks is done after the first processes are finished. This
+       continues until all the targets have been tested.
+
+AAAAUUUUTTTTHHHHOOOORRRR
+       Niko Tyni <ntyni@iki.fi>
+
+BBBBUUUUGGGGSSSS
+       Doesn't signal failures in child processes, partly because
+       SmokePing hasn't any logging features after daemonization.
+
+SSSSEEEEEEEE AAAALLLLSSSSOOOO
+       probes::basevars(3pm), probes::EchoPing(3pm)
+
+
+
+2002-03-22                     1.6            probes::basefork(3)

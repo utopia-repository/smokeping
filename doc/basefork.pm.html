@@ -1,0 +1,82 @@
+<HTML>
+<HEAD>
+<TITLE>basefork.pm</TITLE>
+<LINK REV="made" HREF="mailto:karrer@iis.ee.ethz.ch">
+</HEAD>
+
+<BODY>
+
+<A NAME="__index__"></A>
+<!-- INDEX BEGIN -->
+<!--
+
+<UL>
+
+	<LI><A HREF="#name">NAME</A></LI>
+	<LI><A HREF="#overview">OVERVIEW</A></LI>
+	<LI><A HREF="#synopsys">SYNOPSYS</A></LI>
+	<LI><A HREF="#description">DESCRIPTION</A></LI>
+	<LI><A HREF="#author">AUTHOR</A></LI>
+	<LI><A HREF="#bugs">BUGS</A></LI>
+	<LI><A HREF="#see also">SEE ALSO</A></LI>
+</UL>
+-->
+<!-- INDEX END -->
+
+<P>
+<H1><A NAME="name">NAME</A></H1>
+<P>probes::basefork - Yet Another Base Class for implementing SmokePing Probes</P>
+<P>
+<HR>
+<H1><A NAME="overview">OVERVIEW</A></H1>
+<P>Like probes::basevars, but supports the probe-specific property `forks'
+to determine how many processes should be run concurrently.</P>
+<P>
+<HR>
+<H1><A NAME="synopsys">SYNOPSYS</A></H1>
+<PRE>
+ *** Probes ***</PRE>
+<PRE>
+ + MyForkingProbe
+ # run this many concurrent processes
+ forks = 10</PRE>
+<PRE>
+ + MyOtherForkingProbe
+ # we don't want any concurrent processes at all for some reason.
+ forks = 1</PRE>
+<P>
+<HR>
+<H1><A NAME="description">DESCRIPTION</A></H1>
+<P>Not all pinger programs support testing multiple hosts in a single go like
+fping(1). If the measurement takes long enough, there may be not enough time 
+perform all the tests in the time available. For example, if the test takes
+30 seconds, measuring ten hosts already fills up the SmokePing default 
+five minute step.</P>
+<P>Thus, it may be necessary to do some of the tests concurrently. This module
+defines the <STRONG>ping</STRONG> method that forks the requested number of concurrent 
+processes and calls the <STRONG>pingone</STRONG> method that derived classes must provide.</P>
+<P>The <STRONG>pingone</STRONG> method is called with one argument: a hash containing
+the target that is to be measured. The contents of the hash are
+described in <EM>probes::basevars</EM>(3pm).</P>
+<P>The number of concurrent processes is determined by the probe-specific 
+variable `forks' and is 5 by default. If there are more 
+targets than this value, another round of forks is done after the first 
+processes are finished. This continues until all the targets have been
+tested.</P>
+<P>
+<HR>
+<H1><A NAME="author">AUTHOR</A></H1>
+<P>Niko Tyni &lt;<A HREF="mailto:ntyni@iki.fi">ntyni@iki.fi</A>&gt;</P>
+<P>
+<HR>
+<H1><A NAME="bugs">BUGS</A></H1>
+<P>Doesn't signal failures in child processes, partly because SmokePing 
+hasn't any logging features after daemonization.</P>
+<P>
+<HR>
+<H1><A NAME="see also">SEE ALSO</A></H1>
+<P>probes::basevars(3pm), probes::EchoPing(3pm)</P>
+
+</BODY>
+
+</HTML>

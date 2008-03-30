@@ -1,0 +1,10 @@
+Contributors
+============
+
+* Tobias Oetiker <tobi@oetiker.ch>  => Main Author
+
+* Niko Tyni <ntyni@cc.helsinki.fi>  => EchoPing*.pm basevars.pm basefork.pm
+* Simon Leinen  <leinen@switch.ch>  => SNMP_Session.pm
+* David Schweikert <dws@ee.ethz.ch> => ISG::ParseConfig.pm
+
+

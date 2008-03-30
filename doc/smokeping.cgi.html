@@ -1,0 +1,91 @@
+<HTML>
+<HEAD>
+<TITLE>smokeping.cgi</TITLE>
+<LINK REV="made" HREF="mailto:karrer@iis.ee.ethz.ch">
+</HEAD>
+
+<BODY>
+
+<A NAME="__index__"></A>
+<!-- INDEX BEGIN -->
+<!--
+
+<UL>
+
+	<LI><A HREF="#name">NAME</A></LI>
+	<LI><A HREF="#overview">OVERVIEW</A></LI>
+	<LI><A HREF="#description">DESCRIPTION</A></LI>
+	<LI><A HREF="#setup">SETUP</A></LI>
+	<LI><A HREF="#copyright">COPYRIGHT</A></LI>
+	<LI><A HREF="#license">LICENSE</A></LI>
+	<LI><A HREF="#author">AUTHOR</A></LI>
+</UL>
+-->
+<!-- INDEX END -->
+
+<P>
+<H1><A NAME="name">NAME</A></H1>
+<P>smokeping.cgi - SmokePing webfrontend</P>
+<P>
+<HR>
+<H1><A NAME="overview">OVERVIEW</A></H1>
+<P>This script acts as a 'website' for your SmokePing monitoring operation. It
+presents the targets you are looking at in a tree structure and draws graphs
+as they are required by people looking at the pages.</P>
+<P>
+<HR>
+<H1><A NAME="description">DESCRIPTION</A></H1>
+<P>To get <STRONG>smokeping.cgi</STRONG> going, you need a webserver which allows you to run
+cgi scripts. The system must be setup so that the <STRONG>smokeping.cgi</STRONG> is
+allowed to write to the image caching area as defined in the config file.</P>
+<P>This script runs with normal perl. <STRONG>BUT</STRONG> it will appear to be very slow,
+because it does a lot of things when starting up. So if the script has to be
+started a fresh on every click, this is both slow and a tough thing for your
+webserver. I therefore strongly recomment using SpeedyCGI.</P>
+<P>Please refer to the installation document for detailed setup instructions.</P>
+<P>
+<HR>
+<H1><A NAME="setup">SETUP</A></H1>
+<P>When installing SmokePing, this file has to be adjusted to fit your
+local system. Three paths have to be entered.</P>
+<PRE>
+ use lib qw(/usr/pack/rrdtool-1.0.33-to/lib/perl);</PRE>
+<P>One pointing to your <STRONG>rrdtool</STRONG> installation</P>
+<PRE>
+ use lib qw(/home/oetiker/public_html/smokeping/lib);</PRE>
+<P>One pointing to the place where you have installed the SmokePing libraries</P>
+<PRE>
+ use Smokeping;</PRE>
+<PRE>
+ Smokeping::cgi(&quot;/home/oetiker/.smokeping/config&quot;);</PRE>
+<P>The third path is the argument to the Smokeping::main command. It points to
+the SmokePing configuration file.</P>
+<P>
+<HR>
+<H1><A NAME="copyright">COPYRIGHT</A></H1>
+<P>Copyright (c) 2001 by Tobias Oetiker. All right reserved.</P>
+<P>
+<HR>
+<H1><A NAME="license">LICENSE</A></H1>
+<P>This program is free software; you can redistribute it
+and/or modify it under the terms of the GNU General Public
+License as published by the Free Software Foundation; either
+version 2 of the License, or (at your option) any later
+version.</P>
+<P>This program is distributed in the hope that it will be
+useful, but WITHOUT ANY WARRANTY; without even the implied
+warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+PURPOSE.  See the GNU General Public License for more
+details.</P>
+<P>You should have received a copy of the GNU General Public
+License along with this program; if not, write to the Free
+Software Foundation, Inc., 675 Mass Ave, Cambridge, MA
+02139, USA.</P>
+<P>
+<HR>
+<H1><A NAME="author">AUTHOR</A></H1>
+<P>Tobias Oetiker &lt;tobi\@oetiker.ch&gt;</P>
+
+</BODY>
+
+</HTML>

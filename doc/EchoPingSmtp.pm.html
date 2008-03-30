@@ -1,0 +1,61 @@
+<HTML>
+<HEAD>
+<TITLE>EchoPingSmtp.pm</TITLE>
+<LINK REV="made" HREF="mailto:karrer@iis.ee.ethz.ch">
+</HEAD>
+
+<BODY>
+
+<A NAME="__index__"></A>
+<!-- INDEX BEGIN -->
+<!--
+
+<UL>
+
+	<LI><A HREF="#name">NAME</A></LI>
+	<LI><A HREF="#overview">OVERVIEW</A></LI>
+	<LI><A HREF="#synopsys">SYNOPSYS</A></LI>
+	<LI><A HREF="#description">DESCRIPTION</A></LI>
+	<LI><A HREF="#author">AUTHOR</A></LI>
+	<LI><A HREF="#see also">SEE ALSO</A></LI>
+</UL>
+-->
+<!-- INDEX END -->
+
+<P>
+<H1><A NAME="name">NAME</A></H1>
+<P>probes::EchoPingSmtp - an <CODE>echoping(1)</CODE> probe for SmokePing</P>
+<P>
+<HR>
+<H1><A NAME="overview">OVERVIEW</A></H1>
+<P>Measures SMTP roundtrip times (mail servers) for SmokePing.</P>
+<P>
+<HR>
+<H1><A NAME="synopsys">SYNOPSYS</A></H1>
+<PRE>
+ *** Probes ***
+ + EchoPingSmtp</PRE>
+<PRE>
+ binary = /usr/bin/echoping # mandatory</PRE>
+<PRE>
+ *** Targets ***
+ probe = EchoPingSmtp</PRE>
+<P>
+<HR>
+<H1><A NAME="description">DESCRIPTION</A></H1>
+<P>Supported probe-specific variables: those specified in <CODE>EchoPing(3pm)</CODE> 
+documentation.</P>
+<P>Supported target-specific variables: those specified in 
+<CODE>EchoPing(3pm)</CODE> documentation except <EM>fill</EM>, <EM>size</EM> and <EM>udp</EM>.</P>
+<P>
+<HR>
+<H1><A NAME="author">AUTHOR</A></H1>
+<P>Niko Tyni &lt;<A HREF="mailto:ntyni@iki.fi">ntyni@iki.fi</A>&gt;</P>
+<P>
+<HR>
+<H1><A NAME="see also">SEE ALSO</A></H1>
+<P><CODE>EchoPing(3pm)</CODE></P>
+
+</BODY>
+
+</HTML>

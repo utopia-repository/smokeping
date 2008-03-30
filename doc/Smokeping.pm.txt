@@ -1,0 +1,42 @@
+Smokeping(3)                SmokePing                Smokeping(3)
+
+
+
+NNNNAAAAMMMMEEEE
+       Smokeping.pm - SmokePing Perl Module
+
+OOOOVVVVEEEERRRRVVVVIIIIEEEEWWWW
+       Almost all SmokePing functionality sitts in this Module.
+       The programs ssssmmmmooookkkkeeeeppppiiiinnnngggg and ssssmmmmooookkkkeeeeppppiiiinnnngggg....ccccggggiiii are merily figure
+       heads allowing to hardcode some pathnames.
+
+       If you feel like documenting what is happening within this
+       library you are most welcome todo so.
+
+CCCCOOOOPPPPYYYYRRRRIIIIGGGGHHHHTTTT
+       Copyright (c) 2001 by Tobias Oetiker. All right reserved.
+
+LLLLIIIICCCCEEEENNNNSSSSEEEE
+       This program is free software; you can redistribute it
+       and/or modify it under the terms of the GNU General Public
+       License as published by the Free Software Foundation;
+       either version 2 of the License, or (at your option) any
+       later version.
+
+       This program is distributed in the hope that it will be
+       useful, but WITHOUT ANY WARRANTY; without even the implied
+       warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+       PURPOSE.  See the GNU General Public License for more
+       details.
+
+       You should have received a copy of the GNU General Public
+       License along with this program; if not, write to the Free
+       Software Foundation, Inc., 675 Mass Ave, Cambridge, MA
+       02139, USA.
+
+AAAAUUUUTTTTHHHHOOOORRRR
+       Tobias Oetiker <tobi\@oetiker.ch>
+
+
+
+2002-03-27                     1.6                   Smokeping(3)
