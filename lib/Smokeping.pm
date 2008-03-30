@@ -38,7 +38,7 @@ use Smokeping::RRDtools;
 
 # globale persistent variables for speedy
 use vars qw($cfg $probes $VERSION $havegetaddrinfo $cgimode);
-$VERSION="2.003002";
+$VERSION="2.003003";
 
 # we want opts everywhere
 my %opt;
@@ -1849,22 +1849,16 @@ sub update_rrds($$$$$$) {
         my $probeobj = $probes->{$probe};
         my $pings = $probeobj->_pings($tree);
         if ($prop eq 'host' and check_filter($cfg,$name) and $tree->{$prop} !~ m|^/|) { # skip multihost
-            my %slave_test;
-            my $slaveupdates;
             my @updates;
             if (not $tree->{nomasterpoll} or $tree->{nomasterpoll} eq 'no'){
                 @updates = ([ "", time, $probeobj->rrdupdate_string($tree) ]);
             }
             if ($tree->{slaves}){
-                %slave_test = ( map { $_,1 } split(/\s+/, $tree->{slaves}));
-                $slaveupdates = Smokeping::Master::get_slaveupdates($name);     
-                for my $slave (@{$slaveupdates}){
-                    if (not $slave_test{$slave->[0]}){
-                        warn "WARNING: skipping update for $slave->[0] since it is not configured for $name\n";
-                        next;
-                    }
-                    push @updates, $slave;
-                }
+                my @slaves = split(/\s+/, $tree->{slaves});
+                foreach my $slave (@slaves) {
+	            my $lines = Smokeping::Master::get_slaveupdates($name, $slave);
+                    push @updates, @$lines;
+                } #foreach my $checkslave
             }
             for my $update (sort {$a->[1] <=> $b->[1]}  @updates){ # make sure we put the updates in chronological order in
                 my $s = $update->[0] ? "~".$update->[0] : "";
@@ -3949,7 +3943,8 @@ sub main (;$) {
     GetOptions(\%opt, 'version', 'email', 'man:s','help','logfile=s','static-pages:s', 'debug-daemon',
                       'nosleep', 'makepod:s','debug','restart', 'filter=s', 'nodaemon|nodemon',
                       'config=s', 'check', 'gen-examples', 'reload', 
-                      'master-url=s','cache-dir=s','shared-secret=s','slave-name=s') or pod2usage(2);
+                      'master-url=s','cache-dir=s','shared-secret=s',
+                      'slave-name=s','pid-dir=s') or pod2usage(2);
     if($opt{version})  { print "$VERSION\n"; exit(0) };
     if(exists $opt{man}) {
         if ($opt{man}) {
@@ -3989,6 +3984,7 @@ sub main (;$) {
         $slave_cfg = {
             master_url => $opt{'master-url'},
             cache_dir => $opt{'cache-dir'},
+            pid_dir   => $opt{'pid-dir'} || $opt{'cache-dir'},
             shared_secret => $secret,
             slave_name => $opt{'slave-name'} || hostname(),
         };
@@ -4160,8 +4156,8 @@ KID:
         }
     }
     if (defined $myprobe) {
-        $offset = $probes->{$myprobe}->offset || 'random';
-        $step = $probes->{$myprobe}->step;
+        $offset = $probes->{$myprobe}->offset() || 'random';
+        $step = $probes->{$myprobe}->step();
         $0 .= " [$myprobe]" if $changeprocessnames;
     } else {
         $offset = $cfg->{General}{offset} || 'random';

@@ -72,7 +72,7 @@ sub submit_results {
     my $data_dump = join("\n",@{$restore}) || "";
     my $ua = LWP::UserAgent->new(
         agent => 'smokeping-slave/1.0',
-        timeout => 10,
+        timeout => 60,
         env_proxy => 1 );
 
     my $response = $ua->post(
@@ -103,7 +103,7 @@ sub submit_results {
         if ($@){
             warn "WARNING evaluating new config from server failed: $@ --\n$data";
         } elsif (defined $config and ref $config eq 'HASH'){
-            $config->{General}{piddir} = $slave_cfg->{cache_dir};
+            $config->{General}{piddir} = $slave_cfg->{pid_dir};
             Smokeping::do_log("Sent data to Server and got new config in response.");
             return $config;
         }                       

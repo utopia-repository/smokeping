@@ -1,3 +1,12 @@
+2008/3/10 -- released version 2.3.3
+
+* use separate slave cache and longer slave timeout. this
+  helps with slave congestion -- Phillip Moore  pdm yahoo-inc.com
+
+* add an optional --pid-dir option to specify the pid directory 
+  when running as a slave. --niko
+* slaves were not polling targets where nomasterpoll was set --tobi
+
 2008/2/25 -- released version 2.3.2
 
 * make ajax mode work on IE again -- tobi
