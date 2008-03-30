@@ -129,7 +129,7 @@
 .\" ========================================================================
 .\"
 .IX Title "SMOKEPING_UPGRADE 7"
-.TH SMOKEPING_UPGRADE 7 "2005-09-20" "2.0.3" "SmokePing"
+.TH SMOKEPING_UPGRADE 7 "2005-10-03" "2.0.4" "SmokePing"
 .SH "NAME"
 smokeping_upgrade \- Notes on upgrading Smokeping
 .SH "OVERVIEW"
@@ -329,6 +329,11 @@ like all the others do.
 .Sp
 The \f(CW\*(C`target\*(C'\fR variable was removed. The target should now be specified
 in the \f(CW\*(C`host\*(C'\fR variable, like it is with all the other probes.
+.Sh "CGI::Carp module version"
+.IX Subsection "CGI::Carp module version"
+The recommended version for CGI::Carp is now at least 1.24, included in
+\&\s-1CGI\s0.pm\-2.82 and the Perl standard distribution starting from 5.8.1.
+See the smokeping_install document. 
 .SH "1.38 to 1.40"
 .IX Header "1.38 to 1.40"
 .IP "The new navigation feature" 4

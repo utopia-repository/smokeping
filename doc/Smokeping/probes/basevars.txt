@@ -1,14 +1,14 @@
-doc::Smokeping::probes::basevSamrodsko(ec3P:)i:nSgmokeping::probes::basevars(3)
+doc::Smokeping::probes::basevars(3)SmokePingdoc::Smokeping::probes::basevars(3)
 
 
 
 NNAAMMEE
-       Smokeping::probes::basevars - Another Base Class for
-       implementing SmokePing Probes
+       Smokeping::probes::basevars - Another Base Class for implementing
+       SmokePing Probes
 
 OOVVEERRVVIIEEWW
-       Like Smokeping::probes::base, but supports host-specific
-       variables for the probe.
+       Like Smokeping::probes::base, but supports host-specific variables for
+       the probe.
 
 SSYYNNOOPPSSIISS
         *** Probes ***
@@ -32,62 +32,55 @@ SSYYNNOOPPSSIISS
         host = my.host
 
 DDEESSCCRRIIPPTTIIOONN
-       Provides the method `targets' that returns a list of
-       hashes.  The hashes contain the entries:
+       Provides the method `targets' that returns a list of hashes.  The
+       hashes contain the entries:
 
        addr
            The address of the target.
 
        vars
-           A hash containing variables defined in the correspond-
-           ing config section.
+           A hash containing variables defined in the corresponding config
+           section.
 
        tree
            The unique index that `probe::base' uses for targets.
 
-           There's also the method 'vars' that returns the above-
-           mentioned hash corresponding to the 'tree' index
-           parameter.
+           There's also the method 'vars' that returns the abovementioned hash
+           corresponding to the 'tree' index parameter.
 
 VVAARRIIAABBLLEESS
        Supported probe-specific variables:
 
        offset
-           If you run many probes concurrently you may want to
-           prevent them from hitting your network all at the same
-           time. Using the probe-specific offset parameter you
-           can change the point in time when each probe will be
-           run. Offset is specified in % of total interval, or
-           alternatively as 'random', and the offset from the
-           'General' section is used if nothing is specified
-           here. Note that this does NOT influence the rrds
-           itself, it is just a matter of when data acqusition is
-           initiated.  (This variable is only applicable if the
-           variable 'concurrentprobes' is set in the 'General'
-           section.)
+           If you run many probes concurrently you may want to prevent them
+           from hitting your network all at the same time. Using the probe-
+           specific offset parameter you can change the point in time when
+           each probe will be run. Offset is specified in % of total interval,
+           or alternatively as 'random', and the offset from the 'General'
+           section is used if nothing is specified here. Note that this does
+           NOT influence the rrds itself, it is just a matter of when data
+           acqusition is initiated.  (This variable is only applicable if the
+           variable 'concurrentprobes' is set in the 'General' section.)
 
            Example value: 50%
 
        pings
-           How many pings should be sent to each target, if dif-
-           ferent from the global value specified in the Database
-           section. Note that the number of pings in the RRD
-           files is fixed when they are originally generated, and
-           if you change this parameter afterwards, you'll have
+           How many pings should be sent to each target, if different from the
+           global value specified in the Database section. Note that the num-
+           ber of pings in the RRD files is fixed when they are originally
+           generated, and if you change this parameter afterwards, you'll have
            to delete the old RRD files or somehow convert them.
 
            Example value: 20
 
        step
-           Duration of the base interval that this probe should
-           use, if different from the one specified in the
-           'Database' section. Note that the step in the RRD
-           files is fixed when they are originally generated, and
-           if you change the step parameter afterwards, you'll
-           have to delete the old RRD files or somehow convert
-           them. (This variable is only applicable if the vari-
-           able 'concurrentprobes' is set in the 'General' sec-
-           tion.)
+           Duration of the base interval that this probe should use, if dif-
+           ferent from the one specified in the 'Database' section. Note that
+           the step in the RRD files is fixed when they are originally gener-
+           ated, and if you change the step parameter afterwards, you'll have
+           to delete the old RRD files or somehow convert them. (This variable
+           is only applicable if the variable 'concurrentprobes' is set in the
+           'General' section.)
 
            Example value: 300
 
@@ -95,13 +88,12 @@ AAUUTTHHOORRSS
        Niko Tyni <ntyni@iki.fi>
 
 BBUUGGSS
-       Uses `Smokeping::probes::base' internals too much to be a
-       derived class, but I didn't want to touch the base class
-       directly.
+       Uses `Smokeping::probes::base' internals too much to be a derived
+       class, but I didn't want to touch the base class directly.
 
 SSEEEE AALLSSOO
        Smokeping::probes::base, Smokeping::probes::EchoPing
 
 
 
-2.0.3                       200d5o-c0:9:-S2m6okeping::probes::basevars(3)
+2.0.4                             2005-10-12doc::Smokeping::probes::basevars(3)

@@ -1,4 +1,4 @@
-doc::Smokeping::probes::AnothSdemorocSk:Se:HPS(im3no)gkeping::probes::AnotherSSH(3)
+doc::Smokeping::probes::AnotherSSH(3S)mokePidnogc::Smokeping::probes::AnotherSSH(3)
 
 
 
@@ -41,9 +41,8 @@ SSYYNNOOPPSSIISS
         timeout = 5
 
 DDEESSCCRRIIPPTTIIOONN
-       Latency measurement using SSH. This generates Logfile mes-
-       sages on the other Host, so get permission from the owner
-       first!
+       Latency measurement using SSH. This generates Logfile messages on the
+       other Host, so get permission from the owner first!
 
 VVAARRIIAABBLLEESS
        Supported probe-specific variables:
@@ -56,59 +55,52 @@ VVAARRIIAABBLLEESS
            Default value: 5
 
        offset
-           If you run many probes concurrently you may want to
-           prevent them from hitting your network all at the same
-           time. Using the probe-specific offset parameter you
-           can change the point in time when each probe will be
-           run. Offset is specified in % of total interval, or
-           alternatively as 'random', and the offset from the
-           'General' section is used if nothing is specified
-           here. Note that this does NOT influence the rrds
-           itself, it is just a matter of when data acqusition is
-           initiated.  (This variable is only applicable if the
-           variable 'concurrentprobes' is set in the 'General'
-           section.)
+           If you run many probes concurrently you may want to prevent them
+           from hitting your network all at the same time. Using the probe-
+           specific offset parameter you can change the point in time when
+           each probe will be run. Offset is specified in % of total interval,
+           or alternatively as 'random', and the offset from the 'General'
+           section is used if nothing is specified here. Note that this does
+           NOT influence the rrds itself, it is just a matter of when data
+           acqusition is initiated.  (This variable is only applicable if the
+           variable 'concurrentprobes' is set in the 'General' section.)
 
            Example value: 50%
 
        step
-           Duration of the base interval that this probe should
-           use, if different from the one specified in the
-           'Database' section. Note that the step in the RRD
-           files is fixed when they are originally generated, and
-           if you change the step parameter afterwards, you'll
-           have to delete the old RRD files or somehow convert
-           them. (This variable is only applicable if the vari-
-           able 'concurrentprobes' is set in the 'General' sec-
-           tion.)
+           Duration of the base interval that this probe should use, if dif-
+           ferent from the one specified in the 'Database' section. Note that
+           the step in the RRD files is fixed when they are originally gener-
+           ated, and if you change the step parameter afterwards, you'll have
+           to delete the old RRD files or somehow convert them. (This variable
+           is only applicable if the variable 'concurrentprobes' is set in the
+           'General' section.)
 
            Example value: 300
 
        Supported target-specific variables:
 
        greeting
-           Greeting string to send to the SSH Server. This will
-           appear in the Logfile.  Use this to make clear, who
-           you are and what you are doing to avoid confusion.
+           Greeting string to send to the SSH Server. This will appear in the
+           Logfile.  Use this to make clear, who you are and what you are
+           doing to avoid confusion.
 
-           Also, don't use something that is a valid version
-           string. This probe assumes that the connection gets
-           terminated because of protocol mismatch.
+           Also, don't use something that is a valid version string. This
+           probe assumes that the connection gets terminated because of proto-
+           col mismatch.
 
-           Default value: SSH-Latency-Measurement-Sorry-for-this-
-           logmessage
+           Default value: SSH-Latency-Measurement-Sorry-for-this-logmessage
 
        interval
            The interval to be measured. One of:
 
            connect
-               Interval between _c_o_n_n_e_c_t_(_) and the greeting string
-               from the host.
+               Interval between _c_o_n_n_e_c_t_(_) and the greeting string from the
+               host.
 
            established
-               Interval between our greeting message and the end
-               of the connection because of Protocol mismatch.
-               This is the default.
+               Interval between our greeting message and the end of the con-
+               nection because of Protocol mismatch. This is the default.
 
            complete
                From _c_o_n_n_e_c_t_(_) to the end of the connection.
@@ -116,17 +108,16 @@ VVAARRIIAABBLLEESS
            Default value: established
 
        mininterval
-           Minimum interval between the start of two connection
-           attempts in (possibly fractional) seconds.
+           Minimum interval between the start of two connection attempts in
+           (possibly fractional) seconds.
 
            Default value: 0.5
 
        pings
-           How many pings should be sent to each target, if dif-
-           ferent from the global value specified in the Database
-           section. Note that the number of pings in the RRD
-           files is fixed when they are originally generated, and
-           if you change this parameter afterwards, you'll have
+           How many pings should be sent to each target, if different from the
+           global value specified in the Database section. Note that the num-
+           ber of pings in the RRD files is fixed when they are originally
+           generated, and if you change this parameter afterwards, you'll have
            to delete the old RRD files or somehow convert them.
 
            Example value: 5
@@ -146,4 +137,4 @@ AAUUTTHHOORRSS
 
 
 
-2.0.3                       2d0o0c5:-:0S9m-o2k6eping::probes::AnotherSSH(3)
+2.0.4                             2005-10-d1o2c::Smokeping::probes::AnotherSSH(3)

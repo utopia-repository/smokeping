@@ -52,7 +52,7 @@ use strict;
 # Point the lib variables to your implementation
 use lib qw(/usr/share/perl5/smokeping);
 
-use Smokeping 2.000003;
+use Smokeping 2.000004;
 use Net::SMTP;
 use Getopt::Long;
 use Pod::Usage;

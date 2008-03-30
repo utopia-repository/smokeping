@@ -243,6 +243,13 @@ OOVVEERRVVIIEEWW
            now be specified in the "host" variable, like it is
            with all the other probes.
 
+       CCGGII::::CCaarrpp mmoodduullee vveerrssiioonn
+
+       The recommended version for CGI::Carp is now at least
+       1.24, included in CGI.pm-2.82 and the Perl standard dis-
+       tribution starting from 5.8.1.  See the smokeping_install
+       document.
+
 11..3388 ttoo 11..4400
        The new navigation feature
            The big visible difference between 1.38 and 1.40 is
@@ -301,4 +308,4 @@ SSEEEE AALLSSOO
 
 
 
-2.0.3                       2005-09-20       SMOKEPING_UPGRADE(7)
+2.0.4                       2005-10-03       SMOKEPING_UPGRADE(7)

@@ -1,4 +1,4 @@
-doc::Smokeping::probes::Curl(S3m)okePidnogc::Smokeping::probes::Curl(3)
+doc::Smokeping::probes::Curl(3)    SmokePing   doc::Smokeping::probes::Curl(3)
 
 
 
@@ -69,68 +69,60 @@ VVAARRIIAABBLLEESS
            Default value: 5
 
        offset
-           If you run many probes concurrently you may want to
-           prevent them from hitting your network all at the same
-           time. Using the probe-specific offset parameter you
-           can change the point in time when each probe will be
-           run. Offset is specified in % of total interval, or
-           alternatively as 'random', and the offset from the
-           'General' section is used if nothing is specified
-           here. Note that this does NOT influence the rrds
-           itself, it is just a matter of when data acqusition is
-           initiated.  (This variable is only applicable if the
-           variable 'concurrentprobes' is set in the 'General'
-           section.)
+           If you run many probes concurrently you may want to prevent them
+           from hitting your network all at the same time. Using the probe-
+           specific offset parameter you can change the point in time when
+           each probe will be run. Offset is specified in % of total interval,
+           or alternatively as 'random', and the offset from the 'General'
+           section is used if nothing is specified here. Note that this does
+           NOT influence the rrds itself, it is just a matter of when data
+           acqusition is initiated.  (This variable is only applicable if the
+           variable 'concurrentprobes' is set in the 'General' section.)
 
            Example value: 50%
 
        step
-           Duration of the base interval that this probe should
-           use, if different from the one specified in the
-           'Database' section. Note that the step in the RRD
-           files is fixed when they are originally generated, and
-           if you change the step parameter afterwards, you'll
-           have to delete the old RRD files or somehow convert
-           them. (This variable is only applicable if the vari-
-           able 'concurrentprobes' is set in the 'General' sec-
-           tion.)
+           Duration of the base interval that this probe should use, if dif-
+           ferent from the one specified in the 'Database' section. Note that
+           the step in the RRD files is fixed when they are originally gener-
+           ated, and if you change the step parameter afterwards, you'll have
+           to delete the old RRD files or somehow convert them. (This variable
+           is only applicable if the variable 'concurrentprobes' is set in the
+           'General' section.)
 
            Example value: 300
 
        Supported target-specific variables:
 
        agent
-           The "-A" _c_u_r_l(1) option.  This is a full HTTP User-
-           Agent header including the words "User-Agent:". Note
-           that it does not need any quotes around it.
+           The "-A" _c_u_r_l(1) option.  This is a full HTTP User-Agent header
+           including the words "User-Agent:". Note that it does not need any
+           quotes around it.
 
-           Example value: User-Agent: Lynx/2.8.4rel.1 lib-
-           www-FM/2.14 SSL-MM/1.4.1 OpenSSL/0.9.6c
+           Example value: User-Agent: Lynx/2.8.4rel.1 libwww-FM/2.14
+           SSL-MM/1.4.1 OpenSSL/0.9.6c
 
        extraargs
-           Any extra arguments you might want to hand to _c_u_r_l(1).
-           The arguments should be separated by the regexp speci-
-           fied in "extrare", which contains just the space char-
-           acter (" ") by default.
+           Any extra arguments you might want to hand to _c_u_r_l(1). The argu-
+           ments should be separated by the regexp specified in "extrare",
+           which contains just the space character (" ") by default.
 
-           Note that curl will be called with the resulting list
-           of arguments without any shell expansion. If you need
-           to specify any arguments containing spaces, you should
-           set "extrare" to something else.
+           Note that curl will be called with the resulting list of arguments
+           without any shell expansion. If you need to specify any arguments
+           containing spaces, you should set "extrare" to something else.
 
-           As a complicated example, to explicitly set the
-           "Host:" header in Curl requests, you need to set
-           "extrare" to something else, eg. "/;/", and then spec-
-           ify "extraargs = --header;Host: www.example.com".
+           As a complicated example, to explicitly set the "Host:" header in
+           Curl requests, you need to set "extrare" to something else, eg.
+           "/;/", and then specify "extraargs = --header;Host: www.exam-
+           ple.com".
 
            Example value: -6 --head --user user:password
 
        extrare
-           The regexp used to split the extraargs string into an
-           argument list, in the "/regexp/" notation.  This con-
-           tains just the space character (" ") by default, but
-           if you need to specify any arguments containing
-           spaces, you can set this variable to a different
+           The regexp used to split the extraargs string into an argument
+           list, in the "/regexp/" notation.  This contains just the space
+           character (" ") by default, but if you need to specify any argu-
+           ments containing spaces, you can set this variable to a different
            value.
 
            Example value: / /
@@ -138,27 +130,25 @@ VVAARRIIAABBLLEESS
            Default value: / /
 
        insecure_ssl
-           The "-k" _c_u_r_l(1) option. Accept SSL connections that
-           don't have a secure certificate chain to a trusted CA.
-           Note that if you are going to monitor https targets,
-           you'll probably have to either enable this option or
-           specify the CA path to curl through extraargs below.
-           For more info, see the _c_u_r_l(1) manual page.
+           The "-k" _c_u_r_l(1) option. Accept SSL connections that don't have a
+           secure certificate chain to a trusted CA. Note that if you are
+           going to monitor https targets, you'll probably have to either
+           enable this option or specify the CA path to curl through extraargs
+           below. For more info, see the _c_u_r_l(1) manual page.
 
            Example value: 1
 
        interface
-           The "--interface" _c_u_r_l(1) option.  Bind to a specific
-           interface, IP address or host name.
+           The "--interface" _c_u_r_l(1) option.  Bind to a specific interface, IP
+           address or host name.
 
            Example value: eth0
 
        pings
-           How many pings should be sent to each target, if dif-
-           ferent from the global value specified in the Database
-           section. Note that the number of pings in the RRD
-           files is fixed when they are originally generated, and
-           if you change this parameter afterwards, you'll have
+           How many pings should be sent to each target, if different from the
+           global value specified in the Database section. Note that the num-
+           ber of pings in the RRD files is fixed when they are originally
+           generated, and if you change this parameter afterwards, you'll have
            to delete the old RRD files or somehow convert them.
 
            Example value: 5
@@ -176,9 +166,9 @@ VVAARRIIAABBLLEESS
            Default value: 10
 
        urlformat
-           The template of the URL to fetch.  Can be any one that
-           curl supports.  Any occurrence of the string '%host%'
-           will be replaced with the host to be probed.
+           The template of the URL to fetch.  Can be any one that curl sup-
+           ports.  Any occurrence of the string '%host%' will be replaced with
+           the host to be probed.
 
            Example value: http://%host%/
 
@@ -189,15 +179,14 @@ AAUUTTHHOORRSS
         Niko Tyni <ntyni@iki.fi>
 
 NNOOTTEESS
-       You should consider setting a lower value for the "pings"
-       variable than the default 20, as repetitive URL fetching
-       may be quite heavy on the server.
+       You should consider setting a lower value for the "pings" variable than
+       the default 20, as repetitive URL fetching may be quite heavy on the
+       server.
 
-       The URL to be tested used to be specified by the variable
-       'url' in earlier versions of Smokeping, and the 'host'
-       setting did not influence it in any way. The variable name
-       has now been changed to 'urlformat', and it can (and in
-       most cases should) contain a placeholder for the 'host'
+       The URL to be tested used to be specified by the variable 'url' in ear-
+       lier versions of Smokeping, and the 'host' setting did not influence it
+       in any way. The variable name has now been changed to 'urlformat', and
+       it can (and in most cases should) contain a placeholder for the 'host'
        variable.
 
 SSEEEE AALLSSOO
@@ -205,4 +194,4 @@ SSEEEE AALLSSOO
 
 
 
-2.0.3                       2005-09d-o2c6::Smokeping::probes::Curl(3)
+2.0.4                             2005-10-12   doc::Smokeping::probes::Curl(3)

@@ -1,63 +1,55 @@
-Smokeping::Examples(3)      SmokePing      Smokeping::Examples(3)
+Smokeping::Examples(3)             SmokePing            Smokeping::Examples(3)
 
 
 
 NNAAMMEE
-       Smokeping::Examples - A module for generating the
-       smokeping_examples document
+       Smokeping::Examples - A module for generating the smokeping_examples
+       document
 
 OOVVEERRVVIIEEWW
-       This module generates smokeping_examples and the example
-       configuration files distributed with Smokeping. It is sup-
-       posed to be invoked from the smokeping distribution top
-       directory, as it will need the "etc/config.dist" template
-       configuration file and will create files in the directo-
-       ries "doc" and "doc/examples".
+       This module generates smokeping_examples and the example configuration
+       files distributed with Smokeping. It is supposed to be invoked from the
+       smokeping distribution top directory, as it will need the "etc/con-
+       fig.dist" template configuration file and will create files in the
+       directories "doc" and "doc/examples".
 
 DDEESSCCRRIIPPTTIIOONN
-       The entry point to the module is the "make" subroutine. It
-       takes one optional parameter, "check", that makes the mod-
-       ule run a syntax check for all the created example config-
-       uration files.
+       The entry point to the module is the "make" subroutine. It takes one
+       optional parameter, "check", that makes the module run a syntax check
+       for all the created example configuration files.
 
 BBUUGGSS
-       This module uses more or less internal functions from
-       Smokeping.pm. It's a separate module only because the lat-
-       ter is much too big already.
+       This module uses more or less internal functions from Smokeping.pm.
+       It's a separate module only because the latter is much too big already.
 
-       It should be possible to include POD markup in the config-
-       uration explanations and have this module filter them away
-       for the config files.
+       It should be possible to include POD markup in the configuration expla-
+       nations and have this module filter them away for the config files.
 
-       It might be nice for the probe module authors to be able
-       to provide an example configuration as part of the probe
-       module instead of having to modify Smokeping::Examples
-       too.
+       It might be nice for the probe module authors to be able to provide an
+       example configuration as part of the probe module instead of having to
+       modify Smokeping::Examples too.
 
 CCOOPPYYRRIIGGHHTT
        Copyright 2005 by Niko Tyni.
 
 LLIICCEENNSSEE
-       This program is free software; you can redistribute it
-       and/or modify it under the terms of the GNU General Public
-       License as published by the Free Software Foundation;
-       either version 2 of the License, or (at your option) any
-       later version.
+       This program is free software; you can redistribute it and/or modify it
+       under the terms of the GNU General Public License as published by the
+       Free Software Foundation; either version 2 of the License, or (at your
+       option) any later version.
 
-       This program is distributed in the hope that it will be
-       useful, but WITHOUT ANY WARRANTY; without even the implied
-       warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-       PURPOSE.  See the GNU General Public License for more
-       details.
+       This program is distributed in the hope that it will be useful, but
+       WITHOUT ANY WARRANTY; without even the implied warranty of MER-
+       CHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General
+       Public License for more details.
 
-       You should have received a copy of the GNU General Public
-       License along with this program; if not, write to the Free
-       Software Foundation, Inc., 675 Mass Ave, Cambridge, MA
-       02139, USA.
+       You should have received a copy of the GNU General Public License along
+       with this program; if not, write to the Free Software Foundation, Inc.,
+       675 Mass Ave, Cambridge, MA 02139, USA.
 
 AAUUTTHHOORR
        Niko Tyni <ntyni@iki.fi>
 
 
 
-2.0.3                       2005-02-22     Smokeping::Examples(3)
+2.0.4                             2005-10-12            Smokeping::Examples(3)

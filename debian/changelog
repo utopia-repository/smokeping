@@ -1,3 +1,15 @@
+smokeping (2.0.4-1) unstable; urgency=low
+
+  [ Niko Tyni ]
+  * New upstream version
+     + doesn't create new RRD files when run with '--reload' (Closes: #333373)
+
+  [ Jose Carlos Garcia Sogo ]
+  * Added Niko Tyni <ntyni@iki.fi> to the list of uploaders. Usually he is
+    doing much of the work, and I do not have any need of making any change. 
+
+ -- Jose Carlos Garcia Sogo <jsogo@debian.org>  Wed, 12 Oct 2005 19:52:40 +0200
+
 smokeping (2.0.3-1) unstable; urgency=low
 
   [ Niko Tyni ]

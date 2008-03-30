@@ -2,6 +2,7 @@ Source: smokeping
 Section: net
 Priority: extra
 Maintainer: Jose Carlos Garcia Sogo <jsogo@debian.org>
+Uploaders: Niko Tyni <ntyni@iki.fi>
 Build-Depends-Indep: debhelper (>= 4.1.40), dpatch (>= 2.0.9), librrds-perl, groff-base, libhtml-parser-perl
 Standards-Version: 3.6.2
 

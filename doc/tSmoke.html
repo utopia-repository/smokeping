@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>doc/tSmoke</title>
-<link rev="made" href="mailto:dws@ee.ethz.ch" />
+<link rev="made" href="mailto:root@localhost" />
 </head>
 
 <body style="background-color: white">
@@ -61,27 +61,11 @@ past week and past month including an overview.</p>
 </p>
 <hr />
 <h1><a name="setup">SETUP</a></h1>
-<p>When installing tSmoke, some variables must be adjusted to fit your local system.</p>
-<p>We need to use the following <strong>libraries</strong>:</p>
-<dl>
-<dt><strong><a name="item_smokeping">Smokeping</a></strong><br />
-
-</dt><dt><strong><a name="item_rrdtool_perl_bindings">RRDTool Perl bindings</a></strong><br />
-
-</dt><dt><strong><a name="item_getopt_3a_3along">Getopt::Long</a></strong><br />
-
-</dt></dl>
-<p>Set up your libraries:</p>
-<pre>
- use lib &quot;/usr/local/smokeping/lib&quot;;
- use lib &quot;/usr/local/rrdtool-1.0.39/lib/perl&quot;;</pre>
-<p>Point to your Smokeping <strong>config</strong> file</p>
-<pre>
- my $cfgfile = &quot;/usr/local/smokeping/etc/config&quot;;</pre>
 <p>Modify the Smokeping config file to include a path for tmail in the
-General section:</p>
+General section, if not already present:</p>
 <pre>
- tmail = /usr/local/smokeping/etc/tmail</pre>
+ tmail = /etc/smokeping/tmail</pre>
+<p>Modify the HTML template file, <strong>/etc/smokeping/tmail</strong>, to your liking.</p>
 <p>
 </p>
 <hr />

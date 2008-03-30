@@ -4,7 +4,7 @@
 use lib qw(/usr/share/perl5/smokeping);
 use lib qw(/usr/share/perl5);
 
-use Smokeping 2.000003;
+use Smokeping 2.000004;
  
 Smokeping::main("/etc/smokeping/config");
 

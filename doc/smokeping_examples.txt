@@ -1,4 +1,4 @@
-SMOKEPING_EXAMPLES(7)       SmokePing       SMOKEPING_EXAMPLES(7)
+SMOKEPING_EXAMPLES(7)              SmokePing             SMOKEPING_EXAMPLES(7)
 
 
 
@@ -6,28 +6,26 @@ NNAAMMEE
        smokeping_examples - Examples of Smokeping configuration
 
 OOVVEERRVVIIEEWW
-       This document provides some examples of Smokeping configu-
-       ration files.  All the examples can be found in the "exam-
-       ples" directory in the Smokeping documentation. Note that
-       the DNS names in the examples are non-functional.
+       This document provides some examples of Smokeping configuration files.
+       All the examples can be found in the "examples" directory in the
+       Smokeping documentation. Note that the DNS names in the examples are
+       non-functional.
 
-       Details of the syntax and all the variables are found in
-       smokeping_config and in the documentation of the corre-
-       sponding probe, if applicable.
+       Details of the syntax and all the variables are found in smokeping_con-
+       fig and in the documentation of the corresponding probe, if applicable.
 
-       This manual is automatically generated from the Smokeping
-       source code, specifically the Smokeping::Examples module.
+       This manual is automatically generated from the Smokeping source code,
+       specifically the Smokeping::Examples module.
 
 DDEESSCCRRIIPPTTIIOONN
-       Currently the examples differ only in the "Probes" and
-       "Targets" sections. The other sections are taken from the
-       "etc/config.dist" configuration template in the Smokeping
-       distribution so that the example files are complete.
+       Currently the examples differ only in the "Probes" and "Targets" sec-
+       tions. The other sections are taken from the "etc/config.dist" configu-
+       ration template in the Smokeping distribution so that the example files
+       are complete.
 
-       If you would like to provide more examples, document the
-       other sections or enhance the existing examples, please do
-       so, preferably by sending the proposed changes to the
-       smokeping-users mailing list.
+       If you would like to provide more examples, document the other sections
+       or enhance the existing examples, please do so, preferably by sending
+       the proposed changes to the smokeping-users mailing list.
 
        EExxaammppllee 11:: ccoonnffiigg..ssiimmppllee
 
@@ -38,12 +36,11 @@ DDEESSCCRRIIPPTTIIOONN
             binary = /usr/bin/fping
 
        Probe explanation
-           Here we have just one probe, fping, pinging four
-           hosts.
+           Here we have just one probe, fping, pinging four hosts.
 
-           The fping probe is using the default parameters, some
-           of them supplied from the Database section ("step" and
-           "pings"), and some of them by the probe module.
+           The fping probe is using the default parameters, some of them sup-
+           plied from the Database section ("step" and "pings"), and some of
+           them by the probe module.
 
        Target configuration
             *** Targets ***
@@ -62,8 +59,6 @@ DDEESSCCRRIIPPTTIIOONN
             ++ myhost2
             host = myhost2.mysite1.example
 
-
-
             + mysite2
             menu = Site 2
             title = Hosts in Site 2
@@ -74,9 +69,9 @@ DDEESSCCRRIIPPTTIIOONN
             host = myhost4.mysite2.example
 
        Target explanation
-           The hosts are located in two sites of two hosts each,
-           and the configuration has been divided to site sec-
-           tions ('+') and host subsections ('++') accordingly.
+           The hosts are located in two sites of two hosts each, and the con-
+           figuration has been divided to site sections ('+') and host subsec-
+           tions ('++') accordingly.
 
        EExxaammppllee 22:: ccoonnffiigg..mmuullttiippllee--pprroobbeess
 
@@ -98,19 +93,17 @@ DDEESSCCRRIIPPTTIIOONN
             url = /test-url
 
        Probe explanation
-           Here we have three probes: FPing for the regular ICMP
-           pings, DNS for name server latency measurement and
-           EchoPingHttp for web servers.
+           Here we have three probes: FPing for the regular ICMP pings, DNS
+           for name server latency measurement and EchoPingHttp for web
+           servers.
 
-           The FPing probe runs with the default parameters,
-           except that the ICMP packet size is 1000 bytes instead
-           of the default 56 bytes.
+           The FPing probe runs with the default parameters, except that the
+           ICMP packet size is 1000 bytes instead of the default 56 bytes.
 
-           The DNS and EchoPingHttp probes have been configured
-           to be a bit more gentle with the servers, as they only
-           do 5 queries (pings) instead of the default 20 (or
-           whatever is specified in the Database section). How-
-           ever, DNS queries are made more often: 5 queries every
+           The DNS and EchoPingHttp probes have been configured to be a bit
+           more gentle with the servers, as they only do 5 queries (pings)
+           instead of the default 20 (or whatever is specified in the Database
+           section). However, DNS queries are made more often: 5 queries every
            3 minutes instead of every 5 minutes.
 
        Target configuration
@@ -128,7 +121,6 @@ DDEESSCCRRIIPPTTIIOONN
             host = myhost1.example
             ++ myhost2
             host = myhost2.example
-
 
             + services
             menu = Service latency
@@ -156,11 +148,10 @@ DDEESSCCRRIIPPTTIIOONN
             host = www2.example
 
        Target explanation
-           The target tree has been divided by the probe used.
-           This does not have to be the case: every target
-           (sub)section can use a different probe, and the same
-           probe can be used in different parts of the config
-           tree.
+           The target tree has been divided by the probe used. This does not
+           have to be the case: every target (sub)section can use a different
+           probe, and the same probe can be used in different parts of the
+           config tree.
 
        EExxaammppllee 33:: ccoonnffiigg..ffppiinngg--iinnssttaanncceess
 
@@ -178,24 +169,21 @@ DDEESSCCRRIIPPTTIIOONN
             offset = 50%
 
        Probe explanation
-           This example demonstrates the concept of probe
-           instances. The FPingLarge and FPingNormal probes are
-           independent of each other, they just use the same mod-
-           ule, FPing. FPingNormal uses the default parameters,
-           and so does FPingLarge except for the 5 kilobyte pack-
-           etsize. Both use the same fping binary, and its path
-           is configured FPing top section.
+           This example demonstrates the concept of probe instances. The
+           FPingLarge and FPingNormal probes are independent of each other,
+           they just use the same module, FPing. FPingNormal uses the default
+           parameters, and so does FPingLarge except for the 5 kilobyte pack-
+           etsize. Both use the same fping binary, and its path is configured
+           FPing top section.
 
-           The 'offset' parameters make sure the probes don't run
-           at the same time - FPingNormal is run every 'full' 5
-           minutes (eg. 8:00, 8:05, 8:10 and so on, in wallclock
-           time) while FPingLarge is run halfway through these
-           intervals (eg. 8:02:30, 8:07:30 etc.)
+           The 'offset' parameters make sure the probes don't run at the same
+           time - FPingNormal is run every 'full' 5 minutes (eg. 8:00, 8:05,
+           8:10 and so on, in wallclock time) while FPingLarge is run halfway
+           through these intervals (eg. 8:02:30, 8:07:30 etc.)
 
-           The top FPing section does not define a probe in
-           itself because it has subsections. If we really wanted
-           to have one probe named "FPing", we could do so by
-           making a subsection by that name.
+           The top FPing section does not define a probe in itself because it
+           has subsections. If we really wanted to have one probe named
+           "FPing", we could do so by making a subsection by that name.
 
        Target configuration
             *** Targets ***
@@ -238,9 +226,9 @@ DDEESSCCRRIIPPTTIIOONN
 
        Target explanation
            The target section shows two host, myhost1.example and
-           myhost2.example, being pinged with two differently
-           sized ICMP packets. This time the tree is divided by
-           the target host rather than the probe.
+           myhost2.example, being pinged with two differently sized ICMP pack-
+           ets. This time the tree is divided by the target host rather than
+           the probe.
 
        EExxaammppllee 44:: ccoonnffiigg..ttaarrggeettvvaarrss--wwiitthh--CCuurrll
 
@@ -256,41 +244,34 @@ DDEESSCCRRIIPPTTIIOONN
             urlformat = http://%host/
 
        Probe explanation
-           This example explains the difference between probe-
-           and target-specific variables. We use the Curl probe
-           for this.
+           This example explains the difference between probe- and target-spe-
+           cific variables. We use the Curl probe for this.
 
-           Every probe supports at least some probe-specific
-           variables. The values of these variables are common to
-           all the targets of the probe, and they can only be
-           configured in the Probes section. In this case, the
-           probe-specific variables are "binary" and "step".
+           Every probe supports at least some probe-specific variables. The
+           values of these variables are common to all the targets of the
+           probe, and they can only be configured in the Probes section. In
+           this case, the probe-specific variables are "binary" and "step".
 
-           Target-specific variables are supported by most
-           probes, the most notable exception being the FPing
-           probe and its derivatives. Target-specific variables
-           can have different values for different targets. They
-           can be configured in both Probes and Targets sections.
-           The values assigned in the Probes section function
-           become default values that can be overridden in the
-           Targets section.
+           Target-specific variables are supported by most probes, the most
+           notable exception being the FPing probe and its derivatives. Tar-
+           get-specific variables can have different values for different tar-
+           gets. They can be configured in both Probes and Targets sections.
+           The values assigned in the Probes section function become default
+           values that can be overridden in the Targets section.
 
-           The documentation of each probe states which of its
-           variables are probe-specific and which are target-spe-
-           cific.
+           The documentation of each probe states which of its variables are
+           probe-specific and which are target-specific.
 
-           In this case the "urlformat" variable is a target-spe-
-           cific one.  It is also quite uncommon, because it can
-           contain a placeholder for the "host" variable in the
-           Targets section. This is not a general feature, its
-           usage is only limited to the "urlformat" variable and
+           In this case the "urlformat" variable is a target-specific one.  It
+           is also quite uncommon, because it can contain a placeholder for
+           the "host" variable in the Targets section. This is not a general
+           feature, its usage is only limited to the "urlformat" variable and
            the "%host%" escape.
 
-           (The reason why the FPing probe does not support tar-
-           get-specific variables is simply the fact that the
-           fping program measures all its targets in one go, so
-           they all have the same parameters. The other probes
-           ping their targets one at a time.)
+           (The reason why the FPing probe does not support target-specific
+           variables is simply the fact that the fping program measures all
+           its targets in one go, so they all have the same parameters. The
+           other probes ping their targets one at a time.)
 
        Target configuration
             *** Targets ***
@@ -335,23 +316,20 @@ DDEESSCCRRIIPPTTIIOONN
             host = myhost2.example
 
        Target explanation
-           The target tree is divided into an HTTP branch and an
-           FTP one.  The servers "myhost1.example" and
-           "myhost2.example" are probed in both. The third
-           server, "myhost3.example", only has an HTTP server,
-           and it's in a non-standard port (8080).
+           The target tree is divided into an HTTP branch and an FTP one.  The
+           servers "myhost1.example" and "myhost2.example" are probed in both.
+           The third server, "myhost3.example", only has an HTTP server, and
+           it's in a non-standard port (8080).
 
-           The "urlformat" variable is specified for the whole
-           FTP branch as "ftp://%host%/". For the HTTP branch,
-           the default from the Probes section is used, except
-           for myhost3, which overrides it to tag the port number
-           into the URL.
+           The "urlformat" variable is specified for the whole FTP branch as
+           "ftp://%host%/". For the HTTP branch, the default from the Probes
+           section is used, except for myhost3, which overrides it to tag the
+           port number into the URL.
 
-           The myhost3 assignment could just as well have
-           included the hostname verbatim (ie. urlformat =
-           http://myhost3.example:8080/) instead of using the
-           %host% placeholder, but the host variable would still
-           have been required (even though it wouldn't have been
+           The myhost3 assignment could just as well have included the host-
+           name verbatim (ie. urlformat = http://myhost3.example:8080/)
+           instead of using the %host% placeholder, but the host variable
+           would still have been required (even though it wouldn't have been
            used for anything).
 
        EExxaammppllee 55:: ccoonnffiigg..eecchhooppiinngg
@@ -373,8 +351,7 @@ DDEESSCCRRIIPPTTIIOONN
             + EchoPingIcp        # ICP (3130/udp) for caches
 
        Probe explanation
-           This example shows most of the echoping-derived probes
-           in action.
+           This example shows most of the echoping-derived probes in action.
 
        Target configuration
             *** Targets ***
@@ -389,10 +366,6 @@ DDEESSCCRRIIPPTTIIOONN
 
             menu = My Servers
             title = My Servers
-
-
-
-
 
             ++ www-server
             menu = www-server
@@ -445,10 +418,9 @@ DDEESSCCRRIIPPTTIIOONN
             host = mail-server.example
 
        Target explanation
-           All the servers are pinged both with ICMP (the FPing
-           probe) and their respective echoping probe. The proxy
-           server, www-cache, is probed with both HTTP requests
-           and ICP requests for the same URL.
+           All the servers are pinged both with ICMP (the FPing probe) and
+           their respective echoping probe. The proxy server, www-cache, is
+           probed with both HTTP requests and ICP requests for the same URL.
 
        EExxaammppllee 66:: ccoonnffiigg..tteemmppllaattee
 
@@ -458,22 +430,37 @@ DDEESSCCRRIIPPTTIIOONN
 
             + FPing
 
-            binary = /usr/sepp/bin/fping
+            binary = /usr/bin/fping
 
        Probe explanation
-           This is the template configuration file distributed
-           with Smokeping.  It is included in the examples as
-           well for the sake of completeness.
+           This is the template configuration file distributed with Smokeping.
+           It is included in the examples as well for the sake of complete-
+           ness.
 
        Target configuration
             *** Targets ***
 
             probe = FPing
 
+            ## You have to edit and uncomment all what you want below this.
+            # Please, refer to smokeping_config man page for more info
+            # The given adresses aren't real to avoid DoS.
+
             menu = Top
             title = Network Latency Grapher
-            remark = Welcome to the SmokePing website of xxx Company. \
-                     Here you will learn all about the latency of our network.
+            remark = Welcome to the SmokePing website of 'A poorly \
+                   mantained site running Debian.'
+
+            + Local
+
+            menu = Local
+            title = Local Network
+
+            ++ LocalMachine
+
+            menu = Local Machine
+            title = This own machine
+            host = localhost
 
             + World
 
@@ -491,97 +478,93 @@ DDEESSCCRRIIPPTTIIOONN
             title =Swiss Connectivity
             alerts = bigloss,someloss,startloss
 
-            ++++ SBB
+            # ++++ SBB
+            #
+            # menu = SBB/CFF/FFS
+            # title =Swiss Federal Railways Webserver
+            # host = www.railway-server.abc
 
-            menu = SBB/CFF/FFS
-            title =Swiss Federal Railways Webserver
-            host = www.railway-server.abc
-
-            ++++ Tiscali
-
-            menu = Tiscali Web
-            title = Tiscali Webserver www.tiscali.abc
-            host = www.tiscali-web.abc
+            # ++++ Tiscali
+            #
+            # menu = Tiscali Web
+            # title = Tiscali Webserver www.tiscali.abc
+            # host = www.tiscali-web.abc
 
             +++ UK
 
             menu = United Kingdom
             title = United Kingdom
 
-            ++++ UCL
-
-            menu = UCL
-            title = UCL
-            host = www.ucl-abc.acc.uk
+            # ++++ UCL
+            #
+            # menu = UCL
+            # title = UCL
+            # host = www.ucl-abc.acc.uk
 
             ++ USA
 
             menu = North America
             title =North American Connectivity
 
-            +++ MIT
+            # +++ MIT
 
-            menu = MIT
-            title = Massachusetts Institute of Technology Webserver
-            host = www.gurkoman.ybc
+            # menu = MIT
+            # title = Massachusetts Institute of Technology Webserver
+            # host = www.gurkoman.ybc
 
-            +++ IU
+            # +++ IU
+            #
+            # menu = IU
+            # title = Indiana University
+            # host = www.iu.ali
 
-            menu = IU
-            title = Indiana University
-            host = www.iu.ali
+            # +++ UCB
+            #
+            # menu = U. C. Berkeley
+            # title = U. C. Berkeley Webserver
+            # host = www.berkly.udi
 
-            +++ UCB
+            # +++ UCSD
+            #
+            # menu = U. C. San Diego
+            # title = U. C. San Diego Webserver
+            # host = www.ucsdddar.art
 
-            menu = U. C. Berkeley
-            title = U. C. Berkeley Webserver
-            host = www.berkly.udi
-
-            +++ UCSD
-
-            menu = U. C. San Diego
-            title = U. C. San Diego Webserver
-            host = www.ucsdddar.art
-
-            +++ Sun
-
-            menu = Sun Microsystems
-            title = Sun Microsystems Webserver
-            host = www.sun-web.com
+            # +++ Sun
+            #
+            # menu = Sun Microsystems
+            # title = Sun Microsystems Webserver
+            # host = www.sun-web.com
 
        Target explanation
-           This is the template configuration file distributed
-           with Smokeping.  It is included in the examples as
-           well for the sake of completeness.
+           This is the template configuration file distributed with Smokeping.
+           It is included in the examples as well for the sake of complete-
+           ness.
 
 CCOOPPYYRRIIGGHHTT
        Copyright 2005 by Niko Tyni.
 
 LLIICCEENNSSEE
-       This program is free software; you can redistribute it
-       and/or modify it under the terms of the GNU General Public
-       License as published by the Free Software Foundation;
-       either version 2 of the License, or (at your option) any
-       later version.
+       This program is free software; you can redistribute it and/or modify it
+       under the terms of the GNU General Public License as published by the
+       Free Software Foundation; either version 2 of the License, or (at your
+       option) any later version.
 
-       This program is distributed in the hope that it will be
-       useful, but WITHOUT ANY WARRANTY; without even the implied
-       warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-       PURPOSE.  See the GNU General Public License for more
-       details.
+       This program is distributed in the hope that it will be useful, but
+       WITHOUT ANY WARRANTY; without even the implied warranty of MER-
+       CHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General
+       Public License for more details.
 
-       You should have received a copy of the GNU General Public
-       License along with this program; if not, write to the Free
-       Software Foundation, Inc., 675 Mass Ave, Cambridge, MA
-       02139, USA.
+       You should have received a copy of the GNU General Public License along
+       with this program; if not, write to the Free Software Foundation, Inc.,
+       675 Mass Ave, Cambridge, MA 02139, USA.
 
 AAUUTTHHOORR
        Niko Tyni <ntyni@iki.fi>
 
 SSEEEE AALLSSOO
-       The other Smokeping documents, especially smokeping_con-
-       fig.
+       The other Smokeping documents, especially smokeping_config.
 
 
 
-2.0.3                       2005-09-26      SMOKEPING_EXAMPLES(7)
+2.0.4                             2005-10-12             SMOKEPING_EXAMPLES(7)

@@ -27,7 +27,7 @@ use Smokeping::RRDtools;
 
 # globale persistent variables for speedy
 use vars qw($cfg $probes $VERSION $havegetaddrinfo $cgimode);
-$VERSION="2.000003";
+$VERSION="2.000004";
 
 # we want opts everywhere
 my %opt;
@@ -412,9 +412,10 @@ sub init_target_tree ($$$$) {
 		}
 	    } else {
 	    	shift @create; # remove the filename
-	    	my $comparison = Smokeping::RRDtools::compare($name.".rrd", \@create);
+	    	my ($fatal, $comparison) = Smokeping::RRDtools::compare($name.".rrd", \@create);
 		die("Error: RRD parameter mismatch ('$comparison'). You must delete $name.rrd or fix the configuration parameters.\n")
-			if $comparison;
+			if $fatal;
+		warn("Warning: RRD parameter mismatch('$comparison'). Continuing anyway.\n") if $comparison and not $fatal;
 		Smokeping::RRDtools::tuneds($name.".rrd", \@create);			
 	    }
 	}
@@ -1610,7 +1611,8 @@ DOC
 	 _vars =>
 	 [ qw(owner imgcache imgurl datadir dyndir pagedir piddir sendmail offset
               smokemail cgiurl mailhost contact netsnpp
-	      syslogfacility syslogpriority concurrentprobes changeprocessnames tmail) ],
+	      syslogfacility syslogpriority concurrentprobes changeprocessnames tmail
+	      changecgiprogramname) ],
 	 _mandatory =>
 	 [ qw(owner imgcache imgurl datadir piddir
               smokemail cgiurl contact) ],
@@ -1776,6 +1778,19 @@ the process name.  If set to 'yes' (the default), the probe name will
 be appended to the process name as '[probe]', eg.  '/usr/bin/smokeping
 [FPing]'. If you don't like this behaviour, set this variable to 'no'.
 If 'concurrentprobes' is not set to 'yes', this variable has no effect.
+DOC
+          _default => 'yes',
+	 },
+	 changecgiprogramname => {
+	  _re => '(yes|no)',
+          _re_error =>"this must either be 'yes' or 'no'",
+	  _doc => <<DOC,
+Usually the Smokeping CGI tries to log any possible errors with an extended
+program name that includes the IP address of the remote client for easier
+debugging. If this variable is set to 'no', the program name will not be 
+modified. The only reason you would want this is if you have a very old
+version of the CGI::Carp module. See 
+L<the installation document|smokeping_install> for details.
 DOC
           _default => 'yes',
 	 },
@@ -2474,8 +2489,13 @@ sub daemonize_me ($) {
 
 	sub initialize_cgilog (){
 		$use_cgilog = 1;
-        CGI::Carp::set_progname($0 . " [client " . ($ENV{REMOTE_ADDR}||"(unknown)") . "]");
 		$logging=1;
+		return if $cfg->{General}{changecgiprogramname} eq 'no';
+		# set_progname() is available starting with CGI.pm-2.82 / Perl 5.8.1
+		# so trap this inside 'eval'
+		# even this apparently isn't enough for older versions that try to
+		# find out whether they are inside an eval...oh well.
+		eval 'CGI::Carp::set_progname($0 . " [client " . ($ENV{REMOTE_ADDR}||"(unknown)") . "]")';
 	}
 
 	sub initialize_filelog ($){
@@ -2532,8 +2552,9 @@ sub daemonize_me ($) {
 # The Main Program 
 ###########################################################################
 
-sub load_cfg ($) { 
+sub load_cfg ($;$) { 
     my $cfgfile = shift;
+    my $noinit = shift;
     my $cfmod = (stat $cfgfile)[9] || die "ERROR: calling stat on $cfgfile: $!\n";
     # when running under speedy this will prevent reloading on every run
     # if cfgfile has been modified we will still run.
@@ -2547,6 +2568,7 @@ sub load_cfg ($) {
         $probes = undef;
 	$probes = load_probes $cfg;
 	$cfg->{__probes} = $probes;
+	return if $noinit;
 	init_alerts $cfg if $cfg->{Alerts};
       	init_target_tree $cfg, $probes, $cfg->{Targets}, $cfg->{General}{datadir};
     } else {
@@ -2884,15 +2906,16 @@ sub main (;$) {
     initialize_debuglog if $opt{debug} or $opt{'debug-daemon'};
     my $cfgfile = $opt{config} || $defaultcfg;
     if(defined $opt{'check'}) { verify_cfg($cfgfile); exit 0; }
-    load_cfg $cfgfile;
-    if(defined $opt{'static-pages'}) { makestaticpages $cfg, $opt{'static-pages'}; exit 0 };
-    if($opt{email})    { enable_dynamic $cfg, $cfg->{Targets},"",""; exit 0 };
-    if($opt{restart})  { kill_smoke $cfg->{General}{piddir}."/smokeping.pid", SIGINT;};
     if($opt{reload})  { 
+    	load_cfg $cfgfile, 'noinit'; # we need just the piddir
         kill_smoke $cfg->{General}{piddir}."/smokeping.pid", SIGHUP; 
         print "HUP signal sent to the running SmokePing process, exiting.\n";
         exit 0;
     };
+    load_cfg $cfgfile;
+    if(defined $opt{'static-pages'}) { makestaticpages $cfg, $opt{'static-pages'}; exit 0 };
+    if($opt{email})    { enable_dynamic $cfg, $cfg->{Targets},"",""; exit 0 };
+    if($opt{restart})  { kill_smoke $cfg->{General}{piddir}."/smokeping.pid", SIGINT;};
     if($opt{logfile})      { initialize_filelog($opt{logfile}) };
     if (not keys %$probes) {
     	do_log("No probes defined, exiting.");

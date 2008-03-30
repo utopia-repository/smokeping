@@ -1,17 +1,16 @@
-doc::Smokeping::probes::basefSomrodkko(ec3P:)i:nSgmokeping::probes::basefork(3)
+doc::Smokeping::probes::basefork(3)SmokePingdoc::Smokeping::probes::basefork(3)
 
 
 
 NNAAMMEE
-       Smokeping::probes::basefork - Yet Another Base Class for
-       implementing SmokePing Probes
+       Smokeping::probes::basefork - Yet Another Base Class for implementing
+       SmokePing Probes
 
 OOVVEERRVVIIEEWW
-       Like Smokeping::probes::basevars, but supports the probe-
-       specific property `forks' to determine how many processes
-       should be run concurrently. The targets are pinged one at
-       a time, and the number of pings sent can vary between tar-
-       gets.
+       Like Smokeping::probes::basevars, but supports the probe-specific prop-
+       erty `forks' to determine how many processes should be run concur-
+       rently. The targets are pinged one at a time, and the number of pings
+       sent can vary between targets.
 
 SSYYNNOOPPSSIISS
         *** Probes ***
@@ -40,43 +39,39 @@ SSYYNNOOPPSSIISS
         pings = 5
 
 DDEESSCCRRIIPPTTIIOONN
-       Not all pinger programs support testing multiple hosts in
-       a single go like _f_p_i_n_g(1). If the measurement takes long
-       enough, there may be not enough time perform all the tests
-       in the time available. For example, if the test takes 30
-       seconds, measuring ten hosts already fills up the
+       Not all pinger programs support testing multiple hosts in a single go
+       like _f_p_i_n_g(1). If the measurement takes long enough, there may be not
+       enough time perform all the tests in the time available. For example,
+       if the test takes 30 seconds, measuring ten hosts already fills up the
        SmokePing default five minute step.
 
-       Thus, it may be necessary to do some of the tests concur-
-       rently. This module defines the ppiinngg method that forks the
-       requested number of concurrent processes and calls the
-       ppiinnggoonnee method that derived classes must provide.
+       Thus, it may be necessary to do some of the tests concurrently. This
+       module defines the ppiinngg method that forks the requested number of con-
+       current processes and calls the ppiinnggoonnee method that derived classes
+       must provide.
 
-       The ppiinnggoonnee method is called with one argument: a hash
-       containing the target that is to be measured. The contents
-       of the hash are described in _S_m_o_k_e_p_i_n_g_:_:_p_r_o_b_e_s_:_:_b_a_s_e_-
-       _v_a_r_s(3pm).
+       The ppiinnggoonnee method is called with one argument: a hash containing the
+       target that is to be measured. The contents of the hash are described
+       in _S_m_o_k_e_p_i_n_g_:_:_p_r_o_b_e_s_:_:_b_a_s_e_v_a_r_s(3pm).
 
-       The number of concurrent processes is determined by the
-       probe-specific variable `forks' and is 5 by default. If
-       there are more targets than this value, another round of
-       forks is done after the first processes are finished. This
-       continues until all the targets have been tested.
+       The number of concurrent processes is determined by the probe-specific
+       variable `forks' and is 5 by default. If there are more targets than
+       this value, another round of forks is done after the first processes
+       are finished. This continues until all the targets have been tested.
 
-       The timeout in which each child has to finish is set to 5
-       seconds multiplied by the maximum number of 'pings' of the
-       targets. You can set the base timeout differently if you
-       want to, using the timeout property of the probe in the
-       master config file (this again will be multiplied by the
-       maximum number of pings). The probe itself can also pro-
-       vide another default value if desired by modifying the
-       _default value of the timeout variable.
+       The timeout in which each child has to finish is set to 5 seconds mul-
+       tiplied by the maximum number of 'pings' of the targets. You can set
+       the base timeout differently if you want to, using the timeout property
+       of the probe in the master config file (this again will be multiplied
+       by the maximum number of pings). The probe itself can also provide
+       another default value if desired by modifying the _default value of the
+       timeout variable.
 
-       If the child isn't finished when the timeout occurs, it
-       will be killed along with any processes it has started.
+       If the child isn't finished when the timeout occurs, it will be killed
+       along with any processes it has started.
 
-       The number of pings sent can be specified in the target-
-       specific variable 'pings'.
+       The number of pings sent can be specified in the target-specific vari-
+       able 'pings'.
 
 VVAARRIIAABBLLEESS
        Supported probe-specific variables:
@@ -89,31 +84,26 @@ VVAARRIIAABBLLEESS
            Default value: 5
 
        offset
-           If you run many probes concurrently you may want to
-           prevent them from hitting your network all at the same
-           time. Using the probe-specific offset parameter you
-           can change the point in time when each probe will be
-           run. Offset is specified in % of total interval, or
-           alternatively as 'random', and the offset from the
-           'General' section is used if nothing is specified
-           here. Note that this does NOT influence the rrds
-           itself, it is just a matter of when data acqusition is
-           initiated.  (This variable is only applicable if the
-           variable 'concurrentprobes' is set in the 'General'
-           section.)
+           If you run many probes concurrently you may want to prevent them
+           from hitting your network all at the same time. Using the probe-
+           specific offset parameter you can change the point in time when
+           each probe will be run. Offset is specified in % of total interval,
+           or alternatively as 'random', and the offset from the 'General'
+           section is used if nothing is specified here. Note that this does
+           NOT influence the rrds itself, it is just a matter of when data
+           acqusition is initiated.  (This variable is only applicable if the
+           variable 'concurrentprobes' is set in the 'General' section.)
 
            Example value: 50%
 
        step
-           Duration of the base interval that this probe should
-           use, if different from the one specified in the
-           'Database' section. Note that the step in the RRD
-           files is fixed when they are originally generated, and
-           if you change the step parameter afterwards, you'll
-           have to delete the old RRD files or somehow convert
-           them. (This variable is only applicable if the vari-
-           able 'concurrentprobes' is set in the 'General' sec-
-           tion.)
+           Duration of the base interval that this probe should use, if dif-
+           ferent from the one specified in the 'Database' section. Note that
+           the step in the RRD files is fixed when they are originally gener-
+           ated, and if you change the step parameter afterwards, you'll have
+           to delete the old RRD files or somehow convert them. (This variable
+           is only applicable if the variable 'concurrentprobes' is set in the
+           'General' section.)
 
            Example value: 300
 
@@ -127,11 +117,10 @@ VVAARRIIAABBLLEESS
        Supported target-specific variables:
 
        pings
-           How many pings should be sent to each target, if dif-
-           ferent from the global value specified in the Database
-           section. Note that the number of pings in the RRD
-           files is fixed when they are originally generated, and
-           if you change this parameter afterwards, you'll have
+           How many pings should be sent to each target, if different from the
+           global value specified in the Database section. Note that the num-
+           ber of pings in the RRD files is fixed when they are originally
+           generated, and if you change this parameter afterwards, you'll have
            to delete the old RRD files or somehow convert them.
 
            Example value: 5
@@ -144,4 +133,4 @@ SSEEEE AALLSSOO
 
 
 
-2.0.3                       200d5o-c0:9:-S2m6okeping::probes::basefork(3)
+2.0.4                             2005-10-12doc::Smokeping::probes::basefork(3)

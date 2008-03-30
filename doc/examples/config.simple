@@ -6,22 +6,32 @@
 # This example is included in the smokeping_examples document.
 
 # Note that all IP addresses in this file are false, to prevent some
-# machine falling uder a deadly DOS storm because all users keep
+# machine falling under a deadly DOS storm because all users keep
 # the same addresses in their config.
 
 *** General ***
 
+################################################
+# DON'T TOUCH UNLESS YOU KNOW WHAT YOU'RE DOING
+# BETWEEN THESE MARKS!
+################################################
+sendmail = /usr/sbin/sendmail
+imgcache = /var/www/smokeping
+imgurl   = ../smokeping
+datadir  = /var/lib/smokeping
+piddir   = /var/run/smokeping
+smokemail = /etc/smokeping/smokemail
+tmail    = /etc/smokeping/tmail
+################################################
+# END OF DON'T TOUCH SECTION
+################################################
+
+
+# Please edit this to suit your installation
 owner    = Joe Random
 contact  = joe@some.place.xyz
+cgiurl   = http://put_here_your_domain/cgi-bin/smokeping.cgi
 mailhost = smtp.mailhost.abc
-sendmail = /usr/lib/sendmail
-imgcache = /home/oetiker/public_html/.simg
-imgurl   = ../.simg
-datadir  = /home/oetiker/data/projects/AADJ-smokeping/dist/var
-piddir  = /home/oetiker/data/projects/AADJ-smokeping/dist/var
-cgiurl   = http://people.ee.ethz.ch/~oetiker/smokeping/smokeping.cgi
-smokemail = /home/oetiker/data/projects/AADJ-smokeping/dist/etc/smokemail.dist
-tmail = /home/oetiker/data/projects/AADJ-smokeping/dist/etc/tmail.dist
 # specify this to get syslog logging
 syslogfacility = local0
 # each probe is now run in its own process
@@ -73,7 +83,7 @@ AVERAGE  0.5 144   720
 
 *** Presentation ***
 
-template = /home/oetiker/data/projects/AADJ-smokeping/dist/etc/basepage.html.dist
+template = /etc/smokeping/basepage.html
 
 + overview 
 
