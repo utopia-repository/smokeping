@@ -42,6 +42,14 @@ OOVVEERRVVIIEEWW
        <a href="?foo=bar">. I hope this works for everybody, but
        if it doesn't, see smokeping_config for the alternatives.
 
+22..00..88 ttoo 22..00..99
+       FFPPiinngg
+
+       The 'timeout' variable removed in 2.0.5 has been brought
+       back.  It is used to give the "fping" command the "-t"
+       parameter, which apparently affects the timeout of the
+       last ping in the counting ("-C") mode used by Smokeping.
+
 22..00..44 ttoo 22..00..55
        FFPPiinngg
 
@@ -62,9 +70,6 @@ OOVVEERRVVIIEEWW
        <a href="http://some.host/path/smokeping.cgi?foo=bar">.
 
 22..00..11 ttoo 22..00..22
-
-
-
        EEddggee--ttrriiggggeerreedd aalleerrttss
 
        The alert notifications can now optionally be sent only
@@ -343,4 +348,4 @@ SSEEEE AALLSSOO
 
 
 
-2.0.8                       2006-02-08       SMOKEPING_UPGRADE(7)
+2.0.9                       2006-07-07       SMOKEPING_UPGRADE(7)

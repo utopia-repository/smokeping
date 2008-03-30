@@ -129,7 +129,7 @@
 .\" ========================================================================
 .\"
 .IX Title "Smokeping::matchers::base 3"
-.TH Smokeping::matchers::base 3 "2005-02-22" "2.0.8" "SmokePing"
+.TH Smokeping::matchers::base 3 "2006-07-14" "2.0.9" "SmokePing"
 .SH "NAME"
 Smokeping::matchers::base \- Base Class for implementing SmokePing Matchers
 .SH "OVERVIEW"
@@ -162,7 +162,7 @@ be overwritten by a children of the base class.
 .Sh "Test"
 .IX Subsection "Test"
 Run the matcher and return true or false. The Test method is called
-with a hash of two arrays giving it access to both rtt and loss values.
+with a hash containing two arrays giving it access to both rtt and loss values.
 .PP
 .Vb 3
 \&  my $data=shift;
@@ -178,6 +178,14 @@ The arrays are ordered from old to new.
 .PP
 There may be more than the expected number of elements in this array. Address them with
 \&\f(CW$x\fR[\-1] to \f(CW$x\fR[\-max].
+.PP
+There's also a key called 'prevmatch' in the hash. It contains the
+value returned by the previous call of the 'Test' method. This allows
+for somewhat more intelligent alerting due to state awareness.
+.PP
+.Vb 1
+\&  my $prevmatch = $data->{prevmatch};
+.Ve
 .SH "COPYRIGHT"
 .IX Header "COPYRIGHT"
 Copyright (c) 2004 by \s-1OETIKER+PARTNER\s0 \s-1AG\s0. All rights reserved.

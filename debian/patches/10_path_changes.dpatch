@@ -18,7 +18,7 @@ diff -urNad smokeping-2.0.8~/bin/smokeping.dist smokeping-2.0.8/bin/smokeping.di
 +use lib qw(/usr/share/perl5/smokeping);
 +use lib qw(/usr/share/perl5);
  
- use Smokeping 2.000008;
+ use Smokeping 2.000009;
   
 -Smokeping::main("etc/config.dist");
 +Smokeping::main("/etc/smokeping/config");
@@ -36,7 +36,7 @@ diff -urNad smokeping-2.0.8~/bin/tSmoke.dist smokeping-2.0.8/bin/tSmoke.dist
 -use lib "/usr/local/rrdtool-1.0.39/lib/perl";
 +use lib qw(/usr/share/perl5/smokeping);
  
- use Smokeping 2.000008;
+ use Smokeping 2.000009;
  use Net::SMTP;
 @@ -60,7 +59,7 @@
  use RRDs;
@@ -98,7 +98,7 @@ diff -urNad smokeping-2.0.8~/htdocs/smokeping.cgi.dist smokeping-2.0.8/htdocs/sm
 +use lib qw(/usr/share/perl5/smokeping);
  use CGI::Carp qw(fatalsToBrowser);
  
- use Smokeping 2.000008;
+ use Smokeping 2.000009;
  
 -Smokeping::cgi("/home/oetiker/data/projects/AADJ-smokeping/dist/etc/config");
 +Smokeping::cgi("/etc/smokeping/config");

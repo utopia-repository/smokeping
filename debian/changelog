@@ -1,3 +1,11 @@
+smokeping (2.0.9-1) unstable; urgency=low
+
+  * New upstream release
+  * Add debian/watch.
+  * Update debian/copyright. 
+
+ -- Niko Tyni <ntyni@iki.fi>  Sat, 15 Jul 2006 10:11:06 +0300
+
 smokeping (2.0.8-3) unstable; urgency=low
 
   * remove all configuration file modifications from postinst, as per policy.

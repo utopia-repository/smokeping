@@ -129,7 +129,7 @@
 .\" ========================================================================
 .\"
 .IX Title "SMOKEPING_CONFIG 5"
-.TH SMOKEPING_CONFIG 5 "2006-04-14" "2.0.8" "SmokePing"
+.TH SMOKEPING_CONFIG 5 "2006-07-14" "2.0.9" "SmokePing"
 .SH "NAME"
 smokeping_config \- Reference for the SmokePing Config File
 .SH "OVERVIEW"
@@ -462,12 +462,12 @@ Example:
 \& Loss Color   Legend
 \& 1    00ff00    "<1"
 \& 3    0000ff    "<3"
-\& 100  ff0000    ">=3"
+\& 1000 ff0000    ">=3"
 .Ve
 .RS 4
 .IP "column 0" 4
 .IX Item "column 0"
-Activate when the lossrate (in percent) is larger of equal to this number
+Activate when the number of losst pings is larger or equal to this number                       
 .IP "column 1" 4
 .IX Item "column 1"
 Color for this range.
@@ -616,6 +616,11 @@ Default value: port = 53
 .Ve
 .Sp
 Default value: recordtype = A
+.IP "\fBrequire_answers\fR" 4
+.IX Item "require_answers"
+.Vb 1
+\& (This variable can be overridden target-specifically in the Targets section.)
+.Ve
 .IP "\fBrequire_noerror\fR" 4
 .IX Item "require_noerror"
 .Vb 1
@@ -667,6 +672,9 @@ Default value: port = 53
 This variable \fIinherits\fR its value from the parent section if nothing is specified here.
 .Sp
 Default value: recordtype = A
+.IP "\fBrequire_answers\fR" 4
+.IX Item "require_answers"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
 .IP "\fBrequire_noerror\fR" 4
 .IX Item "require_noerror"
 This variable \fIinherits\fR its value from the parent section if nothing is specified here.
@@ -2215,6 +2223,8 @@ Default value: mininterval = 0.01
 .IX Item "pings"
 .IP "\fBstep\fR" 4
 .IX Item "step"
+.IP "\fBtimeout\fR" 4
+.IX Item "timeout"
 .RE
 .RS 4
 .PD
@@ -2245,6 +2255,9 @@ This variable \fIinherits\fR its value from the parent section if nothing is spe
 This variable \fIinherits\fR its value from the parent section if nothing is specified here.
 .IP "\fBstep\fR" 4
 .IX Item "step"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBtimeout\fR" 4
+.IX Item "timeout"
 This variable \fIinherits\fR its value from the parent section if nothing is specified here.
 .RE
 .RS 4
@@ -2276,6 +2289,8 @@ Default value: mininterval = 0.01
 .IX Item "pings"
 .IP "\fBstep\fR" 4
 .IX Item "step"
+.IP "\fBtimeout\fR" 4
+.IX Item "timeout"
 .RE
 .RS 4
 .PD
@@ -2306,6 +2321,9 @@ This variable \fIinherits\fR its value from the parent section if nothing is spe
 This variable \fIinherits\fR its value from the parent section if nothing is specified here.
 .IP "\fBstep\fR" 4
 .IX Item "step"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBtimeout\fR" 4
+.IX Item "timeout"
 This variable \fIinherits\fR its value from the parent section if nothing is specified here.
 .RE
 .RS 4
@@ -2718,6 +2736,8 @@ Default value: mininterval = 0.01
 .IX Item "ruser"
 .IP "\fBstep\fR" 4
 .IX Item "step"
+.IP "\fBtimeout\fR" 4
+.IX Item "timeout"
 .RE
 .RS 4
 .PD
@@ -2757,6 +2777,9 @@ This variable \fIinherits\fR its value from the parent section if nothing is spe
 This variable \fIinherits\fR its value from the parent section if nothing is specified here.
 .IP "\fBstep\fR" 4
 .IX Item "step"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBtimeout\fR" 4
+.IX Item "timeout"
 This variable \fIinherits\fR its value from the parent section if nothing is specified here.
 .RE
 .RS 4
@@ -2839,6 +2862,137 @@ This variable \fIinherits\fR its value from the parent section if nothing is spe
 .RS 4
 .Sp
 (End of dynamical grammar changes for example instance \f(CW\*(C`SSH\*(C'\fR.)
+.RE
+.IP "\fBTacacsPlus\fR: (See the separate module documentation for details about each variable.)" 4
+.IX Item "TacacsPlus: (See the separate module documentation for details about each variable.)"
+The following new variables are valid:
+.RS 4
+.IP "\fBforks\fR" 4
+.IX Item "forks"
+Default value: forks = 5
+.IP "\fBoffset\fR" 4
+.IX Item "offset"
+.PD 0
+.IP "\fBpasswordfile\fR" 4
+.IX Item "passwordfile"
+.IP "\fBsecretfile\fR" 4
+.IX Item "secretfile"
+.IP "\fBstep\fR" 4
+.IX Item "step"
+.IP "\fBauthtype\fR" 4
+.IX Item "authtype"
+.PD
+.Vb 1
+\& (This variable can be overridden target-specifically in the Targets section.)
+.Ve
+.Sp
+Default value: authtype = \s-1ASCII\s0
+.IP "\fBmininterval\fR" 4
+.IX Item "mininterval"
+.Vb 1
+\& (This variable can be overridden target-specifically in the Targets section.)
+.Ve
+.Sp
+Default value: mininterval = 1
+.IP "\fBpassword\fR" 4
+.IX Item "password"
+.Vb 1
+\& (This variable can be overridden target-specifically in the Targets section.)
+.Ve
+.IP "\fBpings\fR" 4
+.IX Item "pings"
+.Vb 1
+\& (This variable can be overridden target-specifically in the Targets section.)
+.Ve
+.IP "\fBport\fR" 4
+.IX Item "port"
+.Vb 1
+\& (This variable can be overridden target-specifically in the Targets section.)
+.Ve
+.Sp
+Default value: port = 49
+.IP "\fBsecret\fR" 4
+.IX Item "secret"
+.Vb 1
+\& (This variable can be overridden target-specifically in the Targets section.)
+.Ve
+.IP "\fBtimeout\fR" 4
+.IX Item "timeout"
+.Vb 1
+\& (This variable can be overridden target-specifically in the Targets section.)
+.Ve
+.Sp
+Default value: timeout = 5
+.IP "\fBusername\fR" 4
+.IX Item "username"
+.Vb 1
+\& (This variable can be overridden target-specifically in the Targets section.)
+.Ve
+.Sp
+This variable \fIdynamically\fR modifies the grammar based on its value.
+.RE
+.RS 4
+.Sp
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
+.Sp
+.RS 4
+The following new variables are valid:
+.IP "\fBforks\fR" 4
+.IX Item "forks"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.Sp
+Default value: forks = 5
+.IP "\fBoffset\fR" 4
+.IX Item "offset"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBpasswordfile\fR" 4
+.IX Item "passwordfile"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBsecretfile\fR" 4
+.IX Item "secretfile"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBstep\fR" 4
+.IX Item "step"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBauthtype\fR" 4
+.IX Item "authtype"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.Sp
+Default value: authtype = \s-1ASCII\s0
+.IP "\fBmininterval\fR" 4
+.IX Item "mininterval"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.Sp
+Default value: mininterval = 1
+.IP "\fBpassword\fR" 4
+.IX Item "password"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBpings\fR" 4
+.IX Item "pings"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBport\fR" 4
+.IX Item "port"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.Sp
+Default value: port = 49
+.IP "\fBsecret\fR" 4
+.IX Item "secret"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBtimeout\fR" 4
+.IX Item "timeout"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.Sp
+Default value: timeout = 5
+.IP "\fBusername\fR" 4
+.IX Item "username"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.RE
+.RS 4
+.RE
+.RE
+.RS 4
+.Sp
+(End of dynamical grammar changes for example instance \f(CW\*(C`TacacsPlus\*(C'\fR.)
 .RE
 .IP "\fBTelnetIOSPing\fR: (See the separate module documentation for details about each variable.)" 4
 .IX Item "TelnetIOSPing: (See the separate module documentation for details about each variable.)"
@@ -3086,7 +3240,7 @@ The following variables can be set in this section:
 Currently the pattern types \fBrtt\fR and \fBloss\fR and \fBmatcher\fR are known. 
 .Sp
 Matchers are plugin modules that extend the alert conditions.  Known
-matchers are Avgratio, Median.
+matchers are Avgratio, CheckLatency, CheckLoss, Median.
 .Sp
 See the documentation of the corresponding matcher module
 (eg. Smokeping::matchers::Avgratio) for instructions on
@@ -3246,6 +3400,8 @@ The following new variables are valid:
 .IX Item "port"
 .IP "\fBrecordtype\fR" 4
 .IX Item "recordtype"
+.IP "\fBrequire_answers\fR" 4
+.IX Item "require_answers"
 .IP "\fBrequire_noerror\fR" 4
 .IX Item "require_noerror"
 .IP "\fBtimeout\fR" 4
@@ -3272,6 +3428,9 @@ This variable \fIinherits\fR its value from the parent section if nothing is spe
 This variable \fIinherits\fR its value from the parent section if nothing is specified here.
 .IP "\fBrecordtype\fR" 4
 .IX Item "recordtype"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBrequire_answers\fR" 4
+.IX Item "require_answers"
 This variable \fIinherits\fR its value from the parent section if nothing is specified here.
 .IP "\fBrequire_noerror\fR" 4
 .IX Item "require_noerror"
@@ -4293,6 +4452,67 @@ This variable \fIinherits\fR its value from the parent section if nothing is spe
 .RS 4
 .Sp
 (End of dynamical grammar changes for variable \f(CW\*(C`probe\*(C'\fR example value \f(CW\*(C`SSH\*(C'\fR.)
+.RE
+.IP "\fBTacacsPlus\fR: (See the separate module documentation for details about each variable.)" 4
+.IX Item "TacacsPlus: (See the separate module documentation for details about each variable.)"
+The following new variables are valid:
+.RS 4
+.IP "\fBauthtype\fR" 4
+.IX Item "authtype"
+.PD 0
+.IP "\fBmininterval\fR" 4
+.IX Item "mininterval"
+.IP "\fBpassword\fR" 4
+.IX Item "password"
+.IP "\fBpings\fR" 4
+.IX Item "pings"
+.IP "\fBport\fR" 4
+.IX Item "port"
+.IP "\fBsecret\fR" 4
+.IX Item "secret"
+.IP "\fBtimeout\fR" 4
+.IX Item "timeout"
+.IP "\fBusername\fR" 4
+.IX Item "username"
+.RE
+.RS 4
+.PD
+.Sp
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
+.Sp
+.RS 4
+The following new variables are valid:
+.IP "\fBauthtype\fR" 4
+.IX Item "authtype"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBmininterval\fR" 4
+.IX Item "mininterval"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBpassword\fR" 4
+.IX Item "password"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBpings\fR" 4
+.IX Item "pings"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBport\fR" 4
+.IX Item "port"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBsecret\fR" 4
+.IX Item "secret"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBtimeout\fR" 4
+.IX Item "timeout"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBusername\fR" 4
+.IX Item "username"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.RE
+.RS 4
+.RE
+.RE
+.RS 4
+.Sp
+(End of dynamical grammar changes for variable \f(CW\*(C`probe\*(C'\fR example value \f(CW\*(C`TacacsPlus\*(C'\fR.)
 .RE
 .IP "\fBTelnetIOSPing\fR: (See the separate module documentation for details about each variable.)" 4
 .IX Item "TelnetIOSPing: (See the separate module documentation for details about each variable.)"

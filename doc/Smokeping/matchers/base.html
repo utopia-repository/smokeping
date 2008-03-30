@@ -74,7 +74,7 @@ be overwritten by a children of the base class.</p>
 </p>
 <h2><a name="test">Test</a></h2>
 <p>Run the matcher and return true or false. The Test method is called
-with a hash of two arrays giving it access to both rtt and loss values.</p>
+with a hash containing two arrays giving it access to both rtt and loss values.</p>
 <pre>
   my $data=shift;
   my @rtt = @{$data-&gt;{rtt}};
@@ -84,6 +84,11 @@ with a hash of two arrays giving it access to both rtt and loss values.</p>
   @rdd[old..new]</pre>
 <p>There may be more than the expected number of elements in this array. Address them with
 $x[-1] to $x[-max].</p>
+<p>There's also a key called 'prevmatch' in the hash. It contains the
+value returned by the previous call of the 'Test' method. This allows
+for somewhat more intelligent alerting due to state awareness.</p>
+<pre>
+  my $prevmatch = $data-&gt;{prevmatch};</pre>
 <p>
 </p>
 <hr />

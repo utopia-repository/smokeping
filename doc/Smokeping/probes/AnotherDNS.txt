@@ -20,6 +20,7 @@ SSYYNNOOPPSSIISS
         pings = 5
         port = 53
         recordtype = A
+        require_answers = 0
         require_noerror = 0
         timeout = 5
 
@@ -39,6 +40,7 @@ SSYYNNOOPPSSIISS
         pings = 5
         port = 53
         recordtype = A
+        require_answers = 0
         require_noerror = 0
         timeout = 5
 
@@ -128,6 +130,11 @@ VVAARRIIAABBLLEESS
 
            Default value: A
 
+       require_answers
+           Only Count Answers with answer count >= this value.
+
+           Default value: 0
+
        require_noerror
            Only Count Answers with Response Status NOERROR.
 
@@ -143,4 +150,4 @@ AAUUTTHHOORRSS
 
 
 
-2.0.8                       2d0o0c6:-:0S4m-o1k4eping::probes::AnotherDNS(3)
+2.0.9                       2d0o0c6:-:0S7m-o1k4eping::probes::AnotherDNS(3)

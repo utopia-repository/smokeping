@@ -3,11 +3,34 @@ Wed, 13 Feb 2002 23:11:07 +0100.
 
 It was downloaded from http://people.ee.ethz.ch/~oetiker/webtools/smokeping/
 
-Upstream Author: Tobias Oetiker <tobi@oetiker.ch>
+Upstream authors: Tobias Oetiker <tobi@oetiker.ch> and Niko Tyni <ntyni@iki.fi>
 
 Copyright:
 
-  Copyright (c) 2004, 2005 Tobias Oetiker <tobi@oetiker.ch>
+  Copyright (c) 2001-2005 Tobias Oetiker <tobi@oetiker.ch>
+
+The file bin/tSmoke.dist has the following copyright:
+
+  Copyright (c) 2003 by Dan McGinn-Combs. All right reserved.
+
+The files lib/Smokeping/Examples.pm and lib/Smokeping/RRDtools.pm
+have the following copyright:
+
+  Copyright 2005 by Niko Tyni.
+
+The files lib/Smokeping/matchers/Avgratio.pm
+
+The files Avgratio.pm, Median.pm and base.pm in lib/Smokeping/matchers/
+have the following copyright:
+
+  Copyright (c) 2004 by OETIKER+PARTNER AG. All rights reserved.
+
+The files CheckLatency.pm and CheckLoss.pm in lib/Smokeping/matchers/ 
+have the following copyright:
+
+  Copyright (c) 2006 Dylan C Vanderhoof, Semaphore Corporation
+
+All files expect those mentioned below share the GPL license:
 
   All rights reserved.
 
@@ -26,3 +49,34 @@ Copyright:
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
 	      
 You can find a copy of GPL license at /usr/share/common-licenses/GPL
+
+The file lib/Config/Grammar.pm has the following copyright and license:
+
+  Copyright (c) 2000-2005 by ETH Zurich. All rights reserved.
+
+  This program is free software; you can redistribute it and/or modify it
+  under the same terms as Perl itself.
+
+Perl is distributed under the terms of either the Artistic license or the GPL
+(version 1 or later). You can find a copy of the Artistic license at 
+/usr/share/common-licenses/Artistic and the license of Perl itself at
+/usr/share/doc/perl/copyright .
+
+The files lib/BER.pm and lib/SNMP_Session.pm, which are not used in the
+Debian version, have the following copyright and license:
+
+  Copyright (c) 1995-2002, Simon Leinen.
+
+  This program is free software; you can redistribute it under the
+  "Artistic License" included in this distribution (file "Artistic").
+
+The file lib/SNMP_util.pm, which is not used in the Debian version,
+has the following copyright and license:
+  Copyright (c) 1998-2002, Mike Mitchell.
+
+  This program is free software; you can redistribute it under the
+  "Artistic License" included in this distribution (file "Artistic").
+
+You can find a copy of the Artistic license at /usr/share/common-licenses/Artistic
+
+

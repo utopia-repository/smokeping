@@ -45,6 +45,7 @@
  pings = 5
  port = 53
  recordtype = A
+ require_answers = 0
  require_noerror = 0
  timeout = 5</pre>
 <pre>
@@ -64,6 +65,7 @@
  pings = 5
  port = 53
  recordtype = A
+ require_answers = 0
  require_noerror = 0
  timeout = 5</pre>
 <p>
@@ -176,6 +178,15 @@ Record type to look up.
 
 </dd><dd>
 <p>Default value: A</p>
+
+<p></p>
+</dd><dt><strong><a name="item_require_answers">require_answers</a></strong><br />
+
+</dt><dd>
+Only Count Answers with answer count &gt;= this value.
+
+</dd><dd>
+<p>Default value: 0</p>
 
 <p></p>
 </dd><dt><strong><a name="item_require_noerror">require_noerror</a></strong><br />
