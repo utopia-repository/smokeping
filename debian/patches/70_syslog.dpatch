@@ -1,0 +1,37 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 70_syslog.dpatch by Niko Tyni <ntyni@iki.fi>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: Don't die silently if syslogd is unavailable. (#395056)
+
+@DPATCH@
+diff -urNad smokeping-2.0.9~/lib/Smokeping.pm smokeping-2.0.9/lib/Smokeping.pm
+--- smokeping-2.0.9~/lib/Smokeping.pm	2006-07-14 14:17:59.000000000 +0300
++++ smokeping-2.0.9/lib/Smokeping.pm	2006-10-25 21:56:46.000000000 +0300
+@@ -2575,12 +2575,25 @@
+ 		$syslog_priority = $pri if defined $pri;
+ 		print "Note: logging to syslog as $syslog_facility/$syslog_priority.\n";
+ 		openlog(basename($0), 'pid', $syslog_facility);
++		eval {
++			syslog($syslog_priority, 'Starting syslog logging');
++		};
++		if ($@) {
++			print "Warning: can't connect to syslog. Messages will be lost.\n";
++			print "Error message was: $@";
++		}
+ 	}
+ 
+ 	sub do_syslog ($){
+                 my $str = shift;
+                 $str =~ s,%,%%,g;
+-		syslog("$syslog_facility|$syslog_priority", $str);
++		eval {
++			syslog("$syslog_facility|$syslog_priority", $str);
++		};
++		# syslogd is probably dead if that failed
++		# this message is most probably lost too, if we have daemonized
++		# let's try anyway, it shouldn't hurt
++		print STDERR qq(Can't log "$str" to syslog: $@) if $@;
+ 	}
+ 
+ 	sub do_cgilog ($){

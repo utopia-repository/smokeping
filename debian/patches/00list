@@ -1,2 +1,7 @@
 10_path_changes.dpatch
+15_clean_makefile.dpatch
 20_conffile.dpatch
+40_password.dpatch
+50_ldap.dpatch
+60_fping.dpatch
+70_syslog.dpatch

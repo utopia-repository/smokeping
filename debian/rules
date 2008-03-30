@@ -10,18 +10,6 @@ TMP=$(CURDIR)/debian/$(PACKAGE)
 
 include /usr/share/dpatch/dpatch.make
 
-update-docs:
-	
-	# Regenerate docs from sources.
-	# This target is intended to be used to make up 70_regenerate_docs patch, and
-	# should be run after applying every patch that is numbered below this, with
-	# 'dpatch-edit-patch 70_regenerate_docs 68_typos'
-	
-	$(MAKE) ref
-		
-	-rm -f *tmp
-	-rm -f doc/*tmp
-
 build: patch-stamp build-stamp
 build-stamp:
 	$(MAKE) man html txt rename-man
@@ -34,6 +22,9 @@ clean-patched:
 	dh_testroot
 	
 	dh_clean
+
+	$(MAKE) killdoc
+	$(RM) doc/pod2htm[di].tmp
 
 	rm -f build-stamp
 	
@@ -102,6 +93,7 @@ binary-indep: build install
 	dh_testdir
 	dh_testroot
 	dh_installdocs
+	dh_installexamples -Xtemplate
 
 	# We should start later than ssh (20), so the SSH probe can test against localhost.
 	# Just in case, delay initialization even after apache (91).

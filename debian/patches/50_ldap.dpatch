@@ -1,0 +1,30 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 50_ldap.dpatch by Niko Tyni <ntyni@iki.fi>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: Make the 'scope' option of the LDAP probe actually work.
+## DP: (r674 in the upstream SVN repository)
+
+@DPATCH@
+diff -urNad smokeping-2.0.9~/lib/Smokeping/probes/LDAP.pm smokeping-2.0.9/lib/Smokeping/probes/LDAP.pm
+--- smokeping-2.0.9~/lib/Smokeping/probes/LDAP.pm	2005-11-15 00:26:11.000000000 +0200
++++ smokeping-2.0.9/lib/Smokeping/probes/LDAP.pm	2006-10-25 21:25:28.000000000 +0300
+@@ -211,7 +211,7 @@
+ 		}
+ 		local $IO::Socket::SSL::SSL_Context_obj; # ugly but necessary
+ 		$start = gettimeofday();
+-		my $ldap = new Net::LDAP($host, port => $port, version => $version, timeout => $timeout, scope => $scope) 
++		my $ldap = new Net::LDAP($host, port => $port, version => $version, timeout => $timeout)
+ 			or do {
+ 				$self->do_log("connection error on $host: $!");
+ 				next;
+@@ -238,7 +238,8 @@
+ 			$ldap->unbind;
+ 			next;
+ 		};
+-		$mesg = $ldap->search(base => $base, filter => $filter, attrs => $attrsref);
++		$mesg = $ldap->search(base => $base, filter => $filter, 
++		                      attrs => $attrsref, scope => $scope);
+ 		$mesg->code and do {
+ 			$self->do_log("filter error on $host: " . $mesg->error);
+ 			$ldap->unbind;
