@@ -2,15 +2,15 @@ SMOKEPING_INSTALL(1)        SmokePing        SMOKEPING_INSTALL(1)
 
 
 
-NNNNAAAAMMMMEEEE
+NNAAMMEE
        smokeping_install - How to install SmokePing
 
-OOOOVVVVEEEERRRRVVVVIIIIEEEEWWWW
+OOVVEERRVVIIEEWW
        This document explains how to setup SmokePing at your
        site.
 
-DDDDEEEESSSSCCCCRRRRIIIIPPPPTTTTIIIIOOOONNNN
-       PPPPrrrreeeerrrreeeeqqqquuuuiiiissssiiiitttteeeessss
+DDEESSCCRRIIPPTTIIOONN
+       PPrreerreeqquuiissiitteess
 
        SmokePing does not stand alone. It relies on various other
        tools and services being present. Apart from a Unix OS and
@@ -19,7 +19,7 @@ DDDDEEEESSSSCCCCRRRRIIIIPPPPTTTTIIIIOOOONNNN
        version of the tool which I am using, and a link for down-
        loading the tool.
 
-       RRDtool 1.0.33
+       RRDtool 1.0.x
            http://people.ee.ethz.ch/~oetiker/webtools/rrd-
            tool/pub/rrdtool-1.0.33.tar.gz
 
@@ -43,6 +43,27 @@ DDDDEEEESSSSCCCCRRRRIIIIPPPPTTTTIIIIOOOONNNN
            advertised ... SmokePing tries to figure this out. It
            tells you when it starts ... let me know it it gets it
            wrong.
+
+       FPing 2.4b2 IPV6 (Optional)
+           http://unfix.org/pro-
+           jects/ipv6/fping-2.4b2_to-ipv6.tar.gz
+
+           You need this if you want to use the FPing6 probe
+
+       Socket6 0.11-1 (Optional)
+           http://www.cpan.org/modules/by-module/Socket6/
+
+           Optionally installing the Socket6 module for perl
+           enables smokeping to check hostnames that only resolve
+           to an IPv6 address. If you probe such hosts using ie.
+           the FPing6 probe and get warnings that those hosts
+           don't resolve to an IP address, you need to install
+           it.
+
+       EchoPing  (Optional)
+           http://echoping.sourceforge.net/
+
+           You need this to run the EchoPing probes
 
        Webserver
            http://httpd.apache.org/
@@ -73,12 +94,12 @@ DDDDEEEESSSSCCCCRRRRIIIIPPPPTTTTIIIIOOOONNNN
            works without touching your apache ...  Otherwise you
            could as well be using FastCGI or mod_perl.
 
-       IIIInnnnssssttttaaaallllllllaaaattttiiiioooonnnn
+       IInnssttaallllaattiioonn
 
        Once the tools listed above are in place, you can start
        setting up SmokePing itself. Once the SmokePing tools are
        unpacked, they are more of less ready to use. At least to
-       the extent, that it is not necessary to iiiinnnnssssttttaaaallllllll them.  You
+       the extent, that it is not necessary to iinnssttaallll them.  You
        may want to rename the directory to a name which does not
        contain the version number of SmokePing, or at least make
        a symlink, so that you can use a persistent name when
@@ -92,8 +113,8 @@ DDDDEEEESSSSCCCCRRRRIIIIPPPPTTTTIIIIOOOONNNN
        _b_i_n_/_s_m_o_k_e_p_i_n_g
            Make sure all the required libraries are available and
            the first line of the script points to your copy of
-           perl. Adjust the uuuusssseeee lllliiiibbbb lines to point to your RRRRRRRRDDDD----
-           ttttoooooooollll installation and to the SSSSmmmmooookkkkeeeeppppiiiinnnngggg////lllliiiibbbb directory
+           perl. Adjust the uussee lliibb lines to point to your RRRRDD--
+           ttooooll installation and to the SSmmookkeeppiinngg//lliibb directory
            and edit the path of the config file to be in sync
            with reality.
 
@@ -102,14 +123,13 @@ DDDDEEEESSSSCCCCRRRRIIIIPPPPTTTTIIIIOOOONNNN
            above. Make sure the first line of the script is
            pointing to your freshly installed copy of Speedy CGI.
            Store the script in a directory of your weberver where
-           CGIs get executed. You also have to edit the uuuusssseeee lllliiiibbbb
+           CGIs get executed. You also have to edit the uussee lliibb
            line similar to what you did to _s_m_o_k_e_p_i_n_g
 
        _e_t_c_/_c_o_n_f_i_g
            Create your SmokePing configuration file. The easiest
            is to copy the _e_t_c_/_c_o_n_f_i_g file and work from there.
-           Please refer to the smokeping_config manpage for
-           details.
+           Please refer to smokeping_config for details.
 
        _e_t_c_/_b_a_s_e_p_a_g_e_._h_t_m_l
            Edit the html template to your likings. Please do not
@@ -117,7 +137,7 @@ DDDDEEEESSSSCCCCRRRRIIIIPPPPTTTTIIIIOOOONNNN
            from the template.
 
        _e_t_c_/_s_m_o_k_e_m_a_i_l
-           If you are going to use the DDDDYYYYNNNNAAAAMMMMIIIICCCC IP support, cus-
+           If you are going to use the DDYYNNAAMMIICC IP support, cus-
            tomize the contents of this file.
 
        Now you are ready to start smokeping:
@@ -125,16 +145,16 @@ DDDDEEEESSSSCCCCRRRRIIIIPPPPTTTTIIIIOOOONNNN
         ./bin/smokeping
 
        Once the system works, you may want to put a SmokePing
-       startup script into your _/_e_t_c_/_i_n_i_t_._d tree. Check out the
-       smokeping manpage for further information.
+       startup script into your _/_e_t_c_/_i_n_i_t_._d tree. Check out
+       smokeping for further information.
 
        When you can now also open the smokeping.cgi webpage to
        look at your data.
 
-CCCCOOOOPPPPYYYYRRRRIIIIGGGGHHHHTTTT
+CCOOPPYYRRIIGGHHTT
        Copyright (c) 2001 by Tobias Oetiker. All right reserved.
 
-LLLLIIIICCCCEEEENNNNSSSSEEEE
+LLIICCEENNSSEE
        This program is free software; you can redistribute it
        and/or modify it under the terms of the GNU General Public
        License as published by the Free Software Foundation;
@@ -152,9 +172,9 @@ LLLLIIIICCCCEEEENNNNSSSSEEEE
        Software Foundation, Inc., 675 Mass Ave, Cambridge, MA
        02139, USA.
 
-AAAAUUUUTTTTHHHHOOOORRRR
+AAUUTTHHOORR
        Tobias Oetiker <tobi@oetiker.ch>
 
 
 
-2002-03-19                     1.6           SMOKEPING_INSTALL(1)
+1.38                        2002-07-31       SMOKEPING_INSTALL(1)

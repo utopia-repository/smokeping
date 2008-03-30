@@ -1,0 +1,56 @@
+probes::DNS(3)              SmokePing              probes::DNS(3)
+
+
+
+NNAAMMEE
+       probes::DNS - Name Service Probe for SmokePing
+
+SSYYNNOOPPSSIISS
+        *** Probes ***
+        + DNS
+        binary = /usr/bin/dig
+
+        *** Targets ***
+        probe = DNS
+        forks = 10
+
+        + First
+        menu = First
+        title = First Target
+        # ....
+
+        ++ PROBE_CONF
+        lookup=www.mozilla.org
+
+DDEESSCCRRIIPPTTIIOONN
+       Integrates dig as a probe into smokeping. The variable
+       bbiinnaarryy must point to your copy of the dig program. If it
+       is not installed on your system yet, you should install
+       bind-utils >= 9.0.0.
+
+       The Probe asks the given host n-times for it's name. Where
+       n is the amount specified in the config File.
+
+       Supported probe-specific variables:
+
+       binary
+           The location of your dig binary.
+
+       forks
+           The number of concurrent processes to be run. See
+           _p_r_o_b_e_s_:_:_b_a_s_e_f_o_r_k(3pm) for details.
+
+       Supported target-level probe variables:
+
+       lookup
+           Name of the host to look up in the dns.
+
+AAUUTTHHOORR
+       Igor Petrovski <pigor@myrealbox.com>, Carl Elkins
+       <carl@celkins.org.uk>, Andre Stolze <stolze@uni-muen-
+       ster.de>, Niko Tyni <ntyni@iki.fi>, Chris Poetzel<lt>cpo-
+       etzel@anl.gov<gt>
+
+
+
+1.35pre1                    2005-01-04             probes::DNS(3)

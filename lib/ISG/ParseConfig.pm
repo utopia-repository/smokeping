@@ -2,13 +2,11 @@ package ISG::ParseConfig;
 
 # TODO:
 # - _order for sections
-# - dynamically change grammar in _sub (_dyn ?)
-# - default values
 
 use strict;
 
 use vars qw($VERSION);
-$VERSION = 1.5;
+$VERSION = 1.9;
 
 sub new($$)
 {
@@ -64,6 +62,21 @@ sub _quotesplit($)
         }
     }
     return @items;
+}
+
+sub _deepcopy {
+        # this handles circular references on consecutive levels,
+        # but breaks if there are any levels in between
+        # the makepod() and maketmpl() methods have the same limitation
+        my $what = shift;
+        return $what unless ref $what;
+        for (ref $what) {
+                /^ARRAY$/ and return [ map { $_ eq $what ? $_ : _deepcopy($_) } @$what ];
+                /^HASH$/ and return { map { $_ => $what->{$_} eq $what ? 
+                                            $what->{$_} : _deepcopy($what->{$_}) } keys %$what };
+                /^CODE$/ and return $what; # we don't need to copy the subs
+        }
+        die "Cannot _deepcopy reference type @{[ref $what]}";
 }
 
 sub _check_mandatory($$$$)
@@ -153,6 +166,23 @@ sub _search_section($$)
     return undef;
 }
 
+# fill in default values for this section
+sub _fill_defaults ($) {
+    my $self = shift;
+    my $g = $self->{grammar};
+    my $c = $self->{cfg};
+    if ($g->{_vars}) {
+        for my $var (@{$g->{_vars}}) {
+                next if exists $c->{$var};
+                my $value = $g->{$var}{_default}
+                  if exists $g->{$var}{_default};
+                next unless defined $value;
+                $c->{$var} = $value;
+        }
+    }
+
+}
+
 sub _next_level($$$)
 {
     my $self = shift;
@@ -174,7 +204,57 @@ sub _next_level($$$)
         return 0;
     }
     push @{$self->{grammar_stack}}, $self->{grammar};
-    $self->{grammar} = $self->{grammar}{$s};
+    if ($s =~ m|^/(.*)/$|) {
+        # for sections specified by a regexp, we create
+        # a new branch with a deep copy of the section 
+        # grammar so that any _dyn sub further below will edit
+        # just this branch
+
+        $self->{grammar}{$name} = _deepcopy($self->{grammar}{$s});
+
+        # put it at the head of the section list
+        $self->{grammar}{_sections} ||= [];
+        unshift @{$self->{grammar}{_sections}}, $name;
+    } 
+
+    # support for recursive sections
+    # copy the section syntax to the subsection
+
+    if ($self->{grammar}{_recursive} 
+        and grep { $_ eq $s } @{$self->{grammar}{_recursive}}) {
+        $self->{grammar}{$name}{_sections} ||= [];
+        $self->{grammar}{$name}{_recursive} ||= [];
+        push @{$self->{grammar}{$name}{_sections}}, $s;
+        push @{$self->{grammar}{$name}{_recursive}}, $s;
+        my $grammarcopy = _deepcopy($self->{grammar}{$name});
+        if (exists $self->{grammar}{$name}{$s}) {
+                # there's syntax for a variable by the same name too
+                # make sure we don't lose it
+                %{$self->{grammar}{$name}{$s}} = ( %$grammarcopy, %{$self->{grammar}{$name}{$s}} );
+        } else {
+                $self->{grammar}{$name}{$s} = $grammarcopy;
+        }
+    }
+
+    # this uses the copy created above for regexp sections 
+    # and the original for non-regexp sections (where $s == $name)
+    $self->{grammar} = $self->{grammar}{$name};
+
+    # support for inherited values
+    # note that we have to do this on the way down
+    # and keep track of which values were inherited
+    # so that we can propagate the values even further
+    # down if needed
+    my %inherited;
+    if ($self->{grammar}{_inherited}) {
+        for my $var (@{$self->{grammar}{_inherited}}) {
+                next unless exists $self->{cfg}{$var};
+                my $value = $self->{cfg}{$var};
+                next unless defined $value;
+                next if ref $value; # it's a section
+                $inherited{$var} = $value;
+        }
+    }
 
     # config context
     my $order;
@@ -191,18 +271,31 @@ sub _next_level($$$)
         $self->_make_error('section or variable already exists');
         return 0;
     }
-    $self->{cfg}{$name} = {};
+    $self->{cfg}{$name} = { %inherited }; # inherit the values
     push @{$self->{cfg_stack}}, $self->{cfg};
     $self->{cfg} = $self->{cfg}{$name};
+
+    # keep track of the inherited values here;
+    # we delete it on the way up in _prev_level()
+    $self->{cfg}{_inherited} = \%inherited; 
 
     # meta data for _mandatory test
     $self->{grammar}{_is_section} = 1;
     $self->{cfg}{_is_section}     = 1;
-    $self->{cfg}{_grammar}        = $s;
+
+    # this uses the copy created above for regexp sections 
+    # and the original for non-regexp sections (where $s == $name)
+    $self->{cfg}{_grammar}        = $name;
+
     $self->{cfg}{_order} = $order if defined $order;
 
     # increase level
     $self->{level}++;
+
+    # if there's a _dyn sub, apply it
+    if (defined $self->{grammar}{_dyn}) {
+        &{$self->{grammar}{_dyn}}($s, $name, $self->{grammar});
+    }
 
     return 1;
 }
@@ -210,6 +303,9 @@ sub _next_level($$$)
 sub _prev_level($)
 {
     my $self = shift;
+
+    # fill in the values from _default keywords when going up
+    $self->_fill_defaults;
 
     # section name
     if (defined $self->{section}) {
@@ -220,6 +316,9 @@ sub _prev_level($)
             $self->{section} = undef;
         }
     }
+
+    # clean up the _inherited hash, we won't need it anymore
+    delete $self->{cfg}{_inherited};
 
     # config context
     $self->{cfg} = pop @{$self->{cfg_stack}};
@@ -326,6 +425,10 @@ sub _set_variable($$$)
                         return 0;
                 }
         }
+        # if there's a _dyn sub, apply it
+        if (defined $g->{_dyn}) {
+                &{$g->{_dyn}}($key, $value, $self->{grammar});
+        }
     }
     $self->{cfg}{$key} = $value;
     return 1;
@@ -372,7 +475,7 @@ sub _parse_table($$)
                 return 0;
             };
         }
-        if (defined $g->{_sub}){
+        if (defined $gc->{_sub}){
                 my $error = &{$gc->{_sub}}($c);
                 if (defined $error) {
                         $self->_make_error($error);
@@ -407,29 +510,25 @@ sub _parse_table($$)
 
 sub _parse_text($$)
 {
-    my $self = shift;
-    local $_ = shift;
+    my ($self, $line) = @_;
 
-    my $g = $self->{grammar}{_text};
-
-    if (defined $self->{cfg}{_text}) {
-        $self->{cfg}{_text} .= "\n";
-    }
-    else {
-        $self->{cfg}{_text} = '';
-    }
-    $self->{cfg}{_text} .= $_;
+    $self->{cfg}{_text} .= $line;
 
     return 1;
 }
 
 sub _check_text($$)
 {
-    my $self = shift;
-    my $name = shift;
+    my ($self, $name) = @_;
 
     my $g = $self->{grammar}{_text};
     defined $g or return 1;
+
+    # chop empty lines at beginning and end
+    if(defined $self->{cfg}{_text}) {
+	$self->{cfg}{_text} =~ s/\A([ \t]*[\n\r]+)*//m;
+	$self->{cfg}{_text} =~  s/^([ \t]*[\n\r]+)*\Z//m;
+    }
 
     # TODO: not good for META. Use _mandatory ?
     #defined $self->{cfg}{_text} or do {
@@ -460,10 +559,12 @@ sub _check_text($$)
 
 sub _parse_file($$);
 
-sub _parse_line($$)
+sub _parse_line($$$)
 {
     my $self = shift;
     local $_ = shift;
+    my $source = shift;
+
     /^\@include\s+["']?(.*)["']?$/ and do {
         push @{$self->{file_stack}}, $self->{file};
         push @{$self->{line_stack}}, $self->{line};
@@ -494,13 +595,19 @@ sub _parse_line($$)
     };
 
     if (defined $self->{grammar}{_text}) {
-        $self->_parse_text($_) or return 0;
+        $self->_parse_text($source) or return 0;
         return 1;
     }
     /^(\S+)\s*=\s*(.*)$/ and do {
         if (defined $self->{cfg}{$1}) {
-            $self->_make_error('variable already defined');
-            return 0;
+            if (exists $self->{cfg}{_inherited}{$1}) {
+                # it's OK to override any inherited values
+                delete $self->{cfg}{_inherited}{$1};
+                delete $self->{cfg}{$1};
+            } else {
+                $self->_make_error('variable already defined');
+                return 0;
+            }
         }
         $self->_set_variable($1, $2) or return 0;
         return 1;
@@ -520,18 +627,20 @@ sub _parse_file($$)
     unless ($file) { $self->{'err'} = "no filename given" ;
                      return undef;};
 
-    open(File, "<$file") or do {
+    open(File, "$file") or do {
         $self->{'err'} = "can't open $file: $!";
         return undef;
     };
     $self->{file} = $file;
 
     local $_;
+    my $source = '';
     while (<File>) {
+	$source .= $_;
         chomp;
         s/^\s+//;
         s/\s+$//;            # trim
-        s/\s*#.*$//;            # comments
+        s/\s*#.*$//;         # comments
         next if $_ eq '';    # empty lines
         while (/\\$/) {# continuation
             s/\\$//;
@@ -544,15 +653,15 @@ sub _parse_file($$)
         }
 
         $self->{line} = $.;
-        $self->_parse_line($_) or do{ close File; return 0; };
+        $self->_parse_line($_, $source) or do{ close File; return 0; };
+	$source = '';
     }
     close File;
     return 1;
 }
 
-sub _walklevel($$$);
-
-sub _walklevel($$$){
+sub _genpod($$$);
+sub _genpod($$$){
     my $tree = shift;
     my $level = shift;
     my $doc = shift;
@@ -565,23 +674,33 @@ sub _walklevel($$$){
 		    " I<(mandatory setting)>" : ""; 
 	    push @{$doc}, "=item B<$var>".$mandatory;
 	    push @{$doc}, $tree->{$var}{_doc} if $tree->{$var}{_doc} ;
+	    push @{$doc}, "Example: $var = $tree->{$var}{_example}"
+		    if ($tree->{$var}{_example})
 	}
 	push @{$doc}, "=back";
     }
 
     if ($tree->{_text}){
 	push @{$doc}, ($tree->{_text}{_doc} or "Unspecified Text content");
+	if ($tree->{_text}{_example}){
+	    my $ex = $tree->{_text}{_example};
+	    chomp $ex;
+	    $ex = map {" $_"} split /\n/, $ex;
+	    push @{$doc}, "Example:\n\n$ex\n";
+	}
     }
 
     if ($tree->{_table}){
-	push @{$doc}, ($tree->{_table}{_doc} or 
+	push @{$doc}, ($tree->{_table}{_doc} or
 		       "This section can contain a table ".
 		       "with the following structure:" );
 	push @{$doc}, "=over";
 	for (my $i=0;$i < $tree->{_table}{_columns}; $i++){
 	    push @{$doc}, "=item column $i";
-	    push @{$doc}, ($tree->{_table}{$i}{_doc} or 
+	    push @{$doc}, ($tree->{_table}{$i}{_doc} or
 			   "Unspecific Content");
+	    push @{$doc}, "Example: $tree->{_table}{$i}{_example}"
+		    if ($tree->{_table}{$i}{_example})
 	}
 	push @{$doc}, "=back";
     }
@@ -599,7 +718,7 @@ sub _walklevel($$$){
 			"=head2 *** $section ***$mandatory";
 		push @{$doc}, ($tree->{$section}{_doc})
 		    if $tree->{$section}{_doc};
-		_walklevel ($tree->{$section},$level+1,$doc)
+		_genpod ($tree->{$section},$level+1,$doc)
 		    unless $tree eq $tree->{$section};
 
 
@@ -608,13 +727,96 @@ sub _walklevel($$$){
     }	
 };
 
-sub makepod($$) {
+sub makepod($) {
     my $self = shift;
-    my $opts = shift;
     my $tree = $self->{grammar};
     my @doc;
-    _walklevel $tree,0,\@doc;
+    _genpod $tree,0,\@doc;
     return join("\n\n", @doc)."\n";
+}
+
+sub _gentmpl($$$@);
+sub _gentmpl($$$@){
+    my $tree = shift;
+    my $level = shift;
+    my $doc = shift;
+    my @start = @_;
+    if (scalar @start ) {
+	my $section = shift @start;
+	my $secex ='';
+	my $prefix = '';
+	$prefix = "# " unless $tree->{_mandatory} and 
+		    grep {$_ eq $section} @{$tree->{_mandatory}};
+	if ($tree->{$section}{_example}) {
+	    $secex = " #  ( ex. $tree->{$section}{_example} )";
+	}
+ 	push @{$doc}, $prefix.
+	    (($level > 0) ? ("+" x $level)."$section" : "*** $section ***").$secex;
+	my $match;
+	foreach my $s (@{$tree->{_sections}}){
+	    if ($s =~ m|^/.+/$| and $section =~ /$s/ or $s eq $section) {
+		_gentmpl ($tree->{$s},$level+1,$doc,@start)
+		    unless $tree eq $tree->{$s};
+		$match = 1;
+	    }
+	}
+        push @{$doc}, "# Section $section is not a valid choice"
+	    unless $match;
+    } else {
+	if ($tree->{_vars}){
+	    foreach my $var (@{$tree->{_vars}}){
+		push @{$doc}, "# $var = ". 
+		    ($tree->{$var}{_example} || ' * no example *');
+		next unless $tree->{_mandatory} and 
+		    grep {$_ eq $var} @{$tree->{_mandatory}};
+		push @{$doc}, "$var=";
+	    }
+	}
+
+	if ($tree->{_text}){
+	    if ($tree->{_text}{_example}){
+		my $ex = $tree->{_text}{_example};
+		chomp $ex;
+		$ex = map {"# $_"} split /\n/, $ex;
+		push @{$doc}, "$ex\n";
+	    }
+	}
+	if ($tree->{_table}){
+	    my $table = "# table\n#";
+	    for (my $i=0;$i < $tree->{_table}{_columns}; $i++){
+		$table .= ' "'.($tree->{_table}{$i}{_example} || "C$i").'"';
+	    }
+ 	    push @{$doc}, $table;
+	}
+	if ($tree->{_sections}){
+	    foreach my $section (@{$tree->{_sections}}){
+		my $opt = ( $tree->{_mandatory} and 
+		 	    grep {$_ eq $section} @{$tree->{_mandatory}} ) ?
+				"":"\n# optional section\n"; 
+		my $prefix = '';
+		$prefix = "# " unless $tree->{_mandatory} and 
+		    grep {$_ eq $section} @{$tree->{_mandatory}};
+		my $secex ="";
+		if ($section =~ m|^/.+/$| && $tree->{$section}{_example}) {
+		    $secex = " #  ( ex. $tree->{$section}{_example} )";
+		}
+		push @{$doc}, $prefix.
+		    (($level > 0) ? ("+" x $level)."$section" : "*** $section ***").
+			$secex;
+		_gentmpl ($tree->{$section},$level+1,$doc,@start)
+		    unless $tree eq $tree->{$section};
+	    }
+	}
+    }
+};
+
+sub maketmpl ($@) {
+    my $self = shift;
+    my @start = @_;
+    my $tree = $self->{grammar};
+    my @tmpl;
+    _gentmpl $tree,0,\@tmpl,@start;
+    return join("\n", @tmpl)."\n";
 }
 
 sub parse($$)
@@ -629,9 +831,16 @@ sub parse($$)
     $self->{file_stack}    = [];
     $self->{line_stack}    = [];
 
+    # we work with a copy of the grammar so the _dyn subs may change it
+    local $self->{grammar} = _deepcopy($self->{grammar});
+
     $self->_parse_file($file) or return undef;
 
-    $self->_goto_level(0, undef);
+    $self->_goto_level(0, undef) or return undef;
+
+    # fill in the top level values from _default keywords
+    $self->_fill_defaults;
+
     $self->_check_mandatory($self->{grammar}, $self->{cfg}, undef)
       or return undef;
 
@@ -652,7 +861,8 @@ ISG::ParseConfig - Simple config parser
 
  my $parser = ISG::ParseConfig->new(\%grammar);
  my $cfg = $parser->parse('app.cfg') or die "ERROR: $parser->{err}\n";
- my $pod = $parser->makepod;
+ my $pod = $parser->makepod();
+ my $ex = $parser->maketmpl('TOP','SubNode');
 
 =head1 DESCRIPTION
 
@@ -664,6 +874,11 @@ that is supplied upon creation of a ISG::ParseConfig object to parse
 the configuration file and return helpful error messages in case of
 syntax errors. Using the B<makepod> methode you can generate
 documentation of the configuration file format.
+
+The B<maketmpl> method can generate a template configuration file.  If
+your grammar contains regexp matches, the template will not be all
+that helpful as ParseConfig is not smart enough to give you sensible
+template data based in regular expressions.
 
 =head2 Grammar Definition
 
@@ -689,6 +904,15 @@ The sub-section can also be a regular expression denoted by the syntax '/re/',
 where re is the regular-expression. In case a regular expression is used, a
 sub-hash named with the same '/re/' must be included in this hash.
 
+=item _recursive
+
+Array containing the list of those sub-sections that are I<recursive>, ie.
+that can contain a new sub-section with the same syntax as themselves.
+
+The same effect can be accomplished with circular references in the
+grammar tree or a suitable B<_dyn> section subroutine (see below},
+so this facility is included just for convenience.
+
 =item _vars
 
 Array containing the list of variables (assignments) in this section.
@@ -697,6 +921,11 @@ Analogous to sections, regular expressions can be used.
 =item _mandatory
 
 Array containing the list of mandatory sections and variables.
+
+=item _inherited
+
+Array containing the list of the variables that should be assigned the
+same value as in the parent section if nothing is specified here.
 
 =item _table
 
@@ -724,6 +953,15 @@ defined.
 
 Describes what this section is about
 
+=item _dyn
+
+A subroutine reference (function pointer) that will be called when
+a new section of this syntax is encountered. The subroutine will get
+three arguments: the syntax of the section name (string or regexp), the
+actual name encountered (this will be the same as the first argument for
+non-regexp sections) and a reference to the grammar tree of the section.
+This subroutine can then modify the grammar tree dynamically.
+
 =back
 
 =head3 Special Variable Keys
@@ -746,9 +984,28 @@ first argument. If the function returns a defined value it is assumed that
 the test was not successful and an error is generated with the returned
 string as content.
 
+=item _default
+
+A default value that will be assigned to the variable if none is specified or inherited.
+
 =item _doc
 
 Describtion of the variable.
+
+=item _example
+
+A one line example for the content of this variable.
+
+=item _dyn
+
+A subroutine reference (function pointer) that will be called when the
+variable is assigned some value in the config file. The subroutine will
+get three arguments: the name of the variable, the value assigned and
+a reference to the grammar tree of this section.  This subroutine can
+then modify the grammar tree dynamically.
+
+Note that no _dyn() call is made for default and inherited values of
+the variable.
 
 =back
 
@@ -775,6 +1032,10 @@ they work analog to the description in the previous section.
 
 describes the content of the column.
 
+=item _example
+
+example for the content of this column
+
 =back
 
 =head3 Special Text Keys
@@ -798,6 +1059,10 @@ they work analog to the description in the previous section.
 =item _doc
 
 Ditto.
+
+=item _example
+
+Potential multi line example for the content of this text section
 
 =back
 
@@ -866,27 +1131,25 @@ The data is interpreted as one or more columns separated by spaces.
       _sections => [ "/$RE_IP/" ],
       dns       => {
          _doc => "address of the dns server",
+         _example => "ns1.oetiker.xs",
          _re => $RE_HOST,
          _re_error =>
             'dns must be an host name or ip address',
          },
       "/$RE_IP/" => {
          _doc    => "Ip Adress",
-         _vars   => [ 'dns', 'netmask', 'gateway' ],
-         dns     => {
-	    _doc => "address of the dns server",
-            _re => $RE_HOST,
-            _re_error =>
-               'dns must be an host name or ip address'
-            },
+         _example => '10.2.3.2',
+         _vars   => [ 'netmask', 'gateway' ],
          netmask => {
 	    _doc => "Netmask",
+	    _example => "255.255.255.0",
             _re => $RE_IP,
             _re_error =>
                'netmask must be a dotted ip address'
             },
          gateway => {
 	    _doc => "Default Gateway address in IP notation",
+	    _example => "10.22.12.1",
             _re => $RE_IP,
             _re_error =>
                'gateway must be a dotted ip address' },
@@ -900,16 +1163,22 @@ The data is interpreted as one or more columns separated by spaces.
          _columns => 3,
          0 => {
             _doc => "Ethernet Address",
+            _example => "0:3:3:d:a:3:dd:a:cd",
             _re => $RE_MAC,
             _re_error =>
                'first column must be an ethernet mac address',
             },
          1 => {
             _doc => "IP Address",
+            _example => "10.11.23.1",
             _re => $RE_IP,
             _re_error =>
                'second column must be a dotted ip address',
             },
+         2 => {
+            _doc => "Host Name",
+            _example => "tardis",
+             },
          },
       },
    });
@@ -999,6 +1268,11 @@ S<Tobias Oetiker E<lt>oetiker@ee.ethz.chE<gt>>
  2002-01-09 to     Added Documentation to the _text section documentation
  2002-01-28 to     Fixed quote parsing in tables
  2002-03-12 ds 1.5 Implemented @define, make makepod return a string and not an array
+ 2002-08-28 to     Added maketmpl methode
+ 2002-10-10 ds 1.6 More verbatim _text sections
+ 2004-02-09 to 1.7 Added _example propperty for pod and template generation
+ 2004-08-17 to 1.8 Allow special input files like "program|"
+ 2005-01-10 ds 1.9 Implemented _dyn, _default, _recursive, and _inherited (Niko Tyni) 
 
 =cut
 

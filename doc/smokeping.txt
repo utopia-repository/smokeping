@@ -2,64 +2,124 @@ SMOKEPING(1)                SmokePing                SMOKEPING(1)
 
 
 
-NNNNAAAAMMMMEEEE
+NNAAMMEE
        smokeping - Commandline tool for SmokePing
 
-SSSSYYYYNNNNOOOOPPPPSSSSIIIISSSS
-       ssssmmmmooookkkkeeeeppppiiiinnnngggg [ --------eeeemmmmaaaaiiiillll | --------mmmmaaaakkkkeeeeppppoooodddd | --------vvvveeeerrrrssssiiiioooonnnn | --------rrrreeeessssttttaaaarrrrtttt ]
+SSYYNNOOPPSSIISS
+       ssmmookkeeppiinngg [ ----eemmaaiill | ----mmaakkeeppoodd | ----vveerrssiioonn | ----rreessttaarrtt ]
 
         Options:
 
-        --email    Send SmokePing Agents to all Targets marked DYNAMIC
-        --makepod  Create POD documentation on Config file
-        --version  Show SmokePing Version
-        --debug    Run Only once and do not Fork
-        --restart  Restart SmokePing
-        --nodemon  Do no demonize the process (no fork)
+        --man        Show the manpage
 
+        --help       Help :-)
 
-DDDDEEEESSSSCCCCRRRRIIIIPPPPTTTTIIIIOOOONNNN
-       The ssssmmmmooookkkkeeeeppppiiiinnnngggg tool is the commandline part of the
+        --email      Send SmokePing Agents to all Targets marked DYNAMIC
+
+        --makepod    Create POD documentation on Config file
+
+        --version    Show SmokePing Version
+
+        --debug      Run Only once and do not Fork
+
+        --debug-daemon Start the daemon with debugging enabled
+
+        --restart    Restart SmokePing
+
+        --nodaemon    Do no daemonize the process (no fork)
+
+        --filter=x   Only measure entries which pass the filter x
+
+        --logfile    Append warnings to this logfile
+
+        --static[=x] Generates a static website in directory x.  If x is left out,
+                     pagedir from the config is used.
+
+        --nosleep    For debugging you may want to run SmokePing without sleep interval
+
+DDEESSCCRRIIPPTTIIOONN
+       The ssmmookkeeppiinngg tool is the commandline part of the
        SmokePing system. Its main function is to run as a daemon
        and send Pings to all the Targets you have specified in
-       the Config file. When you call ssssmmmmooookkkkeeeeppppiiiinnnngggg without arguments
-       it will start as a daemon and do it's work.
+       the Config file. When you call ssmmookkeeppiinngg without arguments
+       it will start as a daemon and do its work.
 
        If called with an argument, then further functions can be
-       activated, as seen in the Synopsis above. The --------eeeemmmmaaaaiiiillll
+       activated, as seen in the Synopsis above. The ----eemmaaiill
        function is explained in the documentation on the config
        file.
 
-       The --------mmmmaaaakkkkeeeeppppoooodddd does get used internally to produce the doc-
+       The ----ffiilltteerr option allows you to run the daemon on a big
+       config file, but have the config file filtered and only
+       measure the entries that pass the filter. This is useful
+       for remote measurement. Run Smokeping with two exclusive
+       filters in two locations and rsync the rrds back to the
+       webserver host where you run the cgi. Filters act on the
+       section names in the config file. Multiple section names
+       are concatenated with // like path names:
+
+        *** targets ***
+        + A
+        ....
+        + B
+        ...
+        ++ C
+
+       This gives
+
+        /A
+
+       and
+
+        /B, /B/C
+
+       If I want to monitor /A my filter would look like this:
+
+        --filter=/A
+
+       Filters follow regular expression syntax. The are always
+       anchored at the tip of the string.  by adding a !! to the
+       front of the filter string you negate it. Matching entries
+       will be excluded from monitoring.  Multiple ----ffiilltteerr argu-
+       ments can be used to assemble complex filters:
+
+         --filter=/A --filter=/B
+
+       would include all the targets
+
+         --filter=/A --filter=/B --filter=!/B/C
+
+       would include all but /B/C.
+
+       The ----mmaakkeeppoodd does get used internally to produce the doc-
        umentation on the SmokePing configuration file.
 
        Please refer to the installation document for detailed
        setup instructions.
 
-SSSSEEEETTTTUUUUPPPP
+SSEETTUUPP
        When installing SmokePing, this file has to be adjusted to
        fit your local system. Three paths have to be entered.
 
+       One pointing to your rrrrddttooooll installation
+
         use lib qw(/usr/pack/rrdtool-1.0.33-to/lib/perl);
-
-       One pointing to your rrrrrrrrddddttttoooooooollll installation
-
-        use lib qw(/home/oetiker/public_html/smokeping/lib);
 
        One pointing to the place where you have installed the
        SmokePing libraries
 
-        use Smokeping;
-
-        Smokeping::main("/home/oetiker/.smokeping/config");
+        use lib qw(/home/oetiker/public_html/smokeping/lib);
 
        The third path is the argument to the Smokeping::main com-
        mand. It points to the SmokePing configuration file.
 
-CCCCOOOOPPPPYYYYRRRRIIIIGGGGHHHHTTTT
-       Copyright (c) 2001 by Tobias Oetiker. All right reserved.
+        use Smokeping;
+        Smokeping::main("/home/oetiker/.smokeping/config");
 
-LLLLIIIICCCCEEEENNNNSSSSEEEE
+CCOOPPYYRRIIGGHHTT
+       Copyright (c) 2002 by Tobias Oetiker. All right reserved.
+
+LLIICCEENNSSEE
        This program is free software; you can redistribute it
        and/or modify it under the terms of the GNU General Public
        License as published by the Free Software Foundation;
@@ -77,9 +137,9 @@ LLLLIIIICCCCEEEENNNNSSSSEEEE
        Software Foundation, Inc., 675 Mass Ave, Cambridge, MA
        02139, USA.
 
-AAAAUUUUTTTTHHHHOOOORRRR
+AAUUTTHHOORR
        Tobias Oetiker <tobi@oetiker.ch>
 
 
 
-2002-03-13                     1.6                   SMOKEPING(1)
+1.38                        2005-01-12               SMOKEPING(1)

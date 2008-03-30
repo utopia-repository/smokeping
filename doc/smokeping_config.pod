@@ -1,7 +1,7 @@
-### fping seems to report in 0.1 miliseconds
+
 =head1 NAME
 
-smokeping.config - Reference for the SmokePing Config File
+smokeping_config - Reference for the SmokePing Config File
 
 =head1 OVERVIEW
 
@@ -15,7 +15,7 @@ The Parser for the Configuration file is written using David Schweikers
 ParseConfig module. Read all about it in L<ISG::ParseConfig>.
 
 The Configuration file has a tree-like structure with section headings at
-various levels. It also contains variable assignements and tables.
+various levels. It also contains variable assignments and tables.
 
 =head1 REFERENCE
 
@@ -51,14 +51,29 @@ SmokePing cgi.
 The directory where SmokePing can keep its rrd files.
 
 
+=item B<pagedir>
+
+Directory to store static representations of pages.
+
+
 =item B<piddir> I<(mandatory setting)>
 
-The directory where SmokePing keeps its pid when demonised.
+The directory where SmokePing keeps its pid when daemonised.
 
 
 =item B<sendmail>
 
 Path to your sendmail binary. It will be used for sending mails in connection with the support of DYNAMIC addresses.			     
+
+
+=item B<offset>
+
+If you run many instances of smokeping you may want to prevent them from
+hitting your network all at the same time. Using the offset parameter you
+can change the point in time when the probes are run. Offset is specified
+in % of total interval, or alternatively as 'random'. I recommend to use
+'random'. Note that this does NOT influence the rrds itself, it is just a
+matter of when data acqusition is initiated.  The default offset is 'random'.
 
 
 =item B<smokemail> I<(mandatory setting)>
@@ -84,13 +99,47 @@ and use perl's Net::SMTP module to send mail to DYNAMIC host owners (see below).
 Mail address of the person responsible for this smokeping installation.
 
 
+=item B<netsnpp>
+
+=item B<syslogfacility>
+
+The syslog facility to use, eg. local0...local7. 
+Note: syslog logging is only used if you specify this.
+
+
+=item B<syslogpriority>
+
+The syslog priority to use, eg. debug, notice or info. 
+Default is info.
+
+
+=item B<concurrentprobes>
+
+If you use multiple probes or multiple instances of the same probe and you
+want them to run concurrently in separate processes, set this to 'yes'. This
+gives you the possibility to specify probe-specific step and offset parameters 
+(see the 'Probes' section) for each probe and makes the probes unable to block
+each other in cases of service outages. The default is 'yes', but if you for
+some reason want the old behaviour you can set this to 'no'.
+
+
+=item B<changeprocessnames>
+
+When using 'concurrentprobes' (see above), this controls whether the probe
+subprocesses should change their argv string to indicate their probe in
+the process name.  If set to 'yes' (the default), the probe name will
+be appended to the process name as '[probe]', eg.  '/usr/bin/smokeping
+[FPing]'. If you don't like this behaviour, set this variable to 'no'.
+If 'concurrentprobes' is not set to 'yes', this variable has no effect.
+
+
 =back
 
 =head2 *** Database *** I<(mandatory section)>
 
 Describes the properties of the round robin database for storing the
 SmokePing data. Note that it is not possible to edit existing RRDs
-by changeing the entries in the cfg file.
+by changing the entries in the cfg file.
 
 
 The following variables can be set in this section:
@@ -101,11 +150,22 @@ The following variables can be set in this section:
 
 Duration of the base operation interval of SmokePing in seconds.
 SmokePing will venture out every B<step> seconds to ping your target hosts.
+If 'concurrent_probes' is set to 'yes' (see above), this variable can be 
+overridden by each probe. Note that the step in the RRD files is fixed when 
+they are originally generated, and if you change the step parameter afterwards, 
+you'll have to delete the old RRD files or somehow convert them. 
 
 
 =item B<pings> I<(mandatory setting)>
 
 How many pings should be sent to each target. Suggested: 20 pings.
+This can be overridden by each probe. Some probes (those derived from
+basefork.pm, ie. most except the FPing variants) will even let this
+be overridden target-specifically in the PROBE_CONF section (see the
+basefork documentation for details).  Note that the number of pings in
+the RRD files is fixed when they are originally generated, and if you
+change this parameter afterwards, you'll have to delete the old RRD
+files or somehow convert them.
 
 
 =back
@@ -258,6 +318,10 @@ Use posix strftime to format the timestamp in the left hand
 lower corner of the detail graph
 
 
+=item B<nodata_color>
+
+Paint the graph background in a special color when there is no data for this period because smokeping has not been running (#rrggbb)
+
 =back
 
 The detailed display can contain several graphs of different resolution. In this
@@ -302,7 +366,7 @@ Example:
  Loss Color   Legend
  1    00ff00    "<1"
  3    0000ff    "<3"
- 1000 ff0000    ">=3"
+ 100  ff0000    ">=3"
 
 
 
@@ -310,7 +374,7 @@ Example:
 
 =item column 0
 
-Activate when the lossrate is larger of equal to this number
+Activate when the lossrate (in percent) is larger of equal to this number
 
 
 =item column 1
@@ -327,18 +391,19 @@ Description for this range.
 
 =item B<++uptime_colors>
 
-When monitoring a host with DYNAMIC addressing, SmokePing will keep track of how long
-the machine is able to keep the same IP address. This time is plotted as a color
-in the graphs background. SmokePing comes with a reasonable default setting,
-but you may choose to disagree. The table below
-lets you specify your own coloring
+When monitoring a host with DYNAMIC addressing, SmokePing will keep
+track of how long the machine is able to keep the same IP
+address. This time is plotted as a color in the graphs
+background. SmokePing comes with a reasonable default setting, but you
+may choose to disagree. The table below lets you specify your own
+coloring
 
 Example:
 
- Uptime Color     Legend
- 3600    00ff00   "<1h"
- 86400   0000ff   "<1d"
- 604800  ff0000   "<1w"
+ # Uptime      Color     Legend
+ 3600          00ff00   "<1h"
+ 86400         0000ff   "<1d"
+ 604800        ff0000   "<1w"
  1000000000000 ffff00   ">1w"
 
 Uptime is in days!
@@ -370,7 +435,7 @@ Description for this range.
 
 =head2 *** Probes *** I<(mandatory section)>
 
-The Probes Section configures Probe modules. Probe modules integrate an external ping command into SmokePing. Check the documentation of the Ping module for configuration details.
+The Probes Section configures Probe modules. Probe modules integrate an external ping command into SmokePing. Check the documentation of the FPing module for configuration details.
 
 
 The following sections are valid on level 1:
@@ -386,10 +451,204 @@ The following variables can be set in this section:
 
 =over
 
-=item B</[-_0-9a-zA-Z]+/>
+=item B<step>
+
+Duration of the base interval that this probe should use, if different
+from the one specified in the 'Database' section. Note that the step in 
+the RRD files is fixed when they are originally generated, and if you
+change the step parameter afterwards, you'll have to delete the old RRD
+files or somehow convert them. (This variable is only applicable if 
+the variable 'concurrentprobes' is set in the 'General' section.)
+
+
+=item B<offset>
+
+If you run many probes concurrently you may want to prevent them from
+hitting your network all at the same time. Using the probe-specific
+offset parameter you can change the point in time when each probe will
+be run. Offset is specified in % of total interval, or alternatively as
+'random', and the offset from the 'General' section is used if nothing
+is specified here. Note that this does NOT influence the rrds itself,
+it is just a matter of when data acqusition is initiated. 
+(This variable is only applicable if the variable 'concurrentprobes' is set
+in the 'General' section.)
+
+
+=item B<pings>
+
+How many pings should be sent to each target, if different from the global
+value specified in the Database section.  Some probes (those derived from
+basefork.pm, ie. most except the FPing variants) will even let this be
+overridden target-specifically in the PROBE_CONF section (see the
+basefork documentation for details).  Note that the number of pings in
+the RRD files is fixed when they are originally generated, and if you
+change this parameter afterwards, you'll have to delete the old RRD
+files or somehow convert them.
+
+
+=item B</[-_0-9a-zA-Z.]+/>
 
 Each module defines which
 variables it wants to accept. So this expression here just defines legal variable names.
+
+=back
+
+The following sections are valid on level 2:
+
+=over
+
+=item B<++/[-_0-9a-zA-Z]+/>
+
+You can define multiple instances of the same probe with subsections. 
+These instances can have different values for their variables, so you
+can eg. have one instance of the FPing probe with packet size 1000 and
+step 30 and another instance with packet size 64 and step 300.
+The name of the subsection determines what the probe will be called, so
+you can write descriptive names for the probes.
+
+If there are any subsections defined, the main section for this probe
+will just provide default parameter values for the probe instances, ie.
+it will not become a probe instance itself.
+
+
+The following variables can be set in this section:
+
+=over
+
+=item B<step>
+
+=item B<offset>
+
+=item B<pings>
+
+=item B</[-_0-9a-zA-Z.]+/>
+
+Each module defines which
+variables it wants to accept. So this expression here just defines legal variable names.
+
+=back
+
+=back
+
+=back
+
+=head2 *** Alerts ***
+
+The Alert section lets you setup loss and RTT pattern detectors. After each
+round of polling, SmokePing will examine its data and determine which
+detectors match. Detectors are enabled per target and get inherited by
+the targets children.
+
+Detectors are not just simple thresholds which go off at first sight
+of a problem. They are configurable to detect special loss or RTT
+patterns. They let you look at a number of past readings to make a
+more educated decision on what kind of alert should be sent, or if an
+alert should be sent at all.
+
+The patterns are numbers prefixed with an operator indicating the type
+of comparison required for a match.
+
+The following RTT pattern detects if a target's RTT goes from constantly
+below 10ms to constantly 100ms and more:
+
+ old ------------------------------> new
+ <10,<10,<10,<10,<10,>10,>100,>100,>100
+
+Loss patterns work in a similar way, except that the loss is defined as the
+percentage the total number of received packets is of the total number of packets sent.
+
+ old ------------------------------> new
+ ==0%,==0%,==0%,==0%,>20%,>20%,>=20%
+
+Apart from normal numbers, patterns can also contain the values B<*>
+which is true for all values regardless of the operator. And B<U>
+which is true for B<unknown> data together with the B<==> and B<=!> operators.
+
+Detectors normally act on state changes. This has the disadvantage, that
+they will fail to find conditions which were already present when launching
+smokeping. For this it is possible to write detectors that begin with the
+special value B<==S> it is inserted whenever smokeping is started up.
+
+You can write
+
+ ==S,>20%,>20%
+
+to detect lines that have been losing more than 20% of the packets for two
+periods after startup.
+
+Sometimes it may be that conditions occur at irregular intervals. But still
+you only want to throw an alert if they occur several times within a certain
+amount of times. The operator B<*X*> will ignore up to I<X> values and still
+let the pattern match:
+
+  >10%,*10*,>10%
+
+will fire if more than 10% of the packets have been losst twice over the
+last 10 samples.
+
+A complete example
+
+ *** Alerts ***
+ to = admin@company.xy,peter@home.xy
+ from = smokealert@company.xy
+
+ +lossdetect
+ type = loss
+ # in percent
+ pattern = ==0%,==0%,==0%,==0%,>20%,>20%,>20%
+ comment = suddenly there is packet loss
+
+ +miniloss
+ type = loss
+ # in percent
+ pattern = >0%,*12*,>0%,*12*,>0%
+ comment = detected loss 3 times over the last two hours
+
+ +rttdetect
+ type = rtt
+ # in milliseconds
+ pattern = <10,<10,<10,<10,<10,<100,>100,>100,>100
+ comment = routing messed up again ?
+
+ +rttbadstart
+ type = rtt
+ # in milliseconds
+ pattern = ==S,==U
+ comment = offline at startup
+  
+
+
+The following variables can be set in this section:
+
+=over
+
+=item B<to> I<(mandatory setting)>
+
+=item B<from> I<(mandatory setting)>
+
+=back
+
+The following sections are valid on level 1:
+
+=over
+
+=item B<+/[^\s,]+/>
+
+The following variables can be set in this section:
+
+=over
+
+=item B<type> I<(mandatory setting)>
+
+Currently the pattern types B<rtt> and B<loss> and B<matcher> are known
+
+=item B<pattern> I<(mandatory setting)>
+
+a comma separated list of comparison operators and numbers. rtt patterns are in milliseconds, loss patterns are in percents
+
+=item B<comment> I<(mandatory setting)>
+
+=item B<to>
 
 =back
 
@@ -414,17 +673,27 @@ this variable gets propagated
 
 =item B<menu> I<(mandatory setting)>
 
-Menu entry for this section
+Menu entry for this section. If not set this will be set to the hostname.
 
 
 =item B<title> I<(mandatory setting)>
 
-Title of the page when it is displayed.
+Title of the page when it is displayed. This will be set to the hostname if
+left empty.
 
 
 =item B<remark>
 
 An optional remark on the current section. It gets displayed on the webpage.
+
+
+=item B<alerts>
+
+A comma separated list of alerts to check for this target. The alerts have
+to be setup in the Alerts section. Alerts are inherited by child nodes. Use
+an empty alerts definition to remove inherited alerts from the current target
+and its children.
+
 
 
 =back
@@ -442,11 +711,11 @@ The following variables can be set in this section:
 
 =over
 
-=item B</[-_0-9a-zA-Z]+/>
+=item B</[-_0-9a-zA-Z.]+/>
 
 Should be found in the documentation of the
-corresponding probe. The values get propagated. If a child
-node uses the same Probe as the parent.
+corresponding probe. The values get propagated to those child
+nodes using the same Probe.
 
 
 =back
@@ -465,9 +734,13 @@ The following variables can be set in this section:
 
 =item B<probe>
 
-=item B<menu> I<(mandatory setting)>
+=item B<menu>
 
-=item B<title> I<(mandatory setting)>
+=item B<title>
+
+=item B<alerts>
+
+Comma separated list of alert names
 
 =item B<note>
 
@@ -498,6 +771,30 @@ still the same host.
 
 =item B<remark>
 
+=item B<rawlog>
+
+Log the raw data, gathered for this target, in tab separated format, to a file with the
+same basename as the corresponding RRD file. Use posix strftime to format the timestamp to be
+put into the file name. The filename is built like this:
+
+ basename.strftime.csv
+
+Example:
+
+ rawlog=%Y-%m-%d
+
+this would create a new logfile every day with a name like this: 
+
+ targethost.2004-05-03.csv
+
+
+
+=item B<alertee>
+
+If you want to have alerts for this target and all targets below it go to a particular address
+on top of the address already specified in the alert, you can add it here. This can be a comma separated list of items.
+
+
 =back
 
 The following sections are valid on level 2:
@@ -513,11 +810,11 @@ The following variables can be set in this section:
 
 =over
 
-=item B</[-_0-9a-zA-Z]+/>
+=item B</[-_0-9a-zA-Z.]+/>
 
 Should be found in the documentation of the
-corresponding probe. The values get propagated. If a child
-node uses the same Probe as the parent.
+corresponding probe. The values get propagated to those child
+nodes using the same Probe.
 
 
 =back
@@ -536,7 +833,7 @@ sections.
 
 =head1 COPYRIGHT
 
-Copyright (c) 2001 by Tobias Oetiker. All right reserved.
+Copyright (c) 2001-2003 by Tobias Oetiker. All right reserved.
 
 =head1 LICENSE
 

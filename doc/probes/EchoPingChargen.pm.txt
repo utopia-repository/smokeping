@@ -1,0 +1,37 @@
+probes::EchoPingChargen(3)  SmokePing  probes::EchoPingChargen(3)
+
+
+
+NNAAMMEE
+       probes::EchoPingChargen - an echoping(1) probe for
+       SmokePing
+
+OOVVEERRVVIIEEWW
+       Measures TCP chargen (port 19) roundtrip times for
+       SmokePing.
+
+SSYYNNOOPPSSYYSS
+        *** Probes ***
+        + EchoPingChargen
+
+        binary = /usr/bin/echoping
+
+        *** Targets ***
+
+        probe = EchoPingChargen
+
+DDEESSCCRRIIPPTTIIOONN
+       Supported probe- and target-specific variables: see
+       _p_r_o_b_e_s_:_:_E_c_h_o_P_i_n_g(3pm)
+
+       Note: the _u_d_p variable is not supported.
+
+AAUUTTHHOORR
+       Niko Tyni <ntyni@iki.fi>
+
+SSEEEE AALLSSOO
+       _p_r_o_b_e_s_:_:_E_c_h_o_P_i_n_g(3pm)
+
+
+
+1.32                        2003-03-20 probes::EchoPingChargen(3)

@@ -1,0 +1,69 @@
+probes::basevars(3)         SmokePing         probes::basevars(3)
+
+
+
+NNAAMMEE
+       probes::basevars - Another Base Class for implementing
+       SmokePing Probes
+
+OOVVEERRVVIIEEWW
+       Like probes::base, but supports host-specific variables
+       for the probe.
+
+SSYYNNOOPPSSIISS
+        *** Targets ***
+
+        menu = Top
+        title = Top Page
+
+        + branch_1
+        menu = First menu
+        title = First title
+        host = host1
+        ++ PROBE_CONF
+        # vars for host host1
+        var1 = foo
+        var2 = bar
+
+        ++ branch_1_2
+        menu = Second menu
+        title = Second title
+        host = host2
+        +++ PROBE_CONF
+        # vars for host host2
+        # var1 and var2 are propagated from above, override var2
+        var2 = fii
+
+        + branch_2
+        # var1 and var2 are undefined here
+
+DDEESSCCRRIIPPTTIIOONN
+       Provides the method `targets' that returns a list of
+       hashes.  The hashes contain the entries:
+
+       addr
+           The address of the target.
+
+       vars
+           A hash containing variables defined in the correspond-
+           ing `PROBE_CONF' config section.
+
+       tree
+           The unique index that `probe::base' uses for targets.
+
+           There's also the method 'vars' that returns the above-
+           mentioned hash corresponding to the 'tree' index
+           parameter.
+
+AAUUTTHHOORR
+       Niko Tyni <ntyni@iki.fi>
+
+BBUUGGSS
+       Uses `probes::base' internals too much to be a derived
+       class, but I didn't want to touch the base class directly.
+
+SSEEEE AALLSSOO
+       _p_r_o_b_e_s_:_:_b_a_s_e(3pm), _p_r_o_b_e_s_:_:_E_c_h_o_P_i_n_g(3pm)
+
+
+

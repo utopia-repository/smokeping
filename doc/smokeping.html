@@ -1,100 +1,158 @@
-<HTML>
-<HEAD>
-<TITLE>smokeping</TITLE>
-<LINK REV="made" HREF="mailto:karrer@iis.ee.ethz.ch">
-</HEAD>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>smokeping</title>
+<link rev="made" href="mailto:dws@ee.ethz.ch" />
+</head>
 
-<BODY>
+<body style="background-color: white">
 
-<A NAME="__index__"></A>
+<p><a name="__index__"></a></p>
 <!-- INDEX BEGIN -->
 <!--
 
-<UL>
+<ul>
 
-	<LI><A HREF="#name">NAME</A></LI>
-	<LI><A HREF="#synopsis">SYNOPSIS</A></LI>
-	<LI><A HREF="#description">DESCRIPTION</A></LI>
-	<LI><A HREF="#setup">SETUP</A></LI>
-	<LI><A HREF="#copyright">COPYRIGHT</A></LI>
-	<LI><A HREF="#license">LICENSE</A></LI>
-	<LI><A HREF="#author">AUTHOR</A></LI>
-</UL>
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#setup">SETUP</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+	<li><a href="#license">LICENSE</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+</ul>
 -->
 <!-- INDEX END -->
 
-<P>
-<H1><A NAME="name">NAME</A></H1>
-<P>smokeping - Commandline tool for SmokePing</P>
-<P>
-<HR>
-<H1><A NAME="synopsis">SYNOPSIS</A></H1>
-<P><STRONG>smokeping</STRONG> [ <STRONG>--email</STRONG> | <STRONG>--makepod</STRONG> | <STRONG>--version</STRONG> | <STRONG>--restart</STRONG> ]</P>
-<PRE>
- Options:</PRE>
-<PRE>
- --email    Send SmokePing Agents to all Targets marked DYNAMIC
- --makepod  Create POD documentation on Config file
- --version  Show SmokePing Version
- --debug    Run Only once and do not Fork
- --restart  Restart SmokePing
- --nodemon  Do no demonize the process (no fork)</PRE>
-<P>
-<HR>
-<H1><A NAME="description">DESCRIPTION</A></H1>
-<P>The <STRONG>smokeping</STRONG> tool is the commandline part of the SmokePing system. Its
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>smokeping - Commandline tool for SmokePing</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p><strong>smokeping</strong> [ <strong>--email</strong> | <strong>--makepod</strong> | <strong>--version</strong> | <strong>--restart</strong> ]</p>
+<pre>
+ Options:</pre>
+<pre>
+ --man        Show the manpage</pre>
+<pre>
+ --help       Help :-)</pre>
+<pre>
+ --email      Send SmokePing Agents to all Targets marked DYNAMIC</pre>
+<pre>
+ --makepod    Create POD documentation on Config file</pre>
+<pre>
+ --version    Show SmokePing Version</pre>
+<pre>
+ --debug      Run Only once and do not Fork</pre>
+<pre>
+ --debug-daemon Start the daemon with debugging enabled</pre>
+<pre>
+ --restart    Restart SmokePing</pre>
+<pre>
+ --nodaemon    Do no daemonize the process (no fork)</pre>
+<pre>
+ --filter=x   Only measure entries which pass the filter x</pre>
+<pre>
+ --logfile    Append warnings to this logfile</pre>
+<pre>
+ --static[=x] Generates a static website in directory x.  If x is left out,
+              pagedir from the config is used.</pre>
+<pre>
+ --nosleep    For debugging you may want to run SmokePing without sleep interval</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>The <strong>smokeping</strong> tool is the commandline part of the SmokePing system. Its
 main function is to run as a daemon and send Pings to all the Targets you
-have specified in the Config file. When you call <STRONG>smokeping</STRONG> without
-arguments it will start as a daemon and do it's work.</P>
-<P>If called with an argument, then further functions can be activated, as seen
-in the Synopsis above. The <STRONG>--email</STRONG> function is explained in the
-documentation on the config file.</P>
-<P>The <STRONG>--makepod</STRONG> does get used internally to produce the documentation on
-the SmokePing configuration file.</P>
-<P>Please refer to the installation document for detailed setup instructions.</P>
-<P>
-<HR>
-<H1><A NAME="setup">SETUP</A></H1>
-<P>When installing SmokePing, this file has to be adjusted to fit your
-local system. Three paths have to be entered.</P>
-<PRE>
- use lib qw(/usr/pack/rrdtool-1.0.33-to/lib/perl);</PRE>
-<P>One pointing to your <STRONG>rrdtool</STRONG> installation</P>
-<PRE>
- use lib qw(/home/oetiker/public_html/smokeping/lib);</PRE>
-<P>One pointing to the place where you have installed the SmokePing libraries</P>
-<PRE>
- use Smokeping;</PRE>
-<PRE>
- Smokeping::main(&quot;/home/oetiker/.smokeping/config&quot;);</PRE>
-<P>The third path is the argument to the Smokeping::main command. It points to
-the SmokePing configuration file.</P>
-<P>
-<HR>
-<H1><A NAME="copyright">COPYRIGHT</A></H1>
-<P>Copyright (c) 2001 by Tobias Oetiker. All right reserved.</P>
-<P>
-<HR>
-<H1><A NAME="license">LICENSE</A></H1>
-<P>This program is free software; you can redistribute it
+have specified in the Config file. When you call <strong>smokeping</strong> without
+arguments it will start as a daemon and do its work.</p>
+<p>If called with an argument, then further functions can be activated, as seen
+in the Synopsis above. The <strong>--email</strong> function is explained in the
+documentation on the config file.</p>
+<p>The <strong>--filter</strong> option allows you to run the daemon on a big config file,
+but have the config file filtered and only measure the entries that pass the
+filter. This is useful for remote measurement. Run Smokeping with two
+exclusive filters in two locations and rsync the rrds back to the webserver
+host where you run the cgi. Filters act on the section names in the config
+file. Multiple section names are concatenated with <strong>/</strong> like path names:</p>
+<pre>
+ *** targets ***
+ + A
+ ....
+ + B
+ ...
+ ++ C</pre>
+<p>This gives</p>
+<pre>
+ /A</pre>
+<p>and</p>
+<pre>
+ /B, /B/C</pre>
+<p>If I want to monitor /A my filter would look like this:</p>
+<pre>
+ --filter=/A</pre>
+<p>Filters follow regular expression syntax. The are always anchored at the tip of the string.
+by adding a <strong>!</strong> to the front of the filter string you negate it. Matching entries will be excluded from monitoring.
+Multiple <strong>--filter</strong> arguments can be used to assemble complex filters:</p>
+<pre>
+  --filter=/A --filter=/B</pre>
+<p>would include all the targets</p>
+<pre>
+  --filter=/A --filter=/B --filter=!/B/C</pre>
+<p>would include all but /B/C.</p>
+<p>The <strong>--makepod</strong> does get used internally to produce the documentation on
+the SmokePing configuration file.</p>
+<p>Please refer to the installation document for detailed setup instructions.</p>
+<p>
+</p>
+<hr />
+<h1><a name="setup">SETUP</a></h1>
+<p>When installing SmokePing, this file has to be adjusted to fit your
+local system. Three paths have to be entered.</p>
+<p>One pointing to your <strong>rrdtool</strong> installation</p>
+<pre>
+ use lib qw(/usr/pack/rrdtool-1.0.33-to/lib/perl);</pre>
+<p>One pointing to the place where you have installed the SmokePing libraries</p>
+<pre>
+ use lib qw(/home/oetiker/public_html/smokeping/lib);</pre>
+<p>The third path is the argument to the Smokeping::main command. It points to
+the SmokePing configuration file.</p>
+<pre>
+ use Smokeping;
+ Smokeping::main(&quot;/home/oetiker/.smokeping/config&quot;);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright (c) 2002 by Tobias Oetiker. All right reserved.</p>
+<p>
+</p>
+<hr />
+<h1><a name="license">LICENSE</a></h1>
+<p>This program is free software; you can redistribute it
 and/or modify it under the terms of the GNU General Public
 License as published by the Free Software Foundation; either
 version 2 of the License, or (at your option) any later
-version.</P>
-<P>This program is distributed in the hope that it will be
+version.</p>
+<p>This program is distributed in the hope that it will be
 useful, but WITHOUT ANY WARRANTY; without even the implied
 warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the GNU General Public License for more
-details.</P>
-<P>You should have received a copy of the GNU General Public
+details.</p>
+<p>You should have received a copy of the GNU General Public
 License along with this program; if not, write to the Free
 Software Foundation, Inc., 675 Mass Ave, Cambridge, MA
-02139, USA.</P>
-<P>
-<HR>
-<H1><A NAME="author">AUTHOR</A></H1>
-<P>Tobias Oetiker &lt;<A HREF="mailto:tobi@oetiker.ch">tobi@oetiker.ch</A>&gt;</P>
+02139, USA.</p>
+<p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>Tobias Oetiker &lt;<a href="mailto:tobi@oetiker.ch">tobi@oetiker.ch</a>&gt;</p>
 
-</BODY>
+</body>
 
-</HTML>
+</html>

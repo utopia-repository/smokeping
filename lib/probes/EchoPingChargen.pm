@@ -48,7 +48,7 @@ sub test_usage {
 	my $self = shift;
 	my $bin = $self->{properties}{binary};
 	croak("Your echoping binary doesn't support CHARGEN")
-		if `$bin -c 2>&1 foo` =~ /(usage|not compiled|invalid option)/i;
+		if `$bin -c 2>&1 127.0.0.1` =~ /(usage|not compiled|invalid option)/i;
 	$self->SUPER::test_usage;
 	return;
 }

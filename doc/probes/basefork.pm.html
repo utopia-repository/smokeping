@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>probes/basefork.pm</title>
+<link rev="made" href="mailto:dws@ee.ethz.ch" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+<!--
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#overview">OVERVIEW</a></li>
+	<li><a href="#synopsys">SYNOPSYS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+	<li><a href="#bugs">BUGS</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+-->
+<!-- INDEX END -->
+
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>probes::basefork - Yet Another Base Class for implementing SmokePing Probes</p>
+<p>
+</p>
+<hr />
+<h1><a name="overview">OVERVIEW</a></h1>
+<p>Like probes::basevars, but supports the probe-specific property `forks'
+to determine how many processes should be run concurrently. The
+targets are pinged one at a time, and the number of pings sent can vary
+between targets.</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsys">SYNOPSYS</a></h1>
+<pre>
+ *** Probes ***</pre>
+<pre>
+ + MyForkingProbe
+ # run this many concurrent processes
+ forks = 10 
+ # how long does a single 'ping' take
+ timeout = 10
+ # how many pings to send
+ pings = 10</pre>
+<pre>
+ + MyOtherForkingProbe
+ # we don't want any concurrent processes at all for some reason.
+ forks = 1</pre>
+<pre>
+ *** Targets ***</pre>
+<pre>
+ menu = First
+ title = First
+ host = firsthost
+ probe = MyForkingProbe</pre>
+<pre>
+ menu = Second
+ title = Second
+ host = secondhost
+ probe = MyForkingProbe
+ +PROBE_CONF
+ pings = 20</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>Not all pinger programs support testing multiple hosts in a single go like
+fping(1). If the measurement takes long enough, there may be not enough time 
+perform all the tests in the time available. For example, if the test takes
+30 seconds, measuring ten hosts already fills up the SmokePing default 
+five minute step.</p>
+<p>Thus, it may be necessary to do some of the tests concurrently. This module
+defines the <strong>ping</strong> method that forks the requested number of concurrent 
+processes and calls the <strong>pingone</strong> method that derived classes must provide.</p>
+<p>The <strong>pingone</strong> method is called with one argument: a hash containing
+the target that is to be measured. The contents of the hash are
+described in <em>probes::basevars</em>(3pm).</p>
+<p>The number of concurrent processes is determined by the probe-specific 
+variable `forks' and is 5 by default. If there are more 
+targets than this value, another round of forks is done after the first 
+processes are finished. This continues until all the targets have been
+tested.</p>
+<p>The timeout in which each child has to finish is set to 5 seconds
+multiplied by the maximum number of 'pings' of the targets. You can set
+the base timeout differently if you want to, using the timeout property
+of the probe in the master config file (this again will be multiplied
+by the maximum number of pings). The probe itself can also override the
+default by providing a TimeOut method which returns an integer.</p>
+<p>If the child isn't finished when the timeout occurs, it 
+will be killed along with any processes it has started.</p>
+<p>The number of pings sent can be specified in the probe-specific variable
+'pings', and it can be overridden by each target in the 'PROBE_CONF'
+section.</p>
+<p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>Niko Tyni &lt;<a href="mailto:ntyni@iki.fi">ntyni@iki.fi</a>&gt;</p>
+<p>
+</p>
+<hr />
+<h1><a name="bugs">BUGS</a></h1>
+<p>The timeout code has only been tested on Linux.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p>probes::basevars(3pm), probes::EchoPing(3pm)</p>
+
+</body>
+
+</html>

@@ -4,14 +4,14 @@
 use lib qw(/usr/pack/rrdtool-1.0.33-to/lib/perl);
 use lib qw(/home/oetiker/data/projects/AADJ-smokeping/dist/lib);
 
-use Smokeping 1.6;
+use Smokeping 1.38;
 
 Smokeping::cgi("/home/oetiker/data/projects/AADJ-smokeping/dist/etc/config");
 
 
 BEGIN {
     if ($ENV{SERVER_SOFTWARE}) {
-        $SIG{__WARN__} = sub { print "<pre>Warning: ".(shift)."</pre>"; };
-        $SIG{__DIE__} = sub { print "<pre>Error: ".(shift)."</pre>"; exit 1 }
+        $SIG{__WARN__} = sub { print "Content-Type: text/plain\n\n".(shift)."\n"; };
+        $SIG{__DIE__} = sub { print "Content-Type: text/plain\n\n".(shift)."\n"; exit 1 }
     };
 }

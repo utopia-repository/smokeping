@@ -2,7 +2,7 @@
 ######################################################################
 ### BER (Basic Encoding Rules) encoding and decoding.
 ######################################################################
-### Copyright (c) 1995-2000, Simon Leinen.
+### Copyright (c) 1995-2002, Simon Leinen.
 ###
 ### This program is free software; you can redistribute it under the
 ### "Artistic License" included in this distribution (file "Artistic").
@@ -25,6 +25,8 @@
 ### Rik Hoorelbeke <rik.hoorelbeke@pandora.be>: encode_oid() fix
 ### Brett T Warden <wardenb@eluminant.com>: pretty UInteger32
 ### Bert Driehuis <driehuis@playbeing.org>: Handle SNMPv2 exception codes
+### Jakob Ilves (/IlvJa) <jakob.ilves@oracle.com>: PDU decoding
+### Jan Kasprzak <kas@informatics.muni.cz>: Fix for PDU syntax check
 ######################################################################
 
 package BER;
@@ -35,7 +37,7 @@ use strict;
 use vars qw(@ISA @EXPORT $VERSION $pretty_print_timeticks $errmsg);
 use Exporter;
 
-$VERSION = '0.88';
+$VERSION = '0.95';
 
 @ISA = qw(Exporter);
 
@@ -81,6 +83,7 @@ sub pretty_oid ($);
 sub pretty_uptime ($);
 sub pretty_uptime_value ($);
 sub pretty_ip_address ($);
+sub pretty_generic_sequence ($);
 sub hex_string ($);
 sub hex_string_of_type ($$);
 sub decode_oid ($);
@@ -95,6 +98,7 @@ sub decode_string ($);
 sub decode_length ($);
 sub encoded_oid_prefix_p ($$);
 sub decode_subid ($$$);
+sub decode_generic_tlv ($);
 sub error (@);
 sub template_error ($$$);
 
@@ -128,20 +132,20 @@ sub long_length		{ 0x80 }
 
 ### SNMP specific tags
 
-sub snmp_ip_address_tag		{ 0x00 | application_flag }
-sub snmp_counter32_tag		{ 0x01 | application_flag }
-sub snmp_gauge32_tag		{ 0x02 | application_flag }
-sub snmp_timeticks_tag		{ 0x03 | application_flag }
-sub snmp_opaque_tag		{ 0x04 | application_flag }
-sub snmp_nsap_address_tag	{ 0x05 | application_flag }
-sub snmp_counter64_tag		{ 0x06 | application_flag }
-sub snmp_uinteger32_tag		{ 0x07 | application_flag }
+sub snmp_ip_address_tag		{ 0x00 | application_flag () }
+sub snmp_counter32_tag		{ 0x01 | application_flag () }
+sub snmp_gauge32_tag		{ 0x02 | application_flag () }
+sub snmp_timeticks_tag		{ 0x03 | application_flag () }
+sub snmp_opaque_tag		{ 0x04 | application_flag () }
+sub snmp_nsap_address_tag	{ 0x05 | application_flag () }
+sub snmp_counter64_tag		{ 0x06 | application_flag () }
+sub snmp_uinteger32_tag		{ 0x07 | application_flag () }
 
 ## Error codes (SNMPv2 and later)
 ##
-sub snmp_nosuchobject		{ context_flag | 0x00 }
-sub snmp_nosuchinstance		{ context_flag | 0x01 }
-sub snmp_endofmibview		{ context_flag | 0x02 }
+sub snmp_nosuchobject		{ context_flag () | 0x00 }
+sub snmp_nosuchinstance		{ context_flag () | 0x01 }
+sub snmp_endofmibview		{ context_flag () | 0x02 }
 
 #### Encoding
 
@@ -321,6 +325,42 @@ sub pretty_print ($) {
     return error ("Exception code: noSuchObject") if $result == snmp_nosuchobject;
     return error ("Exception code: noSuchInstance") if $result == snmp_nosuchinstance;
     return error ("Exception code: endOfMibView") if $result == snmp_endofmibview;
+
+    # IlvJa
+    # pretty print sequences and their contents.
+
+    my $ctx_cons_flags = context_flag | constructor_flag;
+
+    if($result == (&constructor_flag | &sequence_tag) # sequence
+		|| $result == (0 | $ctx_cons_flags) #get_request
+		|| $result == (1 | $ctx_cons_flags) #getnext_request
+		|| $result == (2 | $ctx_cons_flags) #get_response
+		|| $result == (3 | $ctx_cons_flags) #set_request
+		|| $result == (4 | $ctx_cons_flags) #trap_request
+		|| $result == (5 | $ctx_cons_flags) #getbulk_request
+		|| $result == (6 | $ctx_cons_flags) #inform_request
+		|| $result == (7 | $ctx_cons_flags) #trap2_request
+		)
+    {
+	my $pretty_result = pretty_generic_sequence($packet);
+	$pretty_result =~ s/^/    /gm; #Indent.
+
+	my $seq_type_desc =
+	{
+	    (constructor_flag | sequence_tag) => "Sequence",
+	    (0 | $ctx_cons_flags)             => "GetRequest",
+	    (1 | $ctx_cons_flags)             => "GetNextRequest",
+	    (2 | $ctx_cons_flags)             => "GetResponse",
+	    (3 | $ctx_cons_flags)             => "SetRequest",
+	    (4 | $ctx_cons_flags)             => "TrapRequest",
+	    (5 | $ctx_cons_flags)             => "GetbulkRequest",
+	    (6 | $ctx_cons_flags)             => "InformRequest",
+	    (7 | $ctx_cons_flags)             => "Trap2Request",
+	}->{($result)};
+
+	return $seq_type_desc . "{\n" . $pretty_result . "\n}";
+    }
+
     return sprintf ("#<unprintable BER type 0x%x>", $result);
 }
 
@@ -427,6 +467,52 @@ sub pretty_ip_address ($) {
     sprintf "%d.%d.%d.%d", unpack ("CCCC", $pdu);
 }
 
+# IlvJa
+# Returns a string with the pretty prints of all
+# the elements in the sequence.
+sub pretty_generic_sequence ($) {
+    my ($pdu) = shift;
+
+    my $rest;
+
+    my $type = ord substr ($pdu, 0 ,1);
+    my $flags = context_flag | constructor_flag;
+    
+    return error (sprintf ("Tag 0x%x is not a valid sequence tag",$type))
+	unless ($type == (&constructor_flag | &sequence_tag) # sequence
+		|| $type == (0 | $flags) #get_request
+		|| $type == (1 | $flags) #getnext_request
+		|| $type == (2 | $flags) #get_response
+		|| $type == (3 | $flags) #set_request
+		|| $type == (4 | $flags) #trap_request
+		|| $type == (5 | $flags) #getbulk_request
+		|| $type == (6 | $flags) #inform_request
+		|| $type == (7 | $flags) #trap2_request
+		);
+    
+    my $curelem;
+    my $pretty_result; # Holds the pretty printed sequence.
+    my $pretty_elem;   # Holds the pretty printed current elem.
+    my $first_elem = 'true';
+    
+    # Cut away the first Tag and Length from $packet and then
+    # init $rest with that.
+    (undef, $rest) = decode_length(substr $pdu, 1);
+    while($rest)
+    {
+	($curelem,$rest) = decode_generic_tlv($rest);
+	$pretty_elem = pretty_print($curelem);
+	
+	$pretty_result .= "\n" if not $first_elem;
+	$pretty_result .= $pretty_elem;
+	
+	# The rest of the iterations are not related to the
+	# first element of the sequence so..
+	$first_elem = '' if $first_elem;
+    }
+    return $pretty_result;
+}    
+
 sub hex_string ($) {
     &hex_string_of_type ($_[0], octet_string_tag);
 }
@@ -458,8 +544,29 @@ sub decode_oid ($) {
     $result = ord (substr ($pdu, 0, 1));
     return error ("Object ID expected") unless $result == object_id_tag;
     ($result, $pdu_rest) = decode_length (substr ($pdu, 1));
+    return error ("Short PDU")
+	if $result > length $pdu_rest;
     @result = (substr ($pdu, 0, $result + (length ($pdu) - length ($pdu_rest))),
 	       substr ($pdu_rest, $result));
+    @result;
+}
+
+# IlvJa
+# This takes a PDU and returns a two element list consisting of
+# the first element found in the PDU (whatever it is) and the
+# rest of the PDU
+sub decode_generic_tlv ($) {
+    my ($pdu) = @_;
+    my (@result);
+    my ($elemlength,$pdu_rest) = decode_length (substr($pdu,1));
+    @result = (# Extract the first element.
+	       substr ($pdu, 0, $elemlength + (length ($pdu)
+					       - length ($pdu_rest)
+					       )
+		       ),
+	       #Extract the rest of the PDU.
+	       substr ($pdu_rest, $elemlength)
+	       );
     @result;
 }
 
@@ -480,6 +587,7 @@ sub decode_by_template_2 {
     $template_index = shift;
     my (@results);
     my ($length,$expected,$read,$rest);
+    return undef unless defined $pdu;
     while (0 < length ($_)) {
 	if (substr ($_, 0, 1) eq '%') {
 	    print STDERR "template $_ ", length $pdu," bytes remaining\n"
@@ -494,6 +602,9 @@ sub decode_by_template_2 {
 		$expected = shift | constructor_flag if ($expected eq '*');
 		$expected = sequence_tag | constructor_flag
 		    if $expected eq '';
+		return template_error ("Unexpected end of PDU",
+				       $template, $template_index)
+		    if !defined $pdu or $pdu eq '';
 		return template_error ("Expected sequence tag $expected, got ".
 				       ord (substr ($pdu, 0, 1)),
 				      $template,
@@ -531,6 +642,8 @@ sub decode_by_template_2 {
 		    return error ("Expected IP address, got tag ".$tag)
 			unless $tag == snmp_ip_address_tag;
 		    ($length, $pdu) = decode_length (substr ($pdu, 1));
+		    return error ("Inconsistent length of InetAddress encoding")
+			if $length > length $pdu;
 		    return template_error ("IP address must be four bytes long",
 					   $template, $template_index)
 			unless $length == 4;
@@ -608,8 +721,11 @@ sub decode_sequence ($) {
     my ($result);
     my (@result);
     $result = ord (substr ($pdu, 0, 1));
-    return error ("Sequence expected") unless $result == sequence_tag | constructor_flag;
+    return error ("Sequence expected")
+	unless $result == (sequence_tag | constructor_flag);
     ($result, $pdu) = decode_length (substr ($pdu, 1));
+    return error ("Short PDU")
+	if $result > length $pdu;
     @result = (substr ($pdu, 0, $result), substr ($pdu, $result));
     @result;
 }
@@ -656,6 +772,8 @@ sub decode_string ($) {
     return error ("Expected octet string, got tag ".$result)
 	unless $result == octet_string_tag;
     ($result, $pdu) = decode_length (substr ($pdu, 1));
+    return error ("Short PDU")
+	if $result > length $pdu;
     return (substr ($pdu, 0, $result), substr ($pdu, $result));
 }
 

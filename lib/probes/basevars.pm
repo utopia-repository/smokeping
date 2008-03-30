@@ -56,6 +56,9 @@ A hash containing variables defined in the corresponding
 
 The unique index that `probe::base' uses for targets.
 
+There's also the method 'vars' that returns the abovementioned
+hash corresponding to the 'tree' index parameter.
+
 =back
 
 =head1 AUTHOR
@@ -101,6 +104,12 @@ sub targets {
 				 tree => $tree };
 	}
 	return \@targets;
+}
+
+sub vars {
+	my $self = shift;
+	my $tree = shift;
+	return $self->{PROBE_CONF}{$tree};
 }
 
 sub ProbeDesc {

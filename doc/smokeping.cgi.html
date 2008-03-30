@@ -1,91 +1,99 @@
-<HTML>
-<HEAD>
-<TITLE>smokeping.cgi</TITLE>
-<LINK REV="made" HREF="mailto:karrer@iis.ee.ethz.ch">
-</HEAD>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>smokeping.cgi</title>
+<link rev="made" href="mailto:dws@ee.ethz.ch" />
+</head>
 
-<BODY>
+<body style="background-color: white">
 
-<A NAME="__index__"></A>
+<p><a name="__index__"></a></p>
 <!-- INDEX BEGIN -->
 <!--
 
-<UL>
+<ul>
 
-	<LI><A HREF="#name">NAME</A></LI>
-	<LI><A HREF="#overview">OVERVIEW</A></LI>
-	<LI><A HREF="#description">DESCRIPTION</A></LI>
-	<LI><A HREF="#setup">SETUP</A></LI>
-	<LI><A HREF="#copyright">COPYRIGHT</A></LI>
-	<LI><A HREF="#license">LICENSE</A></LI>
-	<LI><A HREF="#author">AUTHOR</A></LI>
-</UL>
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#overview">OVERVIEW</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#setup">SETUP</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+	<li><a href="#license">LICENSE</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+</ul>
 -->
 <!-- INDEX END -->
 
-<P>
-<H1><A NAME="name">NAME</A></H1>
-<P>smokeping.cgi - SmokePing webfrontend</P>
-<P>
-<HR>
-<H1><A NAME="overview">OVERVIEW</A></H1>
-<P>This script acts as a 'website' for your SmokePing monitoring operation. It
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>smokeping.cgi - SmokePing webfrontend</p>
+<p>
+</p>
+<hr />
+<h1><a name="overview">OVERVIEW</a></h1>
+<p>This script acts as a 'website' for your SmokePing monitoring operation. It
 presents the targets you are looking at in a tree structure and draws graphs
-as they are required by people looking at the pages.</P>
-<P>
-<HR>
-<H1><A NAME="description">DESCRIPTION</A></H1>
-<P>To get <STRONG>smokeping.cgi</STRONG> going, you need a webserver which allows you to run
-cgi scripts. The system must be setup so that the <STRONG>smokeping.cgi</STRONG> is
-allowed to write to the image caching area as defined in the config file.</P>
-<P>This script runs with normal perl. <STRONG>BUT</STRONG> it will appear to be very slow,
+as they are required by people looking at the pages.</p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>To get <strong>smokeping.cgi</strong> going, you need a webserver which allows you to run
+cgi scripts. The system must be setup so that the <strong>smokeping.cgi</strong> is
+allowed to write to the image caching area as defined in the config file.</p>
+<p>This script runs with normal perl. <strong>BUT</strong> it will appear to be very slow,
 because it does a lot of things when starting up. So if the script has to be
 started a fresh on every click, this is both slow and a tough thing for your
-webserver. I therefore strongly recomment using SpeedyCGI.</P>
-<P>Please refer to the installation document for detailed setup instructions.</P>
-<P>
-<HR>
-<H1><A NAME="setup">SETUP</A></H1>
-<P>When installing SmokePing, this file has to be adjusted to fit your
-local system. Three paths have to be entered.</P>
-<PRE>
- use lib qw(/usr/pack/rrdtool-1.0.33-to/lib/perl);</PRE>
-<P>One pointing to your <STRONG>rrdtool</STRONG> installation</P>
-<PRE>
- use lib qw(/home/oetiker/public_html/smokeping/lib);</PRE>
-<P>One pointing to the place where you have installed the SmokePing libraries</P>
-<PRE>
- use Smokeping;</PRE>
-<PRE>
- Smokeping::cgi(&quot;/home/oetiker/.smokeping/config&quot;);</PRE>
-<P>The third path is the argument to the Smokeping::main command. It points to
-the SmokePing configuration file.</P>
-<P>
-<HR>
-<H1><A NAME="copyright">COPYRIGHT</A></H1>
-<P>Copyright (c) 2001 by Tobias Oetiker. All right reserved.</P>
-<P>
-<HR>
-<H1><A NAME="license">LICENSE</A></H1>
-<P>This program is free software; you can redistribute it
+webserver. I therefore strongly recomment using SpeedyCGI.</p>
+<p>Please refer to the installation document for detailed setup instructions.</p>
+<p>
+</p>
+<hr />
+<h1><a name="setup">SETUP</a></h1>
+<p>When installing SmokePing, this file has to be adjusted to fit your
+local system. Three paths have to be entered.</p>
+<pre>
+ use lib qw(/usr/pack/rrdtool-1.0.33-to/lib/perl);</pre>
+<p>One pointing to your <strong>rrdtool</strong> installation</p>
+<pre>
+ use lib qw(/home/oetiker/public_html/smokeping/lib);</pre>
+<p>One pointing to the place where you have installed the SmokePing libraries</p>
+<pre>
+ use Smokeping;</pre>
+<pre>
+ Smokeping::cgi(&quot;/home/oetiker/.smokeping/config&quot;);</pre>
+<p>The third path is the argument to the Smokeping::main command. It points to
+the SmokePing configuration file.</p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright (c) 2001 by Tobias Oetiker. All right reserved.</p>
+<p>
+</p>
+<hr />
+<h1><a name="license">LICENSE</a></h1>
+<p>This program is free software; you can redistribute it
 and/or modify it under the terms of the GNU General Public
 License as published by the Free Software Foundation; either
 version 2 of the License, or (at your option) any later
-version.</P>
-<P>This program is distributed in the hope that it will be
+version.</p>
+<p>This program is distributed in the hope that it will be
 useful, but WITHOUT ANY WARRANTY; without even the implied
 warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the GNU General Public License for more
-details.</P>
-<P>You should have received a copy of the GNU General Public
+details.</p>
+<p>You should have received a copy of the GNU General Public
 License along with this program; if not, write to the Free
 Software Foundation, Inc., 675 Mass Ave, Cambridge, MA
-02139, USA.</P>
-<P>
-<HR>
-<H1><A NAME="author">AUTHOR</A></H1>
-<P>Tobias Oetiker &lt;tobi\@oetiker.ch&gt;</P>
+02139, USA.</p>
+<p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>Tobias Oetiker &lt;tobi\@oetiker.ch&gt;</p>
 
-</BODY>
+</body>
 
-</HTML>
+</html>

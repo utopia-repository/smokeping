@@ -1,0 +1,45 @@
+probes::EchoPingIcp(3)      SmokePing      probes::EchoPingIcp(3)
+
+
+
+NNAAMMEE
+       probes::EchoPingIcp - an echoping(1) probe for SmokePing
+
+OOVVEERRVVIIEEWW
+       Measures ICP (Internet Cache Protocol, spoken by web
+       caches) roundtrip times for SmokePing.
+
+SSYYNNOOPPSSYYSS
+        *** Probes ***
+        + EchoPingIcp
+
+        binary = /usr/bin/echoping # mandatory
+
+        *** Targets ***
+
+        probe = EchoPingHttp
+
+        + PROBE_CONF
+        # this can be overridden in the targets' PROBE_CONF sections
+        url = /
+
+DDEESSCCRRIIPPTTIIOONN
+       Supported probe-specific variables: those specified in
+       _E_c_h_o_P_i_n_g(3pm) documentation.
+
+       Supported target-specific variables:
+
+       those specified in _E_c_h_o_P_i_n_g(3pm) documentation
+           except _f_i_l_l, _s_i_z_e and _u_d_p.
+
+       url The URL to be requested from the web cache.
+
+AAUUTTHHOORR
+       Niko Tyni <ntyni@iki.fi>
+
+SSEEEE AALLSSOO
+       _E_c_h_o_P_i_n_g(3pm), _E_c_h_o_P_i_n_g_H_t_t_p(3pm)
+
+
+
+1.32                        2003-03-20     probes::EchoPingIcp(3)

@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>matchers/avgratio.pm</title>
+<link rev="made" href="mailto:dws@ee.ethz.ch" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+<!--
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#overview">OVERVIEW</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#example">EXAMPLE</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+	<li><a href="#sponsorship">SPONSORSHIP</a></li>
+	<li><a href="#license">LICENSE</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+</ul>
+-->
+<!-- INDEX END -->
+
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>matchers::avgratio - detect changes in average median latency</p>
+<p>
+</p>
+<hr />
+<h1><a name="overview">OVERVIEW</a></h1>
+<pre>
+
+The avgratio matcher establishes a historic average median latency over
+several measurement rounds. It compares this average, against a second
+average latency value again build over several rounds of measurment.</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>Call the matcher with the following sequence:</p>
+<pre>
+ type = matcher
+ pattern =  avgratio(historic=&gt;a,current=&gt;b,comparator=&gt;o,percentage=&gt;p)</pre>
+<dl>
+<dt><strong><a name="item_historic">historic</a></strong><br />
+</dt>
+<dd>
+The number of median values to use for building the 'historic' average.
+</dd>
+<p></p>
+<dt><strong><a name="item_current">current</a></strong><br />
+</dt>
+<dd>
+The number of median values to use for building the 'current' average.
+</dd>
+<p></p>
+<dt><strong><a name="item_comparator">comparator</a></strong><br />
+</dt>
+<dd>
+Which comparison operator should be used to compare current/historic with percentage.
+</dd>
+<p></p>
+<dt><strong><a name="item_percentage">percentage</a></strong><br />
+</dt>
+<dd>
+Right hand side of the comparison.
+</dd>
+<p></p></dl>
+<pre>
+  old &lt;--- historic ---&gt;&lt;--- current ---&gt; now</pre>
+<p>
+</p>
+<hr />
+<h1><a name="example">EXAMPLE</a></h1>
+<p>Take build the average median latency over 10 samples, use this to divid the
+current average latency built over 2 samples and check if it is bigger than
+150%.</p>
+<pre>
+ avgratio(historic=&gt;10,current=&gt;2,comparator=&gt;'&gt;',percentage=&gt;150);</pre>
+<pre>
+ avg(current)/avg(historic) &gt; 150/100</pre>
+<p>This means the matcher will activate when the current latency average if
+more than 1.5 times the historic latency average established over the last
+10 rounds of measurement.</p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright (c) 2004 by OETIKER+PARTNER AG. All rights reserved.</p>
+<p>
+</p>
+<hr />
+<h1><a name="sponsorship">SPONSORSHIP</a></h1>
+<p>The development of this matcher has been sponsored by Virtela Communications www.virtela.net.</p>
+<p>
+</p>
+<hr />
+<h1><a name="license">LICENSE</a></h1>
+<p>This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.</p>
+<p>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.</p>
+<p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>Tobias Oetiker &lt;<a href="mailto:tobi@oetiker.ch">tobi@oetiker.ch</a>&gt;</p>
+
+</body>
+
+</html>

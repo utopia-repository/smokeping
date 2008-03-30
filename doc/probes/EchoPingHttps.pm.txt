@@ -1,0 +1,39 @@
+probes::EchoPingHttps(3)    SmokePing    probes::EchoPingHttps(3)
+
+
+
+NNAAMMEE
+       probes::EchoPingHttps - an echoping(1) probe for SmokePing
+
+OOVVEERRVVIIEEWW
+       Measures HTTPS (HTTP over SSL) roundtrip times (web
+       servers and caches) for SmokePing.
+
+SSYYNNOOPPSSYYSS
+        *** Probes ***
+        + EchoPingHttps
+
+        binary = /usr/bin/echoping # mandatory
+
+        *** Targets ***
+
+        probe = EchoPingHttps
+
+        + PROBE_CONF
+        url = /
+        ignore-cache = yes
+        force-revalidate = no
+        port = 443 # default value anyway
+
+DDEESSCCRRIIPPTTIIOONN
+       As _E_c_h_o_P_i_n_g_H_t_t_p(3pm), but SSL-enabled.
+
+AAUUTTHHOORR
+       Niko Tyni <ntyni@iki.fi>
+
+SSEEEE AALLSSOO
+       _E_c_h_o_P_i_n_g_H_t_t_p(3pm)
+
+
+
+1.32                        2003-03-20   probes::EchoPingHttps(3)

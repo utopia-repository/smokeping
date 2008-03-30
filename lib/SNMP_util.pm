@@ -2,7 +2,7 @@
 ######################################################################
 ### SNMP_util -- SNMP utilities using SNMP_Session.pm and BER.pm
 ######################################################################
-### Copyright (c) 1998-2001, Mike Mitchell.
+### Copyright (c) 1998-2002, Mike Mitchell.
 ###
 ### This program is free software; you can redistribute it under the
 ### "Artistic License" included in this distribution (file "Artistic").
@@ -21,6 +21,11 @@
 ### Simon Leinen <simon@switch.ch>: 'undefined port' bug
 ### Daniel McDonald <dmcdonald@digicontech.com>: request for getbulk support
 ### Laurent Girod <girod.laurent@pmintl.ch>: code for snmpwalkhash
+### Ian Duplisse <i.duplisse@cablelabs.com>: MIB parsing suggestions
+### Jakob Ilves <jakob.ilves@oracle.com>: return_array_refs for snmpwalk()
+### Valerio Bontempi <v.bontempi@inwind.it>: IPv6 support
+### Lorenzo Colitti <lorenzo@colitti.com>: IPv6 support
+### Joerg Kummer <JOERG.KUMMER@Roche.COM>: TimeTicks support in snmpset()
 ######################################################################
 
 package SNMP_util;
@@ -32,15 +37,15 @@ use vars qw(@ISA @EXPORT $VERSION);
 use Exporter;
 use Carp;
 
-use BER "0.82";
-use SNMP_Session "0.83";
+use BER "0.95";
+use SNMP_Session "0.97";
 use Socket;
 
-$VERSION = '0.89';
+$VERSION = '0.98';
 
 @ISA = qw(Exporter);
 
-@EXPORT = qw(snmpget snmpgetnext snmpwalk snmpset snmptrap snmpgetbulk snmpmaptable snmpwalkhash snmpmapOID snmpMIB_to_OID snmpLoad_OID_Cache snmpQueue_MIB_File);
+@EXPORT = qw(snmpget snmpgetnext snmpwalk snmpset snmptrap snmpgetbulk snmpmaptable snmpmaptable4 snmpwalkhash snmpmapOID snmpMIB_to_OID snmpLoad_OID_Cache snmpQueue_MIB_File);
 
 # The OID numbers from RFC1213 (MIB-II) and RFC1315 (Frame Relay)
 # are pre-loaded below.
@@ -319,17 +324,23 @@ $VERSION = '0.89';
     'enterprises' => '1.3.6.1.4.1',
   );
 
+# GIL
+my %revOIDS = ();	# Reversed %SNMP_util::OIDS hash
+my $RevNeeded = 1;
+
 my $agent_start_time = time;
 
 undef $SNMP_util::Host;
 undef $SNMP_util::Session;
 undef $SNMP_util::Version;
 undef $SNMP_util::LHost;
+undef $SNMP_util::IPv4only;
 $SNMP_util::Debug = 0;
 $SNMP_util::CacheFile = "OID_cache.txt";
 $SNMP_util::CacheLoaded = 0;
+$SNMP_util::Return_array_refs = 0;
 
-srand(time|$$);
+srand(time + $$);
 
 ### Prototypes
 sub snmpget ($@);
@@ -341,6 +352,7 @@ sub snmpset ($@);
 sub snmptrap ($$$$$@);
 sub snmpgetbulk ($$$@);
 sub snmpmaptable ($$@);
+sub snmpmaptable4 ($$$@);
 sub snmpwalkhash ($$@);
 sub toOID (@);
 sub snmpmapOID (@);
@@ -359,16 +371,30 @@ sub snmpopen ($$$) {
   my($host, $type, $vars) = @_;
   my($nhost, $port, $community, $lhost, $lport, $nlhost);
   my($timeout, $retries, $backoff, $version);
+  my $v4onlystr;
 
   $type = 0 if (!defined($type));
   $community = "public";
   $nlhost = "";
 
   ($community, $host) = ($1, $2) if ($host =~ /^(.*)@([^@]+)$/);
-  ($host, $port, $timeout, $retries, $backoff, $version) = split(':', $host, 6)
-    if ($host =~ /:/);
+
+  # We can't split on the : character because a numeric IPv6
+  # address contains a variable number of :'s
+  my $opts;
+ if( ($host =~ /^(\[.*\]):(.*)$/) || ($host =~ /^(\[.*\])$/) ) {
+    # Numeric IPv6 address between []
+    ($host, $opts) = ($1, $2);
+  } else {
+    # Hostname or numeric IPv4 address
+    ($host, $opts) = split(':', $host, 2);
+  }
+  ($port, $timeout, $retries, $backoff, $version, $v4onlystr) = split(':', $opts, 6)
+    if(defined($opts) && (length $opts > 0) );
+
+  undef($version) if (defined($version) && length($version) <= 0);
+  $v4onlystr = "" unless defined $v4onlystr;
   $version = '1' unless defined $version;
-  undef($port) if (defined($port) && length($port) <= 0);
   if (defined($port) && ($port =~ /^([^!]*)!(.*)$/)) {
     ($port, $lhost) = ($1, $2);
     $nlhost = $lhost;
@@ -376,6 +402,7 @@ sub snmpopen ($$$) {
     undef($lhost) if (defined($lhost) && (length($lhost) <= 0));
     undef($lport) if (defined($lport) && (length($lport) <= 0));
   }
+  undef($port) if (defined($port) && length($port) <= 0);
   $port = 162 if ($type == 1 && !defined($port));
   $nhost = "$community\@$host";
   $nhost .= ":" . $port if (defined($port));
@@ -383,40 +410,47 @@ sub snmpopen ($$$) {
   if ((!defined($SNMP_util::Session))
     || ($SNMP_util::Host ne $nhost)
     || ($SNMP_util::Version ne $version)
-    || ($SNMP_util::LHost ne $nlhost)) {
+    || ($SNMP_util::LHost ne $nlhost)
+    || ($SNMP_util::IPv4only ne $v4onlystr)) {
     if (defined($SNMP_util::Session)) {
       $SNMP_util::Session->close();    
       undef $SNMP_util::Session;
       undef $SNMP_util::Host;
       undef $SNMP_util::Version;
       undef $SNMP_util::LHost;
+      undef $SNMP_util::IPv4only;
     }
     $SNMP_util::Session = ($version =~ /^2c?$/i)
       ? SNMPv2c_Session->open($host, $community, $port, undef,
-				$lport, undef, $lhost)
+				$lport, undef, $lhost, ($v4onlystr eq 'v4only') ? 1:0 )
       : SNMP_Session->open($host, $community, $port, undef,
-				$lport, undef, $lhost);
+				$lport, undef, $lhost, ($v4onlystr eq 'v4only') ? 1:0 );
     ($SNMP_util::Host = $nhost, $SNMP_util::Version = $version,
-      $SNMP_util::LHost = $nlhost) if defined($SNMP_util::Session);
+      $SNMP_util::LHost = $nlhost, $SNMP_util::IPv4only = $v4onlystr) if defined($SNMP_util::Session);
   }
 
   if (defined($SNMP_util::Session)) {
     if (ref $vars->[0] eq 'HASH') {
       my $opts = shift @$vars;
       foreach $type (keys %$opts) {
-	if (exists $SNMP_util::Session->{$type}) {
-	  if ($type eq 'timeout') {
-	    $SNMP_util::Session->set_timeout($opts->{$type});
-	  } elsif ($type eq 'retries') {
-	    $SNMP_util::Session->set_retries($opts->{$type});
-	  } elsif ($type eq 'backoff') {
-	    $SNMP_util::Session->set_backoff($opts->{$type});
+	if ($type eq 'return_array_refs') {
+	  $SNMP_util::Return_array_refs = $opts->{$type};
+	}
+	else {
+	  if (exists $SNMP_util::Session->{$type}) {
+	    if ($type eq 'timeout') {
+	      $SNMP_util::Session->set_timeout($opts->{$type});
+	    } elsif ($type eq 'retries') {
+	      $SNMP_util::Session->set_retries($opts->{$type});
+	    } elsif ($type eq 'backoff') {
+	      $SNMP_util::Session->set_backoff($opts->{$type});
+	    } else {
+	      $SNMP_util::Session->{$type} = $opts->{$type};
+	    }
 	  } else {
-	    $SNMP_util::Session->{$type} = $opts->{$type};
+	    carp "SNMPopen Unknown SNMP Option Key '$type'\n"
+	      unless ($SNMP_Session::suppress_warnings > 1);
 	  }
-	} else {
-	  carp "SNMPopen Unknown SNMP Option Key '$type'\n"
-	    unless ($SNMP_Session::suppress_warnings > 1);
 	}
       }
     }
@@ -516,16 +550,25 @@ sub snmpgetnext ($@) {
 #
 sub snmpwalk ($@) {
   my($host, @vars) = @_;
-  return(&snmpwalk_flg($host, 0, @vars));
+  return(&snmpwalk_flg($host, undef, @vars));
+}
+
+#
+# Walk the MIB, putting everything you find into hashes.
+#
+sub snmpwalkhash($$@) {
+#  my($host, $hash_sub, @vars) = @_;
+  return(&snmpwalk_flg( @_ ));
 }
 
 sub snmpwalk_flg ($$@) {
-  my($host, $flg, @vars) = @_;
+  my($host, $hash_sub, @vars) = @_;
   my(@enoid, $var, $response, $bindings, $binding);
-  my($value, $upoid, $oid, @retvals);
-  my($got, @nnoid, $noid, $ok);
+  my($value, $upoid, $oid, @retvals, @retvaltmprefs);
+  my($got, @nnoid, $noid, $ok, $ix, @avars);
   my $session;
   my(%soid);
+  my(%done, %rethash);
 
   $session = &snmpopen($host, 0, \@vars);
   if (!defined($session)) {
@@ -537,6 +580,15 @@ sub snmpwalk_flg ($$@) {
   @enoid = toOID(@vars);
   return undef unless defined $enoid[0];
 
+  # GIL
+  #
+  # Create/Refresh a reversed hash with oid -> name
+  #
+  if (defined($hash_sub) && $RevNeeded) {
+    %revOIDS = reverse %SNMP_util::OIDS;
+    $RevNeeded = 0;
+  }
+
   $got = 0;
   @nnoid = @enoid;
   undef @vars;
@@ -544,6 +596,28 @@ sub snmpwalk_flg ($$@) {
     $upoid = pretty_print($noid);
     push(@vars, $upoid);
   }
+
+  # @vars is the original set of walked variables.
+  # @avars is the current set of walked variables as the
+  # walk goes on.
+  # @vars stays static while @avars may shrink as we reach end
+  # of walk for individual variables during PDU exchange.
+   
+  @avars = @vars;
+
+  # IlvJa
+  #
+  # Create temporary array of refs to return vals.
+
+  if ($SNMP_util::Return_array_refs) {
+    for($ix = 0;$ix < scalar @vars; $ix++) {
+      my $tmparray = [];
+      $retvaltmprefs[$ix] = $tmparray;
+      $retvals[$ix] = $tmparray;
+    }
+  }
+
+
   while(($SNMP_util::Version ne '1' && $session->{'use_getbulk'})
     ? $session->getbulk_request_response(0,
 					  $session->default_max_repetitions(),
@@ -553,34 +627,111 @@ sub snmpwalk_flg ($$@) {
     $got = 1;
     $response = $session->pdu_buffer;
     ($bindings) = $session->decode_get_response($response);
-    undef @nnoid;
+    $ix = 0;
     while ($bindings) {
       ($binding, $bindings) = decode_sequence($bindings);
+      unless ($nnoid[$ix]) { # IlvJa
+	$ix = ++$ix % (scalar @avars);
+	next;
+      }
       ($oid, $value) = decode_by_template($binding, "%O%@");
       $ok = 0;
       my $tempo = pretty_print($oid);
-      foreach $noid (@vars) {
-	if ($tempo =~ /^$noid\./ || $tempo eq $noid ) {
-	  $ok = 1;
-	  $upoid = $noid;
-	  last;
-	}
+      $noid = $avars[$ix];  # IlvJa
+      if ($tempo =~ /^$noid\./ || $tempo eq $noid ) {
+	$ok = 1;
+	$upoid = $noid;
+      } else {
+	# IlvJa
+	#
+	# The walk for variable $var[$ix] has been finished as
+	# $nnoid[$ix] no longer is in the $avar[$ix] OID tree.
+	# So we exclude this variable from further requests.
+
+	$avars[$ix] = "";
+	$nnoid[$ix] = "";
+	$retvaltmprefs[$ix] = undef if $SNMP_util::Return_array_refs;
       }
       if ($ok) {
 	my $tmp = encode_oid_with_errmsg ($tempo);
 	return undef unless defined $tmp;
-	$soid{$upoid} = $tmp;
+	next if (exists($done{$tmp}));	# GIL
+	$nnoid[$ix] = $tmp;   # Keep on walking. (IlvJa)
 	my $tempv = pretty_print($value);
-	$tempo=~s/^$upoid\.// unless ($flg & 1);
-	push @retvals, "$tempo:$tempv";
+	if (defined($hash_sub)) {
+	  #
+	  # extract name of the oid, if possible, the rest becomes the instance
+	  #
+	  my $inst = "";
+	  my $upo = $upoid;
+	  while (!exists($revOIDS{$upo}) && length($upo)) {
+	    $upo =~ s/(\.\d+?)$//;
+	    if (defined($1) && length($1)) {
+	      $inst = $1 . $inst;
+	    } else {
+	      $upo = "";
+	      last;
+	    }
+	  }	
+	  if (length($upo) && exists($revOIDS{$upo})) {
+	    $upo = $revOIDS{$upo} . $inst;
+	  } else {
+	    $upo = $upoid;
+	  }
+
+	  $inst = "";
+	  while (!exists($revOIDS{$tempo}) && length($tempo)) {
+	    $tempo =~ s/(\.\d+?)$//;
+	    if (defined($1) && length($1)) {
+	      $inst = $1 . $inst;
+	    } else {
+	      $tempo = "";
+	      last;
+	    }
+	  }	
+	  if (length($tempo) && exists($revOIDS{$tempo})) {
+	    $tempo = $revOIDS{$tempo} . $inst;
+	  } else {
+	    $tempo = pretty_print($oid);
+	  }
+	  #
+	  # call hash_sub
+	  #
+	  &$hash_sub(\%rethash, $host, $revOIDS{$tempo}, $tempo, $inst,
+			$tempv, $upo);
+	} else {
+	  if ($SNMP_util::Return_array_refs) {
+	    $tempo=~s/^$upoid\.//;
+	    push @{$retvaltmprefs[$ix]}, "$tempo:$tempv";
+	  } else {
+	    $tempo=~s/^$upoid\.// if ($#enoid <= 0);
+	    push @retvals, "$tempo:$tempv";
+	  }
+	}
+	$done{$tmp} = 1;	# GIL
       }
+      $ix = ++$ix % (scalar @avars);
     }
-    @nnoid = values(%soid);
-    undef %soid;
-    last if ($#nnoid < 0);
+
+    # Ok, @nnoid should contain the remaining variables for the
+    # next request.  Some or all entries in @nnoid might be the empty
+    # string.  If the nth element in @nnoid is "" that means that
+    # the walk related to the nth variable in the last request has been
+    # completed and we should not include that var in subsequent reqs.
+
+    # Clean up both @nnoid and @avars so "" elements are removed.
+    @nnoid = grep (($_), @nnoid);
+    @avars = grep (($_), @avars);
+    @retvaltmprefs = grep (($_), @retvaltmprefs);
+
+    last if ($#nnoid < 0);   # @nnoid empty means we are done walking.
   }
   if ($got) {
-    return (@retvals);
+    if (defined($hash_sub)) {
+    	return (%rethash)
+    } else {
+    	return (@retvals);
+    }
   } else {
     $var = join(' ', @vars);
     carp "SNMPWALK Problem for $var on $host\n"
@@ -622,6 +773,9 @@ sub snmpset($@) {
       my $tmp = encode_oid_with_errmsg($value);
       return undef unless defined $tmp;
       push @enoid, [$oid,$tmp];
+    } elsif ($type =~ /timeticks/i) {
+      $value = encode_timeticks($value);
+      push @enoid, [$oid,$value];
     } else {
       carp "unknown SNMP type: $type\n"
 	unless ($SNMP_Session::suppress_warnings > 1);
@@ -746,6 +900,11 @@ sub snmpgetbulk ($$$@) {
 #
 sub snmpmaptable($$@) {
   my($host, $fun, @vars) = @_;
+  return snmpmaptable4($host, $fun, 0, @vars);
+}
+
+sub snmpmaptable4($$$@) {
+  my($host, $fun, $max_reps, @vars) = @_;
   my(@enoid, $var, $session);
 
   $session = &snmpopen($host, 0, \@vars);
@@ -759,44 +918,21 @@ sub snmpmaptable($$@) {
     push(@enoid, [split('\.', pretty_print($var))]);
   }
 
-  return $session->map_table([@enoid],
-			      sub() {
-				my ($ind, @vals) = @_;
-				my (@pvals, $val);
+  $max_reps = $session->default_max_repetitions() if ($max_reps <= 0);
 
-				foreach $val (@vals) {
-				  push(@pvals, pretty_print($val));
-				}
-				&$fun($ind, @pvals);
-			      }
-			      );
+  return $session->map_table_start_end( [@enoid],
+					sub() {
+					  my ($ind, @vals) = @_;
+					  my (@pvals, $val);
+
+					  foreach $val (@vals) {
+					    push(@pvals, pretty_print($val));
+					  }
+					  &$fun($ind, @pvals);
+					},
+					"", undef, $max_reps);
 }
 
-#
-# Walk the MIB, puting everything you find into hashes.
-#
-sub snmpwalkhash($$@) {
-  my($host, $hash_sub, @vars) = @_;
-  my($retflg, @retvals, %revOID, $ret, $tempo, $tempv, %rethash);
-
-  @retvals = snmpwalk_flg($host, 1, @vars);
-
-  %revOID = reverse %SNMP_util::OIDS;
-  foreach $ret (@retvals) {
-    my $inst;
-    ($tempo, $tempv) = split(':', $ret);
-    while (!exists($revOID{$tempo}) && length($tempo)) {
-      $tempo =~ s/(\.\d+?)$//;
-      $inst = $1.$inst;
-    }
-    if (defined($hash_sub)) {
-      &$hash_sub(\%rethash, $host, $revOID{$tempo}, $tempo, $inst, $tempv);
-    } else {
-      $rethash{$tempo}{$inst} = $tempv;
-    }
-  }
-  return(%rethash);
-}
 
 #
 #  Given an OID in either ASN.1 or mixed text/ASN.1 notation, return an
@@ -842,6 +978,10 @@ sub toOID(@) {
       unless ($SNMP_Session::suppress_warnings > 1);
       next;
     }
+    while ($var =~ /\"([^\"]*)\"/) {
+      $tmp = sprintf("%d.%s", length($1), join(".", map(ord, split(//, $1))));
+      $var =~ s/\"$1\"/$tmp/;
+    }
     print "toOID: $var\n" if $SNMP_util::Debug;
     $tmp = encode_oid_with_errmsg($var);
     return undef unless defined $tmp;
@@ -861,14 +1001,16 @@ sub snmpmapOID(@)
   $ind = 0;
   while($ind <= $#vars) {
     $txt = $vars[$ind++];
-    next unless($txt =~ /^(([a-z][a-z\d\-]*\.)*([a-z][a-z\d\-]*))$/i);
+    next unless($txt =~ /^(([a-zA-Z][a-zA-Z\d\-]*\.)*([a-zA-Z][a-zA-Z\d\-]*))$/);
 
     $oid = $vars[$ind++];
     next unless($oid =~ /^((\d+.)*\d+)$/);
 
     $SNMP_util::OIDS{$txt} = $oid;
+    $RevNeeded = 1;
     print "snmpmapOID: $txt => $oid\n" if $SNMP_util::Debug;
   }
+  
   return undef;
 }
 
@@ -913,7 +1055,7 @@ sub Check_OID ($) {
   my($var) = @_;
   my($tmp, $tmpv, $oid);
 
-  if ($var =~ /^(([a-z][a-z\d\-]*\.)*([a-z][a-z\d\-]*))/i)
+  if ($var =~ /^(([a-zA-Z][a-zA-Z\d\-]*\.)*([a-zA-Z][a-zA-Z\d\-]*))/)
   {
     $tmp = $&;
     $tmpv = $tmp;
@@ -946,13 +1088,13 @@ sub snmpQueue_MIB_File (@) {
 }
 
 #
-# Read in the passed list of MIB files, parsing them
+# Read in the passed MIB file, parsing it
 # for their text-to-OID mappings
 #
 sub snmpMIB_to_OID ($) {
   my($arg) = @_;
   my($quote, $buf, $var, $code, $val, $tmp, $tmpv, $strt);
-  my($ret);
+  my($ret, $pass, $pos, $need2pass, $cnt, %prev);
   my(%Link) = (
     'org' => 'iso',
     'dod' => 'org',
@@ -972,104 +1114,141 @@ sub snmpMIB_to_OID ($) {
   }
   print "snmpMIB_to_OID: loading $arg\n" if $SNMP_util::Debug;
   $ret = 0;
-  while(<MIB>) {
-    s/--.*--//g;	# throw away comments (-- anything --)
-    s/--.*//;		# throw away comments (-- anything EOL)
-    if ($quote) {
-      next unless /"/;
-      $quote = 0;
-    }
-    chop;
+  $pass = 0;
+  $need2pass = 1;
+  $cnt = 0;
+  $pos = tell(MIB);
+  while($need2pass) {
+    while(<MIB>) {
+      s/--.*--//g;	# throw away comments (-- anything --)
+      s/--.*//;		# throw away comments (-- anything EOL)
+      if ($quote) {
+	next unless /"/;
+	$quote = 0;
+      }
+      chop;
 #
 #	$buf = "$buf $_";
 # Previous line removed (and following replacement)
 # suggested by Brian Reichert, reichert@numachi.com
 #
-    $buf .= ' ' . $_;
-    $buf =~ s/\s+/ /g;
+      $buf .= ' ' . $_;
+      $buf =~ s/\s+/ /g;
 
-    if ($buf =~ / DEFINITIONS ::= BEGIN/) {
-      undef %Link;
-      %Link = (
-	'org' => 'iso',
-	'dod' => 'org',
-	'internet' => 'dod',
-	'directory' => 'internet',
-	'mgmt' => 'internet',
-	'mib-2' => 'mgmt',
-	'experimental' => 'internet',
-	'private' => 'internet',
-	'enterprises' => 'private',
-      );
-    }
+      if ($buf =~ / DEFINITIONS ::= BEGIN/) {
+	if ($pass == 0 && $need2pass) {
+	  seek(MIB, $pos, 0);
+	  $buf = "";
+	  $pass = 1;
+	  $need2pass = 0;
+	  $cnt = 0;
+	  next;
+	}
+	$need2pass = 0;
+	$pass = 0;
+	$pos = tell(MIB);
+	undef %Link;
+	undef %prev;
+	%Link = (
+	  'org' => 'iso',
+	  'dod' => 'org',
+	  'internet' => 'dod',
+	  'directory' => 'internet',
+	  'mgmt' => 'internet',
+	  'mib-2' => 'mgmt',
+	  'experimental' => 'internet',
+	  'private' => 'internet',
+	  'enterprises' => 'private',
+	);
+	$buf = "";
+	next;
+      }
 
-    $buf =~ s/OBJECT-TYPE/OBJECT IDENTIFIER/;
-    $buf =~ s/OBJECT-IDENTITY/OBJECT IDENTIFIER/;
-    $buf =~ s/MODULE-IDENTITY/OBJECT IDENTIFIER/;
-    $buf =~ s/ IMPORTS .*\;//;
-    $buf =~ s/ SEQUENCE {.*}//;
-    $buf =~ s/ SYNTAX .*//;
-    $buf =~ s/ [\w-]+ ::= OBJECT IDENTIFIER//;
-    $buf =~ s/ OBJECT IDENTIFIER .* ::= {/ OBJECT IDENTIFIER ::= {/;
-    $buf =~ s/".*"//;
-    if ($buf =~ /"/) {
-      $quote = 1;
-    }
+      $buf =~ s/OBJECT-TYPE/OBJECT IDENTIFIER/;
+      $buf =~ s/OBJECT-IDENTITY/OBJECT IDENTIFIER/;
+      $buf =~ s/OBJECT-GROUP/OBJECT IDENTIFIER/;
+      $buf =~ s/MODULE-IDENTITY/OBJECT IDENTIFIER/;
+      $buf =~ s/ IMPORTS .*\;//;
+      $buf =~ s/ SEQUENCE {.*}//;
+      $buf =~ s/ SYNTAX .*//;
+      $buf =~ s/ [\w-]+ ::= OBJECT IDENTIFIER//;
+      $buf =~ s/ OBJECT IDENTIFIER .* ::= {/ OBJECT IDENTIFIER ::= {/;
+      $buf =~ s/".*"//;
+      if ($buf =~ /"/) {
+	$quote = 1;
+      }
 
-    if ($buf =~ / ([\w\-]+) OBJECT IDENTIFIER ::= {([^}]+)}/) {
-      $var = $1;
-      $buf = $2;
-      undef $val;
-      $buf =~ s/ +$//;
-      ($code, $val) = split(' ', $buf, 2);
+      if ($buf =~ / ([\w\-]+) OBJECT IDENTIFIER ::= {([^}]+)}/) {
+	$var = $1;
+	$buf = $2;
+	undef $val;
+	$buf =~ s/ +$//;
+	($code, $val) = split(' ', $buf, 2);
 
-      if (!defined($val) || (length($val) <= 0)) {
-	$SNMP_util::OIDS{$var} = $code;
-	$ret++;
-	print "'$var' => '$code'\n" if $SNMP_util::Debug;
-      } else {
-	$strt = $code;
-	while($val =~ / /) {
-	  ($tmp, $val) = split(' ', $val, 2);
-	  if ($tmp =~ /([\w\-]+)\((\d+)\)/) {
-	    $tmp = $1;
-	    $tmpv = "$SNMP_util::OIDS{$strt}.$2";
-	    $Link{$tmp} = $strt;
-	    if (defined($SNMP_util::OIDS{$tmp})) {
-	      if ($tmpv ne $SNMP_util::OIDS{$tmp}) {
-		$strt = "$strt.$tmp";
-		$SNMP_util::OIDS{$strt} = $tmpv;
-		$ret++;
+	if (!defined($val) || (length($val) <= 0)) {
+	  $SNMP_util::OIDS{$var} = $code;
+	  $cnt++;
+	  print "'$var' => '$code'\n" if $SNMP_util::Debug;
+	} else {
+	  $strt = $code;
+	  while($val =~ / /) {
+	    ($tmp, $val) = split(' ', $val, 2);
+	    if ($tmp =~ /([\w\-]+)\((\d+)\)/) {
+	      $tmp = $1;
+	      $tmpv = "$SNMP_util::OIDS{$strt}.$2";
+	      $Link{$tmp} = $strt;
+	      if (!defined($prev{$tmp}) && defined($SNMP_util::OIDS{$tmp})) {
+		if ($tmpv ne $SNMP_util::OIDS{$tmp}) {
+		  $strt = "$strt.$tmp";
+		  $SNMP_util::OIDS{$strt} = $tmpv;
+		  $cnt++;
+		}
+	      } else {
+		$prev{$tmp} = 1;
+		$SNMP_util::OIDS{$tmp} = $tmpv;
+		$cnt++;
+		$strt = $tmp;
 	      }
-	    } else {
-	      $SNMP_util::OIDS{$tmp} = $tmpv;
-	      $ret++;
-	      $strt = $tmp;
 	    }
 	  }
-	}
 
-	if (!defined($SNMP_util::OIDS{$strt})) {
-	  carp "snmpMIB_to_OID: $arg: \"$strt\" prefix unknown, load the parent MIB first.\n"
-	    unless ($SNMP_Session::suppress_warnings > 1);
-	}
-	$Link{$var} = $strt;
-	$val = "$SNMP_util::OIDS{$strt}.$val";
-	if (defined($SNMP_util::OIDS{$var})) {
-	  if ($val ne $SNMP_util::OIDS{$var}) {
-	    $var = "$strt.$var";
+	  if (!defined($SNMP_util::OIDS{$strt})) {
+	    if ($pass) {
+	      carp "snmpMIB_to_OID: $arg: \"$strt\" prefix unknown, load the parent MIB first.\n"
+		unless ($SNMP_Session::suppress_warnings > 1);
+	    } else {
+		$need2pass = 1;
+	    }
 	  }
+	  $Link{$var} = $strt;
+	  $val = "$SNMP_util::OIDS{$strt}.$val";
+	  if (!defined($prev{$var}) && defined($SNMP_util::OIDS{$var})) {
+	    if ($val ne $SNMP_util::OIDS{$var}) {
+	      $var = "$strt.$var";
+	    }
+	  }
+
+	  $SNMP_util::OIDS{$var} = $val;
+	  $prev{$var} = 1;
+	  $cnt++;
+
+	  print "'$var' => '$val'\n" if $SNMP_util::Debug;
 	}
-
-	$SNMP_util::OIDS{$var} = $val;
-	$ret++;
-
-	print "'$var' => '$val'\n" if $SNMP_util::Debug;
+	undef $buf;
       }
-      undef $buf;
+    }
+    if ($pass == 0 && $need2pass) {
+      seek(MIB, $pos, 0);
+      $buf = "";
+      $pass = 1;
+      $cnt = 0;
+    } else {
+      $ret += $cnt;
+      $need2pass = 0;
     }
   }
   close(MIB);
+  $RevNeeded = 1;
   return $ret;
 }
 

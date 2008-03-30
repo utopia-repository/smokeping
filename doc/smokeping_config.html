@@ -1,118 +1,220 @@
-<HTML>
-<HEAD>
-<TITLE>smokeping_config</TITLE>
-<LINK REV="made" HREF="mailto:karrer@iis.ee.ethz.ch">
-</HEAD>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>smokeping_config</title>
+<link rev="made" href="mailto:dws@ee.ethz.ch" />
+</head>
 
-<BODY>
+<body style="background-color: white">
 
-<A NAME="__index__"></A>
+<p><a name="__index__"></a></p>
 <!-- INDEX BEGIN -->
 <!--
 
-<UL>
+<ul>
 
-	<LI><A HREF="#overview">OVERVIEW</A></LI>
-	<LI><A HREF="#reference">REFERENCE</A></LI>
-	<UL>
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#overview">OVERVIEW</a></li>
+	<li><a href="#reference">REFERENCE</a></li>
+	<ul>
 
-		<LI><A HREF="#*** general *** (mandatory section)">*** General *** <EM>(mandatory section)</EM></A></LI>
-		<LI><A HREF="#*** database *** (mandatory section)">*** Database *** <EM>(mandatory section)</EM></A></LI>
-		<LI><A HREF="#*** presentation *** (mandatory section)">*** Presentation *** <EM>(mandatory section)</EM></A></LI>
-		<LI><A HREF="#*** probes *** (mandatory section)">*** Probes *** <EM>(mandatory section)</EM></A></LI>
-		<LI><A HREF="#*** targets *** (mandatory section)">*** Targets *** <EM>(mandatory section)</EM></A></LI>
-	</UL>
+		<li><a href="#____general______mandatory_section_">*** General *** <em>(mandatory section)</em></a></li>
+		<li><a href="#____database______mandatory_section_">*** Database *** <em>(mandatory section)</em></a></li>
+		<li><a href="#____presentation______mandatory_section_">*** Presentation *** <em>(mandatory section)</em></a></li>
+		<li><a href="#____probes______mandatory_section_">*** Probes *** <em>(mandatory section)</em></a></li>
+		<li><a href="#____alerts____">*** Alerts ***</a></li>
+		<li><a href="#____targets______mandatory_section_">*** Targets *** <em>(mandatory section)</em></a></li>
+	</ul>
 
-	<LI><A HREF="#copyright">COPYRIGHT</A></LI>
-	<LI><A HREF="#license">LICENSE</A></LI>
-	<LI><A HREF="#author">AUTHOR</A></LI>
-</UL>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+	<li><a href="#license">LICENSE</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+</ul>
 -->
 <!-- INDEX END -->
 
-<P>
-<H1><A NAME="overview">OVERVIEW</A></H1>
-<P>SmokePing takes its configuration from a single central configuration file.
-Its location must be hardcoded in the smokeping script and smokeping.cgi.</P>
-<P>The contents of this manual is generated directly from the configuration
-file parser.</P>
-<P>The Parser for the Configuration file is written using David Schweikers
-ParseConfig module. Read all about it in <A HREF="./ISG/ParseConfig.html">the ISG::ParseConfig manpage</A>.</P>
-<P>The Configuration file has a tree-like structure with section headings at
-various levels. It also contains variable assignements and tables.</P>
-<P>
-<HR>
-<H1><A NAME="reference">REFERENCE</A></H1>
-<P>The text below describes the syntax of the SmokePing configuration file.</P>
-<P>
-<H2><A NAME="*** general *** (mandatory section)">*** General *** <EM>(mandatory section)</EM></A></H2>
-<P>General configuration values valid for the whole SmokePing setup.</P>
-<P>The following variables can be set in this section:</P>
-<DL>
-<DT><STRONG><A NAME="item_owner"><STRONG>owner</STRONG> <EM>(mandatory setting)</EM></A></STRONG><BR>
-<DD>
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>smokeping_config - Reference for the SmokePing Config File</p>
+<p>
+</p>
+<hr />
+<h1><a name="overview">OVERVIEW</a></h1>
+<p>SmokePing takes its configuration from a single central configuration file.
+Its location must be hardcoded in the smokeping script and smokeping.cgi.</p>
+<p>The contents of this manual is generated directly from the configuration
+file parser.</p>
+<p>The Parser for the Configuration file is written using David Schweikers
+ParseConfig module. Read all about it in <a href="./ISG/ParseConfig.html">the ISG::ParseConfig manpage</a>.</p>
+<p>The Configuration file has a tree-like structure with section headings at
+various levels. It also contains variable assignments and tables.</p>
+<p>
+</p>
+<hr />
+<h1><a name="reference">REFERENCE</a></h1>
+<p>The text below describes the syntax of the SmokePing configuration file.</p>
+<p>
+</p>
+<h2><a name="____general______mandatory_section_">*** General *** <em>(mandatory section)</em></a></h2>
+<p>General configuration values valid for the whole SmokePing setup.</p>
+<p>The following variables can be set in this section:</p>
+<dl>
+<dt><strong><a name="item_owner"><strong>owner</strong> <em>(mandatory setting)</em></a></strong><br />
+</dt>
+<dd>
 Name of the person responsible for this smokeping installation.
-<P></P>
-<DT><STRONG><A NAME="item_imgcache"><STRONG>imgcache</STRONG> <EM>(mandatory setting)</EM></A></STRONG><BR>
-<DD>
+</dd>
+<p></p>
+<dt><strong><a name="item_imgcache"><strong>imgcache</strong> <em>(mandatory setting)</em></a></strong><br />
+</dt>
+<dd>
 A directory which is visible on your webserver where SmokePing can cache graphs.
-<P></P>
-<DT><STRONG><A NAME="item_imgurl"><STRONG>imgurl</STRONG> <EM>(mandatory setting)</EM></A></STRONG><BR>
-<DD>
-Either an absolute URL to the <STRONG>imgcache</STRONG> directory or one relative to the directory where you keep the
+</dd>
+<p></p>
+<dt><strong><a name="item_imgurl"><strong>imgurl</strong> <em>(mandatory setting)</em></a></strong><br />
+</dt>
+<dd>
+Either an absolute URL to the <strong>imgcache</strong> directory or one relative to the directory where you keep the
 SmokePing cgi.
-<P></P>
-<DT><STRONG><A NAME="item_datadir"><STRONG>datadir</STRONG> <EM>(mandatory setting)</EM></A></STRONG><BR>
-<DD>
+</dd>
+<p></p>
+<dt><strong><a name="item_datadir"><strong>datadir</strong> <em>(mandatory setting)</em></a></strong><br />
+</dt>
+<dd>
 The directory where SmokePing can keep its rrd files.
-<P></P>
-<DT><STRONG><A NAME="item_piddir"><STRONG>piddir</STRONG> <EM>(mandatory setting)</EM></A></STRONG><BR>
-<DD>
-The directory where SmokePing keeps its pid when demonised.
-<P></P>
-<DT><STRONG><A NAME="item_sendmail"><STRONG>sendmail</STRONG></A></STRONG><BR>
-<DD>
+</dd>
+<p></p>
+<dt><strong><a name="item_pagedir"><strong>pagedir</strong></a></strong><br />
+</dt>
+<dd>
+Directory to store static representations of pages.
+</dd>
+<p></p>
+<dt><strong><a name="item_piddir"><strong>piddir</strong> <em>(mandatory setting)</em></a></strong><br />
+</dt>
+<dd>
+The directory where SmokePing keeps its pid when daemonised.
+</dd>
+<p></p>
+<dt><strong><a name="item_sendmail"><strong>sendmail</strong></a></strong><br />
+</dt>
+<dd>
 Path to your sendmail binary. It will be used for sending mails in connection with the support of DYNAMIC addresses.
-<P></P>
-<DT><STRONG><A NAME="item_smokemail"><STRONG>smokemail</STRONG> <EM>(mandatory setting)</EM></A></STRONG><BR>
-<DD>
+</dd>
+<p></p>
+<dt><strong><a name="item_offset"><strong>offset</strong></a></strong><br />
+</dt>
+<dd>
+If you run many instances of smokeping you may want to prevent them from
+hitting your network all at the same time. Using the offset parameter you
+can change the point in time when the probes are run. Offset is specified
+in % of total interval, or alternatively as 'random'. I recommend to use
+'random'. Note that this does NOT influence the rrds itself, it is just a
+matter of when data acqusition is initiated.  The default offset is 'random'.
+</dd>
+<p></p>
+<dt><strong><a name="item_smokemail"><strong>smokemail</strong> <em>(mandatory setting)</em></a></strong><br />
+</dt>
+<dd>
 Path to the mail template for DYNAMIC hosts. This mail template
-must contain keywords of the form <STRONG>&lt;##</STRONG><EM>keyword</EM><STRONG>##&gt;</STRONG>. There is a sample
+must contain keywords of the form <strong>&lt;##</strong><em>keyword</em><strong>##&gt;</strong>. There is a sample
 template included with SmokePing.
-<P></P>
-<DT><STRONG><A NAME="item_cgiurl"><STRONG>cgiurl</STRONG> <EM>(mandatory setting)</EM></A></STRONG><BR>
-<DD>
+</dd>
+<p></p>
+<dt><strong><a name="item_cgiurl"><strong>cgiurl</strong> <em>(mandatory setting)</em></a></strong><br />
+</dt>
+<dd>
 Complete URL path of the SmokePing.cgi
-<P></P>
-<DT><STRONG><A NAME="item_mailhost"><STRONG>mailhost</STRONG></A></STRONG><BR>
-<DD>
+</dd>
+<p></p>
+<dt><strong><a name="item_mailhost"><strong>mailhost</strong></a></strong><br />
+</dt>
+<dd>
 Instead of using sendmail, you can specify the name of an smtp server 
 and use perl's Net::SMTP module to send mail to DYNAMIC host owners (see below).
-<P></P>
-<DT><STRONG><A NAME="item_contact"><STRONG>contact</STRONG> <EM>(mandatory setting)</EM></A></STRONG><BR>
-<DD>
+</dd>
+<p></p>
+<dt><strong><a name="item_contact"><strong>contact</strong> <em>(mandatory setting)</em></a></strong><br />
+</dt>
+<dd>
 Mail address of the person responsible for this smokeping installation.
-<P></P></DL>
-<P>
-<H2><A NAME="*** database *** (mandatory section)">*** Database *** <EM>(mandatory section)</EM></A></H2>
-<P>Describes the properties of the round robin database for storing the
+</dd>
+<p></p>
+<dt><strong><a name="item_netsnpp"><strong>netsnpp</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_syslogfacility"><strong>syslogfacility</strong></a></strong><br />
+</dt>
+<dd>
+The syslog facility to use, eg. local0...local7. 
+Note: syslog logging is only used if you specify this.
+</dd>
+<p></p>
+<dt><strong><a name="item_syslogpriority"><strong>syslogpriority</strong></a></strong><br />
+</dt>
+<dd>
+The syslog priority to use, eg. debug, notice or info. 
+Default is info.
+</dd>
+<p></p>
+<dt><strong><a name="item_concurrentprobes"><strong>concurrentprobes</strong></a></strong><br />
+</dt>
+<dd>
+If you use multiple probes or multiple instances of the same probe and you
+want them to run concurrently in separate processes, set this to 'yes'. This
+gives you the possibility to specify probe-specific step and offset parameters 
+(see the 'Probes' section) for each probe and makes the probes unable to block
+each other in cases of service outages. The default is 'yes', but if you for
+some reason want the old behaviour you can set this to 'no'.
+</dd>
+<p></p>
+<dt><strong><a name="item_changeprocessnames"><strong>changeprocessnames</strong></a></strong><br />
+</dt>
+<dd>
+When using 'concurrentprobes' (see above), this controls whether the probe
+subprocesses should change their argv string to indicate their probe in
+the process name.  If set to 'yes' (the default), the probe name will
+be appended to the process name as '[probe]', eg.  '/usr/bin/smokeping
+[FPing]'. If you don't like this behaviour, set this variable to 'no'.
+If 'concurrentprobes' is not set to 'yes', this variable has no effect.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<h2><a name="____database______mandatory_section_">*** Database *** <em>(mandatory section)</em></a></h2>
+<p>Describes the properties of the round robin database for storing the
 SmokePing data. Note that it is not possible to edit existing RRDs
-by changeing the entries in the cfg file.</P>
-<P>The following variables can be set in this section:</P>
-<DL>
-<DT><STRONG><A NAME="item_step"><STRONG>step</STRONG> <EM>(mandatory setting)</EM></A></STRONG><BR>
-<DD>
+by changing the entries in the cfg file.</p>
+<p>The following variables can be set in this section:</p>
+<dl>
+<dt><strong><a name="item_step"><strong>step</strong> <em>(mandatory setting)</em></a></strong><br />
+</dt>
+<dd>
 Duration of the base operation interval of SmokePing in seconds.
-SmokePing will venture out every <STRONG>step</STRONG> seconds to ping your target hosts.
-<P></P>
-<DT><STRONG><A NAME="item_pings"><STRONG>pings</STRONG> <EM>(mandatory setting)</EM></A></STRONG><BR>
-<DD>
+SmokePing will venture out every <strong>step</strong> seconds to ping your target hosts.
+If 'concurrent_probes' is set to 'yes' (see above), this variable can be 
+overridden by each probe. Note that the step in the RRD files is fixed when 
+they are originally generated, and if you change the step parameter afterwards, 
+you'll have to delete the old RRD files or somehow convert them.
+</dd>
+<p></p>
+<dt><strong><a name="item_pings"><strong>pings</strong> <em>(mandatory setting)</em></a></strong><br />
+</dt>
+<dd>
 How many pings should be sent to each target. Suggested: 20 pings.
-<P></P></DL>
-<P>This section also contains a table describing the setup of the
+This can be overridden by each probe. Some probes (those derived from
+basefork.pm, ie. most except the FPing variants) will even let this
+be overridden target-specifically in the PROBE_CONF section (see the
+basefork documentation for details).  Note that the number of pings in
+the RRD files is fixed when they are originally generated, and if you
+change this parameter afterwards, you'll have to delete the old RRD
+files or somehow convert them.
+</dd>
+<p></p></dl>
+<p>This section also contains a table describing the setup of the
 SmokePing database. Below are reasonable defaults. Only change them if
-you know rrdtool and its workings. Each row in the table describes one RRA.</P>
-<PRE>
+you know rrdtool and its workings. Each row in the table describes one RRA.</p>
+<pre>
  # cons   xff steps rows
  AVERAGE  0.5   1   1008
  AVERAGE  0.5  12   4320
@@ -120,321 +222,673 @@ you know rrdtool and its workings. Each row in the table describes one RRA.</P>
      MAX  0.5  12   4320
  AVERAGE  0.5 144    720
      MAX  0.5 144    720
-     MIN  0.5 144    720</PRE>
-<DL>
-<DT><STRONG><A NAME="item_column">column 0</A></STRONG><BR>
-<DD>
+     MIN  0.5 144    720</pre>
+<dl>
+<dt><strong><a name="item_column">column 0</a></strong><br />
+</dt>
+<dd>
 Consolidation method.
-<P></P>
-<DT><STRONG>column 1</STRONG><BR>
-<DD>
+</dd>
+<p></p>
+<dt><strong>column 1</strong><br />
+</dt>
+<dd>
 What part of the consolidated intervals must be known to warrant a known entry.
-<P></P>
-<DT><STRONG>column 2</STRONG><BR>
-<DD>
-How many <STRONG>steps</STRONG> to consolidate into for each RRA entry.
-<P></P>
-<DT><STRONG>column 3</STRONG><BR>
-<DD>
-How many <STRONG>rows</STRONG> this RRA should have.
-<P></P></DL>
-<P>
-<H2><A NAME="*** presentation *** (mandatory section)">*** Presentation *** <EM>(mandatory section)</EM></A></H2>
-<P>Defines how the SmokePing data should be presented.</P>
-<P>The following variables can be set in this section:</P>
-<DL>
-<DT><STRONG><A NAME="item_template"><STRONG>template</STRONG> <EM>(mandatory setting)</EM></A></STRONG><BR>
-<DD>
+</dd>
+<p></p>
+<dt><strong>column 2</strong><br />
+</dt>
+<dd>
+How many <strong>steps</strong> to consolidate into for each RRA entry.
+</dd>
+<p></p>
+<dt><strong>column 3</strong><br />
+</dt>
+<dd>
+How many <strong>rows</strong> this RRA should have.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<h2><a name="____presentation______mandatory_section_">*** Presentation *** <em>(mandatory section)</em></a></h2>
+<p>Defines how the SmokePing data should be presented.</p>
+<p>The following variables can be set in this section:</p>
+<dl>
+<dt><strong><a name="item_template"><strong>template</strong> <em>(mandatory setting)</em></a></strong><br />
+</dt>
+<dd>
 The webpage template must contain keywords of the form 
-<STRONG>&lt;##</STRONG><EM>keyword</EM><STRONG>##&gt;</STRONG>. There is a sample
+<strong>&lt;##</strong><em>keyword</em><strong>##&gt;</strong>. There is a sample
 template included with SmokePing; use it as the basis for your
 experiments. Default template contains a pointer to the SmokePing
 counter and homepage. I would be glad if you would not remove this as
 it gives me an indication as to how widely used the tool is.
-<P></P>
-<DT><STRONG><A NAME="item_charset"><STRONG>charset</STRONG></A></STRONG><BR>
-<DD>
+</dd>
+<p></p>
+<dt><strong><a name="item_charset"><strong>charset</strong></a></strong><br />
+</dt>
+<dd>
 By default, SmokePing assumes the 'iso-8859-15' character set. If you use
 something else, this is the place to speak up.
-<P></P></DL>
-<P>The following sections are valid on level 1:</P>
-<DL>
-<DT><STRONG><A NAME="item_overview"><STRONG>+overview</STRONG> <EM>(mandatory section)</EM></A></STRONG><BR>
-<DD>
+</dd>
+<p></p></dl>
+<p>The following sections are valid on level 1:</p>
+<dl>
+<dt><strong><a name="item_overview"><strong>+overview</strong> <em>(mandatory section)</em></a></strong><br />
+</dt>
+<dd>
 The Overview section defines how the Overview graphs should look.
-<P>The following variables can be set in this section:</P>
-<DL>
-<DT><STRONG><A NAME="item_width"><STRONG>width</STRONG> <EM>(mandatory setting)</EM></A></STRONG><BR>
-<DD>
+</dd>
+<dd>
+<p>The following variables can be set in this section:</p>
+</dd>
+<dl>
+<dt><strong><a name="item_width"><strong>width</strong> <em>(mandatory setting)</em></a></strong><br />
+</dt>
+<dd>
 Width of the Overview Graphs.
-<P></P>
-<DT><STRONG><A NAME="item_height"><STRONG>height</STRONG> <EM>(mandatory setting)</EM></A></STRONG><BR>
-<DD>
+</dd>
+<p></p>
+<dt><strong><a name="item_height"><strong>height</strong> <em>(mandatory setting)</em></a></strong><br />
+</dt>
+<dd>
 Height of the Overview Graphs.
-<P></P>
-<DT><STRONG><A NAME="item_range"><STRONG>range</STRONG></A></STRONG><BR>
-<DD>
+</dd>
+<p></p>
+<dt><strong><a name="item_range"><strong>range</strong></a></strong><br />
+</dt>
+<dd>
 How much time should be depicted in the Overview graph. Time must be specified
 as a number followed by a letter which specifies the unit of time. Known units are:
-<STRONG>s</STRONG>econds, <STRONG>m</STRONG>inutes, <STRONG>h</STRONG>ours, <STRONG>d</STRONG>days, <STRONG>w</STRONG>eeks, <STRONG>y</STRONG>ears.
-<P></P>
-<DT><STRONG><A NAME="item_max_rtt"><STRONG>max_rtt</STRONG></A></STRONG><BR>
-<DD>
+<strong>s</strong>econds, <strong>m</strong>inutes, <strong>h</strong>ours, <strong>d</strong>days, <strong>w</strong>eeks, <strong>y</strong>ears.
+</dd>
+<p></p>
+<dt><strong><a name="item_max_rtt"><strong>max_rtt</strong></a></strong><br />
+</dt>
+<dd>
 Any roundtrip time larger than this value will cropped in the overview graph
-<P></P>
-<DT><STRONG><A NAME="item_median_color"><STRONG>median_color</STRONG></A></STRONG><BR>
-<DD>
+</dd>
+<p></p>
+<dt><strong><a name="item_median_color"><strong>median_color</strong></a></strong><br />
+</dt>
+<dd>
 By default the median line is drawn in red. Override it here with a hex color
-in the format <EM>rrggbb</EM>.
-<P></P>
-<DT><STRONG><A NAME="item_strftime"><STRONG>strftime</STRONG></A></STRONG><BR>
-<DD>
+in the format <em>rrggbb</em>.
+</dd>
+<p></p>
+<dt><strong><a name="item_strftime"><strong>strftime</strong></a></strong><br />
+</dt>
+<dd>
 Use posix strftime to format the timestamp in the left hand
 lower corner of the overview graph
-<P></P></DL>
-<DT><STRONG><A NAME="item_detail"><STRONG>+detail</STRONG> <EM>(mandatory section)</EM></A></STRONG><BR>
-<DD>
+</dd>
+<p></p></dl>
+<dt><strong><a name="item_detail"><strong>+detail</strong> <em>(mandatory section)</em></a></strong><br />
+</dt>
+<dd>
 The following variables can be set in this section:
-<DL>
-<DT><STRONG><STRONG>width</STRONG> <EM>(mandatory setting)</EM></STRONG><BR>
-<DD>
+</dd>
+<dl>
+<dt><strong><strong>width</strong> <em>(mandatory setting)</em></strong><br />
+</dt>
+<dd>
 How many pixels wide should detail graphs be
-<P></P>
-<DT><STRONG><STRONG>height</STRONG> <EM>(mandatory setting)</EM></STRONG><BR>
-<DD>
+</dd>
+<p></p>
+<dt><strong><strong>height</strong> <em>(mandatory setting)</em></strong><br />
+</dt>
+<dd>
 How many pixels high should detail graphs be
-<P></P>
-<DT><STRONG><A NAME="item_logarithmic"><STRONG>logarithmic</STRONG></A></STRONG><BR>
-<DD>
+</dd>
+<p></p>
+<dt><strong><a name="item_logarithmic"><strong>logarithmic</strong></a></strong><br />
+</dt>
+<dd>
 should the graphs be shown in a logarithmic scale (yes/no)
-<P></P>
-<DT><STRONG><A NAME="item_unison_tolerance"><STRONG>unison_tolerance</STRONG></A></STRONG><BR>
-<DD>
+</dd>
+<p></p>
+<dt><strong><a name="item_unison_tolerance"><strong>unison_tolerance</strong></a></strong><br />
+</dt>
+<dd>
 if a graph is more than this factor of the median 'max' it drops out of the unison scaling algorithm. A factor of two would mean that any graph with a max either less than half or more than twice the median 'max' will be dropped from unison scaling
-<P></P>
-<DT><STRONG><STRONG>max_rtt</STRONG></STRONG><BR>
-<DD>
+</dd>
+<p></p>
+<dt><strong><strong>max_rtt</strong></strong><br />
+</dt>
+<dd>
 Any roundtrip time larger than this value will cropped in the detail graph
-<P></P>
-<DT><STRONG><STRONG>strftime</STRONG></STRONG><BR>
-<DD>
+</dd>
+<p></p>
+<dt><strong><strong>strftime</strong></strong><br />
+</dt>
+<dd>
 Use posix strftime to format the timestamp in the left hand
 lower corner of the detail graph
-<P></P></DL>
-<P>The detailed display can contain several graphs of different resolution. In this
-table you can specify the resolution of each graph.</P>
-<P>Example:</P>
-<PRE>
+</dd>
+<p></p>
+<dt><strong><a name="item_nodata_color"><strong>nodata_color</strong></a></strong><br />
+</dt>
+<dd>
+Paint the graph background in a special color when there is no data for this period because smokeping has not been running (#rrggbb)
+</dd>
+<p></p></dl>
+<p>The detailed display can contain several graphs of different resolution. In this
+table you can specify the resolution of each graph.</p>
+<p>Example:</p>
+<pre>
  &quot;Last 3 Hours&quot;    3h
  &quot;Last 30 Hours&quot;   30h
  &quot;Last 10 Days&quot;    10d
- &quot;Last 400 Days&quot;   400d</PRE>
-<DL>
-<DT><STRONG>column 0</STRONG><BR>
-<DD>
+ &quot;Last 400 Days&quot;   400d</pre>
+<dl>
+<dt><strong>column 0</strong><br />
+</dt>
+<dd>
 Description of the particular resolution.
-<P></P>
-<DT><STRONG>column 1</STRONG><BR>
-<DD>
-How much time should be depicted. The format is the same as for the <STRONG>age</STRONG>  parameter of the Overview section.
-<P></P></DL>
-<P>The following sections are valid on level 2:</P>
-<DL>
-<DT><STRONG><A NAME="item_%2B%2Bloss_colors"><STRONG>++loss_colors</STRONG></A></STRONG><BR>
-<DD>
+</dd>
+<p></p>
+<dt><strong>column 1</strong><br />
+</dt>
+<dd>
+How much time should be depicted. The format is the same as for the <strong>age</strong>  parameter of the Overview section.
+</dd>
+<p></p></dl>
+<p>The following sections are valid on level 2:</p>
+<dl>
+<dt><strong><a name="item__2b_2bloss_colors"><strong>++loss_colors</strong></a></strong><br />
+</dt>
+<dd>
 In the Detail view, the color of the median line depends
 the amount of lost packets. SmokePing comes with a reasonable default setting,
 but you may choose to disagree. The table below
 lets you specify your own coloring.
-<P>Example:</P>
-<PRE>
+</dd>
+<dd>
+<p>Example:</p>
+</dd>
+<dd>
+<pre>
  Loss Color   Legend
  1    00ff00    &quot;&lt;1&quot;
  3    0000ff    &quot;&lt;3&quot;
- 1000 ff0000    &quot;&gt;=3&quot;</PRE>
-<DL>
-<DT><STRONG>column 0</STRONG><BR>
-<DD>
-Activate when the lossrate is larger of equal to this number
-<P></P>
-<DT><STRONG>column 1</STRONG><BR>
-<DD>
+ 100  ff0000    &quot;&gt;=3&quot;</pre>
+</dd>
+<dl>
+<dt><strong>column 0</strong><br />
+</dt>
+<dd>
+Activate when the lossrate (in percent) is larger of equal to this number
+</dd>
+<p></p>
+<dt><strong>column 1</strong><br />
+</dt>
+<dd>
 Color for this range.
-<P></P>
-<DT><STRONG>column 2</STRONG><BR>
-<DD>
+</dd>
+<p></p>
+<dt><strong>column 2</strong><br />
+</dt>
+<dd>
 Description for this range.
-<P></P></DL>
-<DT><STRONG><A NAME="item_%2B%2Buptime_colors"><STRONG>++uptime_colors</STRONG></A></STRONG><BR>
-<DD>
-When monitoring a host with DYNAMIC addressing, SmokePing will keep track of how long
-the machine is able to keep the same IP address. This time is plotted as a color
-in the graphs background. SmokePing comes with a reasonable default setting,
-but you may choose to disagree. The table below
-lets you specify your own coloring
-<P>Example:</P>
-<PRE>
- Uptime Color     Legend
- 3600    00ff00   &quot;&lt;1h&quot;
- 86400   0000ff   &quot;&lt;1d&quot;
- 604800  ff0000   &quot;&lt;1w&quot;
- 1000000000000 ffff00   &quot;&gt;1w&quot;</PRE>
-<P>Uptime is in days!</P>
-<DL>
-<DT><STRONG>column 0</STRONG><BR>
-<DD>
+</dd>
+<p></p></dl>
+<dt><strong><a name="item__2b_2buptime_colors"><strong>++uptime_colors</strong></a></strong><br />
+</dt>
+<dd>
+When monitoring a host with DYNAMIC addressing, SmokePing will keep
+track of how long the machine is able to keep the same IP
+address. This time is plotted as a color in the graphs
+background. SmokePing comes with a reasonable default setting, but you
+may choose to disagree. The table below lets you specify your own
+coloring
+</dd>
+<dd>
+<p>Example:</p>
+</dd>
+<dd>
+<pre>
+ # Uptime      Color     Legend
+ 3600          00ff00   &quot;&lt;1h&quot;
+ 86400         0000ff   &quot;&lt;1d&quot;
+ 604800        ff0000   &quot;&lt;1w&quot;
+ 1000000000000 ffff00   &quot;&gt;1w&quot;</pre>
+</dd>
+<dd>
+<p>Uptime is in days!</p>
+</dd>
+<dl>
+<dt><strong>column 0</strong><br />
+</dt>
+<dd>
 Activate when uptime in days is larger of equal to this number
-<P></P>
-<DT><STRONG>column 1</STRONG><BR>
-<DD>
+</dd>
+<p></p>
+<dt><strong>column 1</strong><br />
+</dt>
+<dd>
 Color for this uptime range range.
-<P></P>
-<DT><STRONG>column 2</STRONG><BR>
-<DD>
+</dd>
+<p></p>
+<dt><strong>column 2</strong><br />
+</dt>
+<dd>
 Description for this range.
-<P></P></DL>
-</DL>
-</DL>
-<P>
-<H2><A NAME="*** probes *** (mandatory section)">*** Probes *** <EM>(mandatory section)</EM></A></H2>
-<P>The Probes Section configures Probe modules. Probe modules integrate an external ping command into SmokePing. Check the documentation of the Ping module for configuration details.</P>
-<P>The following sections are valid on level 1:</P>
-<DL>
-<DT><STRONG><A NAME="item_%2B%2F%5B%2D_0%2D9a%2DzA%2DZ%5D%2B%2F"><STRONG>+/[-_0-9a-zA-Z]+/</STRONG></A></STRONG><BR>
-<DD>
+</dd>
+<p></p></dl>
+</dl>
+</dl>
+<p>
+</p>
+<h2><a name="____probes______mandatory_section_">*** Probes *** <em>(mandatory section)</em></a></h2>
+<p>The Probes Section configures Probe modules. Probe modules integrate an external ping command into SmokePing. Check the documentation of the FPing module for configuration details.</p>
+<p>The following sections are valid on level 1:</p>
+<dl>
+<dt><strong><a name="item__2b_2f_5b_2d_0_2d9a_2dza_2dz_5d_2b_2f"><strong>+/[-_0-9a-zA-Z]+/</strong></a></strong><br />
+</dt>
+<dd>
 Each module can take specific configuration information from this area. The jumble of letters above is a regular expression defining legal module names.
-<P>The following variables can be set in this section:</P>
-<DL>
-<DT><STRONG><A NAME="item_%2F%5B%2D_0%2D9a%2DzA%2DZ%5D%2B%2F"><STRONG>/[-_0-9a-zA-Z]+/</STRONG></A></STRONG><BR>
-<DD>
+</dd>
+<dd>
+<p>The following variables can be set in this section:</p>
+</dd>
+<dl>
+<dt><strong><strong>step</strong></strong><br />
+</dt>
+<dd>
+Duration of the base interval that this probe should use, if different
+from the one specified in the 'Database' section. Note that the step in 
+the RRD files is fixed when they are originally generated, and if you
+change the step parameter afterwards, you'll have to delete the old RRD
+files or somehow convert them. (This variable is only applicable if 
+the variable 'concurrentprobes' is set in the 'General' section.)
+</dd>
+<p></p>
+<dt><strong><strong>offset</strong></strong><br />
+</dt>
+<dd>
+If you run many probes concurrently you may want to prevent them from
+hitting your network all at the same time. Using the probe-specific
+offset parameter you can change the point in time when each probe will
+be run. Offset is specified in % of total interval, or alternatively as
+'random', and the offset from the 'General' section is used if nothing
+is specified here. Note that this does NOT influence the rrds itself,
+it is just a matter of when data acqusition is initiated. 
+(This variable is only applicable if the variable 'concurrentprobes' is set
+in the 'General' section.)
+</dd>
+<p></p>
+<dt><strong><strong>pings</strong></strong><br />
+</dt>
+<dd>
+How many pings should be sent to each target, if different from the global
+value specified in the Database section.  Some probes (those derived from
+basefork.pm, ie. most except the FPing variants) will even let this be
+overridden target-specifically in the PROBE_CONF section (see the
+basefork documentation for details).  Note that the number of pings in
+the RRD files is fixed when they are originally generated, and if you
+change this parameter afterwards, you'll have to delete the old RRD
+files or somehow convert them.
+</dd>
+<p></p>
+<dt><strong><a name="item__2f_5b_2d_0_2d9a_2dza_2dz_2e_5d_2b_2f"><strong>/[-_0-9a-zA-Z.]+/</strong></a></strong><br />
+</dt>
+<dd>
 Each module defines which
 variables it wants to accept. So this expression here just defines legal variable names.
-<P></P></DL>
-</DL>
-<P>
-<H2><A NAME="*** targets *** (mandatory section)">*** Targets *** <EM>(mandatory section)</EM></A></H2>
-<P>The Target Section defines the actual work of SmokePing. It contains a hierarchical list
+</dd>
+<p></p></dl>
+<p>The following sections are valid on level 2:</p>
+<dl>
+<dt><strong><a name="item__2b_2b_2f_5b_2d_0_2d9a_2dza_2dz_5d_2b_2f"><strong>++/[-_0-9a-zA-Z]+/</strong></a></strong><br />
+</dt>
+<dd>
+You can define multiple instances of the same probe with subsections. 
+These instances can have different values for their variables, so you
+can eg. have one instance of the FPing probe with packet size 1000 and
+step 30 and another instance with packet size 64 and step 300.
+The name of the subsection determines what the probe will be called, so
+you can write descriptive names for the probes.
+</dd>
+<dd>
+<p>If there are any subsections defined, the main section for this probe
+will just provide default parameter values for the probe instances, ie.
+it will not become a probe instance itself.</p>
+</dd>
+<dd>
+<p>The following variables can be set in this section:</p>
+</dd>
+<dl>
+<dt><strong><strong>step</strong></strong><br />
+</dt>
+<dt><strong><strong>offset</strong></strong><br />
+</dt>
+<dt><strong><strong>pings</strong></strong><br />
+</dt>
+<dt><strong><strong>/[-_0-9a-zA-Z.]+/</strong></strong><br />
+</dt>
+<dd>
+Each module defines which
+variables it wants to accept. So this expression here just defines legal variable names.
+</dd>
+<p></p></dl>
+</dl>
+</dl>
+<p>
+</p>
+<h2><a name="____alerts____">*** Alerts ***</a></h2>
+<p>The Alert section lets you setup loss and RTT pattern detectors. After each
+round of polling, SmokePing will examine its data and determine which
+detectors match. Detectors are enabled per target and get inherited by
+the targets children.</p>
+<p>Detectors are not just simple thresholds which go off at first sight
+of a problem. They are configurable to detect special loss or RTT
+patterns. They let you look at a number of past readings to make a
+more educated decision on what kind of alert should be sent, or if an
+alert should be sent at all.</p>
+<p>The patterns are numbers prefixed with an operator indicating the type
+of comparison required for a match.</p>
+<p>The following RTT pattern detects if a target's RTT goes from constantly
+below 10ms to constantly 100ms and more:</p>
+<pre>
+ old ------------------------------&gt; new
+ &lt;10,&lt;10,&lt;10,&lt;10,&lt;10,&gt;10,&gt;100,&gt;100,&gt;100</pre>
+<p>Loss patterns work in a similar way, except that the loss is defined as the
+percentage the total number of received packets is of the total number of packets sent.</p>
+<pre>
+ old ------------------------------&gt; new
+ ==0%,==0%,==0%,==0%,&gt;20%,&gt;20%,&gt;=20%</pre>
+<p>Apart from normal numbers, patterns can also contain the values <strong>*</strong>
+which is true for all values regardless of the operator. And <strong>U</strong>
+which is true for <strong>unknown</strong> data together with the <strong>==</strong> and <strong>=!</strong> operators.</p>
+<p>Detectors normally act on state changes. This has the disadvantage, that
+they will fail to find conditions which were already present when launching
+smokeping. For this it is possible to write detectors that begin with the
+special value <strong>==S</strong> it is inserted whenever smokeping is started up.</p>
+<p>You can write</p>
+<pre>
+ ==S,&gt;20%,&gt;20%</pre>
+<p>to detect lines that have been losing more than 20% of the packets for two
+periods after startup.</p>
+<p>Sometimes it may be that conditions occur at irregular intervals. But still
+you only want to throw an alert if they occur several times within a certain
+amount of times. The operator <strong>*X*</strong> will ignore up to <em>X</em> values and still
+let the pattern match:</p>
+<pre>
+  &gt;10%,*10*,&gt;10%</pre>
+<p>will fire if more than 10% of the packets have been losst twice over the
+last 10 samples.</p>
+<p>A complete example</p>
+<pre>
+ *** Alerts ***
+ to = admin@company.xy,peter@home.xy
+ from = smokealert@company.xy</pre>
+<pre>
+ +lossdetect
+ type = loss
+ # in percent
+ pattern = ==0%,==0%,==0%,==0%,&gt;20%,&gt;20%,&gt;20%
+ comment = suddenly there is packet loss</pre>
+<pre>
+ +miniloss
+ type = loss
+ # in percent
+ pattern = &gt;0%,*12*,&gt;0%,*12*,&gt;0%
+ comment = detected loss 3 times over the last two hours</pre>
+<pre>
+ +rttdetect
+ type = rtt
+ # in milliseconds
+ pattern = &lt;10,&lt;10,&lt;10,&lt;10,&lt;10,&lt;100,&gt;100,&gt;100,&gt;100
+ comment = routing messed up again ?</pre>
+<pre>
+ +rttbadstart
+ type = rtt
+ # in milliseconds
+ pattern = ==S,==U
+ comment = offline at startup</pre>
+<p>The following variables can be set in this section:</p>
+<dl>
+<dt><strong><a name="item_to"><strong>to</strong> <em>(mandatory setting)</em></a></strong><br />
+</dt>
+<dt><strong><a name="item_from"><strong>from</strong> <em>(mandatory setting)</em></a></strong><br />
+</dt>
+</dl>
+<p>The following sections are valid on level 1:</p>
+<dl>
+<dt><strong><a name="item__2b_2f_5b_5e_5cs_2c_5d_2b_2f"><strong>+/[^\s,]+/</strong></a></strong><br />
+</dt>
+<dd>
+The following variables can be set in this section:
+</dd>
+<dl>
+<dt><strong><a name="item_type"><strong>type</strong> <em>(mandatory setting)</em></a></strong><br />
+</dt>
+<dd>
+Currently the pattern types <strong>rtt</strong> and <strong>loss</strong> and <strong>matcher</strong> are known
+</dd>
+<p></p>
+<dt><strong><a name="item_pattern"><strong>pattern</strong> <em>(mandatory setting)</em></a></strong><br />
+</dt>
+<dd>
+a comma separated list of comparison operators and numbers. rtt patterns are in milliseconds, loss patterns are in percents
+</dd>
+<p></p>
+<dt><strong><a name="item_comment"><strong>comment</strong> <em>(mandatory setting)</em></a></strong><br />
+</dt>
+<dt><strong><strong>to</strong></strong><br />
+</dt>
+</dl>
+</dl>
+<p>
+</p>
+<h2><a name="____targets______mandatory_section_">*** Targets *** <em>(mandatory section)</em></a></h2>
+<p>The Target Section defines the actual work of SmokePing. It contains a hierarchical list
 of hosts which mark the endpoints of the network connections the system should monitor.
-Each section can contain one host as well as other sections.</P>
-<P>The following variables can be set in this section:</P>
-<DL>
-<DT><STRONG><A NAME="item_probe"><STRONG>probe</STRONG> <EM>(mandatory setting)</EM></A></STRONG><BR>
-<DD>
+Each section can contain one host as well as other sections.</p>
+<p>The following variables can be set in this section:</p>
+<dl>
+<dt><strong><a name="item_probe"><strong>probe</strong> <em>(mandatory setting)</em></a></strong><br />
+</dt>
+<dd>
 The name of the probe module to be used for this host. The value of
 this variable gets propagated
-<P></P>
-<DT><STRONG><A NAME="item_menu"><STRONG>menu</STRONG> <EM>(mandatory setting)</EM></A></STRONG><BR>
-<DD>
-Menu entry for this section
-<P></P>
-<DT><STRONG><A NAME="item_title"><STRONG>title</STRONG> <EM>(mandatory setting)</EM></A></STRONG><BR>
-<DD>
-Title of the page when it is displayed.
-<P></P>
-<DT><STRONG><A NAME="item_remark"><STRONG>remark</STRONG></A></STRONG><BR>
-<DD>
+</dd>
+<p></p>
+<dt><strong><a name="item_menu"><strong>menu</strong> <em>(mandatory setting)</em></a></strong><br />
+</dt>
+<dd>
+Menu entry for this section. If not set this will be set to the hostname.
+</dd>
+<p></p>
+<dt><strong><a name="item_title"><strong>title</strong> <em>(mandatory setting)</em></a></strong><br />
+</dt>
+<dd>
+Title of the page when it is displayed. This will be set to the hostname if
+left empty.
+</dd>
+<p></p>
+<dt><strong><a name="item_remark"><strong>remark</strong></a></strong><br />
+</dt>
+<dd>
 An optional remark on the current section. It gets displayed on the webpage.
-<P></P></DL>
-<P>The following sections are valid on level 1:</P>
-<DL>
-<DT><STRONG><A NAME="item_%2BPROBE_CONF"><STRONG>+PROBE_CONF</STRONG></A></STRONG><BR>
-<DD>
+</dd>
+<p></p>
+<dt><strong><a name="item_alerts"><strong>alerts</strong></a></strong><br />
+</dt>
+<dd>
+A comma separated list of alerts to check for this target. The alerts have
+to be setup in the Alerts section. Alerts are inherited by child nodes. Use
+an empty alerts definition to remove inherited alerts from the current target
+and its children.
+</dd>
+<p></p></dl>
+<p>The following sections are valid on level 1:</p>
+<dl>
+<dt><strong><a name="item__2bprobe_conf"><strong>+PROBE_CONF</strong></a></strong><br />
+</dt>
+<dd>
 Probe specific variables.
-<P>The following variables can be set in this section:</P>
-<DL>
-<DT><STRONG><STRONG>/[-_0-9a-zA-Z]+/</STRONG></STRONG><BR>
-<DD>
+</dd>
+<dd>
+<p>The following variables can be set in this section:</p>
+</dd>
+<dl>
+<dt><strong><strong>/[-_0-9a-zA-Z.]+/</strong></strong><br />
+</dt>
+<dd>
 Should be found in the documentation of the
-corresponding probe. The values get propagated. If a child
-node uses the same Probe as the parent.
-<P></P></DL>
-<DT><STRONG><STRONG>+/[-_0-9a-zA-Z]+/</STRONG></STRONG><BR>
-<DD>
+corresponding probe. The values get propagated to those child
+nodes using the same Probe.
+</dd>
+<p></p></dl>
+<dt><strong><strong>+/[-_0-9a-zA-Z]+/</strong></strong><br />
+</dt>
+<dd>
 Each target section can contain information about a host to monitor as
 well as further target sections. Most variables have already been
 described above. The expression above defines legal names for target
 sections.
-<P>The following variables can be set in this section:</P>
-<DL>
-<DT><STRONG><STRONG>probe</STRONG></STRONG><BR>
-<DD>
-<DT><STRONG><STRONG>menu</STRONG> <EM>(mandatory setting)</EM></STRONG><BR>
-<DD>
-<DT><STRONG><STRONG>title</STRONG> <EM>(mandatory setting)</EM></STRONG><BR>
-<DD>
-<DT><STRONG><A NAME="item_note"><STRONG>note</STRONG></A></STRONG><BR>
-<DD>
+</dd>
+<dd>
+<p>The following variables can be set in this section:</p>
+</dd>
+<dl>
+<dt><strong><strong>probe</strong></strong><br />
+</dt>
+<dt><strong><strong>menu</strong></strong><br />
+</dt>
+<dt><strong><strong>title</strong></strong><br />
+</dt>
+<dt><strong><strong>alerts</strong></strong><br />
+</dt>
+<dd>
+Comma separated list of alert names
+</dd>
+<p></p>
+<dt><strong><a name="item_note"><strong>note</strong></a></strong><br />
+</dt>
+<dd>
 Some information about this entry which does NOT get displayed on the web.
-<P></P>
-<DT><STRONG><A NAME="item_email"><STRONG>email</STRONG></A></STRONG><BR>
-<DD>
-This is the contact address for the owner of the current host. In connection with the <STRONG>DYNAMIC</STRONG> hosts,
+</dd>
+<p></p>
+<dt><strong><a name="item_email"><strong>email</strong></a></strong><br />
+</dt>
+<dd>
+This is the contact address for the owner of the current host. In connection with the <strong>DYNAMIC</strong> hosts,
 the address will be used for sending the belowmentioned script.
-<P></P>
-<DT><STRONG><A NAME="item_host"><STRONG>host</STRONG></A></STRONG><BR>
-<DD>
-Can either contain the name of a target host or the string <STRONG>DYNAMIC</STRONG>.
-<P>In the second case, the target machine has a dynamic IP address and
+</dd>
+<p></p>
+<dt><strong><a name="item_host"><strong>host</strong></a></strong><br />
+</dt>
+<dd>
+Can either contain the name of a target host or the string <strong>DYNAMIC</strong>.
+</dd>
+<dd>
+<p>In the second case, the target machine has a dynamic IP address and
 thus is required to regularly contact the SmokePing server to verify
 its IP address.  When starting SmokePing with the commandline argument
-<STRONG>--email</STRONG> it will add a secret password to each of the <STRONG>DYNAMIC</STRONG>
+<strong>--email</strong> it will add a secret password to each of the <strong>DYNAMIC</strong>
 host lines and send a script to the owner of each host. This script
 must be started regularly on the host in question to make sure
 SmokePing monitors the right box. If the target machine supports
 SNMP SmokePing will also query the hosts
 sysContact, sysName and sysLocation properties to make sure it is
-still the same host.</P>
-<P></P>
-<DT><STRONG><STRONG>remark</STRONG></STRONG><BR>
-<DD>
-</DL>
-<P>The following sections are valid on level 2:</P>
-<DL>
-<DT><STRONG><A NAME="item_%2B%2BPROBE_CONF"><STRONG>++PROBE_CONF</STRONG></A></STRONG><BR>
-<DD>
+still the same host.</p>
+</dd>
+<p></p>
+<dt><strong><strong>remark</strong></strong><br />
+</dt>
+<dt><strong><a name="item_rawlog"><strong>rawlog</strong></a></strong><br />
+</dt>
+<dd>
+Log the raw data, gathered for this target, in tab separated format, to a file with the
+same basename as the corresponding RRD file. Use posix strftime to format the timestamp to be
+put into the file name. The filename is built like this:
+</dd>
+<dd>
+<pre>
+ basename.strftime.csv</pre>
+</dd>
+<dd>
+<p>Example:</p>
+</dd>
+<dd>
+<pre>
+ rawlog=%Y-%m-%d</pre>
+</dd>
+<dd>
+<p>this would create a new logfile every day with a name like this:</p>
+</dd>
+<dd>
+<pre>
+ targethost.2004-05-03.csv</pre>
+</dd>
+<p></p>
+<dt><strong><a name="item_alertee"><strong>alertee</strong></a></strong><br />
+</dt>
+<dd>
+If you want to have alerts for this target and all targets below it go to a particular address
+on top of the address already specified in the alert, you can add it here. This can be a comma separated list of items.
+</dd>
+<p></p></dl>
+<p>The following sections are valid on level 2:</p>
+<dl>
+<dt><strong><a name="item__2b_2bprobe_conf"><strong>++PROBE_CONF</strong></a></strong><br />
+</dt>
+<dd>
 Probe specific variables.
-<P>The following variables can be set in this section:</P>
-<DL>
-<DT><STRONG><STRONG>/[-_0-9a-zA-Z]+/</STRONG></STRONG><BR>
-<DD>
+</dd>
+<dd>
+<p>The following variables can be set in this section:</p>
+</dd>
+<dl>
+<dt><strong><strong>/[-_0-9a-zA-Z.]+/</strong></strong><br />
+</dt>
+<dd>
 Should be found in the documentation of the
-corresponding probe. The values get propagated. If a child
-node uses the same Probe as the parent.
-<P></P></DL>
-<DT><STRONG><A NAME="item_%2B%2B%2F%5B%2D_0%2D9a%2DzA%2DZ%5D%2B%2F"><STRONG>++/[-_0-9a-zA-Z]+/</STRONG></A></STRONG><BR>
-<DD>
+corresponding probe. The values get propagated to those child
+nodes using the same Probe.
+</dd>
+<p></p></dl>
+<dt><strong><strong>++/[-_0-9a-zA-Z]+/</strong></strong><br />
+</dt>
+<dd>
 Each target section can contain information about a host to monitor as
 well as further target sections. Most variables have already been
 described above. The expression above defines legal names for target
 sections.
-<P></P></DL>
-</DL>
-<P>
-<HR>
-<H1><A NAME="copyright">COPYRIGHT</A></H1>
-<P>Copyright (c) 2001 by Tobias Oetiker. All right reserved.</P>
-<P>
-<HR>
-<H1><A NAME="license">LICENSE</A></H1>
-<P>This program is free software; you can redistribute it
+</dd>
+<p></p></dl>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright (c) 2001-2003 by Tobias Oetiker. All right reserved.</p>
+<p>
+</p>
+<hr />
+<h1><a name="license">LICENSE</a></h1>
+<p>This program is free software; you can redistribute it
 and/or modify it under the terms of the GNU General Public
 License as published by the Free Software Foundation; either
 version 2 of the License, or (at your option) any later
-version.</P>
-<P>This program is distributed in the hope that it will be
+version.</p>
+<p>This program is distributed in the hope that it will be
 useful, but WITHOUT ANY WARRANTY; without even the implied
 warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the GNU General Public License for more
-details.</P>
-<P>You should have received a copy of the GNU General Public
+details.</p>
+<p>You should have received a copy of the GNU General Public
 License along with this program; if not, write to the Free
 Software Foundation, Inc., 675 Mass Ave, Cambridge, MA
-02139, USA.</P>
-<P>
-<HR>
-<H1><A NAME="author">AUTHOR</A></H1>
-<P>Tobias Oetiker &lt;<A HREF="mailto:tobi@oetiker.ch">tobi@oetiker.ch</A>&gt;</P>
+02139, USA.</p>
+<p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>Tobias Oetiker &lt;<a href="mailto:tobi@oetiker.ch">tobi@oetiker.ch</a>&gt;</p>
 
-</BODY>
+</body>
 
-</HTML>
+</html>
