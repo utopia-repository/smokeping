@@ -1,4 +1,4 @@
-doc::Smokeping::probes::FPing(3)   SmokePing  doc::Smokeping::probes::FPing(3)
+doc::Smokeping::probes::FPingS(m3o)kePdioncg::Smokeping::probes::FPing(3)
 
 
 
@@ -31,22 +31,25 @@ SSYYNNOOPPSSIISS
         host = my.host
 
 DDEESSCCRRIIPPTTIIOONN
-       Integrates FPing as a probe into smokeping. The variable bbiinnaarryy must
-       point to your copy of the FPing program.  If it is not installed on
-       your system yet, you can get it from <http://www.fping.com/>.
+       Integrates FPing as a probe into smokeping. The variable
+       bbiinnaarryy must point to your copy of the FPing program.  If
+       it is not installed on your system yet, you can get it
+       from <http://www.fping.com/>.
 
-       The (optional) ppaacckkeettssiizzee option lets you configure the packetsize for
-       the pings sent.
+       The (optional) ppaacckkeettssiizzee option lets you configure the
+       packetsize for the pings sent.
 
        The FPing manpage has the following to say on this topic:
 
-       Number of bytes of ping data to send.  The minimum size (normally 12)
-       allows room for the data that fping needs to do its work (sequence num-
-       ber, timestamp).  The reported received data size includes the IP
-       header (normally 20 bytes) and ICMP header (8 bytes), so the minimum
-       total size is 40 bytes.  Default is 56, as in ping. Maximum is the the-
-       oretical maximum IP datagram size (64K), though most systems limit this
-       to a smaller, system-dependent number.
+       Number of bytes of ping data to send.  The minimum size
+       (normally 12) allows room for the data that fping needs to
+       do its work (sequence number, timestamp).  The reported
+       received data size includes the IP header (normally 20
+       bytes) and ICMP header (8 bytes), so the minimum total
+       size is 40 bytes.  Default is 56, as in ping. Maximum is
+       the theoretical maximum IP datagram size (64K), though
+       most systems limit this to a smaller, system-dependent
+       number.
 
 VVAARRIIAABBLLEESS
        Supported probe-specific variables:
@@ -59,37 +62,40 @@ VVAARRIIAABBLLEESS
            This setting is mandatory.
 
        hostinterval
-           The fping "-p" parameter, but in (possibly fractional) seconds
-           rather than milliseconds, for consistency with other Smokeping
-           probes. From _f_p_i_n_g(1):
+           The fping "-p" parameter, but in (possibly fractional)
+           seconds rather than milliseconds, for consistency with
+           other Smokeping probes. From _f_p_i_n_g(1):
 
-           This parameter sets the time that fping  waits between successive
-           packets to an individual target.
+           This parameter sets the time that fping  waits between
+           successive packets to an individual target.
 
            Example value: 1.5
 
        mininterval
-           The fping "-i" parameter, but in (probably fractional) seconds
-           rather than milliseconds, for consistency with other Smokeping
-           probes. From _f_p_i_n_g(1):
+           The fping "-i" parameter, but in (probably fractional)
+           seconds rather than milliseconds, for consistency with
+           other Smokeping probes. From _f_p_i_n_g(1):
 
-           The minimum amount of time between sending a ping packet to any
-           target.
+           The minimum amount of time between sending a ping
+           packet to any target.
 
            Example value: 0.001
 
            Default value: 0.01
 
        offset
-           If you run many probes concurrently you may want to prevent them
-           from hitting your network all at the same time. Using the probe-
-           specific offset parameter you can change the point in time when
-           each probe will be run. Offset is specified in % of total interval,
-           or alternatively as 'random', and the offset from the 'General'
-           section is used if nothing is specified here. Note that this does
-           NOT influence the rrds itself, it is just a matter of when data
-           acqusition is initiated.  (This variable is only applicable if the
-           variable 'concurrentprobes' is set in the 'General' section.)
+           If you run many probes concurrently you may want to
+           prevent them from hitting your network all at the same
+           time. Using the probe-specific offset parameter you
+           can change the point in time when each probe will be
+           run. Offset is specified in % of total interval, or
+           alternatively as 'random', and the offset from the
+           'General' section is used if nothing is specified
+           here. Note that this does NOT influence the rrds
+           itself, it is just a matter of when data acqusition is
+           initiated.  (This variable is only applicable if the
+           variable 'concurrentprobes' is set in the 'General'
+           section.)
 
            Example value: 50%
 
@@ -99,22 +105,25 @@ VVAARRIIAABBLLEESS
            Example value: 5000
 
        pings
-           How many pings should be sent to each target, if different from the
-           global value specified in the Database section. Note that the num-
-           ber of pings in the RRD files is fixed when they are originally
-           generated, and if you change this parameter afterwards, you'll have
+           How many pings should be sent to each target, if dif-
+           ferent from the global value specified in the Database
+           section. Note that the number of pings in the RRD
+           files is fixed when they are originally generated, and
+           if you change this parameter afterwards, you'll have
            to delete the old RRD files or somehow convert them.
 
            Example value: 20
 
        step
-           Duration of the base interval that this probe should use, if dif-
-           ferent from the one specified in the 'Database' section. Note that
-           the step in the RRD files is fixed when they are originally gener-
-           ated, and if you change the step parameter afterwards, you'll have
-           to delete the old RRD files or somehow convert them. (This variable
-           is only applicable if the variable 'concurrentprobes' is set in the
-           'General' section.)
+           Duration of the base interval that this probe should
+           use, if different from the one specified in the
+           'Database' section. Note that the step in the RRD
+           files is fixed when they are originally generated, and
+           if you change the step parameter afterwards, you'll
+           have to delete the old RRD files or somehow convert
+           them. (This variable is only applicable if the vari-
+           able 'concurrentprobes' is set in the 'General' sec-
+           tion.)
 
            Example value: 300
 
@@ -123,4 +132,4 @@ AAUUTTHHOORRSS
 
 
 
-2.0.5                             2005-11-16  doc::Smokeping::probes::FPing(3)
+2.0.5                       2005-1d1o-c1:4:Smokeping::probes::FPing(3)

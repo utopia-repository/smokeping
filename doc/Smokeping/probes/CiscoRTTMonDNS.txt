@@ -1,4 +1,4 @@
-doc::Smokeping::probes::CiscoRTTMonDSNmSod(ko3ec)P:i:nSgmokeping::probes::CiscoRTTMonDNS(3)
+doc::Smokeping::probes::Cdioscc:oS:RmSTomTkoMekoPenipDniNgnSg(:3:)probes::CiscoRTTMonDNS(3)
 
 
 
@@ -38,9 +38,10 @@ SSYYNNOOPPSSIISS
         pings = 5
 
 DDEESSCCRRIIPPTTIIOONN
-       A probe for smokeping, which uses the ciscoRttMon MIB functionality
-       ("Service Assurance Agent", "SAA") of Cisco IOS to time ( recursive,
-       type A) DNS queries to a DNS server.
+       A probe for smokeping, which uses the ciscoRttMon MIB
+       functionality ("Service Assurance Agent", "SAA") of Cisco
+       IOS to time ( recursive, type A) DNS queries to a DNS
+       server.
 
 VVAARRIIAABBLLEESS
        Supported probe-specific variables:
@@ -53,26 +54,31 @@ VVAARRIIAABBLLEESS
            Default value: 5
 
        offset
-           If you run many probes concurrently you may want to prevent them
-           from hitting your network all at the same time. Using the probe-
-           specific offset parameter you can change the point in time when
-           each probe will be run. Offset is specified in % of total interval,
-           or alternatively as 'random', and the offset from the 'General'
-           section is used if nothing is specified here. Note that this does
-           NOT influence the rrds itself, it is just a matter of when data
-           acqusition is initiated.  (This variable is only applicable if the
-           variable 'concurrentprobes' is set in the 'General' section.)
+           If you run many probes concurrently you may want to
+           prevent them from hitting your network all at the same
+           time. Using the probe-specific offset parameter you
+           can change the point in time when each probe will be
+           run. Offset is specified in % of total interval, or
+           alternatively as 'random', and the offset from the
+           'General' section is used if nothing is specified
+           here. Note that this does NOT influence the rrds
+           itself, it is just a matter of when data acqusition is
+           initiated.  (This variable is only applicable if the
+           variable 'concurrentprobes' is set in the 'General'
+           section.)
 
            Example value: 50%
 
        step
-           Duration of the base interval that this probe should use, if dif-
-           ferent from the one specified in the 'Database' section. Note that
-           the step in the RRD files is fixed when they are originally gener-
-           ated, and if you change the step parameter afterwards, you'll have
-           to delete the old RRD files or somehow convert them. (This variable
-           is only applicable if the variable 'concurrentprobes' is set in the
-           'General' section.)
+           Duration of the base interval that this probe should
+           use, if different from the one specified in the
+           'Database' section. Note that the step in the RRD
+           files is fixed when they are originally generated, and
+           if you change the step parameter afterwards, you'll
+           have to delete the old RRD files or somehow convert
+           them. (This variable is only applicable if the vari-
+           able 'concurrentprobes' is set in the 'General' sec-
+           tion.)
 
            Example value: 300
 
@@ -86,37 +92,40 @@ VVAARRIIAABBLLEESS
        Supported target-specific variables:
 
        ioshost
-           The (mandatory) ioshost parameter specifies the Cisco router, which
-           will send the DNS requests, as well as the SNMP community string on
-           the router.
+           The (mandatory) ioshost parameter specifies the Cisco
+           router, which will send the DNS requests, as well as
+           the SNMP community string on the router.
 
            Example value: RTTcommunity@Myrouter.foobar.com.au
 
            This setting is mandatory.
 
        iosint
-           The (optional) iosint parameter is the source address for the DNS
-           packets.  This should be one of the active (!) IP addresses of the
-           router to get results. IOS looks up the target host address in the
-           forwarding table and then uses the interface(s) listed there to
-           send the DNS packets. By default IOS uses the (primary) IP address
-           on the sending interface as source address for packets originated
-           by the router.
+           The (optional) iosint parameter is the source address
+           for the DNS packets.  This should be one of the active
+           (!) IP addresses of the router to get results. IOS
+           looks up the target host address in the forwarding
+           table and then uses the interface(s) listed there to
+           send the DNS packets. By default IOS uses the (pri-
+           mary) IP address on the sending interface as source
+           address for packets originated by the router.
 
            Example value: 10.33.22.11
 
        name
-           The (mandatory) name parameter is the DNS name to resolve.
+           The (mandatory) name parameter is the DNS name to
+           resolve.
 
            Example value: www.foobar.com.au
 
            This setting is mandatory.
 
        pings
-           How many pings should be sent to each target, if different from the
-           global value specified in the Database section. Note that the num-
-           ber of pings in the RRD files is fixed when they are originally
-           generated, and if you change this parameter afterwards, you'll have
+           How many pings should be sent to each target, if dif-
+           ferent from the global value specified in the Database
+           section. Note that the number of pings in the RRD
+           files is fixed when they are originally generated, and
+           if you change this parameter afterwards, you'll have
            to delete the old RRD files or somehow convert them.
 
            Example value: 5
@@ -127,53 +136,57 @@ AAUUTTHHOORRSS
 NNOOTTEESS
        hhoosstt ppaarraammeetteerr
 
-       The host parameter specifies the DNS server, which the router will use.
+       The host parameter specifies the DNS server, which the
+       router will use.
 
        IIOOSS VVEERRSSIIOONNSS
 
-       This probe only works with IOS 12.0(3)T or higher.  It is recommended
-       to test it on less critical routers first.
+       This probe only works with IOS 12.0(3)T or higher.  It is
+       recommended to test it on less critical routers first.
 
        IINNSSTTAALLLLAATTIIOONN
 
-       To install this probe copy ciscoRttMonMIB.pm to ($SMOKEPINGIN-
-       STALLDIR)/lib/Smokeping and CiscoRTTMonDNS.pm to ($SMOKEPINGIN-
-       STALLDIR)/lib/Smokeping/probes.
+       To install this probe copy ciscoRttMonMIB.pm to
+       ($SMOKEPINGINSTALLDIR)/lib/Smokeping and CiscoRTTMonDNS.pm
+       to ($SMOKEPINGINSTALLDIR)/lib/Smokeping/probes.
 
-       The router(s) must be configured to allow read/write SNMP access. Suf-
-       ficient is:
+       The router(s) must be configured to allow read/write SNMP
+       access. Sufficient is:
 
                snmp-server community RTTCommunity RW
 
-       If you want to be a bit more restrictive with SNMP write access to the
-       router, then consider configuring something like this
+       If you want to be a bit more restrictive with SNMP write
+       access to the router, then consider configuring something
+       like this
 
                access-list 2 permit 10.37.3.5
                snmp-server view RttMon ciscoRttMonMIB included
                snmp-server community RTTCommunity view RttMon RW 2
 
-       The above configuration grants SNMP read-write only to 10.37.3.5 (the
-       smokeping host) and only to the ciscoRttMon MIB tree. The probe does
-       not need access to SNMP variables outside the RttMon tree.
+       The above configuration grants SNMP read-write only to
+       10.37.3.5 (the smokeping host) and only to the ciscoRttMon
+       MIB tree. The probe does not need access to SNMP variables
+       outside the RttMon tree.
 
 BBUUGGSS
-       The probe does unnecessary DNS queries, i.e. more than configured in
-       the "pings" variable, because the RTTMon MIB only allows to set a total
-       time for all queries in one measurement run (one "life"). Currently the
-       probe sets the life duration to "pings"*2+3 seconds (2 secs is the
-       timeout value hardcoded into this probe).
+       The probe does unnecessary DNS queries, i.e. more than
+       configured in the "pings" variable, because the RTTMon MIB
+       only allows to set a total time for all queries in one
+       measurement run (one "life"). Currently the probe sets the
+       life duration to "pings"*2+3 seconds (2 secs is the time-
+       out value hardcoded into this probe).
 
 SSEEEE AALLSSOO
        <http://people.ee.ethz.ch/~oetiker/webtools/smokeping/>
 
        <http://www.switch.ch/misc/leinen/snmp/perl/>
 
-       The best source for background info on SAA is Cisco's documentation on
-       <http://www.cisco.com> and the CISCO-RTTMON-MIB documentation, which is
-       available at:
+       The best source for background info on SAA is Cisco's doc-
+       umentation on <http://www.cisco.com> and the CISCO-RTTMON-
+       MIB documentation, which is available at:
 
        <ftp://ftp.cisco.com/pub/mibs/v2/CISCO-RTTMON-MIB.my>
 
 
 
-2.0.5                             2005d-o1c1:-:1S6mokeping::probes::CiscoRTTMonDNS(3)
+2.0.5                   doc:2:0S0m5o-k1e1p-i1n4g::probes::CiscoRTTMonDNS(3)

@@ -50,8 +50,7 @@ use strict;
 # -- Getopt::Long
 #
 # Point the lib variables to your implementation
-use lib qw(lib);
-use lib "/usr/local/rrdtool-1.0.39/lib/perl";
+use lib qw(/usr/share/perl5/smokeping);
 
 use Smokeping 2.000005;
 use Net::SMTP;
@@ -60,7 +59,7 @@ use Pod::Usage;
 use RRDs;
 
 # Point to your Smokeping config file
-my $cfgfile = "etc/config.dist";
+my $cfgfile = "/etc/smokeping/config";
 
 # global variables
 my $cfg;
@@ -479,33 +478,12 @@ Typical crontab used to invoke this are
 
 =head1 SETUP
 
-When installing tSmoke, some variables must be adjusted to fit your local system.
-
-We need to use the following B<libraries>:
-
-=over
-
-=item Smokeping
-
-=item RRDTool Perl bindings
-
-=item Getopt::Long
-
-=back
-
-Set up your libraries:
-
- use lib "/usr/local/smokeping/lib";
- use lib "/usr/local/rrdtool-1.0.39/lib/perl";
-
-Point to your Smokeping B<config> file
-
- my $cfgfile = "/usr/local/smokeping/etc/config";
-
 Modify the Smokeping config file to include a path for tmail in the
-General section:
+General section, if not already present:
 
- tmail = /usr/local/smokeping/etc/tmail
+ tmail = /etc/smokeping/tmail
+
+Modify the HTML template file, B</etc/smokeping/tmail>, to your liking.
 
 =head1 COPYRIGHT
 

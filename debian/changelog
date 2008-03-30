@@ -1,3 +1,11 @@
+smokeping (2.0.5-2) unstable; urgency=low
+
+  * Merge smokeping--debian--2.0.5 branch when preparing the package:
+    + Change default perl location. (Closes: #339690)
+    + Change default config file. (Closes: #339816)
+
+ -- Jose Carlos Garcia Sogo <jsogo@debian.org>  Sat, 19 Nov 2005 10:50:22 +0100
+
 smokeping (2.0.5-1) unstable; urgency=low
 
   [ Niko Tyni ]

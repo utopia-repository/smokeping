@@ -1,13 +1,15 @@
-doc::Smokeping::probes::base(3)    SmokePing   doc::Smokeping::probes::base(3)
+doc::Smokeping::probes::base(S3m)okePidnogc::Smokeping::probes::base(3)
 
 
 
 NNAAMMEE
-       Smokeping::probes::base - Base Class for implementing SmokePing Probes
+       Smokeping::probes::base - Base Class for implementing
+       SmokePing Probes
 
 OOVVEERRVVIIEEWW
-       For the time being, please use the Smokeping::probes::FPing for inspi-
-       ration when implementing your own probes.
+       For the time being, please use the
+       Smokeping::probes::FPing for inspiration when implementing
+       your own probes.
 
 SSYYNNOOPPSSIISS
         *** Probes ***
@@ -34,35 +36,41 @@ VVAARRIIAABBLLEESS
        Supported probe-specific variables:
 
        offset
-           If you run many probes concurrently you may want to prevent them
-           from hitting your network all at the same time. Using the probe-
-           specific offset parameter you can change the point in time when
-           each probe will be run. Offset is specified in % of total interval,
-           or alternatively as 'random', and the offset from the 'General'
-           section is used if nothing is specified here. Note that this does
-           NOT influence the rrds itself, it is just a matter of when data
-           acqusition is initiated.  (This variable is only applicable if the
-           variable 'concurrentprobes' is set in the 'General' section.)
+           If you run many probes concurrently you may want to
+           prevent them from hitting your network all at the same
+           time. Using the probe-specific offset parameter you
+           can change the point in time when each probe will be
+           run. Offset is specified in % of total interval, or
+           alternatively as 'random', and the offset from the
+           'General' section is used if nothing is specified
+           here. Note that this does NOT influence the rrds
+           itself, it is just a matter of when data acqusition is
+           initiated.  (This variable is only applicable if the
+           variable 'concurrentprobes' is set in the 'General'
+           section.)
 
            Example value: 50%
 
        pings
-           How many pings should be sent to each target, if different from the
-           global value specified in the Database section. Note that the num-
-           ber of pings in the RRD files is fixed when they are originally
-           generated, and if you change this parameter afterwards, you'll have
+           How many pings should be sent to each target, if dif-
+           ferent from the global value specified in the Database
+           section. Note that the number of pings in the RRD
+           files is fixed when they are originally generated, and
+           if you change this parameter afterwards, you'll have
            to delete the old RRD files or somehow convert them.
 
            Example value: 20
 
        step
-           Duration of the base interval that this probe should use, if dif-
-           ferent from the one specified in the 'Database' section. Note that
-           the step in the RRD files is fixed when they are originally gener-
-           ated, and if you change the step parameter afterwards, you'll have
-           to delete the old RRD files or somehow convert them. (This variable
-           is only applicable if the variable 'concurrentprobes' is set in the
-           'General' section.)
+           Duration of the base interval that this probe should
+           use, if different from the one specified in the
+           'Database' section. Note that the step in the RRD
+           files is fixed when they are originally generated, and
+           if you change the step parameter afterwards, you'll
+           have to delete the old RRD files or somehow convert
+           them. (This variable is only applicable if the vari-
+           able 'concurrentprobes' is set in the 'General' sec-
+           tion.)
 
            Example value: 300
 
@@ -71,4 +79,4 @@ AAUUTTHHOORRSS
 
 
 
-2.0.5                             2005-11-16   doc::Smokeping::probes::base(3)
+2.0.5                       2005-11d-o1c4::Smokeping::probes::base(3)

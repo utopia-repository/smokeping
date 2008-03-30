@@ -1,13 +1,14 @@
-doc::Smokeping::probes::EchoPingIcp(S3m)okePdioncg::Smokeping::probes::EchoPingIcp(3)
+doc::Smokeping::probes::EchodPSoimcno:gk:IeScPmpio(nk3ge)ping::probes::EchoPingIcp(3)
 
 
 
 NNAAMMEE
-       Smokeping::probes::EchoPingIcp - an echoping(1) probe for SmokePing
+       Smokeping::probes::EchoPingIcp - an echoping(1) probe for
+       SmokePing
 
 OOVVEERRVVIIEEWW
-       Measures ICP (Internet Cache Protocol, spoken by web caches) roundtrip
-       times for SmokePing.
+       Measures ICP (Internet Cache Protocol, spoken by web
+       caches) roundtrip times for SmokePing.
 
 SSYYNNOOPPSSIISS
         *** Probes ***
@@ -65,48 +66,55 @@ VVAARRIIAABBLLEESS
            Default value: 5
 
        offset
-           If you run many probes concurrently you may want to prevent them
-           from hitting your network all at the same time. Using the probe-
-           specific offset parameter you can change the point in time when
-           each probe will be run. Offset is specified in % of total interval,
-           or alternatively as 'random', and the offset from the 'General'
-           section is used if nothing is specified here. Note that this does
-           NOT influence the rrds itself, it is just a matter of when data
-           acqusition is initiated.  (This variable is only applicable if the
-           variable 'concurrentprobes' is set in the 'General' section.)
+           If you run many probes concurrently you may want to
+           prevent them from hitting your network all at the same
+           time. Using the probe-specific offset parameter you
+           can change the point in time when each probe will be
+           run. Offset is specified in % of total interval, or
+           alternatively as 'random', and the offset from the
+           'General' section is used if nothing is specified
+           here. Note that this does NOT influence the rrds
+           itself, it is just a matter of when data acqusition is
+           initiated.  (This variable is only applicable if the
+           variable 'concurrentprobes' is set in the 'General'
+           section.)
 
            Example value: 50%
 
        step
-           Duration of the base interval that this probe should use, if dif-
-           ferent from the one specified in the 'Database' section. Note that
-           the step in the RRD files is fixed when they are originally gener-
-           ated, and if you change the step parameter afterwards, you'll have
-           to delete the old RRD files or somehow convert them. (This variable
-           is only applicable if the variable 'concurrentprobes' is set in the
-           'General' section.)
+           Duration of the base interval that this probe should
+           use, if different from the one specified in the
+           'Database' section. Note that the step in the RRD
+           files is fixed when they are originally generated, and
+           if you change the step parameter afterwards, you'll
+           have to delete the old RRD files or somehow convert
+           them. (This variable is only applicable if the vari-
+           able 'concurrentprobes' is set in the 'General' sec-
+           tion.)
 
            Example value: 300
 
        Supported target-specific variables:
 
        extraopts
-           Any extra options specified here will be passed unmodified to
-           _e_c_h_o_p_i_n_g(1).
+           Any extra options specified here will be passed unmod-
+           ified to _e_c_h_o_p_i_n_g(1).
 
-           Example value: -some-letter-the-author-did-not-think-of
+           Example value: -some-let-
+           ter-the-author-did-not-think-of
 
        ipversion
-           The IP protocol used. Possible values are "4" and "6".  Passed to
-           _e_c_h_o_p_i_n_g(1) as the "-4" or "-6" options.
+           The IP protocol used. Possible values are "4" and "6".
+           Passed to _e_c_h_o_p_i_n_g(1) as the "-4" or "-6" options.
 
            Example value: 4
 
        pings
-           How many pings should be sent to each target, if different from the
-           global value specified in the Database section. Note that the num-
-           ber of pings in the RRD files is fixed when they are originally
-           generated, and if you change this parameter afterwards, you'll have
+           How many pings should be sent to each target, if dif-
+           ferent from the global value specified in the Database
+           section. Note that the number of pings in the RRD
+           files is fixed when they are originally generated, and
+           if you change this parameter afterwards, you'll have
            to delete the old RRD files or somehow convert them.
 
            Example value: 5
@@ -145,8 +153,9 @@ NNOOTTEESS
        The _f_i_l_l, _s_i_z_e and _u_d_p EchoPing variables are not valid.
 
 SSEEEE AALLSSOO
-       Smokeping::probes::EchoPing, Smokeping::probes::EchoPingHttp
+       Smokeping::probes::EchoPing, Smokeping::probes::EchoP-
+       ingHttp
 
 
 
-2.0.5                             2005-11d-o1c6::Smokeping::probes::EchoPingIcp(3)
+2.0.5                      d2o0c0:5:-S1m1o-k1e4ping::probes::EchoPingIcp(3)
