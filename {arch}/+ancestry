@@ -1,0 +1,6 @@
+arch ancestry version 1
+arch:patch:jsogo@debian.org--debian-2005/smokeping--integration--1.42-1--patch-1
+arch:patch:jsogo@debian.org--debian-2005/smokeping--integration--1.42-1--base-0
+arch:patch:jsogo@debian.org--debian-2005/smokeping--upstream--1.42--patch-1
+arch:patch:jsogo@debian.org--debian-2005/smokeping--upstream--1.42--base-0
+arch:patch:jsogo@debian.org--debian-2005/smokeping--upstream--1.38--base-0

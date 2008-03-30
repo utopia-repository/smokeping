@@ -1,0 +1,18 @@
+Revision: smokeping--debiandir--1.42-1--base-0
+Archive: jsogo@debian.org--debian-2005
+Creator: Jose Carlos Garcia Sogo <jsogo@debian.org>
+Date: mié ago 17 23:56:54 CEST 2005
+Standard-date: 2005-08-17 21:56:54 GMT
+Summary: initial import
+New-files: .arch-ids/README.Debian.id
+    .arch-ids/changelog.id .arch-ids/control.id
+    .arch-ids/copyright.id .arch-ids/dirs.id
+    .arch-ids/doc-base.id .arch-ids/docs.id
+    .arch-ids/init.d.id .arch-ids/postinst.id
+    .arch-ids/postrm.id .arch-ids/rules.id README.Debian
+    changelog control copyright dirs doc-base docs init.d
+    patches/.arch-ids/=id postinst postrm rules
+New-patches: jsogo@debian.org--debian-2005/smokeping--debiandir--1.42-1--base-0
+
+
+(automatically generated log message)

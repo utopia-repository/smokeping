@@ -1,0 +1,10 @@
+Revision: smokeping--debiandir--1.42-1--patch-1
+Archive: jsogo@debian.org--debian-2005
+Creator: Jose Carlos Garcia Sogo <jsogo@debian.org>
+Date: jue ago 18 00:09:05 CEST 2005
+Standard-date: 2005-08-17 22:09:05 GMT
+Modified-files: README.Debian changelog control
+New-patches: jsogo@debian.org--debian-2005/smokeping--debiandir--1.42-1--patch-1
+Summary: closing bugs for 1.42-1
+Keywords: 
+

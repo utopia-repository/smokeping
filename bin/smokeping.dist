@@ -1,12 +1,12 @@
-#!/usr/sepp/bin/perl-5.8.0 -w
+#!/usr/bin/perl -w
 # -*-perl-*-
 
-use lib qw(/usr/pack/rrdtool-1.0.47-to/lib);
-use lib qw(/home/oetiker/data/projects/AADJ-smokeping/dist/lib);
+use lib qw(/usr/share/perl5/smokeping);
+use lib qw(/usr/share/perl5);
 
-use Smokeping 1.38;
+use Smokeping 1.42;
 
-Smokeping::main("etc/config.dist");
+Smokeping::main("/etc/smokeping/config");
 
 =head1 NAME
 

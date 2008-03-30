@@ -177,4 +177,4 @@ AAUUTTHHOORR
 
 
 
-1.38                        2002-07-31       SMOKEPING_INSTALL(1)
+1.42                        2002-07-31       SMOKEPING_INSTALL(1)

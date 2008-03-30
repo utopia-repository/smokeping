@@ -3,7 +3,7 @@ Section: net
 Priority: extra
 Maintainer: Jose Carlos Garcia Sogo <jsogo@debian.org>
 Build-Depends-Indep: debhelper (>= 4.1.40), dpatch (>= 2.0.9), librrds-perl, groff-base
-Standards-Version: 3.6.1
+Standards-Version: 3.6.2
 
 Package: smokeping
 Architecture: all

@@ -1,0 +1,279 @@
+Revision: smokeping--upstream--1.38--base-0
+Archive: jsogo@debian.org--debian-2005
+Creator: Jose Carlos Garcia Sogo <jsogo@debian.org>
+Date: mié ago 17 22:37:46 CEST 2005
+Standard-date: 2005-08-17 20:37:46 GMT
+Summary: initial import
+New-files: .arch-ids/CHANGES.id .arch-ids/CONTRIBUTORS.id
+    .arch-ids/COPYING.id .arch-ids/COPYRIGHT.id
+    .arch-ids/Makefile.id .arch-ids/README.id
+    .arch-ids/TODO.id CHANGES CONTRIBUTORS COPYING COPYRIGHT
+    Makefile README TODO bin/.arch-ids/=id
+    bin/.arch-ids/smokeping.dist.id bin/smokeping.dist
+    doc/.arch-ids/=id doc/.arch-ids/ParseConfig.pm.1.id
+    doc/.arch-ids/ParseConfig.pm.html.id
+    doc/.arch-ids/ParseConfig.pm.txt.id
+    doc/.arch-ids/Smokeping.pm.1.id
+    doc/.arch-ids/Smokeping.pm.html.id
+    doc/.arch-ids/Smokeping.pm.txt.id
+    doc/.arch-ids/index.bt.id doc/.arch-ids/smokeping.1.id
+    doc/.arch-ids/smokeping.cgi.1.id
+    doc/.arch-ids/smokeping.cgi.html.id
+    doc/.arch-ids/smokeping.cgi.pod.id
+    doc/.arch-ids/smokeping.cgi.txt.id
+    doc/.arch-ids/smokeping.html.id
+    doc/.arch-ids/smokeping.pod.id
+    doc/.arch-ids/smokeping.txt.id
+    doc/.arch-ids/smokeping_config.1.id
+    doc/.arch-ids/smokeping_config.html.id
+    doc/.arch-ids/smokeping_config.pod.id
+    doc/.arch-ids/smokeping_config.txt.id
+    doc/.arch-ids/smokeping_install.1.id
+    doc/.arch-ids/smokeping_install.html.id
+    doc/.arch-ids/smokeping_install.pod.id
+    doc/.arch-ids/smokeping_install.txt.id
+    doc/ParseConfig.pm.1 doc/ParseConfig.pm.html
+    doc/ParseConfig.pm.txt doc/Smokeping.pm.1
+    doc/Smokeping.pm.html doc/Smokeping.pm.txt doc/index.bt
+    doc/man/.arch-ids/=id doc/man/man1/.arch-ids/=id
+    doc/man/man1/.arch-ids/ParseConfig.pm.1.id
+    doc/man/man1/.arch-ids/Smokeping.pm.1.id
+    doc/man/man1/.arch-ids/index.bt.id
+    doc/man/man1/.arch-ids/smokeping.1.id
+    doc/man/man1/.arch-ids/smokeping.cgi.1.id
+    doc/man/man1/.arch-ids/smokeping_config.1.id
+    doc/man/man1/.arch-ids/smokeping_install.1.id
+    doc/man/man1/ParseConfig.pm.1
+    doc/man/man1/Smokeping.pm.1 doc/man/man1/index.bt
+    doc/man/man1/smokeping.1 doc/man/man1/smokeping.cgi.1
+    doc/man/man1/smokeping_config.1
+    doc/man/man1/smokeping_install.1
+    doc/matchers/.arch-ids/=id
+    doc/matchers/.arch-ids/avgratio.pm.1.id
+    doc/matchers/.arch-ids/avgratio.pm.html.id
+    doc/matchers/.arch-ids/avgratio.pm.txt.id
+    doc/matchers/.arch-ids/base.pm.1.id
+    doc/matchers/.arch-ids/base.pm.html.id
+    doc/matchers/.arch-ids/base.pm.txt.id
+    doc/matchers/.arch-ids/median.pm.1.id
+    doc/matchers/.arch-ids/median.pm.html.id
+    doc/matchers/.arch-ids/median.pm.txt.id
+    doc/matchers/avgratio.pm.1
+    doc/matchers/avgratio.pm.html
+    doc/matchers/avgratio.pm.txt doc/matchers/base.pm.1
+    doc/matchers/base.pm.html doc/matchers/base.pm.txt
+    doc/matchers/median.pm.1 doc/matchers/median.pm.html
+    doc/matchers/median.pm.txt doc/probes/.arch-ids/=id
+    doc/probes/.arch-ids/AnotherDNS.pm.1.id
+    doc/probes/.arch-ids/AnotherDNS.pm.html.id
+    doc/probes/.arch-ids/AnotherDNS.pm.txt.id
+    doc/probes/.arch-ids/AnotherSSH.pm.1.id
+    doc/probes/.arch-ids/AnotherSSH.pm.html.id
+    doc/probes/.arch-ids/AnotherSSH.pm.txt.id
+    doc/probes/.arch-ids/CiscoRTTMonDNS.pm.1.id
+    doc/probes/.arch-ids/CiscoRTTMonDNS.pm.html.id
+    doc/probes/.arch-ids/CiscoRTTMonDNS.pm.txt.id
+    doc/probes/.arch-ids/CiscoRTTMonEchoICMP.pm.1.id
+    doc/probes/.arch-ids/CiscoRTTMonEchoICMP.pm.html.id
+    doc/probes/.arch-ids/CiscoRTTMonEchoICMP.pm.txt.id
+    doc/probes/.arch-ids/CiscoRTTMonTcpConnect.pm.1.id
+    doc/probes/.arch-ids/CiscoRTTMonTcpConnect.pm.html.id
+    doc/probes/.arch-ids/CiscoRTTMonTcpConnect.pm.txt.id
+    doc/probes/.arch-ids/Curl.pm.1.id
+    doc/probes/.arch-ids/Curl.pm.html.id
+    doc/probes/.arch-ids/Curl.pm.txt.id
+    doc/probes/.arch-ids/DNS.pm.1.id
+    doc/probes/.arch-ids/DNS.pm.html.id
+    doc/probes/.arch-ids/DNS.pm.txt.id
+    doc/probes/.arch-ids/EchoPing.pm.1.id
+    doc/probes/.arch-ids/EchoPing.pm.html.id
+    doc/probes/.arch-ids/EchoPing.pm.txt.id
+    doc/probes/.arch-ids/EchoPingChargen.pm.1.id
+    doc/probes/.arch-ids/EchoPingChargen.pm.html.id
+    doc/probes/.arch-ids/EchoPingChargen.pm.txt.id
+    doc/probes/.arch-ids/EchoPingDiscard.pm.1.id
+    doc/probes/.arch-ids/EchoPingDiscard.pm.html.id
+    doc/probes/.arch-ids/EchoPingDiscard.pm.txt.id
+    doc/probes/.arch-ids/EchoPingHttp.pm.1.id
+    doc/probes/.arch-ids/EchoPingHttp.pm.html.id
+    doc/probes/.arch-ids/EchoPingHttp.pm.txt.id
+    doc/probes/.arch-ids/EchoPingHttps.pm.1.id
+    doc/probes/.arch-ids/EchoPingHttps.pm.html.id
+    doc/probes/.arch-ids/EchoPingHttps.pm.txt.id
+    doc/probes/.arch-ids/EchoPingIcp.pm.1.id
+    doc/probes/.arch-ids/EchoPingIcp.pm.html.id
+    doc/probes/.arch-ids/EchoPingIcp.pm.txt.id
+    doc/probes/.arch-ids/EchoPingSmtp.pm.1.id
+    doc/probes/.arch-ids/EchoPingSmtp.pm.html.id
+    doc/probes/.arch-ids/EchoPingSmtp.pm.txt.id
+    doc/probes/.arch-ids/FPing.pm.1.id
+    doc/probes/.arch-ids/FPing.pm.html.id
+    doc/probes/.arch-ids/FPing.pm.txt.id
+    doc/probes/.arch-ids/FPing6.pm.1.id
+    doc/probes/.arch-ids/FPing6.pm.html.id
+    doc/probes/.arch-ids/FPing6.pm.txt.id
+    doc/probes/.arch-ids/IOSPing.pm.1.id
+    doc/probes/.arch-ids/IOSPing.pm.html.id
+    doc/probes/.arch-ids/IOSPing.pm.txt.id
+    doc/probes/.arch-ids/LDAP.pm.1.id
+    doc/probes/.arch-ids/LDAP.pm.html.id
+    doc/probes/.arch-ids/LDAP.pm.txt.id
+    doc/probes/.arch-ids/Radius.pm.1.id
+    doc/probes/.arch-ids/Radius.pm.html.id
+    doc/probes/.arch-ids/Radius.pm.txt.id
+    doc/probes/.arch-ids/RemoteFPing.pm.1.id
+    doc/probes/.arch-ids/RemoteFPing.pm.html.id
+    doc/probes/.arch-ids/RemoteFPing.pm.txt.id
+    doc/probes/.arch-ids/SSH.pm.1.id
+    doc/probes/.arch-ids/SSH.pm.html.id
+    doc/probes/.arch-ids/SSH.pm.txt.id
+    doc/probes/.arch-ids/base.pm.1.id
+    doc/probes/.arch-ids/base.pm.html.id
+    doc/probes/.arch-ids/base.pm.txt.id
+    doc/probes/.arch-ids/basefork.pm.1.id
+    doc/probes/.arch-ids/basefork.pm.html.id
+    doc/probes/.arch-ids/basefork.pm.txt.id
+    doc/probes/.arch-ids/basevars.pm.1.id
+    doc/probes/.arch-ids/basevars.pm.html.id
+    doc/probes/.arch-ids/basevars.pm.txt.id
+    doc/probes/.arch-ids/passwordchecker.pm.1.id
+    doc/probes/.arch-ids/passwordchecker.pm.html.id
+    doc/probes/.arch-ids/passwordchecker.pm.txt.id
+    doc/probes/.arch-ids/telnetIOSPing.pm.1.id
+    doc/probes/.arch-ids/telnetIOSPing.pm.html.id
+    doc/probes/.arch-ids/telnetIOSPing.pm.txt.id
+    doc/probes/AnotherDNS.pm.1
+    doc/probes/AnotherDNS.pm.html
+    doc/probes/AnotherDNS.pm.txt doc/probes/AnotherSSH.pm.1
+    doc/probes/AnotherSSH.pm.html
+    doc/probes/AnotherSSH.pm.txt
+    doc/probes/CiscoRTTMonDNS.pm.1
+    doc/probes/CiscoRTTMonDNS.pm.html
+    doc/probes/CiscoRTTMonDNS.pm.txt
+    doc/probes/CiscoRTTMonEchoICMP.pm.1
+    doc/probes/CiscoRTTMonEchoICMP.pm.html
+    doc/probes/CiscoRTTMonEchoICMP.pm.txt
+    doc/probes/CiscoRTTMonTcpConnect.pm.1
+    doc/probes/CiscoRTTMonTcpConnect.pm.html
+    doc/probes/CiscoRTTMonTcpConnect.pm.txt
+    doc/probes/Curl.pm.1 doc/probes/Curl.pm.html
+    doc/probes/Curl.pm.txt doc/probes/DNS.pm.1
+    doc/probes/DNS.pm.html doc/probes/DNS.pm.txt
+    doc/probes/EchoPing.pm.1 doc/probes/EchoPing.pm.html
+    doc/probes/EchoPing.pm.txt
+    doc/probes/EchoPingChargen.pm.1
+    doc/probes/EchoPingChargen.pm.html
+    doc/probes/EchoPingChargen.pm.txt
+    doc/probes/EchoPingDiscard.pm.1
+    doc/probes/EchoPingDiscard.pm.html
+    doc/probes/EchoPingDiscard.pm.txt
+    doc/probes/EchoPingHttp.pm.1
+    doc/probes/EchoPingHttp.pm.html
+    doc/probes/EchoPingHttp.pm.txt
+    doc/probes/EchoPingHttps.pm.1
+    doc/probes/EchoPingHttps.pm.html
+    doc/probes/EchoPingHttps.pm.txt
+    doc/probes/EchoPingIcp.pm.1
+    doc/probes/EchoPingIcp.pm.html
+    doc/probes/EchoPingIcp.pm.txt
+    doc/probes/EchoPingSmtp.pm.1
+    doc/probes/EchoPingSmtp.pm.html
+    doc/probes/EchoPingSmtp.pm.txt doc/probes/FPing.pm.1
+    doc/probes/FPing.pm.html doc/probes/FPing.pm.txt
+    doc/probes/FPing6.pm.1 doc/probes/FPing6.pm.html
+    doc/probes/FPing6.pm.txt doc/probes/IOSPing.pm.1
+    doc/probes/IOSPing.pm.html doc/probes/IOSPing.pm.txt
+    doc/probes/LDAP.pm.1 doc/probes/LDAP.pm.html
+    doc/probes/LDAP.pm.txt doc/probes/Radius.pm.1
+    doc/probes/Radius.pm.html doc/probes/Radius.pm.txt
+    doc/probes/RemoteFPing.pm.1
+    doc/probes/RemoteFPing.pm.html
+    doc/probes/RemoteFPing.pm.txt doc/probes/SSH.pm.1
+    doc/probes/SSH.pm.html doc/probes/SSH.pm.txt
+    doc/probes/base.pm.1 doc/probes/base.pm.html
+    doc/probes/base.pm.txt doc/probes/basefork.pm.1
+    doc/probes/basefork.pm.html doc/probes/basefork.pm.txt
+    doc/probes/basevars.pm.1 doc/probes/basevars.pm.html
+    doc/probes/basevars.pm.txt
+    doc/probes/passwordchecker.pm.1
+    doc/probes/passwordchecker.pm.html
+    doc/probes/passwordchecker.pm.txt
+    doc/probes/telnetIOSPing.pm.1
+    doc/probes/telnetIOSPing.pm.html
+    doc/probes/telnetIOSPing.pm.txt doc/smokeping.1
+    doc/smokeping.cgi.1 doc/smokeping.cgi.html
+    doc/smokeping.cgi.pod doc/smokeping.cgi.txt
+    doc/smokeping.html doc/smokeping.pod doc/smokeping.txt
+    doc/smokeping_config.1 doc/smokeping_config.html
+    doc/smokeping_config.pod doc/smokeping_config.txt
+    doc/smokeping_install.1 doc/smokeping_install.html
+    doc/smokeping_install.pod doc/smokeping_install.txt
+    etc/.arch-ids/=id etc/.arch-ids/basepage.html.dist.id
+    etc/.arch-ids/config-echoping.dist.id
+    etc/.arch-ids/config.dist.id
+    etc/.arch-ids/smokemail.dist.id etc/basepage.html.dist
+    etc/config-echoping.dist etc/config.dist
+    etc/smokemail.dist htdocs/.arch-ids/=id
+    htdocs/.arch-ids/smokeping.cgi.dist.id
+    htdocs/smokeping.cgi.dist lib/.arch-ids/=id
+    lib/.arch-ids/BER.pm.id
+    lib/.arch-ids/SNMP_Session.pm.id
+    lib/.arch-ids/SNMP_util.pm.id
+    lib/.arch-ids/Smokeping.pm.id
+    lib/.arch-ids/ciscoRttMonMIB.pm.id lib/BER.pm
+    lib/ISG/.arch-ids/=id
+    lib/ISG/.arch-ids/ParseConfig.pm.id
+    lib/ISG/ParseConfig.pm lib/SNMP_Session.pm
+    lib/SNMP_util.pm lib/Smokeping.pm lib/ciscoRttMonMIB.pm
+    lib/matchers/.arch-ids/=id
+    lib/matchers/.arch-ids/avgratio.pm.id
+    lib/matchers/.arch-ids/base.pm.id
+    lib/matchers/.arch-ids/median.pm.id
+    lib/matchers/avgratio.pm lib/matchers/base.pm
+    lib/matchers/median.pm lib/probes/.arch-ids/=id
+    lib/probes/.arch-ids/AnotherDNS.pm.id
+    lib/probes/.arch-ids/AnotherSSH.pm.id
+    lib/probes/.arch-ids/CiscoRTTMonDNS.pm.id
+    lib/probes/.arch-ids/CiscoRTTMonEchoICMP.pm.id
+    lib/probes/.arch-ids/CiscoRTTMonTcpConnect.pm.id
+    lib/probes/.arch-ids/Curl.pm.id
+    lib/probes/.arch-ids/DNS.pm.id
+    lib/probes/.arch-ids/EchoPing.pm.id
+    lib/probes/.arch-ids/EchoPingChargen.pm.id
+    lib/probes/.arch-ids/EchoPingDiscard.pm.id
+    lib/probes/.arch-ids/EchoPingHttp.pm.id
+    lib/probes/.arch-ids/EchoPingHttps.pm.id
+    lib/probes/.arch-ids/EchoPingIcp.pm.id
+    lib/probes/.arch-ids/EchoPingSmtp.pm.id
+    lib/probes/.arch-ids/FPing.pm.id
+    lib/probes/.arch-ids/FPing6.pm.id
+    lib/probes/.arch-ids/IOSPing.pm.id
+    lib/probes/.arch-ids/LDAP.pm.id
+    lib/probes/.arch-ids/Radius.pm.id
+    lib/probes/.arch-ids/RemoteFPing.pm.id
+    lib/probes/.arch-ids/SSH.pm.id
+    lib/probes/.arch-ids/base.pm.id
+    lib/probes/.arch-ids/basefork.pm.id
+    lib/probes/.arch-ids/basevars.pm.id
+    lib/probes/.arch-ids/passwordchecker.pm.id
+    lib/probes/.arch-ids/telnetIOSPing.pm.id
+    lib/probes/AnotherDNS.pm lib/probes/AnotherSSH.pm
+    lib/probes/CiscoRTTMonDNS.pm
+    lib/probes/CiscoRTTMonEchoICMP.pm
+    lib/probes/CiscoRTTMonTcpConnect.pm lib/probes/Curl.pm
+    lib/probes/DNS.pm lib/probes/EchoPing.pm
+    lib/probes/EchoPingChargen.pm
+    lib/probes/EchoPingDiscard.pm
+    lib/probes/EchoPingHttp.pm lib/probes/EchoPingHttps.pm
+    lib/probes/EchoPingIcp.pm lib/probes/EchoPingSmtp.pm
+    lib/probes/FPing.pm lib/probes/FPing6.pm
+    lib/probes/IOSPing.pm lib/probes/LDAP.pm
+    lib/probes/Radius.pm lib/probes/RemoteFPing.pm
+    lib/probes/SSH.pm lib/probes/base.pm
+    lib/probes/basefork.pm lib/probes/basevars.pm
+    lib/probes/passwordchecker.pm
+    lib/probes/telnetIOSPing.pm
+New-patches: jsogo@debian.org--debian-2005/smokeping--upstream--1.38--base-0
+
+
+(automatically generated log message)

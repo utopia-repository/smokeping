@@ -8,7 +8,7 @@ probes::FPing - FPing Probe for SmokePing
 
  *** Probes ***
  + FPing
- binary = /usr/sepp/bin/fping
+ binary = /usr/bin/fping
  packetsize = 1024
 
 =head1 DESCRIPTION

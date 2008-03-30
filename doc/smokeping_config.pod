@@ -19,7 +19,29 @@ various levels. It also contains variable assignments and tables.
 
 =head1 REFERENCE
 
-The text below describes the syntax of the SmokePing configuration file.
+=head2 GENERAL SYNTAX
+
+The text below describes the general syntax of the SmokePing configuration file.
+It was copied from the ISG::ParseConfig documentation.
+
+'#' denotes a comment up to the end-of-line, empty lines are allowed and space
+at the beginning and end of lines is trimmed.
+
+'\' at the end of the line marks a continued line on the next line. A single
+space will be inserted between the concatenated lines.
+
+'@include filename' is used to include another file.
+
+'@define a some value' will replace all occurences of 'a' in the following text
+with 'some value'.
+
+Fields in tables that contain white space can be enclosed in either C<'> or C<">.
+Whitespace can also be escaped with C<\>. Quotes inside quotes are allowed but must
+be escaped with a backslash as well.
+
+=head2 SPECIFIC SYNTAX
+
+The text below describes the specific syntax of the SmokePing configuration file.
 
 =head2 *** General *** I<(mandatory section)>
 
@@ -821,11 +843,7 @@ nodes using the same Probe.
 
 =item B<++/[-_0-9a-zA-Z]+/>
 
-Each target section can contain information about a host to monitor as
-well as further target sections. Most variables have already been
-described above. The expression above defines legal names for target
-sections.
-
+This subsection has the same syntax as its parent.
 
 =back
 

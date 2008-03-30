@@ -1,0 +1,13 @@
+Revision: smokeping--debian--1.42-1--base-0
+Archive: jsogo@debian.org--debian-2005
+Creator: Jose Carlos Garcia Sogo <jsogo@debian.org>
+Date: mié ago 17 23:27:39 CEST 2005
+Standard-date: 2005-08-17 21:27:39 GMT
+New-patches: jsogo@debian.org--debian-2005/smokeping--debian--1.42-1--base-0
+    jsogo@debian.org--debian-2005/smokeping--upstream--1.38--base-0
+    jsogo@debian.org--debian-2005/smokeping--upstream--1.42--base-0
+    jsogo@debian.org--debian-2005/smokeping--upstream--1.42--patch-1
+Continuation-of: jsogo@debian.org--debian-2005/smokeping--upstream--1.42--patch-1
+Summary: tag of jsogo@debian.org--debian-2005/smokeping--upstream--1.42--patch-1
+
+(automatically generated log message)

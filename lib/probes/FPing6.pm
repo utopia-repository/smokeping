@@ -8,7 +8,7 @@ probes::FPing6 - FPing6 Probe for SmokePing
 
  *** Probes ***
  + FPing6
- binary = /usr/sbin/fping6
+ binary = /usr/bin/fping6
 
 =head1 DESCRIPTION
 

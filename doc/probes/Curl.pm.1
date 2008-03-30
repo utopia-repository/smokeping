@@ -129,7 +129,7 @@
 .\" ========================================================================
 .\"
 .IX Title "probes::Curl 3"
-.TH probes::Curl 3 "2005-01-15" "1.38" "SmokePing"
+.TH probes::Curl 3 "2005-05-10" "1.41" "SmokePing"
 .SH "NAME"
 probes::Curl \- a curl(1) probe for SmokePing
 .SH "OVERVIEW"
@@ -172,11 +172,13 @@ Fetches an \s-1HTTP\s0 or \s-1HTTPS\s0 \s-1URL\s0 using \fIcurl\fR\|(1).
 \& host = some.host
 .Ve
 .PP
-.Vb 4
+.Vb 6
 \& # PROBE_CONF can be overridden here
 \& ++ PROBE_CONF
 \& agent = "User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.2.1) Gecko/20021130"
 \& url = https://some.host/some/where
+\& # note that 'url' overrides the 'host' variable, although 'host'
+\& # must still be present and is shown on graphs etc. See below.
 .Ve
 .SH "DESCRIPTION"
 .IX Header "DESCRIPTION"
@@ -190,7 +192,10 @@ The number of concurrent processes to be run. See \fIprobes::basefork\fR\|(3pm)
 for details.
 .IP "url" 4
 .IX Item "url"
-The \s-1URL\s0 to fetch.  Can be any one that curl supports.
+The \s-1URL\s0 to fetch.  Can be any one that curl supports.  Note that if this
+variable is present, it overrides the 'host' variable for the actual
+target pinged. Still, 'host' must be present in those targets that should
+be pinged, and its contents will show up on the graphs.
 .PP
 Supported target-level probe variables 
 (see \fIcurl\fR\|(1) for details of the options):
@@ -202,6 +207,13 @@ shell metacharacters
 .IP "ssl2" 4
 .IX Item "ssl2"
 The \*(L"\-2\*(R" \fIcurl\fR\|(1) option.  Force \s-1SSL2\s0.
+.IP "insecure_ssl" 4
+.IX Item "insecure_ssl"
+The \*(L"\-k\*(R" \fIcurl\fR\|(1) option. Accept \s-1SSL\s0 connections that don't have a secure
+certificate chain to a trusted \s-1CA\s0. Note that if you are going to monitor
+https targets, you'll probably have to either enable this option or specify
+the \s-1CA\s0 path to curl through \*(L"extraargs\*(R" below. For more info, see the
+\&\fIcurl\fR\|(1) manual page.
 .IP "timeout" 4
 .IX Item "timeout"
 The \*(L"\-m\*(R" \fIcurl\fR\|(1) option.  Maximum timeout in seconds.
@@ -209,6 +221,10 @@ The \*(L"\-m\*(R" \fIcurl\fR\|(1) option.  Maximum timeout in seconds.
 .IX Item "interface"
 The \*(L"\-\-interface\*(R" \fIcurl\fR\|(1) option.  Bind to a specific interface, \s-1IP\s0 address or
 host name.
+.IP "extraargs" 4
+.IX Item "extraargs"
+Put any extra \fIcurl\fR\|(1) options you want on the right side of the equals and
+they will be used when executing the command.
 .SH "AUTHORS"
 .IX Header "AUTHORS"
 Gerald Combs <gerald [\s-1AT\s0] ethereal.com>

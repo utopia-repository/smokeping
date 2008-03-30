@@ -1,12 +1,16 @@
 
   After installing the package you have to edit the file 
  /etc/smokeping/config to set your preferences. You can follow
- the example provided (note that the domain names are bogus to 
- avoid all the people who install the package DoSing the same 
- servers).
+ the example provided. 
+ Note that the domain names are bogus to avoid all the people 
+ who install the package DoSing the same servers, but at the same time
+ an fping probe in localhost is enabled, so you can check if smokeping
+ works for you.
 
   You can also edit the file /etc/smokeping/basepage.html to suit 
  your needs.
 
   Anyway, please refer to the smokeping_config man page to see
  all the available options.
+
+-- Jose Carlos Garcia Sogo <jsogo@debian.org>

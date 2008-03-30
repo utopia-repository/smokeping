@@ -1,3 +1,17 @@
+smokeping (1.42-1) unstable; urgency=low
+
+  * New upstream version
+    + Works with RRDtool > 1.2 (Closes: #309344)
+    + Fixed curl documentation (Closes: #283652)
+    + Added an 'include' directive in config parser (Closes: #307955)
+
+  * Changed default location of sendmail to /usr/sbin (Closes: #302164)
+  * Added localhost as default fping target (Closes: #307854)
+  * Standars-version bumped to 3.6.2. No changes needed.
+  * README.Debian: document enabled localhost fping probe. 
+
+ -- Jose Carlos Garcia Sogo <jsogo@debian.org>  Thu, 18 Aug 2005 00:06:45 +0200
+
 smokeping (1.38-3) unstable; urgency=low
 
   * Include missing matchers methods in binary package (Closes: #295354)
