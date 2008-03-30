@@ -1,9 +1,0 @@
-#!/bin/sh
-set -e
-set -x
-PATH=/usr/bin:/sbin:/usr/sbin:/usr/ccs/bin:/usr/sepp/bin:/home/oetiker/bin
-export PATH
-VERSION=`perl -n -e 'm/VERSION\s*=\s*(\S+)/ && do {print $1; exit 0}' Makefile`
-PERL5LIB=${HOME}/lib/fake-perl gmake dist
-svn commit -m "prepare for the release of smokeping-$VERSION"
-svn copy -m "tagging version $VERSION" svn://svn.ee.ethz.ch/smokeping/branches/2.0 svn://svn.ee.ethz.ch/smokeping/tags/$VERSION

@@ -27,9 +27,6 @@ case "$1" in
 	rm -rf /var/www/smokeping
 	rm -rf /var/lib/smokeping
 	
-	if getent passwd smokeping >/dev/null; then
-		deluser --system --remove-home smokeping >/dev/null 1>&2 || true
-	fi
 esac
 
 # dh_installdeb will replace this with shell code automatically

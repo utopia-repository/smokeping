@@ -14,3 +14,12 @@
  all the available options.
 
 -- Jose Carlos Garcia Sogo <jsogo@debian.org>
+
+If you have problems getting the CGI to reload your configuration
+file after changes, you may have to kill lingering speedy_backend
+processes. See #397609. This should not happen, but I haven't found
+the bug yet. If you have a reproducible way to trigger this, 
+please send me your configuration files before and after the change.
+
+-- Niko Tyni <ntyni@iki.fi> Mon, 14 May 2007 23:14:10 +0300
+

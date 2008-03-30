@@ -129,7 +129,7 @@
 .\" ========================================================================
 .\"
 .IX Title "Smokeping::RRDtools 3"
-.TH Smokeping::RRDtools 3 "2006-03-24" "2.0.9" "SmokePing"
+.TH Smokeping::RRDtools 3 "2006-08-29" "2.1.1" "SmokePing"
 .SH "NAME"
 Smokeping::RRDtools \- Tools for RRD file handling
 .SH "SYNOPSIS"
@@ -155,7 +155,7 @@ Smokeping::RRDtools \- Tools for RRD file handling
 .PP
 .Vb 5
 \& # or compare them against another create list
-\& my @create = ('--step', 60, 'DS:ds0:GAUGE:120:0:U', 'RRA:AVERAGE:0.5:1:1008');
+\& my @create = ('\-\-step', 60, 'DS:ds0:GAUGE:120:0:U', 'RRA:AVERAGE:0.5:1:1008');
 \& my ($fatal, $comparison) = Smokeping::RRDtools::compare($file, \e@create);
 \& print "Fatal: " if $fatal;
 \& print "Create arguments didn't match: $comparison\en" if $comparison;

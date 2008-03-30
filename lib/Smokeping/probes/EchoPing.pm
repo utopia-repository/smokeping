@@ -74,7 +74,8 @@ sub new {
 
 	$self->_init if $self->can('_init');
 
-	$self->test_usage;
+    # no need for this if running as a CGI
+	$self->test_usage unless $ENV{SERVER_SOFTWARE};
 
 	return $self;
 }
@@ -111,6 +112,10 @@ sub make_host {
 	return $target->{addr};
 }
 
+# This will be overridden by the EchoPingPlugin-derived probes
+sub post_args {
+    return ();
+}
 
 # other than host, count and protocol-specific args come from here
 sub make_args {
@@ -177,11 +182,12 @@ sub make_commandline {
 	$count |= $self->pings($target);
 
 	my @args = $self->make_args($target);
+	my @post_args = $self->post_args($target);
 	my $host = $self->make_host($target);
 	push @args, $self->proto_args($target);
 	push @args, $self->count_args($count);
 	
-	return ($self->{properties}{binary}, @args, $host);
+	return ($self->{properties}{binary}, @args, $host, @post_args);
 }
 
 sub pingone {

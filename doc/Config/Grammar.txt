@@ -1,10 +1,9 @@
-Config::Grammar(3)          SmokePing          Config::Grammar(3)
+Config::Grammar(3)                 SmokePing                Config::Grammar(3)
 
 
 
 NNAAMMEE
-       Config::Grammar - A grammar-based, user-friendly config
-       parser
+       Config::Grammar - A grammar-based, user-friendly config parser
 
 SSYYNNOOPPSSIISS
         use Config::Grammar;
@@ -15,212 +14,179 @@ SSYYNNOOPPSSIISS
         my $ex = $parser->maketmpl('TOP','SubNode');
 
 DDEESSCCRRIIPPTTIIOONN
-       Config::Grammar is a module to parse configuration files.
-       The configuration may consist of multiple-level sections
-       with assignments and tabular data. The parsed data will be
-       returned as a hash containing the whole configuration.
-       Config::Grammar uses a grammar that is supplied upon cre-
-       ation of a Config::Grammar object to parse the configura-
-       tion file and return helpful error messages in case of
-       syntax errors. Using the mmaakkeeppoodd method you can generate
-       documentation of the configuration file format.
+       Config::Grammar is a module to parse configuration files. The configu-
+       ration may consist of multiple-level sections with assignments and tab-
+       ular data. The parsed data will be returned as a hash containing the
+       whole configuration. Config::Grammar uses a grammar that is supplied
+       upon creation of a Config::Grammar object to parse the configuration
+       file and return helpful error messages in case of syntax errors. Using
+       the mmaakkeeppoodd method you can generate documentation of the configuration
+       file format.
 
-       The mmaakkeettmmppll method can generate a template configuration
-       file.  If your grammar contains regexp matches, the tem-
-       plate will not be all that helpful as Config::Grammar is
-       not smart enough to give you sensible template data based
-       in regular expressions.
+       The mmaakkeettmmppll method can generate a template configuration file.  If
+       your grammar contains regexp matches, the template will not be all that
+       helpful as Config::Grammar is not smart enough to give you sensible
+       template data based in regular expressions.
 
        GGrraammmmaarr DDeeffiinniittiioonn
 
-       The grammar is a multiple-level hash of hashes, which fol-
-       lows the structure of the configuration. Each section or
-       variable is represented by a hash with the same structure.
-       Each hash contains special keys starting with an under-
-       score such as '_sections', '_vars', '_sub' or '_re' to
-       denote meta data with information about that section or
-       variable. Other keys are used to structure the hash
-       according to the same nesting structure of the configura-
-       tion itself. The starting hash given as parameter to 'new'
-       contains the "root section".
+       The grammar is a multiple-level hash of hashes, which follows the
+       structure of the configuration. Each section or variable is represented
+       by a hash with the same structure.  Each hash contains special keys
+       starting with an underscore such as '_sections', '_vars', '_sub' or
+       '_re' to denote meta data with information about that section or vari-
+       able. Other keys are used to structure the hash according to the same
+       nesting structure of the configuration itself. The starting hash given
+       as parameter to 'new' contains the "root section".
 
        _S_p_e_c_i_a_l _S_e_c_t_i_o_n _K_e_y_s
 
-       _sections   Array containing the list of sub-sections of
-                   this section. Each sub-section must then be
-                   represented by a sub-hash in this hash with
-                   the same name of the sub-section.
+       _sections   Array containing the list of sub-sections of this section.
+                   Each sub-section must then be represented by a sub-hash in
+                   this hash with the same name of the sub-section.
 
-                   The sub-section can also be a regular expres-
-                   sion denoted by the syntax '/re/', where re is
-                   the regular-expression. In case a regular
-                   expression is used, a sub-hash named with the
-                   same '/re/' must be included in this hash.
+                   The sub-section can also be a regular expression denoted by
+                   the syntax '/re/', where re is the regular-expression. In
+                   case a regular expression is used, a sub-hash named with
+                   the same '/re/' must be included in this hash.
 
-       _recursive  Array containing the list of those sub-sec-
-                   tions that are _r_e_c_u_r_s_i_v_e, ie.  that can con-
-                   tain a new sub-section with the same syntax as
-                   themselves.
+       _recursive  Array containing the list of those sub-sections that are
+                   _r_e_c_u_r_s_i_v_e, ie.  that can contain a new sub-section with the
+                   same syntax as themselves.
 
-                   The same effect can be accomplished with cir-
-                   cular references in the grammar tree or a
-                   suitable __ddyynn section subroutine (see below},
-                   so this facility is included just for conve-
-                   nience.
+                   The same effect can be accomplished with circular refer-
+                   ences in the grammar tree or a suitable __ddyynn section sub-
+                   routine (see below}, so this facility is included just for
+                   convenience.
 
-       _vars       Array containing the list of variables
-                   (assignments) in this section.  Analogous to
-                   sections, regular expressions can be used.
+       _vars       Array containing the list of variables (assignments) in
+                   this section.  Analogous to sections, regular expressions
+                   can be used.
 
-       _mandatory  Array containing the list of mandatory sec-
-                   tions and variables.
+       _mandatory  Array containing the list of mandatory sections and vari-
+                   ables.
 
-       _inherited  Array containing the list of the variables
-                   that should be assigned the same value as in
-                   the parent section if nothing is specified
-                   here.
+       _inherited  Array containing the list of the variables that should be
+                   assigned the same value as in the parent section if nothing
+                   is specified here.
 
-       _table      Hash containing the table grammar (see Special
-                   Table Keys). If not specified, no table is
-                   allowed in this section. The grammar of the
-                   columns if specified by sub-hashes named with
-                   the column number.
+       _table      Hash containing the table grammar (see Special Table Keys).
+                   If not specified, no table is allowed in this section. The
+                   grammar of the columns if specified by sub-hashes named
+                   with the column number.
 
-       _text       Section contains free-form text. Only sections
-                   and @includes statements will be interpreted,
-                   the rest will be added in the returned hash
-                   under '_text' as string.
+       _text       Section contains free-form text. Only sections and
+                   @includes statements will be interpreted, the rest will be
+                   added in the returned hash under '_text' as string.
 
-                   __tteexxtt is a hash reference which can contain a
-                   __rree and a __rree__eerrrroorr key which will be used to
-                   scrutanize the text ... if the hash is empty,
-                   all text will be accepted.
+                   __tteexxtt is a hash reference which can contain a __rree and a
+                   __rree__eerrrroorr key which will be used to scrutanize the text ...
+                   if the hash is empty, all text will be accepted.
 
-       _order      If defined, a '_order' element will be put in
-                   every hash containing the sections with a num-
-                   ber that determines the order in which the
-                   sections were defined.
+       _order      If defined, a '_order' element will be put in every hash
+                   containing the sections with a number that determines the
+                   order in which the sections were defined.
 
-       _varlist    If defined, a '_varlist' element will be put
-                   in the config hash of this section with a list
-                   of the variables defined in the section. This
-                   can be used to find out the order of the vari-
-                   able assignments.
+       _varlist    If defined, a '_varlist' element will be put in the config
+                   hash of this section with a list of the variables defined
+                   in the section. This can be used to find out the order of
+                   the variable assignments.
 
-                   The '_sub' function (see below) of any vari-
-                   ables defined in this section will also
-                   receive a list of those variables already
-                   defined in the same section. This can be used
-                   to enforce the order of the variables during
-                   parsing.
+                   The '_sub' function (see below) of any variables defined in
+                   this section will also receive a list of those variables
+                   already defined in the same section. This can be used to
+                   enforce the order of the variables during parsing.
 
        _doc        Describes what this section is about
 
-       _sub        A function pointer. It is called for every
-                   instance of this section, with the real name
-                   of the section passed as its first argument.
-                   This is probably only useful for the regexp
-                   sections. If the function returns a defined
-                   value it is assumed that the test was not suc-
-                   cessful and an error is generated with the
-                   returned string as content.
+       _sub        A function pointer. It is called for every instance of this
+                   section, with the real name of the section passed as its
+                   first argument. This is probably only useful for the regexp
+                   sections. If the function returns a defined value it is
+                   assumed that the test was not successful and an error is
+                   generated with the returned string as content.
 
-       _dyn        A subroutine reference (function pointer) that
-                   will be called when a new section of this syn-
-                   tax is encountered. The subroutine will get
-                   three arguments: the syntax of the section
-                   name (string or regexp), the actual name
-                   encountered (this will be the same as the
-                   first argument for non-regexp sections) and a
-                   reference to the grammar tree of the section.
-                   This subroutine can then modify the grammar
-                   tree dynamically.
+       _dyn        A subroutine reference (function pointer) that will be
+                   called when a new section of this syntax is encountered.
+                   The subroutine will get three arguments: the syntax of the
+                   section name (string or regexp), the actual name encoun-
+                   tered (this will be the same as the first argument for non-
+                   regexp sections) and a reference to the grammar tree of the
+                   section.  This subroutine can then modify the grammar tree
+                   dynamically.
 
-       _dyndoc     A hash reference that lists interesting names
-                   for the section that should be documented. The
-                   keys of the hash are the names and the values
-                   in the hash are strings that can contain an
-                   explanation for the name. The ___d_y_n_(_) subrou-
-                   tine is then called for each of these names
-                   and the differences of the resulting grammar
-                   and the original one are documented. This mod-
-                   ule can currently document differences in the
-                   _vars list, listing new variables and removed
-                   ones, and differences in the _sections list,
-                   listing the new and removed sections.
+       _dyndoc     A hash reference that lists interesting names for the sec-
+                   tion that should be documented. The keys of the hash are
+                   the names and the values in the hash are strings that can
+                   contain an explanation for the name. The ___d_y_n_(_) subroutine
+                   is then called for each of these names and the differences
+                   of the resulting grammar and the original one are docu-
+                   mented. This module can currently document differences in
+                   the _vars list, listing new variables and removed ones, and
+                   differences in the _sections list, listing the new and
+                   removed sections.
 
        _S_p_e_c_i_a_l _V_a_r_i_a_b_l_e _K_e_y_s
 
-       _re         Regular expression upon which the value will
-                   be checked.
+       _re         Regular expression upon which the value will be checked.
 
-       _re_error   String containing the returned error in case
-                   the regular expression doesn't match (if not
-                   specified, a generic 'syntax error' message
-                   will be returned).
+       _re_error   String containing the returned error in case the regular
+                   expression doesn't match (if not specified, a generic
+                   'syntax error' message will be returned).
 
-       _sub        A function pointer. It called for every value,
-                   with the value passed as its first argument.
-                   If the function returns a defined value it is
-                   assumed that the test was not successful and
-                   an error is generated with the returned string
+       _sub        A function pointer. It called for every value, with the
+                   value passed as its first argument. If the function returns
+                   a defined value it is assumed that the test was not suc-
+                   cessful and an error is generated with the returned string
                    as content.
 
-                   If the '_varlist' key (see above) is defined
-                   in this section, the '_sub' function will also
-                   receive an array reference as the second argu-
-                   ment. The array contains a list of those vari-
-                   ables already defined in the same section.
-                   This can be used to enforce the order of the
-                   variables.
+                   If the '_varlist' key (see above) is defined in this sec-
+                   tion, the '_sub' function will also receive an array refer-
+                   ence as the second argument. The array contains a list of
+                   those variables already defined in the same section. This
+                   can be used to enforce the order of the variables.
 
-       _default    A default value that will be assigned to the
-                   variable if none is specified or inherited.
+       _default    A default value that will be assigned to the variable if
+                   none is specified or inherited.
 
        _doc        Description of the variable.
 
-       _example    A one line example for the content of this
-                   variable.
+       _example    A one line example for the content of this variable.
 
-       _dyn        A subroutine reference (function pointer) that
-                   will be called when the variable is assigned
-                   some value in the config file. The subroutine
-                   will get three arguments: the name of the
-                   variable, the value assigned and a reference
-                   to the grammar tree of this section.  This
-                   subroutine can then modify the grammar tree
-                   dynamically.
+       _dyn        A subroutine reference (function pointer) that will be
+                   called when the variable is assigned some value in the con-
+                   fig file. The subroutine will get three arguments: the name
+                   of the variable, the value assigned and a reference to the
+                   grammar tree of this section.  This subroutine can then
+                   modify the grammar tree dynamically.
 
-                   Note that no ___d_y_n_(_) call is made for default
-                   and inherited values of the variable.
+                   Note that no ___d_y_n_(_) call is made for default and inherited
+                   values of the variable.
 
-       _dyndoc     A hash reference that lists interesting values
-                   for the variable that should be documented.
-                   The keys of the hash are the values and the
-                   values in the hash are strings that can con-
-                   tain an explanation for the value. The ___d_y_n_(_)
-                   subroutine is then called for each of these
-                   values and the differences of the resulting
-                   grammar and the original one are documented.
-                   This module can currently document differences
-                   in the _vars list, listing new variables and
-                   removed ones, and differences in the _sections
-                   list, listing the new and removed sections.
+       _dyndoc     A hash reference that lists interesting values for the
+                   variable that should be documented. The keys of the hash
+                   are the values and the values in the hash are strings that
+                   can contain an explanation for the value. The ___d_y_n_(_) sub-
+                   routine is then called for each of these values and the
+                   differences of the resulting grammar and the original one
+                   are documented. This module can currently document differ-
+                   ences in the _vars list, listing new variables and removed
+                   ones, and differences in the _sections list, listing the
+                   new and removed sections.
 
        _S_p_e_c_i_a_l _T_a_b_l_e _K_e_y_s
 
-       _columns    Number of columns. If not specified, it will
-                   not be enforced.
+       _columns    Number of columns. If not specified, it will not be
+                   enforced.
 
-       _key        If defined, the specified column number will
-                   be used as key in a hash in the returned hash.
-                   If not defined, the returned hash will contain
-                   a '_table' element with the contents of the
-                   table as array. The rows of the tables are
+       _key        If defined, the specified column number will be used as key
+                   in a hash in the returned hash. If not defined, the
+                   returned hash will contain a '_table' element with the con-
+                   tents of the table as array. The rows of the tables are
                    stored as arrays.
 
-       _sub        they work analog to the description in the
-                   previous section.
+       _sub        they work analog to the description in the previous sec-
+                   tion.
 
        _doc        describes the content of the column.
 
@@ -228,48 +194,44 @@ DDEESSCCRRIIPPTTIIOONN
 
        _S_p_e_c_i_a_l _T_e_x_t _K_e_y_s
 
-       _re         Regular expression upon which the text will be
-                   checked (everything as a single line).
+       _re         Regular expression upon which the text will be checked
+                   (everything as a single line).
 
-       _re_error   String containing the returned error in case
-                   the regular expression doesn't match (if not
-                   specified, a generic 'syntax error' message
-                   will be returned).
+       _re_error   String containing the returned error in case the regular
+                   expression doesn't match (if not specified, a generic
+                   'syntax error' message will be returned).
 
-       _sub        they work analog to the description in the
-                   previous section.
+       _sub        they work analog to the description in the previous sec-
+                   tion.
 
        _doc        Ditto.
 
-       _example    Potential multi line example for the content
-                   of this text section
+       _example    Potential multi line example for the content of this text
+                   section
 
        CCoonnffiigguurraattiioonn SSyynnttaaxx
 
        _G_e_n_e_r_a_l _S_y_n_t_a_x
 
-       '#' denotes a comment up to the end-of-line, empty lines
-       are allowed and space at the beginning and end of lines is
-       trimmed.
+       '#' denotes a comment up to the end-of-line, empty lines are allowed
+       and space at the beginning and end of lines is trimmed.
 
-       '\' at the end of the line marks a continued line on the
-       next line. A single space will be inserted between the
-       concatenated lines.
+       '\' at the end of the line marks a continued line on the next line. A
+       single space will be inserted between the concatenated lines.
 
        '@include filename' is used to include another file.
 
-       '@define a some value' will replace all occurences of 'a'
-       in the following text with 'some value'.
+       '@define a some value' will replace all occurences of 'a' in the fol-
+       lowing text with 'some value'.
 
-       Fields in tables that contain white space can be enclosed
-       in either "'" or """.  Whitespace can also be escaped with
-       "\". Quotes inside quotes are allowed but must be escaped
-       with a backslash as well.
+       Fields in tables that contain white space can be enclosed in either "'"
+       or """.  Whitespace can also be escaped with "\". Quotes inside quotes
+       are allowed but must be escaped with a backslash as well.
 
        _S_e_c_t_i_o_n_s
 
-       Config::Grammar supports hierarchical configurations
-       through sections, whose syntax is as follows:
+       Config::Grammar supports hierarchical configurations through sections,
+       whose syntax is as follows:
 
        Level 1        *** section name ***
 
@@ -277,56 +239,21 @@ DDEESSCCRRIIPPTTIIOONN
 
        Level 3        ++ section name
 
-       Level n, n>1   +..+ section name (number of '+' determines
-                      level)
+       Level n, n>1   +..+ section name (number of '+' determines level)
 
        _A_s_s_i_g_n_m_e_n_t_s
 
-       Assignements take the form: 'variable = value', where
-       value can be any string (can contain whitespaces and spe-
-       cial characters). The spaces before and after the equal
-       sign are optional.
+       Assignements take the form: 'variable = value', where value can be any
+       string (can contain whitespaces and special characters). The spaces
+       before and after the equal sign are optional.
 
        _T_a_b_u_l_a_r _D_a_t_a
 
-       The data is interpreted as one or more columns separated
-       by spaces.
+       The data is interpreted as one or more columns separated by spaces.
 
        EExxaammppllee
 
        _C_o_d_e
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         my $parser = Config::Grammar->new({
           _sections => [ 'network', 'hosts' ],
@@ -439,12 +366,11 @@ DDEESSCCRRIIPPTTIIOONN
         };
 
 CCOOPPYYRRIIGGHHTT
-       Copyright (c) 2000-2005 by ETH Zurich. All rights
-       reserved.
+       Copyright (c) 2000-2005 by ETH Zurich. All rights reserved.
 
 LLIICCEENNSSEE
-       This program is free software; you can redistribute it
-       and/or modify it under the same terms as Perl itself.
+       This program is free software; you can redistribute it and/or modify it
+       under the same terms as Perl itself.
 
 AAUUTTHHOORR
        David Schweikert <dws_at_ee.ethz.ch>, Tobias Oetiker
@@ -456,4 +382,4 @@ HHIISSTTOORRYY
 
 
 
-2.0.9                       2005-12-18         Config::Grammar(3)
+2.1.1                             2005-12-18                Config::Grammar(3)

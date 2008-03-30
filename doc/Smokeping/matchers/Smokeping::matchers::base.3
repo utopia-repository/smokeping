@@ -129,7 +129,7 @@
 .\" ========================================================================
 .\"
 .IX Title "Smokeping::matchers::base 3"
-.TH Smokeping::matchers::base 3 "2006-07-14" "2.0.9" "SmokePing"
+.TH Smokeping::matchers::base 3 "2006-08-15" "2.1.1" "SmokePing"
 .SH "NAME"
 Smokeping::matchers::base \- Base Class for implementing SmokePing Matchers
 .SH "OVERVIEW"
@@ -166,8 +166,8 @@ with a hash containing two arrays giving it access to both rtt and loss values.
 .PP
 .Vb 3
 \&  my $data=shift;
-\&  my @rtt = @{$data->{rtt}};
-\&  my @loss = @{$data->{loss}};
+\&  my @rtt = @{$data\->{rtt}};
+\&  my @loss = @{$data\->{loss}};
 .Ve
 .PP
 The arrays are ordered from old to new.
@@ -184,7 +184,7 @@ value returned by the previous call of the 'Test' method. This allows
 for somewhat more intelligent alerting due to state awareness.
 .PP
 .Vb 1
-\&  my $prevmatch = $data->{prevmatch};
+\&  my $prevmatch = $data\->{prevmatch};
 .Ve
 .SH "COPYRIGHT"
 .IX Header "COPYRIGHT"

@@ -1,3 +1,26 @@
+smokeping (2.1.1-1) unstable; urgency=low
+
+  * New upstream release.
+  * Patches included upstream:
+    + 40_password.dpatch
+    + 50_ldap.dpatch
+    + 60_fping.dpatch
+    + 70_syslog.dpatch
+  * Recommend echoping, don't list it as an alternative dependency.
+  * Suggest openssh-client instead of ssh. (Closes: #416539)
+  * Don't delete the smokeping user when the package is purged.
+  * Update debian/watch: upstream has moved.
+  * Rewrite the init script for LSB support.
+    + Depend on lsb-base accordingly.
+  * Add a note in README.Debian about sporadic problems with the
+    CGI reloading configuration changes.
+  * Point to the note when executing '/etc/init.d/smokeping reload'.
+    (Closes: #397609)
+  * debian/patches/30_missing_smoke.dpatch: show the visible part of all
+    smoke even if the rest of it doesn't fit on the scale. (Closes: #412826)
+
+ -- Niko Tyni <ntyni@iki.fi>  Mon, 14 May 2007 23:25:27 +0300
+
 smokeping (2.0.9-2) unstable; urgency=low
 
   * debian/patches/15_clean_makefile.dpatch:

@@ -48,6 +48,9 @@ install: build-stamp
 	install -d $(TMP)/usr/share/perl5/smokeping/Smokeping/matchers
 	install -m 644 lib/Smokeping/matchers/*pm $(TMP)/usr/share/perl5/smokeping/Smokeping/matchers
 
+	install -d $(TMP)/usr/share/perl5/smokeping/Smokeping/sorters
+	install -m 644 lib/Smokeping/sorters/*pm $(TMP)/usr/share/perl5/smokeping/Smokeping/sorters
+
 	install -d $(TMP)/usr/share/perl5/smokeping/Config
 	install -m 644 lib/Config/*pm $(TMP)/usr/share/perl5/smokeping/Config/
 
@@ -68,20 +71,24 @@ install: build-stamp
 	install -d $(TMP)/usr/share/doc/$(PACKAGE)/html/Smokeping
 	install -d $(TMP)/usr/share/doc/$(PACKAGE)/html/Smokeping/probes
 	install -d $(TMP)/usr/share/doc/$(PACKAGE)/html/Smokeping/matchers
+	install -d $(TMP)/usr/share/doc/$(PACKAGE)/html/Smokeping/sorters
 	install -d $(TMP)/usr/share/doc/$(PACKAGE)/txt
 	install -d $(TMP)/usr/share/doc/$(PACKAGE)/txt/Smokeping
 	install -d $(TMP)/usr/share/doc/$(PACKAGE)/txt/Smokeping/probes
 	install -d $(TMP)/usr/share/doc/$(PACKAGE)/txt/Smokeping/matchers
+	install -d $(TMP)/usr/share/doc/$(PACKAGE)/txt/Smokeping/sorters
 
 	install -m 644 doc/*.txt $(TMP)/usr/share/doc/$(PACKAGE)/txt
 	install -m 644 doc/Smokeping/*.txt $(TMP)/usr/share/doc/$(PACKAGE)/txt/Smokeping
 	install -m 644 doc/Smokeping/probes/*.txt $(TMP)/usr/share/doc/$(PACKAGE)/txt/Smokeping/probes
 	install -m 644 doc/Smokeping/matchers/*.txt $(TMP)/usr/share/doc/$(PACKAGE)/txt/Smokeping/matchers
+	install -m 644 doc/Smokeping/sorters/*.txt $(TMP)/usr/share/doc/$(PACKAGE)/txt/Smokeping/sorters
 	
 	install -m 644 doc/*.html $(TMP)/usr/share/doc/$(PACKAGE)/html
 	install -m 644 doc/Smokeping/*.html $(TMP)/usr/share/doc/$(PACKAGE)/html/Smokeping
 	install -m 644 doc/Smokeping/probes/*.html $(TMP)/usr/share/doc/$(PACKAGE)/html/Smokeping/probes
-	install -m 644 doc/Smokeping/matchers/*.html $(TMP)/usr/share/doc/$(PACKAGE)/html/Smokeping/probes
+	install -m 644 doc/Smokeping/matchers/*.html $(TMP)/usr/share/doc/$(PACKAGE)/html/Smokeping/matchers
+	install -m 644 doc/Smokeping/sorters/*.html $(TMP)/usr/share/doc/$(PACKAGE)/html/Smokeping/sorters
 	
 	for s in 1 3 5 7;\
 	do\

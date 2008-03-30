@@ -1,3 +1,48 @@
+2007/05/02 -- released version 2.1.1
+* fixed scaling of detail graphs. They were all sacled to max_rtt
+  if it was defined --tobi
+
+2007/04/29 -- released version 2.1.0
+
+* add new echoping 6 plugin probes: EchoPingDNS, EchoPingLDAP, EchoPingWhois
+  -- niko
+* don't test echoping or curl usage if running as a CGI --niko
+* bail out at startup with an error message if LC_ALL is set --niko
+* New Presentation option Charts. Charts are based on the new 'sorter' plugins.
+  There are sample plugins for Loss, Max, Median, StdDev based Charts -- tobi
+* new matcher Medratio (compare two medians) -- tobi
+* fixes for Median matcher -- tobi
+* make the CGI not croak if a password file is not readable. -- niko
+* don't die if syslogd is dead -- niko, reported by 
+  Christoph Biedl <cbiedl *gmx.de> as Debian bug #395056
+* add sourceaddress configurability to FPing probe (requires -S flag) -- Norman Rasmussen norman rasmussen.co.za
+* allow . in section names ... 
+* in FTPtransfer probe set destfilename to srcfilename if it is empty
+* in FTPtransfer probe strip path elements from srcfile when building destfile
+* alerts can now have a priority. if multiple prioritized alerts match,
+  only the one with the highest priority will cause any action. Alerts
+  without priority setting are not affected eitherway. --tobi
+* make the LDAP probe 'scope' option actually work. -- niko
+* new probe WebProxyFilter exercies a filtering web proxy firewall by
+  requesting banned pages. It tests if the data returned from the proxy
+  looks like the page telling users that they came upon a banned page. When
+  ever a real page can be retreived, a loss is logged. --tobi
+* some touchups to the graph comments to be a bit less 'ping' focussed -- tobi
+* configuration option mailtemplate lets you configure the alert message content -- tobi
+* added new method ProbeUnit to base.pm in support of FTPtransfer.pm -- tobi
+* new probe FTPtransfer.pm added. It measures available bandwidth by
+  actually sending data over the wire to test (don't try this at home) -- tobi
+* make sure logo images get writen in binary mode or they will not be usable on windows -- tobi
+* make PERL binary configurable in Makefile -- tobi
+* fixed echoping test call to be compatible with echoping 6 -- tobi
+* create a log entry when there are zero replies from a device. -- tobi
+* maintaining trunk and branch is not realy sensible the way smokeping evolves. 
+  I have merged everything back to trunk -- tobi
+* Allow several Mailservers to be specified in Mailhost -- tobi
+* Reduce timeout for Net::SMTP to 5 seconds. -- tobi
+* new feature to color the graph background in sync with the loss -- grahame.bo
+* new probe JunOS Telnet ping -- Shan Ali Khan shanali *singtel.com
+
 2006/07/14 -- released version 2.0.9
 
 * added matchers CheckLatency and CheckLoss -- tobi, from Dylan Vanderhoof DylanV semaphore.com

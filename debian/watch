@@ -1,2 +1,2 @@
 version=3
-http://people.ee.ethz.ch/~oetiker/webtools/smokeping/pub/ smokeping-(.+)\.tar\.gz
+http://oss.oetiker.ch/smokeping/pub/ smokeping-(.+)\.tar\.gz

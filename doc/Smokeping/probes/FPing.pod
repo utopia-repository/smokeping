@@ -14,6 +14,7 @@ Smokeping::probes::FPing - FPing Probe for SmokePing
  offset = 50%
  packetsize = 5000
  pings = 20
+ sourceaddress = 192.168.0.1
  step = 300
  timeout = 1.5
 
@@ -111,6 +112,14 @@ change this parameter afterwards, you'll have to delete the old RRD
 files or somehow convert them.
 
 Example value: 20
+
+=item sourceaddress
+
+The fping "-S" parameter . From fping(1):
+
+Set source address.
+
+Example value: 192.168.0.1
 
 =item step
 

@@ -1,0 +1,41 @@
+--- FPing.pm	2006-07-16 11:15:42.000000000 +0200
++++ FPingSourced.pm	2006-10-23 12:22:45.000000000 +0200
+@@ -103,10 +103,11 @@
+     # pinging nothing is pointless
+     return unless @{$self->addresses};
+     my @params = () ;
+-    push @params , "-b$self->{properties}{packetsize}" if $self->{properties}{packetsize};
++    push @params, "-b$self->{properties}{packetsize}" if $self->{properties}{packetsize};
+     push @params, "-t" . int(1000 * $self->{properties}{timeout}) if $self->{properties}{timeout};
+     push @params, "-i" . int(1000 * $self->{properties}{mininterval});
+     push @params, "-p" . int(1000 * $self->{properties}{hostinterval}) if $self->{properties}{hostinterval};
++    push @params, "-S$self->{properties}{sourceaddress}" if $self->{properties}{sourceaddress};
+     my @cmd = (
+                     $self->binary,
+                     '-C', $self->pings, '-q','-B1','-r1',
+@@ -190,6 +191,15 @@
+ The minimum amount of time between sending a ping packet to any target.
+ DOC
+ 		},
++		sourceaddress => {
++			_re => '(?:25[0-5]|2[0-4]\d|[0-1]?\d?\d)(?:\.(?:25[0-5]|2[0-4]\d|[0-1]?\d?\d)){3}',
++			_example => '192.168.0.1',
++			_doc => <<DOC,
++The fping "-S" parameter . From fping(1):
++
++Set source address.
++DOC
++		},
+ 	});
+ }
+ 
+--- FPing6.pm	2006-07-16 11:15:42.000000000 +0200
++++ FPingSourced6.pm	2006-10-23 12:31:00.000000000 +0200
+@@ -46,6 +46,7 @@
+       my $self = shift;
+       my $h = $self->SUPER::probevars;
+       $h->{binary}{_example} = "/usr/bin/fping6";
++      $h->{sourceaddress}{_re} = "(?:(?:(?:(?:[0-9A-Fa-f]{1,4}(?::[0-9A-Fa-f]{1,4})*)?)::(?:(?:[0-9A-Fa-f]{1,4}(?::[0-9A-Fa-f]{1,4})*)?))|(?:(?:(?:[0-9A-Fa-f]{1,4}:){6,6})(?:25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)(?:\\.(?:25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)){3})|(?:(?:(?:[0-9A-Fa-f]{1,4}(?::[0-9A-Fa-f]{1,4})*)?)::(?:(?:[0-9A-Fa-f]{1,4}:)*)(?:25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)(?:\\.(?:25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)){3}))";
+       return $h;
+ }
+ 

@@ -129,7 +129,7 @@
 .\" ========================================================================
 .\"
 .IX Title "SMOKEPING_CONFIG 5"
-.TH SMOKEPING_CONFIG 5 "2006-07-14" "2.0.9" "SmokePing"
+.TH SMOKEPING_CONFIG 5 "2007-05-02" "2.1.1" "SmokePing"
 .SH "NAME"
 smokeping_config \- Reference for the SmokePing Config File
 .SH "OVERVIEW"
@@ -223,8 +223,10 @@ template included with SmokePing.
 Complete \s-1URL\s0 path of the SmokePing.cgi
 .IP "\fBmailhost\fR" 4
 .IX Item "mailhost"
-Instead of using sendmail, you can specify the name of an smtp server 
-and use perl's Net::SMTP module to send mail to \s-1DYNAMIC\s0 host owners (see below).
+Instead of using sendmail, you can specify the name of an smtp server and
+use perl's Net::SMTP module to send mail (for alerts and \s-1DYNAMIC\s0 client
+script). Several comma separated mailhosts can be specified. SmokePing will
+try one after the other if one does not answer for 5 seconds.
 .IP "\fBcontact\fR \fI(mandatory setting)\fR" 4
 .IX Item "contact (mandatory setting)"
 Mail address of the person responsible for this smokeping installation.
@@ -409,6 +411,9 @@ How many pixels wide should detail graphs be
 .IP "\fBheight\fR \fI(mandatory setting)\fR" 4
 .IX Item "height (mandatory setting)"
 How many pixels high should detail graphs be
+.IP "\fBloss_background\fR" 4
+.IX Item "loss_background"
+If this option is enabled, uptime data is no longer displayed in the graph background.
 .IP "\fBlogarithmic\fR" 4
 .IX Item "logarithmic"
 should the graphs be shown in a logarithmic scale (yes/no)
@@ -467,7 +472,7 @@ Example:
 .RS 4
 .IP "column 0" 4
 .IX Item "column 0"
-Activate when the number of losst pings is larger or equal to this number                       
+Activate when the number of losst pings is larger or equal to this number
 .IP "column 1" 4
 .IX Item "column 1"
 Color for this range.
@@ -513,6 +518,59 @@ Description for this range.
 .RE
 .RS 4
 .RE
+.IP "\fB+charts\fR" 4
+.IX Item "+charts"
+The SmokePing Charts feature allow you to have Top X lists created according
+to various criteria.
+.Sp
+Each type of Chart must live in its own subsection.
+.Sp
+.Vb 8
+\& + charts
+\& menu = Charts
+\& title = The most interesting destinations
+\& ++ median
+\& sorter = Median(entries=>10)
+\& title = Sorted by Median Roundtrip Time
+\& menu = Top Median RTT
+\& format = Median RTT %e s
+.Ve
+.Sp
+The following variables can be set in this section:
+.RS 4
+.IP "\fBmenu\fR \fI(mandatory setting)\fR" 4
+.IX Item "menu (mandatory setting)"
+Menu entry for the Charts Section.
+.IP "\fBtitle\fR \fI(mandatory setting)\fR" 4
+.IX Item "title (mandatory setting)"
+Page title for the Charts Section.
+.RE
+.RS 4
+.Sp
+The following sections are valid on level 2:
+.IP "\fB++/[\-_0\-9a\-zA\-Z.]+/\fR" 4
+.IX Item "++/[-_0-9a-zA-Z.]+/"
+The following variables can be set in this section:
+.RS 4
+.IP "\fBmenu\fR \fI(mandatory setting)\fR" 4
+.IX Item "menu (mandatory setting)"
+Menu entry
+.IP "\fBtitle\fR \fI(mandatory setting)\fR" 4
+.IX Item "title (mandatory setting)"
+Page title
+.IP "\fBsorter\fR \fI(mandatory setting)\fR" 4
+.IX Item "sorter (mandatory setting)"
+.PD 0
+.IP "\fBformat\fR" 4
+.IX Item "format"
+.PD
+sprintf format string to format curent value
+.RE
+.RS 4
+.RE
+.RE
+.RS 4
+.RE
 .Sh "*** Probes *** \fI(mandatory section)\fP"
 .IX Subsection "*** Probes *** (mandatory section)"
 The Probes Section configures Probe modules. Probe modules integrate
@@ -520,8 +578,8 @@ an external ping command into SmokePing. Check the documentation of each
 module for more information about it.
 .PP
 The following sections are valid on level 1:
-.IP "\fB+/[\-_0\-9a\-zA\-Z]+/\fR" 4
-.IX Item "+/[-_0-9a-zA-Z]+/"
+.IP "\fB+/[\-_0\-9a\-zA\-Z.]+/\fR" 4
+.IX Item "+/[-_0-9a-zA-Z.]+/"
 Each module can take specific configuration information from this
 area. The jumble of letters above is a regular expression defining legal
 module names.
@@ -532,8 +590,8 @@ The grammar of this section is \fIdynamically\fR modified based on its name.
 .Sp
 The following sections are valid on level 2:
 .RS 4
-.IP "\fB++/[\-_0\-9a\-zA\-Z]+/\fR" 4
-.IX Item "++/[-_0-9a-zA-Z]+/"
+.IP "\fB++/[\-_0\-9a\-zA\-Z.]+/\fR" 4
+.IX Item "++/[-_0-9a-zA-Z.]+/"
 You can define multiple instances of the same probe with subsections. 
 These instances can have different values for their variables, so you
 can eg. have one instance of the FPing probe with packet size 1000 and
@@ -588,55 +646,55 @@ Default value: forks = 5
 .IX Item "lookup"
 .PD
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBmininterval\fR" 4
 .IX Item "mininterval"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .Sp
 Default value: mininterval = 0.5
 .IP "\fBpings\fR" 4
 .IX Item "pings"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBport\fR" 4
 .IX Item "port"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .Sp
 Default value: port = 53
 .IP "\fBrecordtype\fR" 4
 .IX Item "recordtype"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .Sp
 Default value: recordtype = A
 .IP "\fBrequire_answers\fR" 4
 .IX Item "require_answers"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBrequire_noerror\fR" 4
 .IX Item "require_noerror"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBtimeout\fR" 4
 .IX Item "timeout"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .Sp
 Default value: timeout = 5
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -707,47 +765,47 @@ Default value: forks = 5
 .IX Item "greeting"
 .PD
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .Sp
 Default value: greeting = SSH-Latency-Measurement-Sorry-for-this-logmessage
 .IP "\fBinterval\fR" 4
 .IX Item "interval"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .Sp
 Default value: interval = established
 .IP "\fBmininterval\fR" 4
 .IX Item "mininterval"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .Sp
 Default value: mininterval = 0.5
 .IP "\fBpings\fR" 4
 .IX Item "pings"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBport\fR" 4
 .IX Item "port"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .Sp
 Default value: port = 22
 .IP "\fBtimeout\fR" 4
 .IX Item "timeout"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .Sp
 Default value: timeout = 5
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -817,31 +875,31 @@ Default value: timeout = 5
 .IP "\fBioshost\fR" 4
 .IX Item "ioshost"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .Sp
 This variable \fIdynamically\fR modifies the grammar based on its value.
 .IP "\fBiosint\fR" 4
 .IX Item "iosint"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBname\fR" 4
 .IX Item "name"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .Sp
 This variable \fIdynamically\fR modifies the grammar based on its value.
 .IP "\fBpings\fR" 4
 .IX Item "pings"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -900,41 +958,41 @@ Default value: timeout = 5
 .IP "\fBioshost\fR" 4
 .IX Item "ioshost"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .Sp
 This variable \fIdynamically\fR modifies the grammar based on its value.
 .IP "\fBiosint\fR" 4
 .IX Item "iosint"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBpacketsize\fR" 4
 .IX Item "packetsize"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .Sp
 Default value: packetsize = 56
 .IP "\fBpings\fR" 4
 .IX Item "pings"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBtos\fR" 4
 .IX Item "tos"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBvrf\fR" 4
 .IX Item "vrf"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -1001,36 +1059,36 @@ Default value: timeout = 5
 .IP "\fBioshost\fR" 4
 .IX Item "ioshost"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .Sp
 This variable \fIdynamically\fR modifies the grammar based on its value.
 .IP "\fBiosint\fR" 4
 .IX Item "iosint"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBpings\fR" 4
 .IX Item "pings"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBport\fR" 4
 .IX Item "port"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .Sp
 Default value: port = 80
 .IP "\fBtos\fR" 4
 .IX Item "tos"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -1094,72 +1152,72 @@ Default value: forks = 5
 .IX Item "agent"
 .PD
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBextraargs\fR" 4
 .IX Item "extraargs"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBextrare\fR" 4
 .IX Item "extrare"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .Sp
 Default value: extrare = / /
 .IP "\fBfollow_redirects\fR" 4
 .IX Item "follow_redirects"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .Sp
 Default value: follow_redirects = no
 .IP "\fBinclude_redirects\fR" 4
 .IX Item "include_redirects"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .Sp
 Default value: include_redirects = no
 .IP "\fBinsecure_ssl\fR" 4
 .IX Item "insecure_ssl"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBinterface\fR" 4
 .IX Item "interface"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBpings\fR" 4
 .IX Item "pings"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBssl2\fR" 4
 .IX Item "ssl2"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBtimeout\fR" 4
 .IX Item "timeout"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .Sp
 Default value: timeout = 10
 .IP "\fBurlformat\fR" 4
 .IX Item "urlformat"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .Sp
 This variable \fIdynamically\fR modifies the grammar based on its value.
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -1251,22 +1309,22 @@ Default value: timeout = 5
 .IP "\fBlookup\fR" 4
 .IX Item "lookup"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBpings\fR" 4
 .IX Item "pings"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBserver\fR" 4
 .IX Item "server"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -1325,59 +1383,59 @@ Default value: forks = 5
 .IX Item "extraopts"
 .PD
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBfill\fR" 4
 .IX Item "fill"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBipversion\fR" 4
 .IX Item "ipversion"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBpings\fR" 4
 .IX Item "pings"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBpriority\fR" 4
 .IX Item "priority"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBsize\fR" 4
 .IX Item "size"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBtimeout\fR" 4
 .IX Item "timeout"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .Sp
 Default value: timeout = 5
 .IP "\fBtos\fR" 4
 .IX Item "tos"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBudp\fR" 4
 .IX Item "udp"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBwaittime\fR" 4
 .IX Item "waittime"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -1456,54 +1514,54 @@ Default value: forks = 5
 .IX Item "extraopts"
 .PD
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBfill\fR" 4
 .IX Item "fill"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBipversion\fR" 4
 .IX Item "ipversion"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBpings\fR" 4
 .IX Item "pings"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBpriority\fR" 4
 .IX Item "priority"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBsize\fR" 4
 .IX Item "size"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBtimeout\fR" 4
 .IX Item "timeout"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .Sp
 Default value: timeout = 5
 .IP "\fBtos\fR" 4
 .IX Item "tos"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBwaittime\fR" 4
 .IX Item "waittime"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -1560,6 +1618,163 @@ This variable \fIinherits\fR its value from the parent section if nothing is spe
 .Sp
 (End of dynamical grammar changes for example instance \f(CW\*(C`EchoPingChargen\*(C'\fR.)
 .RE
+.IP "\fBEchoPingDNS\fR: (See the separate module documentation for details about each variable.)" 4
+.IX Item "EchoPingDNS: (See the separate module documentation for details about each variable.)"
+The following new variables are valid:
+.RS 4
+.IP "\fBbinary\fR" 4
+.IX Item "binary"
+Default value: binary = /usr/bin/echoping
+.IP "\fBforks\fR" 4
+.IX Item "forks"
+Default value: forks = 5
+.IP "\fBoffset\fR" 4
+.IX Item "offset"
+.PD 0
+.IP "\fBstep\fR" 4
+.IX Item "step"
+.IP "\fBdns_request\fR" 4
+.IX Item "dns_request"
+.PD
+.Vb 1
+\& (This variable can be overridden target\-specifically in the Targets section.)
+.Ve
+.Sp
+This variable \fIdynamically\fR modifies the grammar based on its value.
+.IP "\fBdns_tcp\fR" 4
+.IX Item "dns_tcp"
+.Vb 1
+\& (This variable can be overridden target\-specifically in the Targets section.)
+.Ve
+.IP "\fBdns_type\fR" 4
+.IX Item "dns_type"
+.Vb 1
+\& (This variable can be overridden target\-specifically in the Targets section.)
+.Ve
+.Sp
+Default value: dns_type = A
+.IP "\fBextraopts\fR" 4
+.IX Item "extraopts"
+.Vb 1
+\& (This variable can be overridden target\-specifically in the Targets section.)
+.Ve
+.IP "\fBipversion\fR" 4
+.IX Item "ipversion"
+.Vb 1
+\& (This variable can be overridden target\-specifically in the Targets section.)
+.Ve
+.IP "\fBpings\fR" 4
+.IX Item "pings"
+.Vb 1
+\& (This variable can be overridden target\-specifically in the Targets section.)
+.Ve
+.IP "\fBplugin\fR" 4
+.IX Item "plugin"
+.Vb 1
+\& (This variable can be overridden target\-specifically in the Targets section.)
+.Ve
+.Sp
+Default value: plugin = dns
+.IP "\fBpluginargs\fR" 4
+.IX Item "pluginargs"
+.Vb 1
+\& (This variable can be overridden target\-specifically in the Targets section.)
+.Ve
+.IP "\fBpriority\fR" 4
+.IX Item "priority"
+.Vb 1
+\& (This variable can be overridden target\-specifically in the Targets section.)
+.Ve
+.IP "\fBtimeout\fR" 4
+.IX Item "timeout"
+.Vb 1
+\& (This variable can be overridden target\-specifically in the Targets section.)
+.Ve
+.Sp
+Default value: timeout = 5
+.IP "\fBtos\fR" 4
+.IX Item "tos"
+.Vb 1
+\& (This variable can be overridden target\-specifically in the Targets section.)
+.Ve
+.IP "\fBwaittime\fR" 4
+.IX Item "waittime"
+.Vb 1
+\& (This variable can be overridden target\-specifically in the Targets section.)
+.Ve
+.RE
+.RS 4
+.Sp
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+.Sp
+.RS 4
+The following new variables are valid:
+.IP "\fBbinary\fR" 4
+.IX Item "binary"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.Sp
+Default value: binary = /usr/bin/echoping
+.IP "\fBforks\fR" 4
+.IX Item "forks"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.Sp
+Default value: forks = 5
+.IP "\fBoffset\fR" 4
+.IX Item "offset"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBstep\fR" 4
+.IX Item "step"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBdns_request\fR" 4
+.IX Item "dns_request"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBdns_tcp\fR" 4
+.IX Item "dns_tcp"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBdns_type\fR" 4
+.IX Item "dns_type"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.Sp
+Default value: dns_type = A
+.IP "\fBextraopts\fR" 4
+.IX Item "extraopts"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBipversion\fR" 4
+.IX Item "ipversion"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBpings\fR" 4
+.IX Item "pings"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBplugin\fR" 4
+.IX Item "plugin"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.Sp
+Default value: plugin = dns
+.IP "\fBpluginargs\fR" 4
+.IX Item "pluginargs"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBpriority\fR" 4
+.IX Item "priority"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBtimeout\fR" 4
+.IX Item "timeout"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.Sp
+Default value: timeout = 5
+.IP "\fBtos\fR" 4
+.IX Item "tos"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBwaittime\fR" 4
+.IX Item "waittime"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.RE
+.RS 4
+.RE
+.RE
+.RS 4
+.Sp
+(End of dynamical grammar changes for example instance \f(CW\*(C`EchoPingDNS\*(C'\fR.)
+.RE
 .IP "\fBEchoPingDiscard\fR: (See the separate module documentation for details about each variable.)" 4
 .IX Item "EchoPingDiscard: (See the separate module documentation for details about each variable.)"
 The following new variables are valid:
@@ -1579,59 +1794,59 @@ Default value: forks = 5
 .IX Item "extraopts"
 .PD
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBfill\fR" 4
 .IX Item "fill"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBipversion\fR" 4
 .IX Item "ipversion"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBpings\fR" 4
 .IX Item "pings"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBpriority\fR" 4
 .IX Item "priority"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBsize\fR" 4
 .IX Item "size"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBtimeout\fR" 4
 .IX Item "timeout"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .Sp
 Default value: timeout = 5
 .IP "\fBtos\fR" 4
 .IX Item "tos"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBudp\fR" 4
 .IX Item "udp"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBwaittime\fR" 4
 .IX Item "waittime"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -1710,66 +1925,66 @@ Default value: forks = 5
 .IX Item "extraopts"
 .PD
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBignore_cache\fR" 4
 .IX Item "ignore_cache"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBipversion\fR" 4
 .IX Item "ipversion"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBpings\fR" 4
 .IX Item "pings"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBport\fR" 4
 .IX Item "port"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBpriority\fR" 4
 .IX Item "priority"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBrevalidate_data\fR" 4
 .IX Item "revalidate_data"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBtimeout\fR" 4
 .IX Item "timeout"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .Sp
 Default value: timeout = 5
 .IP "\fBtos\fR" 4
 .IX Item "tos"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBurl\fR" 4
 .IX Item "url"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .Sp
 Default value: url = /
 .IP "\fBwaittime\fR" 4
 .IX Item "waittime"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -1853,66 +2068,66 @@ Default value: forks = 5
 .IX Item "extraopts"
 .PD
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBignore_cache\fR" 4
 .IX Item "ignore_cache"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBipversion\fR" 4
 .IX Item "ipversion"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBpings\fR" 4
 .IX Item "pings"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBport\fR" 4
 .IX Item "port"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBpriority\fR" 4
 .IX Item "priority"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBrevalidate_data\fR" 4
 .IX Item "revalidate_data"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBtimeout\fR" 4
 .IX Item "timeout"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .Sp
 Default value: timeout = 5
 .IP "\fBtos\fR" 4
 .IX Item "tos"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBurl\fR" 4
 .IX Item "url"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .Sp
 Default value: url = /
 .IP "\fBwaittime\fR" 4
 .IX Item "waittime"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -1996,51 +2211,51 @@ Default value: forks = 5
 .IX Item "extraopts"
 .PD
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBipversion\fR" 4
 .IX Item "ipversion"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBpings\fR" 4
 .IX Item "pings"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBpriority\fR" 4
 .IX Item "priority"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBtimeout\fR" 4
 .IX Item "timeout"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .Sp
 Default value: timeout = 5
 .IP "\fBtos\fR" 4
 .IX Item "tos"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBurl\fR" 4
 .IX Item "url"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .Sp
 This variable \fIdynamically\fR modifies the grammar based on its value.
 .IP "\fBwaittime\fR" 4
 .IX Item "waittime"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -2094,6 +2309,282 @@ This variable \fIinherits\fR its value from the parent section if nothing is spe
 .Sp
 (End of dynamical grammar changes for example instance \f(CW\*(C`EchoPingIcp\*(C'\fR.)
 .RE
+.IP "\fBEchoPingLDAP\fR: (See the separate module documentation for details about each variable.)" 4
+.IX Item "EchoPingLDAP: (See the separate module documentation for details about each variable.)"
+The following new variables are valid:
+.RS 4
+.IP "\fBbinary\fR" 4
+.IX Item "binary"
+Default value: binary = /usr/bin/echoping
+.IP "\fBforks\fR" 4
+.IX Item "forks"
+Default value: forks = 5
+.IP "\fBoffset\fR" 4
+.IX Item "offset"
+.PD 0
+.IP "\fBstep\fR" 4
+.IX Item "step"
+.IP "\fBextraopts\fR" 4
+.IX Item "extraopts"
+.PD
+.Vb 1
+\& (This variable can be overridden target\-specifically in the Targets section.)
+.Ve
+.IP "\fBipversion\fR" 4
+.IX Item "ipversion"
+.Vb 1
+\& (This variable can be overridden target\-specifically in the Targets section.)
+.Ve
+.IP "\fBldap_base\fR" 4
+.IX Item "ldap_base"
+.Vb 1
+\& (This variable can be overridden target\-specifically in the Targets section.)
+.Ve
+.IP "\fBldap_request\fR" 4
+.IX Item "ldap_request"
+.Vb 1
+\& (This variable can be overridden target\-specifically in the Targets section.)
+.Ve
+.IP "\fBldap_scope\fR" 4
+.IX Item "ldap_scope"
+.Vb 1
+\& (This variable can be overridden target\-specifically in the Targets section.)
+.Ve
+.IP "\fBpings\fR" 4
+.IX Item "pings"
+.Vb 1
+\& (This variable can be overridden target\-specifically in the Targets section.)
+.Ve
+.IP "\fBplugin\fR" 4
+.IX Item "plugin"
+.Vb 1
+\& (This variable can be overridden target\-specifically in the Targets section.)
+.Ve
+.Sp
+Default value: plugin = ldap
+.IP "\fBpluginargs\fR" 4
+.IX Item "pluginargs"
+.Vb 1
+\& (This variable can be overridden target\-specifically in the Targets section.)
+.Ve
+.IP "\fBpriority\fR" 4
+.IX Item "priority"
+.Vb 1
+\& (This variable can be overridden target\-specifically in the Targets section.)
+.Ve
+.IP "\fBtimeout\fR" 4
+.IX Item "timeout"
+.Vb 1
+\& (This variable can be overridden target\-specifically in the Targets section.)
+.Ve
+.Sp
+Default value: timeout = 5
+.IP "\fBtos\fR" 4
+.IX Item "tos"
+.Vb 1
+\& (This variable can be overridden target\-specifically in the Targets section.)
+.Ve
+.IP "\fBwaittime\fR" 4
+.IX Item "waittime"
+.Vb 1
+\& (This variable can be overridden target\-specifically in the Targets section.)
+.Ve
+.RE
+.RS 4
+.Sp
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+.Sp
+.RS 4
+The following new variables are valid:
+.IP "\fBbinary\fR" 4
+.IX Item "binary"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.Sp
+Default value: binary = /usr/bin/echoping
+.IP "\fBforks\fR" 4
+.IX Item "forks"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.Sp
+Default value: forks = 5
+.IP "\fBoffset\fR" 4
+.IX Item "offset"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBstep\fR" 4
+.IX Item "step"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBextraopts\fR" 4
+.IX Item "extraopts"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBipversion\fR" 4
+.IX Item "ipversion"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBldap_base\fR" 4
+.IX Item "ldap_base"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBldap_request\fR" 4
+.IX Item "ldap_request"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBldap_scope\fR" 4
+.IX Item "ldap_scope"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBpings\fR" 4
+.IX Item "pings"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBplugin\fR" 4
+.IX Item "plugin"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.Sp
+Default value: plugin = ldap
+.IP "\fBpluginargs\fR" 4
+.IX Item "pluginargs"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBpriority\fR" 4
+.IX Item "priority"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBtimeout\fR" 4
+.IX Item "timeout"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.Sp
+Default value: timeout = 5
+.IP "\fBtos\fR" 4
+.IX Item "tos"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBwaittime\fR" 4
+.IX Item "waittime"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.RE
+.RS 4
+.RE
+.RE
+.RS 4
+.Sp
+(End of dynamical grammar changes for example instance \f(CW\*(C`EchoPingLDAP\*(C'\fR.)
+.RE
+.IP "\fBEchoPingPlugin\fR: (See the separate module documentation for details about each variable.)" 4
+.IX Item "EchoPingPlugin: (See the separate module documentation for details about each variable.)"
+The following new variables are valid:
+.RS 4
+.IP "\fBbinary\fR" 4
+.IX Item "binary"
+Default value: binary = /usr/bin/echoping
+.IP "\fBforks\fR" 4
+.IX Item "forks"
+Default value: forks = 5
+.IP "\fBoffset\fR" 4
+.IX Item "offset"
+.PD 0
+.IP "\fBstep\fR" 4
+.IX Item "step"
+.IP "\fBextraopts\fR" 4
+.IX Item "extraopts"
+.PD
+.Vb 1
+\& (This variable can be overridden target\-specifically in the Targets section.)
+.Ve
+.IP "\fBipversion\fR" 4
+.IX Item "ipversion"
+.Vb 1
+\& (This variable can be overridden target\-specifically in the Targets section.)
+.Ve
+.IP "\fBpings\fR" 4
+.IX Item "pings"
+.Vb 1
+\& (This variable can be overridden target\-specifically in the Targets section.)
+.Ve
+.IP "\fBplugin\fR" 4
+.IX Item "plugin"
+.Vb 1
+\& (This variable can be overridden target\-specifically in the Targets section.)
+.Ve
+.Sp
+This variable \fIdynamically\fR modifies the grammar based on its value.
+.IP "\fBpluginargs\fR" 4
+.IX Item "pluginargs"
+.Vb 1
+\& (This variable can be overridden target\-specifically in the Targets section.)
+.Ve
+.IP "\fBpriority\fR" 4
+.IX Item "priority"
+.Vb 1
+\& (This variable can be overridden target\-specifically in the Targets section.)
+.Ve
+.IP "\fBtimeout\fR" 4
+.IX Item "timeout"
+.Vb 1
+\& (This variable can be overridden target\-specifically in the Targets section.)
+.Ve
+.Sp
+Default value: timeout = 5
+.IP "\fBtos\fR" 4
+.IX Item "tos"
+.Vb 1
+\& (This variable can be overridden target\-specifically in the Targets section.)
+.Ve
+.IP "\fBwaittime\fR" 4
+.IX Item "waittime"
+.Vb 1
+\& (This variable can be overridden target\-specifically in the Targets section.)
+.Ve
+.RE
+.RS 4
+.Sp
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+.Sp
+.RS 4
+The following new variables are valid:
+.IP "\fBbinary\fR" 4
+.IX Item "binary"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.Sp
+Default value: binary = /usr/bin/echoping
+.IP "\fBforks\fR" 4
+.IX Item "forks"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.Sp
+Default value: forks = 5
+.IP "\fBoffset\fR" 4
+.IX Item "offset"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBstep\fR" 4
+.IX Item "step"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBextraopts\fR" 4
+.IX Item "extraopts"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBipversion\fR" 4
+.IX Item "ipversion"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBpings\fR" 4
+.IX Item "pings"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBplugin\fR" 4
+.IX Item "plugin"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBpluginargs\fR" 4
+.IX Item "pluginargs"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBpriority\fR" 4
+.IX Item "priority"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBtimeout\fR" 4
+.IX Item "timeout"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.Sp
+Default value: timeout = 5
+.IP "\fBtos\fR" 4
+.IX Item "tos"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBwaittime\fR" 4
+.IX Item "waittime"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.RE
+.RS 4
+.RE
+.RE
+.RS 4
+.Sp
+(End of dynamical grammar changes for example instance \f(CW\*(C`EchoPingPlugin\*(C'\fR.)
+.RE
 .IP "\fBEchoPingSmtp\fR: (See the separate module documentation for details about each variable.)" 4
 .IX Item "EchoPingSmtp: (See the separate module documentation for details about each variable.)"
 The following new variables are valid:
@@ -2113,44 +2604,44 @@ Default value: forks = 5
 .IX Item "extraopts"
 .PD
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBipversion\fR" 4
 .IX Item "ipversion"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBpings\fR" 4
 .IX Item "pings"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBpriority\fR" 4
 .IX Item "priority"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBtimeout\fR" 4
 .IX Item "timeout"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .Sp
 Default value: timeout = 5
 .IP "\fBtos\fR" 4
 .IX Item "tos"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBwaittime\fR" 4
 .IX Item "waittime"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -2201,6 +2692,143 @@ This variable \fIinherits\fR its value from the parent section if nothing is spe
 .Sp
 (End of dynamical grammar changes for example instance \f(CW\*(C`EchoPingSmtp\*(C'\fR.)
 .RE
+.IP "\fBEchoPingWhois\fR: (See the separate module documentation for details about each variable.)" 4
+.IX Item "EchoPingWhois: (See the separate module documentation for details about each variable.)"
+The following new variables are valid:
+.RS 4
+.IP "\fBbinary\fR" 4
+.IX Item "binary"
+Default value: binary = /usr/bin/echoping
+.IP "\fBforks\fR" 4
+.IX Item "forks"
+Default value: forks = 5
+.IP "\fBoffset\fR" 4
+.IX Item "offset"
+.PD 0
+.IP "\fBstep\fR" 4
+.IX Item "step"
+.IP "\fBextraopts\fR" 4
+.IX Item "extraopts"
+.PD
+.Vb 1
+\& (This variable can be overridden target\-specifically in the Targets section.)
+.Ve
+.IP "\fBipversion\fR" 4
+.IX Item "ipversion"
+.Vb 1
+\& (This variable can be overridden target\-specifically in the Targets section.)
+.Ve
+.IP "\fBpings\fR" 4
+.IX Item "pings"
+.Vb 1
+\& (This variable can be overridden target\-specifically in the Targets section.)
+.Ve
+.IP "\fBplugin\fR" 4
+.IX Item "plugin"
+.Vb 1
+\& (This variable can be overridden target\-specifically in the Targets section.)
+.Ve
+.Sp
+Default value: plugin = whois
+.IP "\fBpluginargs\fR" 4
+.IX Item "pluginargs"
+.Vb 1
+\& (This variable can be overridden target\-specifically in the Targets section.)
+.Ve
+.IP "\fBpriority\fR" 4
+.IX Item "priority"
+.Vb 1
+\& (This variable can be overridden target\-specifically in the Targets section.)
+.Ve
+.IP "\fBtimeout\fR" 4
+.IX Item "timeout"
+.Vb 1
+\& (This variable can be overridden target\-specifically in the Targets section.)
+.Ve
+.Sp
+Default value: timeout = 5
+.IP "\fBtos\fR" 4
+.IX Item "tos"
+.Vb 1
+\& (This variable can be overridden target\-specifically in the Targets section.)
+.Ve
+.IP "\fBwaittime\fR" 4
+.IX Item "waittime"
+.Vb 1
+\& (This variable can be overridden target\-specifically in the Targets section.)
+.Ve
+.IP "\fBwhois_request\fR" 4
+.IX Item "whois_request"
+.Vb 1
+\& (This variable can be overridden target\-specifically in the Targets section.)
+.Ve
+.Sp
+This variable \fIdynamically\fR modifies the grammar based on its value.
+.RE
+.RS 4
+.Sp
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+.Sp
+.RS 4
+The following new variables are valid:
+.IP "\fBbinary\fR" 4
+.IX Item "binary"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.Sp
+Default value: binary = /usr/bin/echoping
+.IP "\fBforks\fR" 4
+.IX Item "forks"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.Sp
+Default value: forks = 5
+.IP "\fBoffset\fR" 4
+.IX Item "offset"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBstep\fR" 4
+.IX Item "step"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBextraopts\fR" 4
+.IX Item "extraopts"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBipversion\fR" 4
+.IX Item "ipversion"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBpings\fR" 4
+.IX Item "pings"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBplugin\fR" 4
+.IX Item "plugin"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.Sp
+Default value: plugin = whois
+.IP "\fBpluginargs\fR" 4
+.IX Item "pluginargs"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBpriority\fR" 4
+.IX Item "priority"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBtimeout\fR" 4
+.IX Item "timeout"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.Sp
+Default value: timeout = 5
+.IP "\fBtos\fR" 4
+.IX Item "tos"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBwaittime\fR" 4
+.IX Item "waittime"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBwhois_request\fR" 4
+.IX Item "whois_request"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.RE
+.RS 4
+.RE
+.RE
+.RS 4
+.Sp
+(End of dynamical grammar changes for example instance \f(CW\*(C`EchoPingWhois\*(C'\fR.)
+.RE
 .IP "\fBFPing\fR: (See the separate module documentation for details about each variable.)" 4
 .IX Item "FPing: (See the separate module documentation for details about each variable.)"
 The following new variables are valid:
@@ -2221,6 +2849,8 @@ Default value: mininterval = 0.01
 .IX Item "packetsize"
 .IP "\fBpings\fR" 4
 .IX Item "pings"
+.IP "\fBsourceaddress\fR" 4
+.IX Item "sourceaddress"
 .IP "\fBstep\fR" 4
 .IX Item "step"
 .IP "\fBtimeout\fR" 4
@@ -2229,7 +2859,7 @@ Default value: mininterval = 0.01
 .RS 4
 .PD
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -2252,6 +2882,9 @@ This variable \fIinherits\fR its value from the parent section if nothing is spe
 This variable \fIinherits\fR its value from the parent section if nothing is specified here.
 .IP "\fBpings\fR" 4
 .IX Item "pings"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBsourceaddress\fR" 4
+.IX Item "sourceaddress"
 This variable \fIinherits\fR its value from the parent section if nothing is specified here.
 .IP "\fBstep\fR" 4
 .IX Item "step"
@@ -2287,6 +2920,8 @@ Default value: mininterval = 0.01
 .IX Item "packetsize"
 .IP "\fBpings\fR" 4
 .IX Item "pings"
+.IP "\fBsourceaddress\fR" 4
+.IX Item "sourceaddress"
 .IP "\fBstep\fR" 4
 .IX Item "step"
 .IP "\fBtimeout\fR" 4
@@ -2295,7 +2930,7 @@ Default value: mininterval = 0.01
 .RS 4
 .PD
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -2319,6 +2954,9 @@ This variable \fIinherits\fR its value from the parent section if nothing is spe
 .IP "\fBpings\fR" 4
 .IX Item "pings"
 This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBsourceaddress\fR" 4
+.IX Item "sourceaddress"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
 .IP "\fBstep\fR" 4
 .IX Item "step"
 This variable \fIinherits\fR its value from the parent section if nothing is specified here.
@@ -2332,6 +2970,131 @@ This variable \fIinherits\fR its value from the parent section if nothing is spe
 .RS 4
 .Sp
 (End of dynamical grammar changes for example instance \f(CW\*(C`FPing6\*(C'\fR.)
+.RE
+.IP "\fBFTPtransfer\fR: (See the separate module documentation for details about each variable.)" 4
+.IX Item "FTPtransfer: (See the separate module documentation for details about each variable.)"
+The following new variables are valid:
+.RS 4
+.IP "\fBdestfile\fR" 4
+.IX Item "destfile"
+.PD 0
+.IP "\fBforks\fR" 4
+.IX Item "forks"
+.PD
+Default value: forks = 5
+.IP "\fBmin_interval\fR" 4
+.IX Item "min_interval"
+Default value: min_interval = 1
+.IP "\fBmode\fR \fI(mandatory setting)\fR" 4
+.IX Item "mode (mandatory setting)"
+.PD 0
+.IP "\fBoffset\fR" 4
+.IX Item "offset"
+.IP "\fBpasswordfile\fR" 4
+.IX Item "passwordfile"
+.IP "\fBsrcfile\fR \fI(mandatory setting)\fR" 4
+.IX Item "srcfile (mandatory setting)"
+.IP "\fBstep\fR" 4
+.IX Item "step"
+.IP "\fBlocaladdr\fR" 4
+.IX Item "localaddr"
+.PD
+.Vb 1
+\& (This variable can be overridden target\-specifically in the Targets section.)
+.Ve
+.IP "\fBpassive\fR" 4
+.IX Item "passive"
+.Vb 1
+\& (This variable can be overridden target\-specifically in the Targets section.)
+.Ve
+.IP "\fBpassword\fR" 4
+.IX Item "password"
+.Vb 1
+\& (This variable can be overridden target\-specifically in the Targets section.)
+.Ve
+.IP "\fBpings\fR" 4
+.IX Item "pings"
+.Vb 1
+\& (This variable can be overridden target\-specifically in the Targets section.)
+.Ve
+.IP "\fBport\fR" 4
+.IX Item "port"
+.Vb 1
+\& (This variable can be overridden target\-specifically in the Targets section.)
+.Ve
+.IP "\fBtimeout\fR \fI(mandatory setting)\fR" 4
+.IX Item "timeout (mandatory setting)"
+.Vb 1
+\& (This variable can be overridden target\-specifically in the Targets section.)
+.Ve
+.IP "\fBusername\fR" 4
+.IX Item "username"
+.Vb 1
+\& (This variable can be overridden target\-specifically in the Targets section.)
+.Ve
+.RE
+.RS 4
+.Sp
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+.Sp
+.RS 4
+The following new variables are valid:
+.IP "\fBdestfile\fR" 4
+.IX Item "destfile"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBforks\fR" 4
+.IX Item "forks"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.Sp
+Default value: forks = 5
+.IP "\fBmin_interval\fR" 4
+.IX Item "min_interval"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.Sp
+Default value: min_interval = 1
+.IP "\fBmode\fR \fI(mandatory setting)\fR" 4
+.IX Item "mode (mandatory setting)"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBoffset\fR" 4
+.IX Item "offset"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBpasswordfile\fR" 4
+.IX Item "passwordfile"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBsrcfile\fR \fI(mandatory setting)\fR" 4
+.IX Item "srcfile (mandatory setting)"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBstep\fR" 4
+.IX Item "step"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBlocaladdr\fR" 4
+.IX Item "localaddr"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBpassive\fR" 4
+.IX Item "passive"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBpassword\fR" 4
+.IX Item "password"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBpings\fR" 4
+.IX Item "pings"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBport\fR" 4
+.IX Item "port"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBtimeout\fR \fI(mandatory setting)\fR" 4
+.IX Item "timeout (mandatory setting)"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBusername\fR" 4
+.IX Item "username"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.RE
+.RS 4
+.RE
+.RE
+.RS 4
+.Sp
+(End of dynamical grammar changes for example instance \f(CW\*(C`FTPtransfer\*(C'\fR.)
 .RE
 .IP "\fBIOSPing\fR: (See the separate module documentation for details about each variable.)" 4
 .IX Item "IOSPing: (See the separate module documentation for details about each variable.)"
@@ -2361,29 +3124,29 @@ Default value: timeout = 5
 .IP "\fBioshost\fR" 4
 .IX Item "ioshost"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .Sp
 This variable \fIdynamically\fR modifies the grammar based on its value.
 .IP "\fBiosint\fR" 4
 .IX Item "iosint"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBiosuser\fR" 4
 .IX Item "iosuser"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBpings\fR" 4
 .IX Item "pings"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -2449,75 +3212,75 @@ Default value: forks = 5
 .IX Item "attrs"
 .PD
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBbase\fR" 4
 .IX Item "base"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBbinddn\fR" 4
 .IX Item "binddn"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBfilter\fR" 4
 .IX Item "filter"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .Sp
 This variable \fIdynamically\fR modifies the grammar based on its value.
 .IP "\fBmininterval\fR" 4
 .IX Item "mininterval"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .Sp
 Default value: mininterval = 1
 .IP "\fBpassword\fR" 4
 .IX Item "password"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBpings\fR" 4
 .IX Item "pings"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBport\fR" 4
 .IX Item "port"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBscope\fR" 4
 .IX Item "scope"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .Sp
 Default value: scope = sub
 .IP "\fBstart_tls\fR" 4
 .IX Item "start_tls"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBtimeout\fR" 4
 .IX Item "timeout"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .Sp
 Default value: timeout = 5
 .IP "\fBversion\fR" 4
 .IX Item "version"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -2605,53 +3368,53 @@ Default value: forks = 5
 .IX Item "mininterval"
 .PD
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .Sp
 Default value: mininterval = 1
 .IP "\fBnas_ip_address\fR" 4
 .IX Item "nas_ip_address"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBpassword\fR" 4
 .IX Item "password"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBpings\fR" 4
 .IX Item "pings"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBport\fR" 4
 .IX Item "port"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBsecret\fR" 4
 .IX Item "secret"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBtimeout\fR" 4
 .IX Item "timeout"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .Sp
 Default value: timeout = 5
 .IP "\fBusername\fR" 4
 .IX Item "username"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .Sp
 This variable \fIdynamically\fR modifies the grammar based on its value.
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -2734,6 +3497,8 @@ Default value: mininterval = 0.01
 .IX Item "rhost (mandatory setting)"
 .IP "\fBruser\fR" 4
 .IX Item "ruser"
+.IP "\fBsourceaddress\fR" 4
+.IX Item "sourceaddress"
 .IP "\fBstep\fR" 4
 .IX Item "step"
 .IP "\fBtimeout\fR" 4
@@ -2742,7 +3507,7 @@ Default value: mininterval = 0.01
 .RS 4
 .PD
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -2774,6 +3539,9 @@ This variable \fIinherits\fR its value from the parent section if nothing is spe
 This variable \fIinherits\fR its value from the parent section if nothing is specified here.
 .IP "\fBruser\fR" 4
 .IX Item "ruser"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBsourceaddress\fR" 4
+.IX Item "sourceaddress"
 This variable \fIinherits\fR its value from the parent section if nothing is specified here.
 .IP "\fBstep\fR" 4
 .IX Item "step"
@@ -2812,19 +3580,19 @@ Default value: timeout = 5
 .IP "\fBkeytype\fR" 4
 .IX Item "keytype"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .Sp
 Default value: keytype = rsa
 .IP "\fBpings\fR" 4
 .IX Item "pings"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -2883,57 +3651,57 @@ Default value: forks = 5
 .IX Item "authtype"
 .PD
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .Sp
 Default value: authtype = \s-1ASCII\s0
 .IP "\fBmininterval\fR" 4
 .IX Item "mininterval"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .Sp
 Default value: mininterval = 1
 .IP "\fBpassword\fR" 4
 .IX Item "password"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBpings\fR" 4
 .IX Item "pings"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBport\fR" 4
 .IX Item "port"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .Sp
 Default value: port = 49
 .IP "\fBsecret\fR" 4
 .IX Item "secret"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBtimeout\fR" 4
 .IX Item "timeout"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .Sp
 Default value: timeout = 5
 .IP "\fBusername\fR" 4
 .IX Item "username"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .Sp
 This variable \fIdynamically\fR modifies the grammar based on its value.
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -3018,38 +3786,38 @@ Default value: timeout = 5
 .IP "\fBiospass\fR" 4
 .IX Item "iospass"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .Sp
 This variable \fIdynamically\fR modifies the grammar based on its value.
 .IP "\fBiosuser\fR" 4
 .IX Item "iosuser"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .Sp
 This variable \fIdynamically\fR modifies the grammar based on its value.
 .IP "\fBpings\fR" 4
 .IX Item "pings"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBpsource\fR" 4
 .IX Item "psource"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .IP "\fBsource\fR" 4
 .IX Item "source"
 .Vb 1
-\& (This variable can be overridden target-specifically in the Targets section.)
+\& (This variable can be overridden target\-specifically in the Targets section.)
 .Ve
 .Sp
 This variable \fIdynamically\fR modifies the grammar based on its value.
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -3097,10 +3865,212 @@ This variable \fIinherits\fR its value from the parent section if nothing is spe
 .Sp
 (End of dynamical grammar changes for example instance \f(CW\*(C`TelnetIOSPing\*(C'\fR.)
 .RE
+.IP "\fBTelnetJunOSPing\fR: (See the separate module documentation for details about each variable.)" 4
+.IX Item "TelnetJunOSPing: (See the separate module documentation for details about each variable.)"
+The following new variables are valid:
+.RS 4
+.IP "\fBforks\fR" 4
+.IX Item "forks"
+Default value: forks = 5
+.IP "\fBoffset\fR" 4
+.IX Item "offset"
+.PD 0
+.IP "\fBpacketsize\fR" 4
+.IX Item "packetsize"
+.PD
+Default value: packetsize = 100
+.IP "\fBstep\fR" 4
+.IX Item "step"
+.PD 0
+.IP "\fBtimeout\fR" 4
+.IX Item "timeout"
+.PD
+Default value: timeout = 5
+.IP "\fBjunospass\fR" 4
+.IX Item "junospass"
+.Vb 1
+\& (This variable can be overridden target\-specifically in the Targets section.)
+.Ve
+.Sp
+This variable \fIdynamically\fR modifies the grammar based on its value.
+.IP "\fBjunosuser\fR" 4
+.IX Item "junosuser"
+.Vb 1
+\& (This variable can be overridden target\-specifically in the Targets section.)
+.Ve
+.Sp
+This variable \fIdynamically\fR modifies the grammar based on its value.
+.IP "\fBpings\fR" 4
+.IX Item "pings"
+.Vb 1
+\& (This variable can be overridden target\-specifically in the Targets section.)
+.Ve
+.IP "\fBpsource\fR" 4
+.IX Item "psource"
+.Vb 1
+\& (This variable can be overridden target\-specifically in the Targets section.)
+.Ve
+.IP "\fBsource\fR" 4
+.IX Item "source"
+.Vb 1
+\& (This variable can be overridden target\-specifically in the Targets section.)
+.Ve
+.Sp
+This variable \fIdynamically\fR modifies the grammar based on its value.
 .RE
 .RS 4
 .Sp
-(End of dynamical grammar changes for example instances of section \f(CW\*(C`/[\-_0\-9a\-zA\-Z]+/\*(C'\fR.)
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+.Sp
+.RS 4
+The following new variables are valid:
+.IP "\fBforks\fR" 4
+.IX Item "forks"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.Sp
+Default value: forks = 5
+.IP "\fBoffset\fR" 4
+.IX Item "offset"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBpacketsize\fR" 4
+.IX Item "packetsize"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.Sp
+Default value: packetsize = 100
+.IP "\fBstep\fR" 4
+.IX Item "step"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBtimeout\fR" 4
+.IX Item "timeout"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.Sp
+Default value: timeout = 5
+.IP "\fBjunospass\fR" 4
+.IX Item "junospass"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBjunosuser\fR" 4
+.IX Item "junosuser"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBpings\fR" 4
+.IX Item "pings"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBpsource\fR" 4
+.IX Item "psource"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBsource\fR" 4
+.IX Item "source"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.RE
+.RS 4
+.RE
+.RE
+.RS 4
+.Sp
+(End of dynamical grammar changes for example instance \f(CW\*(C`TelnetJunOSPing\*(C'\fR.)
+.RE
+.IP "\fBWebProxyFilter\fR: (See the separate module documentation for details about each variable.)" 4
+.IX Item "WebProxyFilter: (See the separate module documentation for details about each variable.)"
+The following new variables are valid:
+.RS 4
+.IP "\fBforks\fR" 4
+.IX Item "forks"
+Default value: forks = 5
+.IP "\fBmaxsize\fR" 4
+.IX Item "maxsize"
+Default value: maxsize = 2000
+.IP "\fBmin_interval\fR" 4
+.IX Item "min_interval"
+Default value: min_interval = 1
+.IP "\fBoffset\fR" 4
+.IX Item "offset"
+.PD 0
+.IP "\fBstep\fR" 4
+.IX Item "step"
+.IP "\fBuseragent\fR" 4
+.IX Item "useragent"
+.PD
+Default value: useragent = SmokePing/2.x (WebProxyFilter Probe)
+.IP "\fBdeny_re\fR \fI(mandatory setting)\fR" 4
+.IX Item "deny_re (mandatory setting)"
+.Vb 1
+\& (This variable can be overridden target\-specifically in the Targets section.)
+.Ve
+.IP "\fBmore_hosts\fR" 4
+.IX Item "more_hosts"
+.Vb 1
+\& (This variable can be overridden target\-specifically in the Targets section.)
+.Ve
+.IP "\fBpings\fR" 4
+.IX Item "pings"
+.Vb 1
+\& (This variable can be overridden target\-specifically in the Targets section.)
+.Ve
+.IP "\fBtimeout\fR" 4
+.IX Item "timeout"
+.Vb 1
+\& (This variable can be overridden target\-specifically in the Targets section.)
+.Ve
+.Sp
+Default value: timeout = 2
+.RE
+.RS 4
+.Sp
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+.Sp
+.RS 4
+The following new variables are valid:
+.IP "\fBforks\fR" 4
+.IX Item "forks"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.Sp
+Default value: forks = 5
+.IP "\fBmaxsize\fR" 4
+.IX Item "maxsize"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.Sp
+Default value: maxsize = 2000
+.IP "\fBmin_interval\fR" 4
+.IX Item "min_interval"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.Sp
+Default value: min_interval = 1
+.IP "\fBoffset\fR" 4
+.IX Item "offset"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBstep\fR" 4
+.IX Item "step"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBuseragent\fR" 4
+.IX Item "useragent"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.Sp
+Default value: useragent = SmokePing/2.x (WebProxyFilter Probe)
+.IP "\fBdeny_re\fR \fI(mandatory setting)\fR" 4
+.IX Item "deny_re (mandatory setting)"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBmore_hosts\fR" 4
+.IX Item "more_hosts"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBpings\fR" 4
+.IX Item "pings"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBtimeout\fR" 4
+.IX Item "timeout"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.Sp
+Default value: timeout = 2
+.RE
+.RS 4
+.RE
+.RE
+.RS 4
+.Sp
+(End of dynamical grammar changes for example instance \f(CW\*(C`WebProxyFilter\*(C'\fR.)
+.RE
+.RE
+.RS 4
+.Sp
+(End of dynamical grammar changes for example instances of section \f(CW\*(C`/[\-_0\-9a\-zA\-Z.]+/\*(C'\fR.)
 .RE
 .Sh "*** Alerts ***"
 .IX Subsection "*** Alerts ***"
@@ -3122,7 +4092,7 @@ The following \s-1RTT\s0 pattern detects if a target's \s-1RTT\s0 goes from cons
 below 10ms to constantly 100ms and more:
 .PP
 .Vb 2
-\& old ------------------------------> new
+\& old \-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-> new
 \& <10,<10,<10,<10,<10,>10,>100,>100,>100
 .Ve
 .PP
@@ -3130,7 +4100,7 @@ Loss patterns work in a similar way, except that the loss is defined as the
 percentage the total number of received packets is of the total number of packets sent.
 .PP
 .Vb 2
-\& old ------------------------------> new
+\& old \-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-> new
 \& ==0%,==0%,==0%,==0%,>20%,>20%,>=20%
 .Ve
 .PP
@@ -3229,6 +4199,25 @@ documentation above) will get a sixth argument, \fBraise\fR, which has the value
 was just raised and 0 if it was cleared.
 .Sp
 Default value: edgetrigger = no
+.IP "\fBmailtemplate\fR" 4
+.IX Item "mailtemplate"
+When sending out mails for alerts, smokeping normally uses an internally
+generated message. With the mailtemplate you can customize the alert mails
+to look they way you like them. The all \fB<##\fR\fIkeyword\fR\fB##>\fR type
+strings will get replaced in the template before it is sent out. the
+following keywords are supported:
+.Sp
+.Vb 9
+\& <##ALERT##>    \- target name
+\& <##WHAT##>     \- status (is active, was raised, was celared)
+\& <##LINE##>     \- path in the config tree
+\& <##URL##>      \- webpage for graph
+\& <##STAMP##>    \- date and time 
+\& <##PAT##>      \- pattern that matched the alert
+\& <##LOSS##>     \- loss history
+\& <##RTT##>      \- rtt history
+\& <##COMMENT##>  \- comment
+.Ve
 .PP
 The following sections are valid on level 1:
 .IP "\fB+/[^\es,]+/\fR" 4
@@ -3240,7 +4229,7 @@ The following variables can be set in this section:
 Currently the pattern types \fBrtt\fR and \fBloss\fR and \fBmatcher\fR are known. 
 .Sp
 Matchers are plugin modules that extend the alert conditions.  Known
-matchers are Avgratio, CheckLatency, CheckLoss, Median.
+matchers are Avgratio, CheckLatency, CheckLoss, Median, Medratio.
 .Sp
 See the documentation of the corresponding matcher module
 (eg. Smokeping::matchers::Avgratio) for instructions on
@@ -3260,6 +4249,13 @@ Similar to the \*(L"to\*(R" parameter on the top-level except that  it will only
 This variable \fIinherits\fR its value from the parent section if nothing is specified here.
 .Sp
 Default value: edgetrigger = no
+.IP "\fBmailtemplate\fR" 4
+.IX Item "mailtemplate"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBpriority\fR" 4
+.IX Item "priority"
+if multiple alerts 'match' only the one with the highest priority (lowest number) will cause and
+alert to be sent. Alerts without priority will be sent in any case.
 .RE
 .RS 4
 .RE
@@ -3294,8 +4290,8 @@ an empty alerts definition to remove inherited alerts from the current target
 and its children.
 .PP
 The following sections are valid on level 1:
-.IP "\fB+/[\-_0\-9a\-zA\-Z]+/\fR" 4
-.IX Item "+/[-_0-9a-zA-Z]+/"
+.IP "\fB+/[\-_0\-9a\-zA\-Z.]+/\fR" 4
+.IX Item "+/[-_0-9a-zA-Z.]+/"
 Each target section can contain information about a host to monitor as
 well as further target sections. Most variables have already been
 described above. The expression above defines legal names for target
@@ -3359,13 +4355,13 @@ put into the file name. The filename is built like this:
 Example:
 .Sp
 .Vb 1
-\& rawlog=%Y-%m-%d
+\& rawlog=%Y\-%m\-%d
 .Ve
 .Sp
 this would create a new logfile every day with a name like this: 
 .Sp
 .Vb 1
-\& targethost.2004-05-03.csv
+\& targethost.2004\-05\-03.csv
 .Ve
 .IP "\fBalertee\fR" 4
 .IX Item "alertee"
@@ -3377,8 +4373,8 @@ This variable \fIinherits\fR its value from the parent section if nothing is spe
 .RS 4
 .Sp
 The following sections are valid on level 2:
-.IP "\fB++/[\-_0\-9a\-zA\-Z]+/\fR" 4
-.IX Item "++/[-_0-9a-zA-Z]+/"
+.IP "\fB++/[\-_0\-9a\-zA\-Z.]+/\fR" 4
+.IX Item "++/[-_0-9a-zA-Z.]+/"
 This section is \fIrecursive\fR: it can contain subsection(s) with the same syntax.
 .RE
 .RS 4
@@ -3410,7 +4406,7 @@ The following new variables are valid:
 .RS 4
 .PD
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -3467,7 +4463,7 @@ The following new variables are valid:
 .RS 4
 .PD
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -3514,7 +4510,7 @@ The following new variables are valid:
 .RS 4
 .PD
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -3559,7 +4555,7 @@ The following new variables are valid:
 .RS 4
 .PD
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -3608,7 +4604,7 @@ The following new variables are valid:
 .RS 4
 .PD
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -3666,7 +4662,7 @@ The following new variables are valid:
 .RS 4
 .PD
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -3726,7 +4722,7 @@ The following new variables are valid:
 .RS 4
 .PD
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -3776,7 +4772,7 @@ The following new variables are valid:
 .RS 4
 .PD
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -3845,7 +4841,7 @@ The following new variables are valid:
 .RS 4
 .PD
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -3884,6 +4880,87 @@ This variable \fIinherits\fR its value from the parent section if nothing is spe
 .Sp
 (End of dynamical grammar changes for variable \f(CW\*(C`probe\*(C'\fR example value \f(CW\*(C`EchoPingChargen\*(C'\fR.)
 .RE
+.IP "\fBEchoPingDNS\fR: (See the separate module documentation for details about each variable.)" 4
+.IX Item "EchoPingDNS: (See the separate module documentation for details about each variable.)"
+The following new variables are valid:
+.RS 4
+.IP "\fBdns_request\fR" 4
+.IX Item "dns_request"
+.PD 0
+.IP "\fBdns_tcp\fR" 4
+.IX Item "dns_tcp"
+.IP "\fBdns_type\fR" 4
+.IX Item "dns_type"
+.IP "\fBextraopts\fR" 4
+.IX Item "extraopts"
+.IP "\fBipversion\fR" 4
+.IX Item "ipversion"
+.IP "\fBpings\fR" 4
+.IX Item "pings"
+.IP "\fBplugin\fR" 4
+.IX Item "plugin"
+.IP "\fBpluginargs\fR" 4
+.IX Item "pluginargs"
+.IP "\fBpriority\fR" 4
+.IX Item "priority"
+.IP "\fBtimeout\fR" 4
+.IX Item "timeout"
+.IP "\fBtos\fR" 4
+.IX Item "tos"
+.IP "\fBwaittime\fR" 4
+.IX Item "waittime"
+.RE
+.RS 4
+.PD
+.Sp
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+.Sp
+.RS 4
+The following new variables are valid:
+.IP "\fBdns_request\fR" 4
+.IX Item "dns_request"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBdns_tcp\fR" 4
+.IX Item "dns_tcp"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBdns_type\fR" 4
+.IX Item "dns_type"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBextraopts\fR" 4
+.IX Item "extraopts"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBipversion\fR" 4
+.IX Item "ipversion"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBpings\fR" 4
+.IX Item "pings"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBplugin\fR" 4
+.IX Item "plugin"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBpluginargs\fR" 4
+.IX Item "pluginargs"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBpriority\fR" 4
+.IX Item "priority"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBtimeout\fR" 4
+.IX Item "timeout"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBtos\fR" 4
+.IX Item "tos"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBwaittime\fR" 4
+.IX Item "waittime"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.RE
+.RS 4
+.RE
+.RE
+.RS 4
+.Sp
+(End of dynamical grammar changes for variable \f(CW\*(C`probe\*(C'\fR example value \f(CW\*(C`EchoPingDNS\*(C'\fR.)
+.RE
 .IP "\fBEchoPingDiscard\fR: (See the separate module documentation for details about each variable.)" 4
 .IX Item "EchoPingDiscard: (See the separate module documentation for details about each variable.)"
 The following new variables are valid:
@@ -3913,7 +4990,7 @@ The following new variables are valid:
 .RS 4
 .PD
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -3986,7 +5063,7 @@ The following new variables are valid:
 .RS 4
 .PD
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -4062,7 +5139,7 @@ The following new variables are valid:
 .RS 4
 .PD
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -4132,7 +5209,7 @@ The following new variables are valid:
 .RS 4
 .PD
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -4168,6 +5245,153 @@ This variable \fIinherits\fR its value from the parent section if nothing is spe
 .Sp
 (End of dynamical grammar changes for variable \f(CW\*(C`probe\*(C'\fR example value \f(CW\*(C`EchoPingIcp\*(C'\fR.)
 .RE
+.IP "\fBEchoPingLDAP\fR: (See the separate module documentation for details about each variable.)" 4
+.IX Item "EchoPingLDAP: (See the separate module documentation for details about each variable.)"
+The following new variables are valid:
+.RS 4
+.IP "\fBextraopts\fR" 4
+.IX Item "extraopts"
+.PD 0
+.IP "\fBipversion\fR" 4
+.IX Item "ipversion"
+.IP "\fBldap_base\fR" 4
+.IX Item "ldap_base"
+.IP "\fBldap_request\fR" 4
+.IX Item "ldap_request"
+.IP "\fBldap_scope\fR" 4
+.IX Item "ldap_scope"
+.IP "\fBpings\fR" 4
+.IX Item "pings"
+.IP "\fBplugin\fR" 4
+.IX Item "plugin"
+.IP "\fBpluginargs\fR" 4
+.IX Item "pluginargs"
+.IP "\fBpriority\fR" 4
+.IX Item "priority"
+.IP "\fBtimeout\fR" 4
+.IX Item "timeout"
+.IP "\fBtos\fR" 4
+.IX Item "tos"
+.IP "\fBwaittime\fR" 4
+.IX Item "waittime"
+.RE
+.RS 4
+.PD
+.Sp
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+.Sp
+.RS 4
+The following new variables are valid:
+.IP "\fBextraopts\fR" 4
+.IX Item "extraopts"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBipversion\fR" 4
+.IX Item "ipversion"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBldap_base\fR" 4
+.IX Item "ldap_base"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBldap_request\fR" 4
+.IX Item "ldap_request"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBldap_scope\fR" 4
+.IX Item "ldap_scope"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBpings\fR" 4
+.IX Item "pings"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBplugin\fR" 4
+.IX Item "plugin"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBpluginargs\fR" 4
+.IX Item "pluginargs"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBpriority\fR" 4
+.IX Item "priority"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBtimeout\fR" 4
+.IX Item "timeout"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBtos\fR" 4
+.IX Item "tos"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBwaittime\fR" 4
+.IX Item "waittime"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.RE
+.RS 4
+.RE
+.RE
+.RS 4
+.Sp
+(End of dynamical grammar changes for variable \f(CW\*(C`probe\*(C'\fR example value \f(CW\*(C`EchoPingLDAP\*(C'\fR.)
+.RE
+.IP "\fBEchoPingPlugin\fR: (See the separate module documentation for details about each variable.)" 4
+.IX Item "EchoPingPlugin: (See the separate module documentation for details about each variable.)"
+The following new variables are valid:
+.RS 4
+.IP "\fBextraopts\fR" 4
+.IX Item "extraopts"
+.PD 0
+.IP "\fBipversion\fR" 4
+.IX Item "ipversion"
+.IP "\fBpings\fR" 4
+.IX Item "pings"
+.IP "\fBplugin\fR" 4
+.IX Item "plugin"
+.IP "\fBpluginargs\fR" 4
+.IX Item "pluginargs"
+.IP "\fBpriority\fR" 4
+.IX Item "priority"
+.IP "\fBtimeout\fR" 4
+.IX Item "timeout"
+.IP "\fBtos\fR" 4
+.IX Item "tos"
+.IP "\fBwaittime\fR" 4
+.IX Item "waittime"
+.RE
+.RS 4
+.PD
+.Sp
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+.Sp
+.RS 4
+The following new variables are valid:
+.IP "\fBextraopts\fR" 4
+.IX Item "extraopts"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBipversion\fR" 4
+.IX Item "ipversion"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBpings\fR" 4
+.IX Item "pings"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBplugin\fR" 4
+.IX Item "plugin"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBpluginargs\fR" 4
+.IX Item "pluginargs"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBpriority\fR" 4
+.IX Item "priority"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBtimeout\fR" 4
+.IX Item "timeout"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBtos\fR" 4
+.IX Item "tos"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBwaittime\fR" 4
+.IX Item "waittime"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.RE
+.RS 4
+.RE
+.RE
+.RS 4
+.Sp
+(End of dynamical grammar changes for variable \f(CW\*(C`probe\*(C'\fR example value \f(CW\*(C`EchoPingPlugin\*(C'\fR.)
+.RE
 .IP "\fBEchoPingSmtp\fR: (See the separate module documentation for details about each variable.)" 4
 .IX Item "EchoPingSmtp: (See the separate module documentation for details about each variable.)"
 The following new variables are valid:
@@ -4191,7 +5415,7 @@ The following new variables are valid:
 .RS 4
 .PD
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -4224,6 +5448,77 @@ This variable \fIinherits\fR its value from the parent section if nothing is spe
 .Sp
 (End of dynamical grammar changes for variable \f(CW\*(C`probe\*(C'\fR example value \f(CW\*(C`EchoPingSmtp\*(C'\fR.)
 .RE
+.IP "\fBEchoPingWhois\fR: (See the separate module documentation for details about each variable.)" 4
+.IX Item "EchoPingWhois: (See the separate module documentation for details about each variable.)"
+The following new variables are valid:
+.RS 4
+.IP "\fBextraopts\fR" 4
+.IX Item "extraopts"
+.PD 0
+.IP "\fBipversion\fR" 4
+.IX Item "ipversion"
+.IP "\fBpings\fR" 4
+.IX Item "pings"
+.IP "\fBplugin\fR" 4
+.IX Item "plugin"
+.IP "\fBpluginargs\fR" 4
+.IX Item "pluginargs"
+.IP "\fBpriority\fR" 4
+.IX Item "priority"
+.IP "\fBtimeout\fR" 4
+.IX Item "timeout"
+.IP "\fBtos\fR" 4
+.IX Item "tos"
+.IP "\fBwaittime\fR" 4
+.IX Item "waittime"
+.IP "\fBwhois_request\fR" 4
+.IX Item "whois_request"
+.RE
+.RS 4
+.PD
+.Sp
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+.Sp
+.RS 4
+The following new variables are valid:
+.IP "\fBextraopts\fR" 4
+.IX Item "extraopts"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBipversion\fR" 4
+.IX Item "ipversion"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBpings\fR" 4
+.IX Item "pings"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBplugin\fR" 4
+.IX Item "plugin"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBpluginargs\fR" 4
+.IX Item "pluginargs"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBpriority\fR" 4
+.IX Item "priority"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBtimeout\fR" 4
+.IX Item "timeout"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBtos\fR" 4
+.IX Item "tos"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBwaittime\fR" 4
+.IX Item "waittime"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBwhois_request\fR" 4
+.IX Item "whois_request"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.RE
+.RS 4
+.RE
+.RE
+.RS 4
+.Sp
+(End of dynamical grammar changes for variable \f(CW\*(C`probe\*(C'\fR example value \f(CW\*(C`EchoPingWhois\*(C'\fR.)
+.RE
 .IP "\fBFPing\fR: (See the separate module documentation for details about each variable.)" 4
 .IX Item "FPing: (See the separate module documentation for details about each variable.)"
 No changes that can be automatically described.
@@ -4234,6 +5529,62 @@ No changes that can be automatically described.
 No changes that can be automatically described.
 .Sp
 (End of dynamical grammar changes for variable \f(CW\*(C`probe\*(C'\fR example value \f(CW\*(C`FPing6\*(C'\fR.)
+.IP "\fBFTPtransfer\fR: (See the separate module documentation for details about each variable.)" 4
+.IX Item "FTPtransfer: (See the separate module documentation for details about each variable.)"
+The following new variables are valid:
+.RS 4
+.IP "\fBlocaladdr\fR" 4
+.IX Item "localaddr"
+.PD 0
+.IP "\fBpassive\fR" 4
+.IX Item "passive"
+.IP "\fBpassword\fR" 4
+.IX Item "password"
+.IP "\fBpings\fR" 4
+.IX Item "pings"
+.IP "\fBport\fR" 4
+.IX Item "port"
+.IP "\fBtimeout\fR" 4
+.IX Item "timeout"
+.IP "\fBusername\fR" 4
+.IX Item "username"
+.RE
+.RS 4
+.PD
+.Sp
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+.Sp
+.RS 4
+The following new variables are valid:
+.IP "\fBlocaladdr\fR" 4
+.IX Item "localaddr"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBpassive\fR" 4
+.IX Item "passive"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBpassword\fR" 4
+.IX Item "password"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBpings\fR" 4
+.IX Item "pings"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBport\fR" 4
+.IX Item "port"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBtimeout\fR" 4
+.IX Item "timeout"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBusername\fR" 4
+.IX Item "username"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.RE
+.RS 4
+.RE
+.RE
+.RS 4
+.Sp
+(End of dynamical grammar changes for variable \f(CW\*(C`probe\*(C'\fR example value \f(CW\*(C`FTPtransfer\*(C'\fR.)
+.RE
 .IP "\fBIOSPing\fR: (See the separate module documentation for details about each variable.)" 4
 .IX Item "IOSPing: (See the separate module documentation for details about each variable.)"
 The following new variables are valid:
@@ -4251,7 +5602,7 @@ The following new variables are valid:
 .RS 4
 .PD
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -4308,7 +5659,7 @@ The following new variables are valid:
 .RS 4
 .PD
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -4381,7 +5732,7 @@ The following new variables are valid:
 .RS 4
 .PD
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -4435,7 +5786,7 @@ The following new variables are valid:
 .RS 4
 .PD
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -4478,7 +5829,7 @@ The following new variables are valid:
 .RS 4
 .PD
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -4533,7 +5884,7 @@ The following new variables are valid:
 .RS 4
 .PD
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -4559,6 +5910,93 @@ This variable \fIinherits\fR its value from the parent section if nothing is spe
 .RS 4
 .Sp
 (End of dynamical grammar changes for variable \f(CW\*(C`probe\*(C'\fR example value \f(CW\*(C`TelnetIOSPing\*(C'\fR.)
+.RE
+.IP "\fBTelnetJunOSPing\fR: (See the separate module documentation for details about each variable.)" 4
+.IX Item "TelnetJunOSPing: (See the separate module documentation for details about each variable.)"
+The following new variables are valid:
+.RS 4
+.IP "\fBjunospass\fR" 4
+.IX Item "junospass"
+.PD 0
+.IP "\fBjunosuser\fR" 4
+.IX Item "junosuser"
+.IP "\fBpings\fR" 4
+.IX Item "pings"
+.IP "\fBpsource\fR" 4
+.IX Item "psource"
+.IP "\fBsource\fR" 4
+.IX Item "source"
+.RE
+.RS 4
+.PD
+.Sp
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+.Sp
+.RS 4
+The following new variables are valid:
+.IP "\fBjunospass\fR" 4
+.IX Item "junospass"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBjunosuser\fR" 4
+.IX Item "junosuser"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBpings\fR" 4
+.IX Item "pings"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBpsource\fR" 4
+.IX Item "psource"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBsource\fR" 4
+.IX Item "source"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.RE
+.RS 4
+.RE
+.RE
+.RS 4
+.Sp
+(End of dynamical grammar changes for variable \f(CW\*(C`probe\*(C'\fR example value \f(CW\*(C`TelnetJunOSPing\*(C'\fR.)
+.RE
+.IP "\fBWebProxyFilter\fR: (See the separate module documentation for details about each variable.)" 4
+.IX Item "WebProxyFilter: (See the separate module documentation for details about each variable.)"
+The following new variables are valid:
+.RS 4
+.IP "\fBdeny_re\fR" 4
+.IX Item "deny_re"
+.PD 0
+.IP "\fBmore_hosts\fR" 4
+.IX Item "more_hosts"
+.IP "\fBpings\fR" 4
+.IX Item "pings"
+.IP "\fBtimeout\fR" 4
+.IX Item "timeout"
+.RE
+.RS 4
+.PD
+.Sp
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+.Sp
+.RS 4
+The following new variables are valid:
+.IP "\fBdeny_re\fR" 4
+.IX Item "deny_re"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBmore_hosts\fR" 4
+.IX Item "more_hosts"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBpings\fR" 4
+.IX Item "pings"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBtimeout\fR" 4
+.IX Item "timeout"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.RE
+.RS 4
+.RE
+.RE
+.RS 4
+.Sp
+(End of dynamical grammar changes for variable \f(CW\*(C`probe\*(C'\fR example value \f(CW\*(C`WebProxyFilter\*(C'\fR.)
 .RE
 .PP
 (End of dynamical grammar changes for example values of variable \f(CW\*(C`probe\*(C'\fR.)

@@ -17,6 +17,7 @@ Smokeping::probes::RemoteFPing - Remote FPing Probe for SmokePing
  rbinary = /usr/bin/fping # mandatory
  rhost = my.pinger.host # mandatory
  ruser = foo
+ sourceaddress = 192.168.0.1
  step = 300
  timeout = 1.5
 
@@ -132,6 +133,14 @@ The (optional) B<ruser> option allows you to specify the remote user,
 if different from the one running the smokeping daemon.
 
 Example value: foo
+
+=item sourceaddress
+
+The fping "-S" parameter . From fping(1):
+
+Set source address.
+
+Example value: 192.168.0.1
 
 =item step
 

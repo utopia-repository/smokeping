@@ -5,9 +5,9 @@
 ## DP: No description.
 
 @DPATCH@
-diff -urNad smokeping-2.0.8~/etc/config.dist smokeping-2.0.8/etc/config.dist
---- smokeping-2.0.8~/etc/config.dist	2006-03-24 17:51:02.000000000 +0100
-+++ smokeping-2.0.8/etc/config.dist	2006-04-16 13:01:48.000000000 +0200
+diff -urNad smokeping-2.1.1~/etc/config.dist smokeping-2.1.1/etc/config.dist
+--- smokeping-2.1.1~/etc/config.dist	2007-05-06 23:37:51.000000000 +0300
++++ smokeping-2.1.1/etc/config.dist	2007-05-06 23:38:00.000000000 +0300
 @@ -4,17 +4,27 @@
  
  *** General ***

@@ -5,17 +5,17 @@
 ## DP: remove unneeded and potentially unsecure include paths
 
 @DPATCH@
-diff -urNad smokeping-2.0.9~/Makefile smokeping-2.0.9/Makefile
---- smokeping-2.0.9~/Makefile	2006-07-14 14:17:47.000000000 +0300
-+++ smokeping-2.0.9/Makefile	2006-10-25 23:17:47.000000000 +0300
-@@ -36,8 +36,8 @@
+diff -urNad smokeping-2.1.1~/Makefile smokeping-2.1.1/Makefile
+--- smokeping-2.1.1~/Makefile	2007-05-06 23:36:18.000000000 +0300
++++ smokeping-2.1.1/Makefile	2007-05-06 23:36:57.000000000 +0300
+@@ -39,8 +39,8 @@
  # pod2html apparently needs to be in the target directory to get L<> links right
  POD2HTML= cd $(dir $@); top="$(shell echo $(dir $@)|sed -e 's,doc/,,' -e 's,[^/]*/,../,g' -e 's,/$$,,')"; top=$${top:-.}; pod2html --infile=$(CURDIR)/$< --noindex --htmlroot=. --podroot=. --podpath=$${top} --title=$* | $${top}/../util/fix-pod2html.pl > $(notdir $@)
  # we go to this trouble to ensure that MAKEPOD only uses modules in the installation directory
--MAKEPOD= perl -I/home/oetiker/lib/fake-perl/ -Ilib -I/usr/pack/rrdtool-1.2svn-to/lib/perl -mSmokeping -e 'Smokeping::main()' -- --makepod
--GENEX= perl -I/home/oetiker/lib/fake-perl/ -Ilib -I/usr/pack/rrdtool-1.2svn-to/lib/perl -mSmokeping -e 'Smokeping::main()' -- --gen-examples
-+MAKEPOD= perl -Ilib -mSmokeping -e 'Smokeping::main()' -- --makepod
-+GENEX= perl -Ilib -mSmokeping -e 'Smokeping::main()' -- --gen-examples
+-MAKEPOD= $(PERL) -I/home/oetiker/lib/fake-perl/ -Ilib -I/usr/pack/rrdtool-1.2svn-to/lib/perl -mSmokeping -e 'Smokeping::main()' -- --makepod
+-GENEX= $(PERL) -I/home/oetiker/lib/fake-perl/ -Ilib -I/usr/pack/rrdtool-1.2svn-to/lib/perl -mSmokeping -e 'Smokeping::main()' -- --gen-examples
++MAKEPOD= $(PERL) -Ilib -mSmokeping -e 'Smokeping::main()' -- --makepod
++GENEX= $(PERL) -Ilib -mSmokeping -e 'Smokeping::main()' -- --gen-examples
  
  doc/%.7: doc/%.pod
  	$(POD2MAN) --section 7 > $@

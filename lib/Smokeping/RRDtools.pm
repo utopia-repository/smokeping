@@ -104,7 +104,6 @@ use RRDs;
 sub info2create {
 	my $file = shift;
 	my @create;
-
 	# check for Perl version 5.8.0, it's buggy
 	# no more v-strings 
         my $buggy_perl_version = 1 if abs($] - 5.008000) < .0000005;

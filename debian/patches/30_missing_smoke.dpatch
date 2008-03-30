@@ -1,0 +1,19 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 30_missing_smoke.dpatch by Niko Tyni <ntyni@iki.fi>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: Fix missing smoke when it doesn't fit the scale. (#412826)
+
+@DPATCH@
+diff -urNad smokeping-2.1.1~/lib/Smokeping.pm smokeping-2.1.1/lib/Smokeping.pm
+--- smokeping-2.1.1~/lib/Smokeping.pm	2007-05-02 19:15:31.000000000 +0300
++++ smokeping-2.1.1/lib/Smokeping.pm	2007-05-14 23:24:13.000000000 +0300
+@@ -1006,7 +1006,7 @@
+ 	   '--color', 'BACK#ffffff',
+ 	   '--color', 'CANVAS#ffffff',
+ 	   (map {"DEF:ping${_}=${rrd}:ping${_}:AVERAGE"} 1..$pings),
+-	   (map {"CDEF:cp${_}=ping${_},0,$max->{$start},LIMIT"} 1..$pings),
++	   (map {"CDEF:cp${_}=ping${_},$max->{$start},MIN"} 1..$pings),
+            ("DEF:loss=${rrd}:loss:AVERAGE"),
+ 	   @upargs,# draw the uptime bg color
+ 	   @lossargs, # draw the loss bg color
