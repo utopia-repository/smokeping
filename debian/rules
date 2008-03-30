@@ -60,6 +60,9 @@ install: build
 	install -d $(TMP)/usr/share/perl5/smokeping/probes
 	install -m 644 lib/probes/*pm $(TMP)/usr/share/perl5/smokeping/probes
 
+	install -d $(TMP)/usr/share/perl5/smokeping/matchers
+	install -m 644 lib/matchers/*pm $(TMP)/usr/share/perl5/smokeping/matchers
+
 	install -d $(TMP)/usr/share/perl5/smokeping/ISG
 	install -m 644 lib/ISG/*pm $(TMP)/usr/share/perl5/smokeping/ISG/
 

@@ -1,3 +1,11 @@
+smokeping (1.38-3) unstable; urgency=low
+
+  * Include missing matchers methods in binary package (Closes: #295354)
+  * Add missing suggests: libnet-dns-perl, ssh, libio-socket-ssl-perl,
+    libnet-telnet-perl (Closes: #295372)
+
+ -- Jose Carlos Garcia Sogo <jsogo@debian.org>  Sun, 13 Mar 2005 13:55:44 +0100
+
 smokeping (1.38-2) unstable; urgency=low
 
   * Added missing Build-Dependecy in groff. (Closes: #292949)
