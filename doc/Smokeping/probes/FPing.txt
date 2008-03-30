@@ -140,4 +140,4 @@ AAUUTTHHOORRSS
 
 
 
-2.2.7                             2007-11-05  doc::Smokeping::probes::FPing(3)
+2.3.0                             2008-01-23  doc::Smokeping::probes::FPing(3)

@@ -610,6 +610,33 @@ Example: colors = ff0000 00ff00 0000ff
 
 =back
 
+=item B<+hierarchies>
+
+Provide an alternative presentation hierarchy for your smokeping data. After setting up a hierarchy in this
+section. You can use it in each tagets parent property. A drop-down menu in the smokeping website lets
+the user switch presentation hierarchy.
+
+
+The following sections are valid on level 2:
+
+=over
+
+=item B<++/[-_0-9a-zA-Z.]+/>
+
+Identifier of the hierarchie. Use this as prefix in the targets parent property
+
+The following variables can be set in this section:
+
+=over
+
+=item B<title> I<(mandatory setting)>
+
+Title for this hierarchy
+
+=back
+
+=back
+
 =back
 
 =head2 *** Probes *** I<(mandatory section)>
@@ -2221,6 +2248,10 @@ see above
 
 see above
 
+=item B<accept_redirects>
+
+(This variable can be overridden target-specifically in the Targets section.)
+
 =item B<extraopts>
 
 (This variable can be overridden target-specifically in the Targets section.)
@@ -2304,6 +2335,10 @@ This variable I<inherits> its value from the parent section if nothing is specif
 =item B<step>
 
 see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<accept_redirects>
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -2387,6 +2422,10 @@ see above
 
 see above
 
+=item B<accept_redirects>
+
+(This variable can be overridden target-specifically in the Targets section.)
+
 =item B<extraopts>
 
 (This variable can be overridden target-specifically in the Targets section.)
@@ -2470,6 +2509,10 @@ This variable I<inherits> its value from the parent section if nothing is specif
 =item B<step>
 
 see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<accept_redirects>
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -4389,6 +4432,102 @@ Default value: port = 22
 
 (End of dynamical grammar changes for example instance C<SSH>.)
 
+=item B<TCPPing>: (See the L<separate module documentation|Smokeping::probes::TCPPing> for details about each variable.)
+
+The following new variables are valid:
+
+=over
+
+=item B<binary> I<(mandatory setting)>
+
+see above
+
+=item B<forks>
+
+see above
+
+Default value: forks = 5
+
+=item B<offset>
+
+see above
+
+=item B<step>
+
+see above
+
+=item B<timeout>
+
+see above
+
+Default value: timeout = 5
+
+=item B<pings>
+
+(This variable can be overridden target-specifically in the Targets section.)
+
+=item B<port>
+
+(This variable can be overridden target-specifically in the Targets section.)
+
+=back
+
+Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+
+=over
+
+The following new variables are valid:
+
+=over
+
+=item B<binary> I<(mandatory setting)>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<forks>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+Default value: forks = 5
+
+=item B<offset>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<step>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<timeout>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+Default value: timeout = 5
+
+=item B<pings>
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<port>
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=back
+
+=back
+
+(End of dynamical grammar changes for example instance C<TCPPing>.)
+
 =item B<TacacsPlus>: (See the L<separate module documentation|Smokeping::probes::TacacsPlus> for details about each variable.)
 
 The following new variables are valid:
@@ -4995,6 +5134,8 @@ and its children.
 
 =item B<slaves>
 
+=item B<parents>
+
 =back
 
 The following sections are valid on level 1:
@@ -5112,6 +5253,53 @@ The slave names must match the slaves you have setup in the slaves section.
 
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<parents>
+
+After setting up a hierarchy in the Presentation section of the
+configuration file you can use this property to assign an entry to alternate
+hierarchies. The format for parent entries is.
+
+ hierarchyA:/Node1/Node2 hierarchyB:/Node3
+      
+The entries from all parent properties together will build a new tree for
+each hierarchy. With this method it is possible to make a single target show
+up multiple times in a tree. If you think this is a good thing, go ahead,
+nothing is stopping you. Since you do not only define the parent but the full path
+of the parent node, circular dependencies are not possible.
+
+
+
+=item B<hide>
+
+Set the hide property to 'yes' to hide this host from the navigation menu
+and from search results. Note that if you set the hide property on a non
+leaf entry all subordinate entries will also disapear in the menu structure.
+If you know a direct link to a page it is still accessible. Pages which are
+hidden from the menu due to a parent being hidden will still show up in
+search results and in alternate hierarchies where they are below a non
+hidden parent.
+
+
+Default value: hide = no
+
+=item B<nomasterpoll>
+
+Use this in a master/slave setup where the master must not poll a particular
+target. The master will now skip this entry in its polling cycle.  and from
+search results. Note that if you set the hide property on a non leaf entry
+all subordinate entries will also disapear in the menu structure. You can
+still access them via direct link or via an alternate hierarchy.
+
+If you have no master/slave setup this will have a similar effect to the
+hide property, except that the menu entry will still show up, but will not
+contain any graphs.
+
+
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+Default value: nomasterpoll = no
 
 =back
 
@@ -6219,6 +6407,10 @@ The following new variables are valid:
 
 =over
 
+=item B<accept_redirects>
+
+see above
+
 =item B<extraopts>
 
 see above
@@ -6272,6 +6464,12 @@ Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
 The following new variables are valid:
 
 =over
+
+=item B<accept_redirects>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<extraopts>
 
@@ -6351,6 +6549,10 @@ The following new variables are valid:
 
 =over
 
+=item B<accept_redirects>
+
+see above
+
 =item B<extraopts>
 
 see above
@@ -6404,6 +6606,12 @@ Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
 The following new variables are valid:
 
 =over
+
+=item B<accept_redirects>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<extraopts>
 
@@ -7514,6 +7722,48 @@ This variable I<inherits> its value from the parent section if nothing is specif
 =back
 
 (End of dynamical grammar changes for variable C<probe> example value C<SSH>.)
+
+=item B<TCPPing>: (See the L<separate module documentation|Smokeping::probes::TCPPing> for details about each variable.)
+
+The following new variables are valid:
+
+=over
+
+=item B<pings>
+
+see above
+
+=item B<port>
+
+see above
+
+=back
+
+Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+
+=over
+
+The following new variables are valid:
+
+=over
+
+=item B<pings>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<port>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=back
+
+=back
+
+(End of dynamical grammar changes for variable C<probe> example value C<TCPPing>.)
 
 =item B<TacacsPlus>: (See the L<separate module documentation|Smokeping::probes::TacacsPlus> for details about each variable.)
 

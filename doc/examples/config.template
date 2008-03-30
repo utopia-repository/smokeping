@@ -11,6 +11,9 @@ owner    = Peter Random
 contact  = some@address.nowhere
 mailhost = my.mail.host
 sendmail = /usr/lib/sendmail
+# NOTE: do not put the Image Cache below cgi-bin
+# since all files under cgi-bin will be executed ... this is not
+# good for images.
 imgcache = /home/oetiker/public_html/smokeping-ms/cache
 imgurl   = cache
 datadir  = /tmp/smokeping-ms/data
@@ -99,6 +102,12 @@ unison_tolerance = 2
 "Last 10 Days"    10d
 "Last 400 Days"   400d
 
+#+ hierarchies
+#++ owner
+#title = Host Owner
+#++ location
+#title = Location
+
 # (The actual example starts here.)
 
 *** Probes ***
@@ -134,6 +143,7 @@ remark = Welcome to the SmokePing website of xxx Company. \
 
 + Test
 menu= Targets
+#parents = owner:/Test/James location:/
 
 ++ James
 

@@ -115,13 +115,21 @@ you when it starts ... let me know it it gets it wrong.</p>
 <p>You need this for the SSH probe.</p>
 
 </li>
-</dd><dt><strong><a name="item_modules">Various Perl modules (Optional)</a></strong>
+</dd><dt><strong><a name="item_modules">Various Perl modules (Most of these are optional)</a></strong>
 
 <dd>
 <p>You can get these from <a href="http://www.cpan.org/">http://www.cpan.org/</a>.</p>
 
 <dl>
-<dt><strong><a name="item_socket6_0_2e11_2d1">Socket6 0.11-1</a></strong>
+<dt><strong><a name="item_libwww_2dperl">libwww-perl</a></strong>
+
+<dd>
+<p>The master/slave functionality introduced a dependency LWP::UserAgent
+from the libwww-perl (also known as LWP) library. Currently the module
+is needed even if the master/slave mode is not enabled.</p>
+
+</li>
+</dd><dt><strong><a name="item_socket6_0_2e11_2d1">Socket6 0.11-1</a></strong>
 
 <dd>
 <p>Optionally installing the Socket6 module for perl enables

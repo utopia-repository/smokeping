@@ -191,4 +191,4 @@ SSEEEE AALLSSOO
 
 
 
-2.2.7                             2007-11d-o0c5::Smokeping::probes::EchoPingDNS(3)
+2.3.0                             2008-01d-o2c3::Smokeping::probes::EchoPingDNS(3)

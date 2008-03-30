@@ -26,6 +26,13 @@ OOVVEERRVVIIEEWW
        CHANGES file in the Smokeping distribution. This document tries to com-
        plement that with upgrading instructions etc.
 
+22..11..xx ttoo 22..22..00
+       LLWWPP DDeeppeennddeennccyy
+
+       The new master/slave functionality needs the LWP::UserAgent module from
+       CPAN. Currently the dependency is not optional; you'll need the module
+       even if you are only running one Smokeping instance.
+
 22..00..99 ttoo 22..11..00
        EEcchhooppiinngg 66 ssuuppppoorrtt
 
@@ -338,4 +345,4 @@ SSEEEE AALLSSOO
 
 
 
-2.2.7                             2007-09-05              SMOKEPING_UPGRADE(7)
+2.3.0                             2007-12-01              SMOKEPING_UPGRADE(7)

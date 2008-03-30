@@ -75,9 +75,12 @@ DDEESSCCRRIIPPTTIIOONN
 
         *** slaves ****
         secrets=/etc/smokeping/slavesecrets.conf
+
         +slave1
         display_name=erul22
         location=India
+        color=ff0000
+
         ++override
         Probes.FPing.binary = /usr/bin/fping
         ...
@@ -119,7 +122,7 @@ DDEESSCCRRIIPPTTIIOONN
        will be located in _/_t_m_p_/_s_m_o_k_e_p_i_n_g_._$_U_S_E_R_._c_a_c_h_e.
 
         ./smokeping --master-url=http://smokeping/smokeping.cgi \
-                    --cache-dir=/var/smokeping/cache.file \
+                    --cache-dir=/var/smokeping/ \
                     --shared-secret=/var/smokeping/secret.txt
 
 CCOOPPYYRRIIGGHHTT
@@ -146,4 +149,4 @@ AAUUTTHHOORR
 
 
 
-2.2.7                             2007-09-26         SMOKEPING_MASTER_SLAVE(7)
+2.3.0                             2007-12-21         SMOKEPING_MASTER_SLAVE(7)

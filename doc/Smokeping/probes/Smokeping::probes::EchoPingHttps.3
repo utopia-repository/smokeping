@@ -129,7 +129,7 @@
 .\" ========================================================================
 .\"
 .IX Title "doc::Smokeping::probes::EchoPingHttps 3"
-.TH doc::Smokeping::probes::EchoPingHttps 3 "2007-11-05" "2.2.7" "SmokePing"
+.TH doc::Smokeping::probes::EchoPingHttps 3 "2008-01-23" "2.3.0" "SmokePing"
 .SH "NAME"
 Smokeping::probes::EchoPingHttps \- an echoping(1) probe for SmokePing
 .SH "OVERVIEW"
@@ -153,8 +153,9 @@ SmokePing.
 \& step = 300
 .Ve
 .PP
-.Vb 12
+.Vb 13
 \& # The following variables can be overridden in each target section
+\& accept_redirects = yes
 \& extraopts = \-some\-letter\-the\-author\-did\-not\-think\-of
 \& ignore_cache = yes
 \& ipversion = 4
@@ -184,10 +185,11 @@ SmokePing.
 \& # [...]
 .Ve
 .PP
-.Vb 14
+.Vb 15
 \& + mytarget
 \& # probe = EchoPingHttps # if the default probe is something else
 \& host = my.host
+\& accept_redirects = yes
 \& extraopts = \-some\-letter\-the\-author\-did\-not\-think\-of
 \& ignore_cache = yes
 \& ipversion = 4
@@ -243,6 +245,15 @@ the variable 'concurrentprobes' is set in the 'General' section.)
 Example value: 300
 .PP
 Supported target-specific variables:
+.IP "accept_redirects" 4
+.IX Item "accept_redirects"
+The \fIechoping\fR\|(1) \*(L"\-R\*(R" option: Accept  \s-1HTTP\s0  status  codes  3xx (redirections) 
+as normal responses instead of treating them as errors. Note that this option
+is only available starting with Echoping 6.
+.Sp
+Enabled if the value is anything other than 'no' or '0'.
+.Sp
+Example value: yes
 .IP "extraopts" 4
 .IX Item "extraopts"
 Any extra options specified here will be passed unmodified to \fIechoping\fR\|(1).

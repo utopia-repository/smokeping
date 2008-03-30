@@ -129,7 +129,7 @@
 .\" ========================================================================
 .\"
 .IX Title "SMOKEPING_INSTALL 7"
-.TH SMOKEPING_INSTALL 7 "2007-09-06" "2.2.7" "SmokePing"
+.TH SMOKEPING_INSTALL 7 "2007-12-01" "2.3.0" "SmokePing"
 .SH "NAME"
 smokeping_install \- How to install SmokePing
 .SH "OVERVIEW"
@@ -181,10 +181,15 @@ You need this for the \s-1DNS\s0 probe.
 <http://www.openssh.org/>
 .Sp
 You need this for the \s-1SSH\s0 probe.
-.IP "Various Perl modules (Optional)" 4
-.IX Item "Various Perl modules (Optional)"
+.IP "Various Perl modules (Most of these are optional)" 4
+.IX Item "Various Perl modules (Most of these are optional)"
 You can get these from <http://www.cpan.org/>.
 .RS 4
+.IP "libwww-perl" 4
+.IX Item "libwww-perl"
+The master/slave functionality introduced a dependency LWP::UserAgent
+from the libwww-perl (also known as \s-1LWP\s0) library. Currently the module
+is needed even if the master/slave mode is not enabled.
 .IP "Socket6 0.11\-1" 4
 .IX Item "Socket6 0.11-1"
 Optionally installing the Socket6 module for perl enables

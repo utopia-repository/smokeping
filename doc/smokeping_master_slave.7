@@ -129,7 +129,7 @@
 .\" ========================================================================
 .\"
 .IX Title "SMOKEPING_MASTER_SLAVE 7"
-.TH SMOKEPING_MASTER_SLAVE 7 "2007-09-26" "2.2.7" "SmokePing"
+.TH SMOKEPING_MASTER_SLAVE 7 "2007-12-21" "2.3.0" "SmokePing"
 .SH "NAME"
 smokeping_master_slave \- How run multiple distributed instances of SmokePing
 .SH "OVERVIEW"
@@ -198,12 +198,19 @@ calls the master to get its config or report its measurements it will tell
 the master its 'hostname'. This together with the shared secret is used to
 authenticate and identify who is who.
 .PP
-.Vb 8
+.Vb 2
 \& *** slaves ****
-\& secrets=/etc/smokeping/slavesecrets.conf 
+\& secrets=/etc/smokeping/slavesecrets.conf
+.Ve
+.PP
+.Vb 4
 \& +slave1
 \& display_name=erul22
 \& location=India
+\& color=ff0000
+.Ve
+.PP
+.Vb 3
 \& ++override
 \& Probes.FPing.binary = /usr/bin/fping
 \& ...
@@ -249,7 +256,7 @@ optimal protection. By default the persistent data cache will be located in
 .PP
 .Vb 3
 \& ./smokeping \-\-master\-url=http://smokeping/smokeping.cgi \e
-\&             \-\-cache\-dir=/var/smokeping/cache.file \e
+\&             \-\-cache\-dir=/var/smokeping/ \e
 \&             \-\-shared\-secret=/var/smokeping/secret.txt
 .Ve
 .SH "COPYRIGHT"
