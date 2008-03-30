@@ -58,6 +58,12 @@ case "$1" in
         exit $STATUS
     fi
 
+    if [ ! -d /var/run/smokeping ]; then
+        mkdir /var/run/smokeping
+        chown ${DAEMON_USER}.root /var/run/smokeping
+        chmod 0755 /var/run/smokeping
+    fi
+
     set +e
     start-stop-daemon --start --quiet --exec $DAEMON --oknodo \
                             --chuid $DAEMON_USER --pidfile $PIDFILE \

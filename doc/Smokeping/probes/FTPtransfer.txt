@@ -216,4 +216,4 @@ BBUUGGSS
 
 
 
-2.2.6                             2007-10d-o2c8::Smokeping::probes::FTPtransfer(3)
+2.2.7                             2007-11d-o0c5::Smokeping::probes::FTPtransfer(3)

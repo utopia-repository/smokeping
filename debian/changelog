@@ -1,3 +1,11 @@
+smokeping (2.2.7-1) unstable; urgency=low
+
+  * New upstream release
+  * Create /var/run/smokeping at startup if it doesn't exist.
+    Patch from Ubuntu.
+
+ -- Niko Tyni <ntyni@iki.fi>  Sat, 10 Nov 2007 09:55:32 +0200
+
 smokeping (2.2.6-1) unstable; urgency=low
 
   * New upstream release.

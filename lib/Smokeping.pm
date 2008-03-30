@@ -37,7 +37,7 @@ use Smokeping::RRDtools;
 
 # globale persistent variables for speedy
 use vars qw($cfg $probes $VERSION $havegetaddrinfo $cgimode);
-$VERSION="2.002006";
+$VERSION="2.002007";
 
 # we want opts everywhere
 my %opt;
@@ -446,6 +446,8 @@ sub init_target_tree ($$$$) {
                 push @slaves, split /\s+/, $tree->{slaves};
             };
             for my $slave (@slaves){
+                die "ERROR: slave '$slave' is not defined in the '*** Slaves ***' section!\n"
+                        unless $slave eq '' or defined $cfg->{Slaves}{$slave};
                 my $s = $slave ? "~".$slave : "";
                 my @create =    
                         ($name.$s.".rrd", "--start",(time-1),"--step",$step,
@@ -1353,13 +1355,10 @@ sub load_sortercache($){
 sub display_webpage($$){
     my $cfg = shift;
     my $q = shift;
-    my $open_orig = [ split /\./,( $q->param('target') || '')];
-    my $open = [@$open_orig]; # in this version we get rid of the 'slave' part if there is any
-    my ($host,$slave);
-    if (0 < @$open){ 
-        ($host,$slave) =  split(/~/, $open->[-1]);
-        $open->[-1] = $host;
-    }
+    my ($path,$slave) = split(/~/,$q->param('target') || '');
+    my $open = [ (split /\./,$path) ];
+    my $open_orig = [@$open];
+    $open_orig->[-1] .= '~'.$slave if $slave;
 
     my $tree = $cfg->{Targets};
     my $targets = $cfg->{Targets};
@@ -1421,8 +1420,9 @@ sub display_webpage($$){
         smokelogo => '<A HREF="http://oss.oetiker.ch/smokeping/counter.cgi/'.$VERSION.'"><img border="0" src="'.$cfg->{General}{imgurl}.'/smokeping.png"></a>',
        }
        );
+    my $expi = $cfg->{Database}{step} > 120 ? $cfg->{Database}{step} : 120;
     print $q->header(-type=>'text/html',
-                     -expires=>'+'.($cfg->{Database}{step}).'s',
+                     -expires=>'+'.$expi.'s',
                      -charset=> ( $cfg->{Presentation}{charset} || 'iso-8859-15'),
                      -Content_length => length($page),
                      );

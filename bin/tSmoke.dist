@@ -53,7 +53,7 @@ use strict;
 use lib qw(lib);
 use lib "/usr/local/rrdtool-1.0.39/lib/perl";
 
-use Smokeping 2.002006;
+use Smokeping 2.002007;
 use Net::SMTP;
 use Getopt::Long;
 use Pod::Usage;
@@ -389,7 +389,7 @@ sub list_rrds($$$) {
         if (ref $tree->{$rrds} eq 'HASH'){
 			$prline .= list_rrds( $tree->{$rrds}, $path."/$rrds", $print );
         } 
-        if ($rrds eq 'host') {
+        if ($rrds eq 'host' and $tree->{$rrds} !~ m|/| ) {
             $prline .= "$cfg->{General}{datadir}$path".".rrd\n";
 		}
 	}
