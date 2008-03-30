@@ -1,3 +1,14 @@
+smokeping (2.0.3-1) unstable; urgency=low
+
+  [ Niko Tyni ]
+  * New upstream version
+     + Make the package build without extra Build-Depends. (Closes: #330009)
+
+  [ Jose Carlos Garcia Sogo ]
+  * Integrate and upload. Thanks Niko for your work! 
+
+ -- Jose Carlos Garcia Sogo <jsogo@debian.org>  Sat,  1 Oct 2005 14:00:45 +0200
+
 smokeping (2.0.2-1) unstable; urgency=low
 
   [ Niko Tyni ]

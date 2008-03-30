@@ -1,3 +1,14 @@
+2005/9/26 -- released version 2.0.3
+
+2005/9/26 -- released version 2.0.2
+
+2005/9/26 -- released version 2.0.3
+
+* fixed FPing probe so it doesn't report 100% loss when the first ping is lost
+  -- niko, reported by Matthew Swainston <njunk *exemail.com.au>
+* don't need to have all the external modules installed to build the
+  documentation -- niko
+
 2005/9/20 -- released version 2.0.2
 
 * reload the config file on HUP signal and switch to the new one if it 

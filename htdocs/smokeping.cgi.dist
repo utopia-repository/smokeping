@@ -4,7 +4,7 @@
 use lib qw(/usr/share/perl5/smokeping);
 use CGI::Carp qw(fatalsToBrowser);
 
-use Smokeping 2.000002;
+use Smokeping 2.000003;
 
 Smokeping::cgi("/etc/smokeping/config");
 
