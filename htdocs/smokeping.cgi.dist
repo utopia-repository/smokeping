@@ -1,12 +1,11 @@
-#!/usr/sepp/bin/speedy -w
+#!/usr/bin/speedy -w
 # -*-perl-*-
 
-use lib qw(/usr/pack/rrdtool-1.0.33-to/lib/perl);
-use lib qw(/home/oetiker/data/projects/AADJ-smokeping/dist/lib);
+use lib qw (/usr/lib/perl5/smokeping);
 
 use Smokeping 1.6;
 
-Smokeping::cgi("/home/oetiker/data/projects/AADJ-smokeping/dist/etc/config");
+Smokeping::cgi("/etc/smokeping/config");
 
 
 BEGIN {

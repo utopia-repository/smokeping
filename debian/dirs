@@ -1,0 +1,4 @@
+usr/bin
+usr/sbin
+var/www/smokeping
+var/run/smokeping

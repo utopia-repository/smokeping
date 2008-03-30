@@ -1,0 +1,20 @@
+Source: smokeping
+Section: net
+Priority: extra
+Maintainer: Jose Carlos Garcia Sogo <jsogo@debian.org>
+Build-Depends-Indep: debhelper (>= 3.0.18)
+Standards-Version: 3.5.2
+
+Package: smokeping
+Architecture: all
+Depends: ${perl:Depends}, libsnmp-session-perl (>= 0.86), librrds-perl (>= 1.0.33-9), fping (>= 2.4b2-to-ipv6-2) | echoping (>= 4.2.0-1.1), speedy-cgi-perl (>= 1.82-10.1), libdigest-md5-perl (>= 2.13-2)
+Recommends: httpd
+Description: A latency logging and graphing system.
+ SmokePing is a latency logging and graphing system. It consists of
+ a daemon process which organizes the latency measurements and a CGI
+ which presents the graphs. 
+ .
+ With SmokePing you can measure latency and packet loss in your network. 
+ SmokePing uses RRDtool to maintain a longterm datastore and to draw pretty
+ graphs giving up to the minute information on the state of each 
+ network connection.

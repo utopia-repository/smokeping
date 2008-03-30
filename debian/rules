@@ -1,0 +1,111 @@
+#!/usr/bin/make -f
+# Sample debian/rules that uses debhelper.
+# GNU copyright 1997 to 1999 by Joey Hess.
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+
+# This is the debhelper compatability version to use.
+export DH_COMPAT=3
+
+PACKAGE=smokeping
+TMP=$(CURDIR)/debian/$(PACKAGE)
+
+build:
+	touch build-stamp
+
+clean:
+	dh_testdir
+	dh_testroot
+	
+	dh_clean
+
+	rm -f build-stamp
+
+
+install: build
+	dh_testdir
+	dh_testroot
+	dh_clean -k
+	dh_installdirs
+
+	install -d $(TMP)/usr/lib/perl5/smokeping
+	install -m 644 lib/*pm $(TMP)/usr/lib/perl5/smokeping
+	rm -f $(TMP)/usr/lib/perl5/smokeping/BER.pm
+	rm -f $(TMP)/usr/lib/perl5/smokeping/SNMP_*
+			        
+
+	install -d $(TMP)/usr/lib/perl5/smokeping/probes
+	install -m 644 lib/probes/*pm $(TMP)/usr/lib/perl5/smokeping/probes
+
+	install -d $(TMP)/usr/lib/perl5/smokeping/ISG
+	install -m 644 lib/ISG/*pm $(TMP)/usr/lib/perl5/smokeping/ISG/
+
+	install -d $(TMP)/usr/sbin/
+	install -m 755 bin/smokeping.dist $(TMP)/usr/sbin/smokeping
+
+	install -d $(TMP)/etc/smokeping
+	install -m 644 etc/basepage.html.dist $(TMP)/etc/smokeping/basepage.html
+	install -m 644 etc/config.dist $(TMP)/etc/smokeping/config
+	install -m 644 etc/smokemail.dist $(TMP)/etc/smokeping/smokemail
+	install -m 644 etc/config-echoping.dist $(TMP)/etc/smokeping/config-echoping
+
+	install -d $(TMP)/usr/lib/cgi-bin
+	install htdocs/smokeping.cgi.dist $(TMP)/usr/lib/cgi-bin/smokeping.cgi
+
+	install -d $(TMP)/usr/share/doc/$(PACKAGE)/html
+	install -d $(TMP)/usr/share/doc/$(PACKAGE)/pod
+	install -d $(TMP)/usr/share/man/man1
+
+	install -m 644 doc/*.txt $(TMP)/usr/share/doc/$(PACKAGE)
+	install -m 644 doc/*.html $(TMP)/usr/share/doc/$(PACKAGE)/html
+	install -m 644 doc/*.pod $(TMP)/usr/share/doc/$(PACKAGE)/pod
+	install -m 644 doc/*.1 $(TMP)/usr/share/man/man1
+
+	# We have to rename base.1 manpage
+	mv $(TMP)/usr/share/man/man1/base.pm.1 $(TMP)/usr/share/man/man1/smokeping-base.pm.1
+	
+
+# Build architecture-independent files here.
+binary-indep: build install
+	dh_testdir
+	dh_testroot
+#	dh_installdebconf	
+	dh_installdocs
+#	dh_installexamples
+#	dh_installmenu
+#	dh_installlogrotate
+#	dh_installemacsen
+#	dh_installpam
+#	dh_installmime
+	dh_installinit
+#	dh_installcron
+	dh_installman
+#	dh_installinfo
+#	dh_undocumented
+	dh_installchangelogs CHANGES
+	dh_link
+	dh_strip
+	dh_compress
+	dh_fixperms
+	
+	# We need smokeping.cgi to be able to write in
+	# /var/www/smokeping
+	chown www-data.www-data $(TMP)/var/www/smokeping
+	chmod 4755 $(TMP)/var/www/smokeping
+	
+	chown www-data.www-data $(TMP)/usr/sbin/smokeping
+	chmod 4754 $(TMP)/usr/sbin/smokeping
+	
+	chown www-data.www-data $(TMP)/var/run/smokeping
+	
+#	dh_makeshlibs
+	dh_installdeb
+	dh_perl /usr/sbin /usr/lib/perl5/smokeping/
+#	dh_shlibdeps
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
+
+binary: binary-indep
+.PHONY: clean binary-indep binary install build
