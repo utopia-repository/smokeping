@@ -79,7 +79,9 @@ The directory where SmokePing can keep its rrd files.
 =item B<dyndir>
 
 The base directory where SmokePing keeps the files related to the DYNAMIC function.
-This directory must be writeable by the WWW server.
+This directory must be writeable by the WWW server. It is also used for temporary
+storage of slave polling results by the master in 
+L<the master/slave mode|smokeping_master_slave>.
 
 If this variable is not specified, the value of C<datadir> will be used instead.
 
@@ -229,6 +231,18 @@ The default is "relative", which hopefully works for everybody.
 
 
 Default value: linkstyle = relative
+
+=item B<precreateperms>
+
+If this variable is set, the Smokeping daemon will create its directory
+hierarchy under 'dyndir' (the CGI-writable tree) at startup with the
+specified directory permission bits. The value is interpreted as an
+octal value, eg. 775 for rwxrwxr-x etc.
+
+If unset, the directories will be created dynamically with umask 022.
+
+
+Example: precreateperms = 2755
 
 =back
 
@@ -398,7 +412,10 @@ How many pixels high should detail graphs be
 
 =item B<loss_background>
 
+Should the graphs be shown with a background showing loss data for emphasis (yes/no)?
+
 If this option is enabled, uptime data is no longer displayed in the graph background.
+
 
 =item B<logarithmic>
 
@@ -5286,8 +5303,8 @@ Default value: hide = no
 =item B<nomasterpoll>
 
 Use this in a master/slave setup where the master must not poll a particular
-target. The master will now skip this entry in its polling cycle.  and from
-search results. Note that if you set the hide property on a non leaf entry
+target. The master will now skip this entry in its polling cycle.
+Note that if you set the hide property on a non leaf entry
 all subordinate entries will also disapear in the menu structure. You can
 still access them via direct link or via an alternate hierarchy.
 
@@ -8290,6 +8307,11 @@ and the secret:
  slave1:secret1
  slave2:secret2
  ...
+
+Note that these secrets combined with a man-in-the-middle attack
+effectively give shell access to the corresponding slaves (see
+L<smokeping_master_slave>), so the file should be appropriately protected
+and the secrets should not be easily crackable.
 
 
 =back

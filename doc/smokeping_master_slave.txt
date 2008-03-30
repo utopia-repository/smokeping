@@ -38,9 +38,9 @@ DDEESSCCRRIIPPTTIIOONN
        If the assignment for a slave changes, the master will tell the slave
        after the slave has delivered its results.
 
-       The master and the slaves sign their messages by supplying an md5 hash
-       of the message appended with a shared secret. Optionally the whole com-
-       munication can run over ssl.
+       The master and the slaves sign their messages by supplying an HMAC-MD5
+       code (RFC 2104) of the message and a shared secret. Optionally the
+       whole communication can run over ssl.
 
            [slave 1]     [slave 2]      [slave 3]
                |             |              |
@@ -125,6 +125,18 @@ DDEESSCCRRIIPPTTIIOONN
                     --cache-dir=/var/smokeping/ \
                     --shared-secret=/var/smokeping/secret.txt
 
+SSEECCUURRIITTYY CCOONNSSIIDDEERRAATTIIOONNSS
+       The master effectively has full access to slave hosts as the user the
+       slave smokeping instance is run as. The configuration is transferred as
+       Perl code that is evaluated on the slave. While this is done inside a
+       restricted "Safe" compartment, there are various ways that a malicious
+       master could use to embed arbitrary commands in the configuration and
+       get them to run when the slave probes its targets.
+
+       The strength of the shared secret is thus of paramount importance.
+       Brute forcing the secret would enable a man-in-the-middle to inject a
+       malicious new configuration and compromise the slave.
+
 CCOOPPYYRRIIGGHHTT
        Copyright (c) 2007 by Tobias Oetiker, OETIKER+PARTNER AG. All right
        reserved.
@@ -149,4 +161,4 @@ AAUUTTHHOORR
 
 
 
-2.3.3                             2008-02-22         SMOKEPING_MASTER_SLAVE(7)
+2.3.4                             2008-03-18         SMOKEPING_MASTER_SLAVE(7)

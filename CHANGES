@@ -1,3 +1,40 @@
+2008/3/28 -- released version 2.3.4
+
+* fix 'loss_background' documentation. Reported by David Tomic. --niko
+
+* fix local variable override handling in connection with nomasterpoll
+  --niko
+
+* add protocol level master/slave protocol to control upgrades --tobi
+
+* fix ordering of menu entries again --tobi
+
+* bail out if the master/slave shared secret file is world-readable
+  or writable --niko
+
+* add some security notes to the master/slave documentation --niko
+
+* Switch message hash generation to Digest::HMAC_MD5 (bundled) since this
+  prevents the extension attack. Note that this change requires that you
+  upgrade client and server in sync (you should do that anyway, but
+  especially because of this)! -- tobi
+
+* make sure when loading the sortercache that we only load info about
+  graphs presently in the config. --tobi
+
+* optionally precreate the directory structure under 'dyndir' if
+  'precreateperms' is set --niko
+
+* store the slave updates in 'dyndir', defaulting to 'datadir' --niko
+
+* change the slave update locking code so that reading works without
+  write access to the temporary storage file --niko
+
+* allow SSH probe to config rsa1 key -- Walery Kokarev
+
+* make zooming work properly even for graphs generated with the
+  navigator form time range fields. -- tobi
+
 2008/3/10 -- released version 2.3.3
 
 * use separate slave cache and longer slave timeout. this
@@ -5,6 +42,7 @@
 
 * add an optional --pid-dir option to specify the pid directory 
   when running as a slave. --niko
+
 * slaves were not polling targets where nomasterpoll was set --tobi
 
 2008/2/25 -- released version 2.3.2

@@ -38,7 +38,7 @@ use Smokeping::RRDtools;
 
 # globale persistent variables for speedy
 use vars qw($cfg $probes $VERSION $havegetaddrinfo $cgimode);
-$VERSION="2.003003";
+$VERSION="2.003004";
 
 # we want opts everywhere
 my %opt;
@@ -151,6 +151,21 @@ sub lnk ($$) {
 sub dyndir ($) {
     my $cfg = shift;
     return $cfg->{General}{dyndir} || $cfg->{General}{datadir};
+}
+
+sub make_cgi_directories {
+    my $targets = shift;
+    my $dir = shift;
+    my $perms = shift;
+    while (my ($k, $v) = each %$targets) {
+        next if ref $v ne "HASH";
+        if ( ! -d "$dir/$k" ) {
+            my $saved = umask 0;
+            mkdir "$dir/$k", oct($perms);
+            umask $saved;
+        }
+        make_cgi_directories($targets->{$k}, "$dir/$k", $perms);
+    }
 }
 
 sub update_dynaddr ($$){
@@ -401,7 +416,7 @@ sub add_targets ($$$$){
         if (ref $tree->{$prop} eq 'HASH'){
             add_targets $cfg, $probes, $tree->{$prop}, "$name/$prop";
         }
-        if ($prop eq 'host' and ( not $tree->{nomasterpoll} or $tree->{nomasterpoll} eq 'no') and check_filter($cfg,$name) and $tree->{$prop} !~ m|^/| ) {           
+        if ($prop eq 'host' and ( check_filter($cfg,$name) and $tree->{$prop} !~ m|^/| )) {
             if($tree->{host} =~ /^DYNAMIC/) {
                 $probeobj->add($tree,$name);
             } else {
@@ -600,7 +615,7 @@ sub target_menu($$$$;$){
     my $print;
     my $current =  shift @{$open} || "";
     my @hashes;
-    foreach my $prop (sort {$tree->{$a}{_order} ? ($tree->{$a}{_order} <=> $tree->{$b}{_order}) : ($a cmp $b)} 
+    foreach my $prop (sort {exists $tree->{$a}{_order} ? ($tree->{$a}{_order} <=> $tree->{$b}{_order}) : ($a cmp $b)} 
                       grep {  ref $tree->{$_} eq 'HASH' and not /^__/ }
                       keys %$tree) {
             push @hashes, $prop;
@@ -733,7 +748,7 @@ sub get_overview ($$$$){
     if ( $RRDs::VERSION >= 1.199908 ){
             $date =~ s|:|\\:|g;
     }
-    foreach my $prop (sort {$tree->{$a}{_order} ? ($tree->{$a}{_order} <=> $tree->{$b}{_order}) : ($a cmp $b)} 
+    foreach my $prop (sort {exists $tree->{$a}{_order} ? ($tree->{$a}{_order} <=> $tree->{$b}{_order}) : ($a cmp $b)} 
                       grep {  ref $tree->{$_} eq 'HASH' and not /^__/ }
                       keys %$tree) {
         my @slaves;
@@ -939,8 +954,10 @@ sub parse_datetime($){
 	/^(\d+)$/ && do { my $value = $1; $value = time if $value > 2**32; return $value};
         /^\s*(\d{4})-(\d{1,2})-(\d{1,2})(?:\s+(\d{1,2}):(\d{2})(?::(\d{2}))?)?\s*$/  && 
             return POSIX::mktime($6||0,$5||0,$4||0,$3,$2-1,$1-1900,0,0,-1);
-        /([ -:a-z0-9]+)/ && return $1;
+        /^now$/ && return time;
+        /([ -:a-z0-9]+)/ && return $1;     
     };
+    return time;
 }
         
 sub get_detail ($$$$;$){
@@ -1063,6 +1080,8 @@ sub get_detail ($$$$;$){
             $imghref =$cfg->{General}{imgurl}."/__navcache/".$serial;
         }
 
+	$q->param('epoch_start',parse_datetime($q->param('start')));
+	$q->param('epoch_end',parse_datetime($q->param('end')));
         @tasks = (["Navigator Graph".$name, parse_datetime($q->param('start')),parse_datetime($q->param('end'))]);
         my ($graphret,$xs,$ys) = RRDs::graph
           ("dummy", 
@@ -1337,12 +1356,11 @@ sub get_detail ($$$$;$){
 #           $page .= qq|<div class="zoom" style="cursor: crosshair;">|;
            $page .= qq|<IMG id="zoom" BORDER="0" width="$xs{''}" height="$ys{''}" SRC="${imghref}_${end}_${start}.png">| ;
 #           $page .= "</div>";
-
-           $page .= $q->start_form(-method=>'GET', -id=>'range_form')
-              . "<p>Time range: "
-              . $q->hidden(-name=>'epoch_start',-id=>'epoch_start',-default=>$start)
+           $page .= $q->start_form(-method=>'POST', -id=>'range_form')
+              . "<p>Time range: "		
+              . $q->hidden(-name=>'epoch_start',-id=>'epoch_start')
               . $q->hidden(-name=>'hierarchy',-id=>'hierarchy')
-              . $q->hidden(-name=>'epoch_end',-id=>'epoch_end',-default=>time())
+              . $q->hidden(-name=>'epoch_end',-id=>'epoch_end')
               . $q->hidden(-name=>'target',-id=>'target' )
               . $q->hidden(-name=>'displaymode',-default=>$mode )
               . $q->textfield(-name=>'start',-default=>$startstr)
@@ -1395,7 +1413,7 @@ sub get_charts ($$$){
         for my $chart ( keys %charts ){
             $page .= "<h2>$cfg->{Presentation}{charts}{$chart}{title}</h2>\n";
             if (not defined $charts{$chart}[0]){
-                $page .= "<p>No targets retured by the sorter.</p>"
+                $page .= "<p>No targets returned by the sorter.</p>"
             } else {
                 my $tree = $cfg->{Targets};
                 my $chartentry = $charts{$chart}[0];
@@ -1413,7 +1431,7 @@ sub get_charts ($$$){
         my $chart = $open->[1];
         $page = "<h1>$cfg->{Presentation}{charts}{$chart}{title}</h1>\n";
         if (not defined $charts{$chart}[0]){
-                $page .= "<p>No targets retured by the sorter.</p>"
+                $page .= "<p>No targets returned by the sorter.</p>"
         } else {
           my $rank =1;
           for my $chartentry (@{$charts{$chart}}){
@@ -1449,8 +1467,19 @@ sub load_sortercache($){
         }
         my $data = Storable::retrieve("$_");
         for my $chart (keys %$data){
+            PATH:
             for my $path (keys %{$data->{$chart}}){
                 warn "Warning: Duplicate entry $chart/$path in sortercache\n" if defined $cache{$chart}{$path};
+                my $root = $cfg->{Targets};
+                for my $element (split /\//, $path){
+                    if (ref $root eq 'HASH' and defined $root->{$element}){
+                        $root = $root->{$element}
+                    }
+                    else {
+                        warn "Warning: Dropping $chart/$path from sortercache\n";
+                        next PATH;
+                    }
+                }                
                 $cache{$chart}{$path} = $data->{$chart}{$path}
             }
         }
@@ -1856,7 +1885,7 @@ sub update_rrds($$$$$$) {
             if ($tree->{slaves}){
                 my @slaves = split(/\s+/, $tree->{slaves});
                 foreach my $slave (@slaves) {
-	            my $lines = Smokeping::Master::get_slaveupdates($name, $slave);
+	            my $lines = Smokeping::Master::get_slaveupdates($cfg, $name, $slave);
                     push @updates, @$lines;
                 } #foreach my $checkslave
             }
@@ -2026,8 +2055,8 @@ DOC
        nomasterpoll=> {
                      _doc => <<DOC,
 Use this in a master/slave setup where the master must not poll a particular
-target. The master will now skip this entry in its polling cycle.  and from
-search results. Note that if you set the hide property on a non leaf entry
+target. The master will now skip this entry in its polling cycle.
+Note that if you set the hide property on a non leaf entry
 all subordinate entries will also disapear in the menu structure. You can
 still access them via direct link or via an alternate hierarchy.
 
@@ -2037,7 +2066,6 @@ contain any graphs.
 
 DOC
                      _re => '(yes|no)',
-                     _re_error => 'Only set this if you want to hide',
                      _default => 'no',
                     },
 
@@ -2401,7 +2429,7 @@ DOC
          [ qw(owner imgcache imgurl datadir dyndir pagedir piddir sendmail offset
               smokemail cgiurl mailhost snpphost contact display_name
               syslogfacility syslogpriority concurrentprobes changeprocessnames tmail
-              changecgiprogramname linkstyle) ],
+              changecgiprogramname linkstyle precreateperms ) ],
 
          _mandatory =>
          [ qw(owner imgcache imgurl datadir piddir
@@ -2485,7 +2513,9 @@ DOC
          %$DIRCHECK_SUB,
          _doc => <<DOC,
 The base directory where SmokePing keeps the files related to the DYNAMIC function.
-This directory must be writeable by the WWW server.
+This directory must be writeable by the WWW server. It is also used for temporary
+storage of slave polling results by the master in 
+L<the master/slave mode|smokeping_master_slave>.
 
 If this variable is not specified, the value of C<datadir> will be used instead.
 DOC
@@ -2522,6 +2552,20 @@ DOC
 Complete URL path of the SmokePing.cgi
 DOC
           
+         },
+         precreateperms =>
+         {
+            _re => '[0-7]+',
+            _re_error => 'please specify the permissions in octal',
+            _example => '2755',
+            _doc => <<DOC,
+If this variable is set, the Smokeping daemon will create its directory
+hierarchy under 'dyndir' (the CGI-writable tree) at startup with the
+specified directory permission bits. The value is interpreted as an
+octal value, eg. 775 for rwxrwxr-x etc.
+
+If unset, the directories will be created dynamically with umask 022.
+DOC
          },
      linkstyle =>
      {
@@ -2910,10 +2954,13 @@ DOC
                 _re_error =>  "color must be defined with in rrggbb syntax",
                 _doc => "Paint the graph background in a special color when there is no data for this period because smokeping has not been running (#rrggbb)",
                         },
-         loss_background      => { _doc => 'should the graphs be shown with a background showing loss data for emphasis (yes/no)',
+         loss_background      => { _doc => <<EOF,
+Should the graphs be shown with a background showing loss data for emphasis (yes/no)?
+
+If this option is enabled, uptime data is no longer displayed in the graph background.
+EOF
                        _re  => '(yes|no)',
                        _re_error =>"this must either be 'yes' or 'no'",
-                       _doc => "If this option is enabled, uptime data is no longer displayed in the graph background.",
                                      },
          logarithmic      => { _doc => 'should the graphs be shown in a logarithmic scale (yes/no)',
                        _re  => '(yes|no)',
@@ -3294,7 +3341,12 @@ END_DOC
           _mandatory   => [ qw(secrets) ],
           _sections    => [ "/$KEYD_RE/" ],
           secrets => {              
-              %$FILECHECK_SUB,
+              _sub => sub {
+                 return "File '$_[0]' does not exist" unless -f $_[ 0 ];
+                 return "File '$_[0]' is world-readable or writable, refusing it" 
+                    if ((stat(_))[2] & 6);
+                 return undef;
+              },
               _doc => <<END_DOC,
 The slave secrets file contines one line per slave with the name of the slave followed by a colon
 and the secret:
@@ -3302,6 +3354,11 @@ and the secret:
  slave1:secret1
  slave2:secret2
  ...
+
+Note that these secrets combined with a man-in-the-middle attack
+effectively give shell access to the corresponding slaves (see
+L<smokeping_master_slave>), so the file should be appropriately protected
+and the secrets should not be easily crackable.
 END_DOC
 
           },
@@ -3635,6 +3692,10 @@ sub load_cfg ($;$) {
         init_alerts $cfg if $cfg->{Alerts};
         add_targets $cfg, $probes, $cfg->{Targets}, $cfg->{General}{datadir};   
         init_target_tree $cfg, $probes, $cfg->{Targets}, $cfg->{General}{datadir};
+        if (defined $cfg->{General}{precreateperms} && !$cgimode) {
+            make_cgi_directories($cfg->{Targets}, dyndir($cfg),
+                                 $cfg->{General}{precreateperms});
+        }
         #use Data::Dumper;
         #die Dumper $cfg->{__hierarchies};
     } else {
@@ -3978,6 +4039,8 @@ sub main (;$) {
         die "ERROR: no shared-secret defined along with master-url\n" unless $opt{'shared-secret'};
         die "ERROR: no cache-dir defined along with master-url\n" unless $opt{'cache-dir'};
         die "ERROR: no cache-dir ($opt{'cache-dir'}): $!\n" unless -d $opt{'cache-dir'};
+        die "ERROR: the shared secret file ($opt{'shared-secret'}) is world-readable or writable"
+            if ((stat($opt{'shared-secret'}))[2] & 6);
         open my $fd, "<$opt{'shared-secret'}" or die "ERROR: opening $opt{'shared-secret'} $!\n";
         chomp(my $secret = <$fd>);
         close $fd;
@@ -3997,7 +4060,7 @@ sub main (;$) {
             $cfg->{__probes} = $probes;
             add_targets($cfg, $probes, $cfg->{Targets}, $cfg->{General}{datadir});
         } else {
-          die "ERROR: we did not get config form the master. Maybe we are not configured as a slave for any of the targets on the master ?\n";
+          die "ERROR: we did not get config from the master. Maybe we are not configured as a slave for any of the targets on the master ?\n";
         }
     } else {
         if(defined $opt{'check'}) { verify_cfg($cfgfile); exit 0; }

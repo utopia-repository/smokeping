@@ -25,6 +25,7 @@
 		<li><a href="#slave_configuration">Slave Configuration</a></li>
 	</ul>
 
+	<li><a href="#security_considerations">SECURITY CONSIDERATIONS</a></li>
 	<li><a href="#copyright">COPYRIGHT</a></li>
 	<li><a href="#license">LICENSE</a></li>
 	<li><a href="#author">AUTHOR</a></li>
@@ -67,9 +68,9 @@ master server and asks for its assignments. When the slave has done a round
 of probing it connects to the master again to deliver the results.</p>
 <p>If the assignment for a slave changes, the master will tell the slave after
 the slave has delivered its results.</p>
-<p>The master and the slaves sign their messages by supplying an md5 hash of the
-message appended with a shared secret. Optionally the whole communication
-can run over ssl.</p>
+<p>The master and the slaves sign their messages by supplying an HMAC-MD5
+code (RFC 2104) of the message and a shared secret. Optionally the whole
+communication can run over ssl.</p>
 <pre>
     [slave 1]     [slave 2]      [slave 3]
         |             |              |
@@ -149,6 +150,19 @@ optimal protection. By default the persistent data cache will be located in
  ./smokeping --master-url=<a href="http://smokeping/smokeping.cgi">http://smokeping/smokeping.cgi</a> \
              --cache-dir=/var/smokeping/ \
              --shared-secret=/var/smokeping/secret.txt</pre>
+<p>
+</p>
+<hr />
+<h1><a name="security_considerations">SECURITY CONSIDERATIONS</a></h1>
+<p>The master effectively has full access to slave hosts as the user the
+slave smokeping instance is run as. The configuration is transferred as
+Perl code that is evaluated on the slave. While this is done inside a
+restricted <code>Safe</code> compartment, there are various ways that a malicious
+master could use to embed arbitrary commands in the configuration and
+get them to run when the slave probes its targets.</p>
+<p>The strength of the shared secret is thus of paramount importance. Brute
+forcing the secret would enable a man-in-the-middle to inject a malicious
+new configuration and compromise the slave.</p>
 <p>
 </p>
 <hr />

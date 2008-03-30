@@ -71,7 +71,8 @@ RREEFFEERREENNCCEE
        ddyynnddiirr
            The base directory where SmokePing keeps the files related to the
            DYNAMIC function.  This directory must be writeable by the WWW
-           server.
+           server. It is also used for temporary storage of slave polling
+           results by the master in the master/slave mode.
 
            If this variable is not specified, the value of "datadir" will be
            used instead.
@@ -190,6 +191,17 @@ RREEFFEERREENNCCEE
 
            Default value: linkstyle = relative
 
+       pprreeccrreeaatteeppeerrmmss
+           If this variable is set, the Smokeping daemon will create its
+           directory hierarchy under 'dyndir' (the CGI-writable tree) at
+           startup with the specified directory permission bits. The value is
+           interpreted as an octal value, eg. 775 for rwxrwxr-x etc.
+
+           If unset, the directories will be created dynamically with umask
+           022.
+
+           Example: precreateperms = 2755
+
        ****** DDaattaabbaassee ****** _(_m_a_n_d_a_t_o_r_y _s_e_c_t_i_o_n_)
 
        Describes the properties of the round robin database for storing the
@@ -305,6 +317,9 @@ RREEFFEERREENNCCEE
                How many pixels high should detail graphs be
 
            lloossss__bbaacckkggrroouunndd
+               Should the graphs be shown with a background showing loss data
+               for emphasis (yes/no)?
+
                If this option is enabled, uptime data is no longer displayed
                in the graph background.
 
@@ -592,8 +607,8 @@ RREEFFEERREENNCCEE
                    ooffffsseett
                        see above
 
-                       This variable _i_n_h_e_r_i_t_s its value from the parent sec-
-                       tion if nothing is specified here.
+                       This variable _i_n_h_e_r_i_t_s its value from the parent
+                       section if nothing is specified here.
 
                    sstteepp
                        see above
@@ -2980,8 +2995,8 @@ RREEFFEERREENNCCEE
                    bbiinnaarryy _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
                        see above
 
-                       This variable _i_n_h_e_r_i_t_s its value from the parent sec-
-                       tion if nothing is specified here.
+                       This variable _i_n_h_e_r_i_t_s its value from the parent
+                       section if nothing is specified here.
 
                    hhoossttiinntteerrvvaall
                        see above
@@ -3292,8 +3307,8 @@ RREEFFEERREENNCCEE
                        This variable _i_n_h_e_r_i_t_s its value from the parent sec-
                        tion if nothing is specified here.
 
-               (End of dynamical grammar changes for example instance "IOSP-
-               ing".)
+               (End of dynamical grammar changes for example instance
+               "IOSPing".)
 
            LLDDAAPP: (See the separate module documentation for details about each
            variable.)
@@ -3660,8 +3675,8 @@ RREEFFEERREENNCCEE
                    ooffffsseett
                        see above
 
-                       This variable _i_n_h_e_r_i_t_s its value from the parent
-                       section if nothing is specified here.
+                       This variable _i_n_h_e_r_i_t_s its value from the parent sec-
+                       tion if nothing is specified here.
 
                    ppaacckkeettssiizzee
                        see above
@@ -4552,10 +4567,10 @@ RREEFFEERREENNCCEE
            nnoommaasstteerrppoollll
                Use this in a master/slave setup where the master must not poll
                a particular target. The master will now skip this entry in its
-               polling cycle.  and from search results. Note that if you set
-               the hide property on a non leaf entry all subordinate entries
-               will also disapear in the menu structure. You can still access
-               them via direct link or via an alternate hierarchy.
+               polling cycle.  Note that if you set the hide property on a non
+               leaf entry all subordinate entries will also disapear in the
+               menu structure. You can still access them via direct link or
+               via an alternate hierarchy.
 
                If you have no master/slave setup this will have a similar
                effect to the hide property, except that the menu entry will
@@ -6963,6 +6978,11 @@ RREEFFEERREENNCCEE
             slave2:secret2
             ...
 
+           Note that these secrets combined with a man-in-the-middle attack
+           effectively give shell access to the corresponding slaves (see
+           smokeping_master_slave), so the file should be appropriately pro-
+           tected and the secrets should not be easily crackable.
+
        The following sections are valid on level 1:
 
        ++//[[--__00--99aa--zzAA--ZZ..]]++//
@@ -7025,4 +7045,4 @@ AAUUTTHHOORR
 
 
 
-2.3.3                             2008-03-10               SMOKEPING_CONFIG(5)
+2.3.4                             2008-03-28               SMOKEPING_CONFIG(5)
