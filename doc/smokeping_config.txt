@@ -1,101 +1,142 @@
-SMOKEPING_CONFIG(1)         SmokePing         SMOKEPING_CONFIG(1)
+SMOKEPING_CONFIG(1)                SmokePing               SMOKEPING_CONFIG(1)
 
 
 
-OOOOVVVVEEEERRRRVVVVIIIIEEEEWWWW
-       SmokePing takes its configuration from a single central
-       configuration file.  Its location must be hardcoded in the
-       smokeping script and smokeping.cgi.
+NNAAMMEE
+       smokeping_config - Reference for the SmokePing Config File
 
-       The contents of this manual is generated directly from the
-       configuration file parser.
+OOVVEERRVVIIEEWW
+       SmokePing takes its configuration from a single central configuration
+       file.  Its location must be hardcoded in the smokeping script and
+       smokeping.cgi.
 
-       The Parser for the Configuration file is written using
-       David Schweikers ParseConfig module. Read all about it in
-       the ISG::ParseConfig manpage.
+       The contents of this manual is generated directly from the configura-
+       tion file parser.
 
-       The Configuration file has a tree-like structure with sec-
-       tion headings at various levels. It also contains variable
-       assignements and tables.
+       The Parser for the Configuration file is written using David Schweikers
+       ParseConfig module. Read all about it in ISG::ParseConfig.
 
-RRRREEEEFFFFEEEERRRREEEENNNNCCCCEEEE
-       The text below describes the syntax of the SmokePing con-
-       figuration file.
+       The Configuration file has a tree-like structure with section headings
+       at various levels. It also contains variable assignments and tables.
 
-       ************ GGGGeeeennnneeeerrrraaaallll ************ _(_m_a_n_d_a_t_o_r_y _s_e_c_t_i_o_n_)
-
-       General configuration values valid for the whole SmokePing
-       setup.
-
-       The following variables can be set in this section:
-
-       oooowwwwnnnneeeerrrr _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
-           Name of the person responsible for this smokeping
-           installation.
-
-       iiiimmmmggggccccaaaacccchhhheeee _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
-           A directory which is visible on your webserver where
-           SmokePing can cache graphs.
-
-       iiiimmmmgggguuuurrrrllll _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
-           Either an absolute URL to the iiiimmmmggggccccaaaacccchhhheeee directory or
-           one relative to the directory where you keep the
-           SmokePing cgi.
-
-       ddddaaaattttaaaaddddiiiirrrr _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
-           The directory where SmokePing can keep its rrd files.
-
-       ppppiiiiddddddddiiiirrrr _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
-           The directory where SmokePing keeps its pid when
-           demonised.
-
-       sssseeeennnnddddmmmmaaaaiiiillll
-           Path to your sendmail binary. It will be used for
-           sending mails in connection with the support of
-           DYNAMIC addresses.
-
-       ssssmmmmooookkkkeeeemmmmaaaaiiiillll _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
-           Path to the mail template for DYNAMIC hosts. This mail
-           template must contain keywords of the form <<<<########_k_e_y_-
-           _w_o_r_d########>>>>. There is a sample template included with
-           SmokePing.
-
-       ccccggggiiiiuuuurrrrllll _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
-           Complete URL path of the SmokePing.cgi
-
-
-
-       mmmmaaaaiiiillllhhhhoooosssstttt
-           Instead of using sendmail, you can specify the name of
-           an smtp server and use perl's Net::SMTP module to send
-           mail to DYNAMIC host owners (see below).
-
-       ccccoooonnnnttttaaaacccctttt _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
-           Mail address of the person responsible for this
-           smokeping installation.
-
-       ************ DDDDaaaattttaaaabbbbaaaasssseeee ************ _(_m_a_n_d_a_t_o_r_y _s_e_c_t_i_o_n_)
-
-       Describes the properties of the round robin database for
-       storing the SmokePing data. Note that it is not possible
-       to edit existing RRDs by changeing the entries in the cfg
+RREEFFEERREENNCCEE
+       The text below describes the syntax of the SmokePing configuration
        file.
 
+       ****** GGeenneerraall ****** _(_m_a_n_d_a_t_o_r_y _s_e_c_t_i_o_n_)
+
+       General configuration values valid for the whole SmokePing setup.
+
        The following variables can be set in this section:
 
-       sssstttteeeepppp _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
-           Duration of the base operation interval of SmokePing
-           in seconds.  SmokePing will venture out every sssstttteeeepppp
-           seconds to ping your target hosts.
+       oowwnneerr _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
+           Name of the person responsible for this smokeping installation.
 
-       ppppiiiinnnnggggssss _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
-           How many pings should be sent to each target. Sug-
-           gested: 20 pings.
+       iimmggccaacchhee _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
+           A directory which is visible on your webserver where SmokePing can
+           cache graphs.
 
-       This section also contains a table describing the setup of
-       the SmokePing database. Below are reasonable defaults.
-       Only change them if you know rrdtool and its workings.
-       Each row in the table describes one RRA.
+       iimmgguurrll _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
+           Either an absolute URL to the iimmggccaacchhee directory or one relative to
+           the directory where you keep the SmokePing cgi.
+
+       ddaattaaddiirr _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
+           The directory where SmokePing can keep its rrd files.
+
+       ppaaggeeddiirr
+           Directory to store static representations of pages.
+
+       ppiiddddiirr _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
+           The directory where SmokePing keeps its pid when daemonised.
+
+       sseennddmmaaiill
+           Path to your sendmail binary. It will be used for sending mails in
+           connection with the support of DYNAMIC addresses.
+
+       ooffffsseett
+           If you run many instances of smokeping you may want to prevent them
+           from hitting your network all at the same time. Using the offset
+           parameter you can change the point in time when the probes are run.
+           Offset is specified in % of total interval, or alternatively as
+           'random'. I recommend to use 'random'. Note that this does NOT
+           influence the rrds itself, it is just a matter of when data acqusi-
+           tion is initiated.  The default offset is 'random'.
+
+       ssmmookkeemmaaiill _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
+           Path to the mail template for DYNAMIC hosts. This mail template
+           must contain keywords of the form <<####_k_e_y_w_o_r_d####>>. There is a sample
+           template included with SmokePing.
+
+       ccggiiuurrll _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
+           Complete URL path of the SmokePing.cgi
+
+       mmaaiillhhoosstt
+           Instead of using sendmail, you can specify the name of an smtp
+           server and use perl's Net::SMTP module to send mail to DYNAMIC host
+           owners (see below).
+
+       ccoonnttaacctt _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
+           Mail address of the person responsible for this smokeping installa-
+           tion.
+
+       nneettssnnpppp
+       ssyyssllooggffaacciilliittyy
+           The syslog facility to use, eg. local0...local7.  Note: syslog log-
+           ging is only used if you specify this.
+
+       ssyyssllooggpprriioorriittyy
+           The syslog priority to use, eg. debug, notice or info.  Default is
+           info.
+
+       ccoonnccuurrrreennttpprroobbeess
+           If you use multiple probes or multiple instances of the same probe
+           and you want them to run concurrently in separate processes, set
+           this to 'yes'. This gives you the possibility to specify probe-spe-
+           cific step and offset parameters (see the 'Probes' section) for
+           each probe and makes the probes unable to block each other in cases
+           of service outages. The default is 'yes', but if you for some rea-
+           son want the old behaviour you can set this to 'no'.
+
+       cchhaannggeepprroocceessssnnaammeess
+           When using 'concurrentprobes' (see above), this controls whether
+           the probe subprocesses should change their argv string to indicate
+           their probe in the process name.  If set to 'yes' (the default),
+           the probe name will be appended to the process name as '[probe]',
+           eg.  '/usr/bin/smokeping [FPing]'. If you don't like this
+           behaviour, set this variable to 'no'.  If 'concurrentprobes' is not
+           set to 'yes', this variable has no effect.
+
+       ****** DDaattaabbaassee ****** _(_m_a_n_d_a_t_o_r_y _s_e_c_t_i_o_n_)
+
+       Describes the properties of the round robin database for storing the
+       SmokePing data. Note that it is not possible to edit existing RRDs by
+       changing the entries in the cfg file.
+
+       The following variables can be set in this section:
+
+       sstteepp _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
+           Duration of the base operation interval of SmokePing in seconds.
+           SmokePing will venture out every sstteepp seconds to ping your target
+           hosts.  If 'concurrent_probes' is set to 'yes' (see above), this
+           variable can be overridden by each probe. Note that the step in the
+           RRD files is fixed when they are originally generated, and if you
+           change the step parameter afterwards, you'll have to delete the old
+           RRD files or somehow convert them.
+
+       ppiinnggss _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
+           How many pings should be sent to each target. Suggested: 20 pings.
+           This can be overridden by each probe. Some probes (those derived
+           from basefork.pm, ie. most except the FPing variants) will even let
+           this be overridden target-specifically in the PROBE_CONF section
+           (see the basefork documentation for details).  Note that the number
+           of pings in the RRD files is fixed when they are originally gener-
+           ated, and if you change this parameter afterwards, you'll have to
+           delete the old RRD files or somehow convert them.
+
+       This section also contains a table describing the setup of the
+       SmokePing database. Below are reasonable defaults. Only change them if
+       you know rrdtool and its workings. Each row in the table describes one
+       RRA.
 
         # cons   xff steps rows
         AVERAGE  0.5   1   1008
@@ -106,108 +147,102 @@ RRRREEEEFFFFEEEERRRREEEENNNNCCCCEEEE
             MAX  0.5 144    720
             MIN  0.5 144    720
 
-
        column 0
            Consolidation method.
 
        column 1
-           What part of the consolidated intervals must be known
-           to warrant a known entry.
+           What part of the consolidated intervals must be known to warrant a
+           known entry.
 
        column 2
-           How many sssstttteeeeppppssss to consolidate into for each RRA entry.
+           How many sstteeppss to consolidate into for each RRA entry.
 
        column 3
-           How many rrrroooowwwwssss this RRA should have.
+           How many rroowwss this RRA should have.
 
-       ************ PPPPrrrreeeesssseeeennnnttttaaaattttiiiioooonnnn ************ _(_m_a_n_d_a_t_o_r_y _s_e_c_t_i_o_n_)
+       ****** PPrreesseennttaattiioonn ****** _(_m_a_n_d_a_t_o_r_y _s_e_c_t_i_o_n_)
 
        Defines how the SmokePing data should be presented.
 
        The following variables can be set in this section:
 
-       tttteeeemmmmppppllllaaaatttteeee _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
-           The webpage template must contain keywords of the form
-           <<<<########_k_e_y_w_o_r_d########>>>>. There is a sample template included
-           with SmokePing; use it as the basis for your
-           experiments. Default template contains a pointer to
-           the SmokePing counter and homepage. I would be glad if
-           you would not remove this as it gives me an indication
-           as to how widely used the tool is.
+       tteemmppllaattee _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
+           The webpage template must contain keywords of the form <<####_k_e_y_-
+           _w_o_r_d####>>. There is a sample template included with SmokePing; use it
+           as the basis for your experiments. Default template contains a
+           pointer to the SmokePing counter and homepage. I would be glad if
+           you would not remove this as it gives me an indication as to how
+           widely used the tool is.
 
-       cccchhhhaaaarrrrsssseeeetttt
-           By default, SmokePing assumes the 'iso-8859-15' char-
-           acter set. If you use something else, this is the
-           place to speak up.
+       cchhaarrsseett
+           By default, SmokePing assumes the 'iso-8859-15' character set. If
+           you use something else, this is the place to speak up.
 
        The following sections are valid on level 1:
 
-       ++++oooovvvveeeerrrrvvvviiiieeeewwww _(_m_a_n_d_a_t_o_r_y _s_e_c_t_i_o_n_)
-           The Overview section defines how the Overview graphs
-           should look.
+       ++oovveerrvviieeww _(_m_a_n_d_a_t_o_r_y _s_e_c_t_i_o_n_)
+           The Overview section defines how the Overview graphs should look.
 
            The following variables can be set in this section:
 
-           wwwwiiiiddddtttthhhh _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
+           wwiiddtthh _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
                Width of the Overview Graphs.
 
-           hhhheeeeiiiigggghhhhtttt _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
+           hheeiigghhtt _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
                Height of the Overview Graphs.
 
-           rrrraaaannnnggggeeee
-               How much time should be depicted in the Overview
-               graph. Time must be specified as a number followed
-               by a letter which specifies the unit of time.
-               Known units are: sssseconds, mmmminutes, hhhhours, dddddays,
-               wwwweeks, yyyyears.
+           rraannggee
+               How much time should be depicted in the Overview graph. Time
+               must be specified as a number followed by a letter which speci-
+               fies the unit of time. Known units are: sseconds, mminutes,
+               hhours, dddays, wweeks, yyears.
 
-           mmmmaaaaxxxx____rrrrtttttttt
-               Any roundtrip time larger than this value will
-               cropped in the overview graph
+           mmaaxx__rrtttt
+               Any roundtrip time larger than this value will cropped in the
+               overview graph
 
-           mmmmeeeeddddiiiiaaaannnn____ccccoooolllloooorrrr
-               By default the median line is drawn in red. Over-
-               ride it here with a hex color in the format
-               _r_r_g_g_b_b.
+           mmeeddiiaann__ccoolloorr
+               By default the median line is drawn in red. Override it here
+               with a hex color in the format _r_r_g_g_b_b.
 
-           ssssttttrrrrffffttttiiiimmmmeeee
-               Use posix strftime to format the timestamp in the
-               left hand lower corner of the overview graph
+           ssttrrffttiimmee
+               Use posix strftime to format the timestamp in the left hand
+               lower corner of the overview graph
 
-       ++++ddddeeeettttaaaaiiiillll _(_m_a_n_d_a_t_o_r_y _s_e_c_t_i_o_n_)
+       ++ddeettaaiill _(_m_a_n_d_a_t_o_r_y _s_e_c_t_i_o_n_)
            The following variables can be set in this section:
 
-           wwwwiiiiddddtttthhhh _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
+           wwiiddtthh _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
                How many pixels wide should detail graphs be
 
-           hhhheeeeiiiigggghhhhtttt _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
+           hheeiigghhtt _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
                How many pixels high should detail graphs be
 
-           llllooooggggaaaarrrriiiitttthhhhmmmmiiiicccc
-               should the graphs be shown in a logarithmic scale
-               (yes/no)
+           llooggaarriitthhmmiicc
+               should the graphs be shown in a logarithmic scale (yes/no)
 
-           uuuunnnniiiissssoooonnnn____ttttoooolllleeeerrrraaaannnncccceeee
-               if a graph is more than this factor of the median
-               'max' it drops out of the unison scaling algo-
-               rithm. A factor of two would mean that any graph
-               with a max either less than half or more than
-               twice the median 'max' will be dropped from unison
+           uunniissoonn__ttoolleerraannccee
+               if a graph is more than this factor of the median 'max' it
+               drops out of the unison scaling algorithm. A factor of two
+               would mean that any graph with a max either less than half or
+               more than twice the median 'max' will be dropped from unison
                scaling
 
+           mmaaxx__rrtttt
+               Any roundtrip time larger than this value will cropped in the
+               detail graph
 
+           ssttrrffttiimmee
+               Use posix strftime to format the timestamp in the left hand
+               lower corner of the detail graph
 
-           mmmmaaaaxxxx____rrrrtttttttt
-               Any roundtrip time larger than this value will
-               cropped in the detail graph
+           nnooddaattaa__ccoolloorr
+               Paint the graph background in a special color when there is no
+               data for this period because smokeping has not been running
+               (#rrggbb)
 
-           ssssttttrrrrffffttttiiiimmmmeeee
-               Use posix strftime to format the timestamp in the
-               left hand lower corner of the detail graph
-
-           The detailed display can contain several graphs of
-           different resolution. In this table you can specify
-           the resolution of each graph.
+           The detailed display can contain several graphs of different reso-
+           lution. In this table you can specify the resolution of each graph.
 
            Example:
 
@@ -216,34 +251,30 @@ RRRREEEEFFFFEEEERRRREEEENNNNCCCCEEEE
             "Last 10 Days"    10d
             "Last 400 Days"   400d
 
-
            column 0
                Description of the particular resolution.
 
            column 1
-               How much time should be depicted. The format is
-               the same as for the aaaaggggeeee  parameter of the Overview
-               section.
+               How much time should be depicted. The format is the same as for
+               the aaggee  parameter of the Overview section.
 
            The following sections are valid on level 2:
 
-           ++++++++lllloooossssssss____ccccoooolllloooorrrrssss
-               In the Detail view, the color of the median line
-               depends the amount of lost packets. SmokePing
-               comes with a reasonable default setting, but you
-               may choose to disagree. The table below lets you
-               specify your own coloring.
+           ++++lloossss__ccoolloorrss
+               In the Detail view, the color of the median line depends the
+               amount of lost packets. SmokePing comes with a reasonable
+               default setting, but you may choose to disagree. The table
+               below lets you specify your own coloring.
 
                Example:
 
                 Loss Color   Legend
                 1    00ff00    "<1"
                 3    0000ff    "<3"
-                1000 ff0000    ">=3"
-
+                100  ff0000    ">=3"
 
                column 0
-                   Activate when the lossrate is larger of equal
+                   Activate when the lossrate (in percent) is larger of equal
                    to this number
 
                column 1
@@ -252,28 +283,27 @@ RRRREEEEFFFFEEEERRRREEEENNNNCCCCEEEE
                column 2
                    Description for this range.
 
-           ++++++++uuuuppppttttiiiimmmmeeee____ccccoooolllloooorrrrssss
-               When monitoring a host with DYNAMIC addressing,
-               SmokePing will keep track of how long the machine
-               is able to keep the same IP address. This time is
-               plotted as a color in the graphs background.
-               SmokePing comes with a reasonable default setting,
-               but you may choose to disagree. The table below
-               lets you specify your own coloring
+           ++++uuppttiimmee__ccoolloorrss
+               When monitoring a host with DYNAMIC addressing, SmokePing will
+               keep track of how long the machine is able to keep the same IP
+               address. This time is plotted as a color in the graphs back-
+               ground. SmokePing comes with a reasonable default setting, but
+               you may choose to disagree. The table below lets you specify
+               your own coloring
 
                Example:
 
-                Uptime Color     Legend
-                3600    00ff00   "<1h"
-                86400   0000ff   "<1d"
-                604800  ff0000   "<1w"
+                # Uptime      Color     Legend
+                3600          00ff00   "<1h"
+                86400         0000ff   "<1d"
+                604800        ff0000   "<1w"
                 1000000000000 ffff00   ">1w"
 
                Uptime is in days!
 
                column 0
-                   Activate when uptime in days is larger of
-                   equal to this number
+                   Activate when uptime in days is larger of equal to this
+                   number
 
                column 1
                    Color for this uptime range range.
@@ -281,151 +311,331 @@ RRRREEEEFFFFEEEERRRREEEENNNNCCCCEEEE
                column 2
                    Description for this range.
 
-       ************ PPPPrrrroooobbbbeeeessss ************ _(_m_a_n_d_a_t_o_r_y _s_e_c_t_i_o_n_)
+       ****** PPrroobbeess ****** _(_m_a_n_d_a_t_o_r_y _s_e_c_t_i_o_n_)
 
-       The Probes Section configures Probe modules. Probe modules
-       integrate an external ping command into SmokePing. Check
-       the documentation of the Ping module for configuration
-       details.
+       The Probes Section configures Probe modules. Probe modules integrate an
+       external ping command into SmokePing. Check the documentation of the
+       FPing module for configuration details.
 
        The following sections are valid on level 1:
 
-       ++++////[[[[----____0000----9999aaaa----zzzzAAAA----ZZZZ]]]]++++////
-           Each module can take specific configuration informa-
-           tion from this area. The jumble of letters above is a
-           regular expression defining legal module names.
+       ++//[[--__00--99aa--zzAA--ZZ]]++//
+           Each module can take specific configuration information from this
+           area. The jumble of letters above is a regular expression defining
+           legal module names.
 
            The following variables can be set in this section:
 
-           ////[[[[----____0000----9999aaaa----zzzzAAAA----ZZZZ]]]]++++////
-               Each module defines which variables it wants to
-               accept. So this expression here just defines legal
-               variable names.
+           sstteepp
+               Duration of the base interval that this probe should use, if
+               different from the one specified in the 'Database' section.
+               Note that the step in the RRD files is fixed when they are
+               originally generated, and if you change the step parameter
+               afterwards, you'll have to delete the old RRD files or somehow
+               convert them. (This variable is only applicable if the variable
+               'concurrentprobes' is set in the 'General' section.)
 
-       ************ TTTTaaaarrrrggggeeeettttssss ************ _(_m_a_n_d_a_t_o_r_y _s_e_c_t_i_o_n_)
+           ooffffsseett
+               If you run many probes concurrently you may want to prevent
+               them from hitting your network all at the same time. Using the
+               probe-specific offset parameter you can change the point in
+               time when each probe will be run. Offset is specified in % of
+               total interval, or alternatively as 'random', and the offset
+               from the 'General' section is used if nothing is specified
+               here. Note that this does NOT influence the rrds itself, it is
+               just a matter of when data acqusition is initiated.  (This
+               variable is only applicable if the variable 'concurrentprobes'
+               is set in the 'General' section.)
 
-       The Target Section defines the actual work of SmokePing.
-       It contains a hierarchical list of hosts which mark the
-       endpoints of the network connections the system should
-       monitor.  Each section can contain one host as well as
-       other sections.
+           ppiinnggss
+               How many pings should be sent to each target, if different from
+               the global value specified in the Database section.  Some
+               probes (those derived from basefork.pm, ie. most except the
+               FPing variants) will even let this be overridden target-specif-
+               ically in the PROBE_CONF section (see the basefork documenta-
+               tion for details).  Note that the number of pings in the RRD
+               files is fixed when they are originally generated, and if you
+               change this parameter afterwards, you'll have to delete the old
+               RRD files or somehow convert them.
+
+           //[[--__00--99aa--zzAA--ZZ..]]++//
+               Each module defines which variables it wants to accept. So this
+               expression here just defines legal variable names.
+
+           The following sections are valid on level 2:
+
+           ++++//[[--__00--99aa--zzAA--ZZ]]++//
+               You can define multiple instances of the same probe with sub-
+               sections.  These instances can have different values for their
+               variables, so you can eg. have one instance of the FPing probe
+               with packet size 1000 and step 30 and another instance with
+               packet size 64 and step 300.  The name of the subsection deter-
+               mines what the probe will be called, so you can write descrip-
+               tive names for the probes.
+
+               If there are any subsections defined, the main section for this
+               probe will just provide default parameter values for the probe
+               instances, ie.  it will not become a probe instance itself.
+
+               The following variables can be set in this section:
+
+               sstteepp
+               ooffffsseett
+               ppiinnggss
+               //[[--__00--99aa--zzAA--ZZ..]]++//
+                   Each module defines which variables it wants to accept. So
+                   this expression here just defines legal variable names.
+
+       ****** AAlleerrttss ******
+
+       The Alert section lets you setup loss and RTT pattern detectors. After
+       each round of polling, SmokePing will examine its data and determine
+       which detectors match. Detectors are enabled per target and get inher-
+       ited by the targets children.
+
+       Detectors are not just simple thresholds which go off at first sight of
+       a problem. They are configurable to detect special loss or RTT pat-
+       terns. They let you look at a number of past readings to make a more
+       educated decision on what kind of alert should be sent, or if an alert
+       should be sent at all.
+
+       The patterns are numbers prefixed with an operator indicating the type
+       of comparison required for a match.
+
+       The following RTT pattern detects if a target's RTT goes from con-
+       stantly below 10ms to constantly 100ms and more:
+
+        old ------------------------------> new
+        <10,<10,<10,<10,<10,>10,>100,>100,>100
+
+       Loss patterns work in a similar way, except that the loss is defined as
+       the percentage the total number of received packets is of the total
+       number of packets sent.
+
+        old ------------------------------> new
+        ==0%,==0%,==0%,==0%,>20%,>20%,>=20%
+
+       Apart from normal numbers, patterns can also contain the values ** which
+       is true for all values regardless of the operator. And UU which is true
+       for uunnkknnoowwnn data together with the ==== and ==!! operators.
+
+       Detectors normally act on state changes. This has the disadvantage,
+       that they will fail to find conditions which were already present when
+       launching smokeping. For this it is possible to write detectors that
+       begin with the special value ====SS it is inserted whenever smokeping is
+       started up.
+
+       You can write
+
+        ==S,>20%,>20%
+
+       to detect lines that have been losing more than 20% of the packets for
+       two periods after startup.
+
+       Sometimes it may be that conditions occur at irregular intervals. But
+       still you only want to throw an alert if they occur several times
+       within a certain amount of times. The operator **XX** will ignore up to _X
+       values and still let the pattern match:
+
+         >10%,*10*,>10%
+
+       will fire if more than 10% of the packets have been losst twice over
+       the last 10 samples.
+
+       A complete example
+
+        *** Alerts ***
+        to = admin@company.xy,peter@home.xy
+        from = smokealert@company.xy
+
+        +lossdetect
+        type = loss
+        # in percent
+        pattern = ==0%,==0%,==0%,==0%,>20%,>20%,>20%
+        comment = suddenly there is packet loss
+
+        +miniloss
+        type = loss
+        # in percent
+        pattern = >0%,*12*,>0%,*12*,>0%
+        comment = detected loss 3 times over the last two hours
+
+        +rttdetect
+        type = rtt
+        # in milliseconds
+        pattern = <10,<10,<10,<10,<10,<100,>100,>100,>100
+        comment = routing messed up again ?
+
+        +rttbadstart
+        type = rtt
+        # in milliseconds
+        pattern = ==S,==U
+        comment = offline at startup
 
        The following variables can be set in this section:
 
-       pppprrrroooobbbbeeee _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
-           The name of the probe module to be used for this host.
-           The value of this variable gets propagated
-
-       mmmmeeeennnnuuuu _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
-           Menu entry for this section
-
-       ttttiiiittttlllleeee _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
-           Title of the page when it is displayed.
-
-       rrrreeeemmmmaaaarrrrkkkk
-           An optional remark on the current section. It gets
-           displayed on the webpage.
+       ttoo _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
+       ffrroomm _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
 
        The following sections are valid on level 1:
 
+       ++//[[^^\\ss,,]]++//
+           The following variables can be set in this section:
 
-       ++++PPPPRRRROOOOBBBBEEEE____CCCCOOOONNNNFFFF
+           ttyyppee _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
+               Currently the pattern types rrtttt and lloossss and mmaattcchheerr are known
+
+           ppaatttteerrnn _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
+               a comma separated list of comparison operators and numbers. rtt
+               patterns are in milliseconds, loss patterns are in percents
+
+           ccoommmmeenntt _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
+           ttoo
+
+       ****** TTaarrggeettss ****** _(_m_a_n_d_a_t_o_r_y _s_e_c_t_i_o_n_)
+
+       The Target Section defines the actual work of SmokePing. It contains a
+       hierarchical list of hosts which mark the endpoints of the network con-
+       nections the system should monitor.  Each section can contain one host
+       as well as other sections.
+
+       The following variables can be set in this section:
+
+       pprroobbee _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
+           The name of the probe module to be used for this host. The value of
+           this variable gets propagated
+
+       mmeennuu _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
+           Menu entry for this section. If not set this will be set to the
+           hostname.
+
+       ttiittllee _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
+           Title of the page when it is displayed. This will be set to the
+           hostname if left empty.
+
+       rreemmaarrkk
+           An optional remark on the current section. It gets displayed on the
+           webpage.
+
+       aalleerrttss
+           A comma separated list of alerts to check for this target. The
+           alerts have to be setup in the Alerts section. Alerts are inherited
+           by child nodes. Use an empty alerts definition to remove inherited
+           alerts from the current target and its children.
+
+       The following sections are valid on level 1:
+
+       ++PPRROOBBEE__CCOONNFF
            Probe specific variables.
 
            The following variables can be set in this section:
 
-           ////[[[[----____0000----9999aaaa----zzzzAAAA----ZZZZ]]]]++++////
-               Should be found in the documentation of the corre-
-               sponding probe. The values get propagated. If a
-               child node uses the same Probe as the parent.
+           //[[--__00--99aa--zzAA--ZZ..]]++//
+               Should be found in the documentation of the corresponding
+               probe. The values get propagated to those child nodes using the
+               same Probe.
 
-       ++++////[[[[----____0000----9999aaaa----zzzzAAAA----ZZZZ]]]]++++////
-           Each target section can contain information about a
-           host to monitor as well as further target sections.
-           Most variables have already been described above. The
-           expression above defines legal names for target sec-
-           tions.
+       ++//[[--__00--99aa--zzAA--ZZ]]++//
+           Each target section can contain information about a host to monitor
+           as well as further target sections. Most variables have already
+           been described above. The expression above defines legal names for
+           target sections.
 
            The following variables can be set in this section:
 
-           pppprrrroooobbbbeeee
-           mmmmeeeennnnuuuu _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
-           ttttiiiittttlllleeee _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
-           nnnnooootttteeee
-               Some information about this entry which does NOT
-               get displayed on the web.
+           pprroobbee
+           mmeennuu
+           ttiittllee
+           aalleerrttss
+               Comma separated list of alert names
 
-           eeeemmmmaaaaiiiillll
-               This is the contact address for the owner of the
-               current host. In connection with the DDDDYYYYNNNNAAAAMMMMIIIICCCC
-               hosts, the address will be used for sending the
-               belowmentioned script.
+           nnoottee
+               Some information about this entry which does NOT get displayed
+               on the web.
 
-           hhhhoooosssstttt
-               Can either contain the name of a target host or
-               the string DDDDYYYYNNNNAAAAMMMMIIIICCCC.
+           eemmaaiill
+               This is the contact address for the owner of the current host.
+               In connection with the DDYYNNAAMMIICC hosts, the address will be used
+               for sending the belowmentioned script.
 
-               In the second case, the target machine has a
-               dynamic IP address and thus is required to regu-
-               larly contact the SmokePing server to verify its
-               IP address.  When starting SmokePing with the com-
-               mandline argument --------eeeemmmmaaaaiiiillll it will add a secret
-               password to each of the DDDDYYYYNNNNAAAAMMMMIIIICCCC host lines and
-               send a script to the owner of each host. This
-               script must be started regularly on the host in
-               question to make sure SmokePing monitors the right
-               box. If the target machine supports SNMP SmokePing
-               will also query the hosts sysContact, sysName and
-               sysLocation properties to make sure it is still
-               the same host.
+           hhoosstt
+               Can either contain the name of a target host or the string
+               DDYYNNAAMMIICC.
 
-           rrrreeeemmmmaaaarrrrkkkk
+               In the second case, the target machine has a dynamic IP address
+               and thus is required to regularly contact the SmokePing server
+               to verify its IP address.  When starting SmokePing with the
+               commandline argument ----eemmaaiill it will add a secret password to
+               each of the DDYYNNAAMMIICC host lines and send a script to the owner
+               of each host. This script must be started regularly on the host
+               in question to make sure SmokePing monitors the right box. If
+               the target machine supports SNMP SmokePing will also query the
+               hosts sysContact, sysName and sysLocation properties to make
+               sure it is still the same host.
+
+           rreemmaarrkk
+           rraawwlloogg
+               Log the raw data, gathered for this target, in tab separated
+               format, to a file with the same basename as the corresponding
+               RRD file. Use posix strftime to format the timestamp to be put
+               into the file name. The filename is built like this:
+
+                basename.strftime.csv
+
+               Example:
+
+                rawlog=%Y-%m-%d
+
+               this would create a new logfile every day with a name like
+               this:
+
+                targethost.2004-05-03.csv
+
+           aalleerrtteeee
+               If you want to have alerts for this target and all targets
+               below it go to a particular address on top of the address
+               already specified in the alert, you can add it here. This can
+               be a comma separated list of items.
 
            The following sections are valid on level 2:
 
-           ++++++++PPPPRRRROOOOBBBBEEEE____CCCCOOOONNNNFFFF
+           ++++PPRROOBBEE__CCOONNFF
                Probe specific variables.
 
-               The following variables can be set in this sec-
-               tion:
+               The following variables can be set in this section:
 
-               ////[[[[----____0000----9999aaaa----zzzzAAAA----ZZZZ]]]]++++////
-                   Should be found in the documentation of the
-                   corresponding probe. The values get propa-
-                   gated. If a child node uses the same Probe as
-                   the parent.
+               //[[--__00--99aa--zzAA--ZZ..]]++//
+                   Should be found in the documentation of the corresponding
+                   probe. The values get propagated to those child nodes using
+                   the same Probe.
 
-           ++++++++////[[[[----____0000----9999aaaa----zzzzAAAA----ZZZZ]]]]++++////
-               Each target section can contain information about
-               a host to monitor as well as further target sec-
-               tions. Most variables have already been described
-               above. The expression above defines legal names
-               for target sections.
+           ++++//[[--__00--99aa--zzAA--ZZ]]++//
+               Each target section can contain information about a host to
+               monitor as well as further target sections. Most variables have
+               already been described above. The expression above defines
+               legal names for target sections.
 
-CCCCOOOOPPPPYYYYRRRRIIIIGGGGHHHHTTTT
-       Copyright (c) 2001 by Tobias Oetiker. All right reserved.
+CCOOPPYYRRIIGGHHTT
+       Copyright (c) 2001-2003 by Tobias Oetiker. All right reserved.
 
-LLLLIIIICCCCEEEENNNNSSSSEEEE
-       This program is free software; you can redistribute it
-       and/or modify it under the terms of the GNU General Public
-       License as published by the Free Software Foundation;
-       either version 2 of the License, or (at your option) any
-       later version.
+LLIICCEENNSSEE
+       This program is free software; you can redistribute it and/or modify it
+       under the terms of the GNU General Public License as published by the
+       Free Software Foundation; either version 2 of the License, or (at your
+       option) any later version.
 
-       This program is distributed in the hope that it will be
-       useful, but WITHOUT ANY WARRANTY; without even the implied
-       warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-       PURPOSE.  See the GNU General Public License for more
-       details.
+       This program is distributed in the hope that it will be useful, but
+       WITHOUT ANY WARRANTY; without even the implied warranty of MER-
+       CHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General
+       Public License for more details.
 
-       You should have received a copy of the GNU General Public
-       License along with this program; if not, write to the Free
-       Software Foundation, Inc., 675 Mass Ave, Cambridge, MA
-       02139, USA.
+       You should have received a copy of the GNU General Public License along
+       with this program; if not, write to the Free Software Foundation, Inc.,
+       675 Mass Ave, Cambridge, MA 02139, USA.
 
-AAAAUUUUTTTTHHHHOOOORRRR
+AAUUTTHHOORR
        Tobias Oetiker <tobi@oetiker.ch>
 
 
 
-2002-03-27                     1.6            SMOKEPING_CONFIG(1)
+1.38                              2005-01-30               SMOKEPING_CONFIG(1)

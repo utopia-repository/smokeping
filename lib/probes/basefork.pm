@@ -9,7 +9,9 @@ probes::basefork - Yet Another Base Class for implementing SmokePing Probes
 =head1 OVERVIEW
 
 Like probes::basevars, but supports the probe-specific property `forks'
-to determine how many processes should be run concurrently.
+to determine how many processes should be run concurrently. The
+targets are pinged one at a time, and the number of pings sent can vary
+between targets.
 
 =head1 SYNOPSYS
 
@@ -18,10 +20,28 @@ to determine how many processes should be run concurrently.
  + MyForkingProbe
  # run this many concurrent processes
  forks = 10 
+ # how long does a single 'ping' take
+ timeout = 10
+ # how many pings to send
+ pings = 10
 
  + MyOtherForkingProbe
  # we don't want any concurrent processes at all for some reason.
  forks = 1 
+
+ *** Targets ***
+
+ menu = First
+ title = First
+ host = firsthost
+ probe = MyForkingProbe
+
+ menu = Second
+ title = Second
+ host = secondhost
+ probe = MyForkingProbe
+ +PROBE_CONF
+ pings = 20
 
 =head1 DESCRIPTION
 
@@ -45,14 +65,27 @@ targets than this value, another round of forks is done after the first
 processes are finished. This continues until all the targets have been
 tested.
 
+The timeout in which each child has to finish is set to 5 seconds
+multiplied by the maximum number of 'pings' of the targets. You can set
+the base timeout differently if you want to, using the timeout property
+of the probe in the master config file (this again will be multiplied
+by the maximum number of pings). The probe itself can also override the
+default by providing a TimeOut method which returns an integer.
+
+If the child isn't finished when the timeout occurs, it 
+will be killed along with any processes it has started.
+
+The number of pings sent can be specified in the probe-specific variable
+'pings', and it can be overridden by each target in the 'PROBE_CONF'
+section.
+
 =head1 AUTHOR
 
 Niko Tyni E<lt>ntyni@iki.fiE<gt>
 
 =head1 BUGS
 
-Doesn't signal failures in child processes, partly because SmokePing 
-hasn't any logging features after daemonization.
+The timeout code has only been tested on Linux.
 
 =head1 SEE ALSO
 
@@ -65,34 +98,73 @@ use base qw(probes::basevars);
 use Symbol;
 use Carp;
 use IO::Select;
+use POSIX; # for ceil() and floor()
+use Config; # for signal names
 
-sub ping_one {
-	croak "ping_one: this must be overridden by the subclass";
+my %signo;
+my @signame;
+
+{
+	# from perlipc man page
+	my $i = 0;
+	defined $Config{sig_name} || die "No sigs?";
+	foreach my $name (split(' ', $Config{sig_name})) {
+		$signo{$name} = $i;
+		$signame[$i] = $name;
+		$i++;
+	}
+}
+
+die("Missing TERM signal?") unless exists $signo{TERM};
+die("Missing KILL signal?") unless exists $signo{KILL};
+
+sub pingone {
+	croak "pingone: this must be overridden by the subclass";
+}
+
+sub TimeOut {
+	# probes which require more time may want to provide their own implementation.
+	return 5;
 }
 
 sub ping {
 	my $self = shift;
-	my $forks = $self->{properties}{forks};
-	$forks = $DEFAULTFORKS unless defined $forks;
-	$forks = $DEFAULTFORKS if $forks !~ /^\d+$/ or $forks < 1;
 
 	my @targets = @{$self->targets};
+	return unless @targets;
+
+	my $forks = $self->{properties}{forks} || $DEFAULTFORKS;
+
+	my $timeout = $self->{properties}{timeout};
+	unless (defined $timeout and $timeout > 0) {
+		my $maxpings = 0;
+		for (@targets) {
+			my $p = $self->pings($_);
+			$maxpings = $p if $p > $maxpings;
+		}
+		$timeout = $maxpings * $self->TimeOut();
+	}
+
+        $self->{rtts}={};
+	$self->do_debug("forks $forks, timeout per target $timeout");
 
 	while (@targets) {
 		my %targetlookup;
+		my %pidlookup;
 		my $s = IO::Select->new();
+		my $starttime = time();
 		for (1..$forks) {
 			last unless @targets;
 			my $t = pop @targets;
 			my $pid;
 			my $handle = gensym;
+			my $sleep_count = 0;
 			do {
 				$pid = open($handle, "-|");
-				my $sleep_count = 0;
 
 				unless (defined $pid) {
-					carp("cannot fork: $!");
-					croak("bailing out") 
+					$self->do_log("cannot fork: $!");
+					$self->fatal("bailing out") 
 						if $sleep_count++ > 6;
 					sleep 10;
 				}
@@ -100,23 +172,20 @@ sub ping {
 			if ($pid) { #parent
 				$s->add($handle);
 				$targetlookup{$handle} = $t;
+				$pidlookup{$handle} = $pid;
 			} else { #child
+				# we detach from the parent's process group
+				setpgrp(0, $$);
+
 				my @times = $self->pingone($t);
 				print join(" ", @times), "\n";
 				exit;
 			}
 		}
-		my $step = $self->{cfg}{Database}{step};
-		my $starttime = time();
-		while ($s->handles and time() - $starttime < $step) {
-			if( $s->can('has_exception') ) {
-				$s->remove($s->has_exception(0)); # should we carp?
-			} elsif( $s->can('has_error') ) {
-				$s->remove($s->has_error(0));
-			} else {
-				croak 'IO::Select neither knows has_exception() nor has_error()';
- 			};
-			for my $ready ($s->can_read($step / 2)) {
+		my $timeleft = $timeout - (time() - $starttime);
+
+		while ($s->handles and $timeleft > 0) {
+			for my $ready ($s->can_read($timeleft)) {
 				$s->remove($ready);
 				my $response = <$ready>;
 				close $ready;
@@ -126,9 +195,56 @@ sub ping {
 				my $target = $targetlookup{$ready};
 				my $tree = $target->{tree};
 				$self->{rtts}{$tree} = \@times;
+
+				$self->do_debug("$target->{addr}: got $response");
 			}
+			my @errorhandles;
+			if( $s->can('has_exception') ) {
+				@errorhandles = $s->has_exception(0);
+			} elsif( $s->can('has_error') ) {
+				@errorhandles = $s->has_error(0);
+			} else {
+				$self->fatal('IO::Select neither knows has_exception() nor has_error()');
+ 			};
+			for (@errorhandles) {
+				$self->do_log("$targetlookup{$_}{addr}: caught exception");
+				$s->remove($_);
+			}
+			$timeleft = $timeout - (time() - $starttime);
+		}
+		my @left = $s->handles;
+		for my $handle (@left) {
+			$self->do_log("$targetlookup{$handle}{addr}: timeout ($timeout s) reached, killing the probe.");
+
+			# we kill the child's process group (negative signal) 
+			# this should finish off the actual pinger process as well
+
+			my $pid = $pidlookup{$handle};
+			kill -$signo{TERM}, $pid;
+			sleep 1;
+			kill -$signo{KILL}, $pid;
+
+			close $handle;
+			$s->remove($handle);
 		}
 	}
+}
+
+# the "private" method that takes a "tree" argument is used by Smokeping.pm
+sub _pings {
+	my $self = shift;
+	my $tree = shift;
+	my $vars = $self->vars($tree);
+	return $vars->{pings} if defined $vars->{pings};
+	return $self->SUPER::pings();
+}
+
+# the "public" method that takes a "target" argument is used by the probes
+sub pings {
+	my $self = shift;
+	my $target = shift;
+	return $self->SUPER::pings() unless ref $target;
+	return $self->_pings($target->{tree});
 }
 
 sub ProbeDesc {

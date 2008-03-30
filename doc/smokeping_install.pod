@@ -18,7 +18,7 @@ downloading the tool.
 
 =over
 
-=item RRDtool 1.0.33
+=item RRDtool 1.0.x
 
 http://people.ee.ethz.ch/~oetiker/webtools/rrdtool/pub/rrdtool-1.0.33.tar.gz
 
@@ -37,6 +37,28 @@ Note that fping must be installed setuid root. It seems that older versions
 of fping report round trip times in 0.1 milliseconds instead of 1 milliseconds
 as advertised ... SmokePing tries to figure this out. It tells
 you when it starts ... let me know it it gets it wrong.
+
+=item FPing 2.4b2 IPV6 (Optional)
+
+http://unfix.org/projects/ipv6/fping-2.4b2_to-ipv6.tar.gz
+
+You need this if you want to use the FPing6 probe
+
+=item Socket6 0.11-1 (Optional)
+
+http://www.cpan.org/modules/by-module/Socket6/
+
+Optionally installing the Socket6 module for perl enables
+smokeping to check hostnames that only resolve to an IPv6
+address. If you probe such hosts using ie. the FPing6 probe
+and get warnings that those hosts don't resolve to an IP
+address, you need to install it.
+
+=item EchoPing  (Optional)
+
+http://echoping.sourceforge.net/
+
+You need this to run the EchoPing probes
 
 =item Webserver 
 

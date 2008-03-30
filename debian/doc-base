@@ -1,0 +1,13 @@
+Document: smokeping
+Title: smokeping
+Abstract:  SmokePing is a latency logging and graphing system. It consists of
+ a daemon process which organizes the latency measurements and a CGI
+ which presents the graphs..
+Section: Apps/net
+
+Format: HTML
+Index: /usr/share/doc/smokeping/html/smokeping.html
+Files: /usr/share/doc/smokeping/html/*
+
+Format: text
+Files: /usr/share/doc/smokeping/*.txt*

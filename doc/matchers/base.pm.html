@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>matchers/base.pm</title>
+<link rev="made" href="mailto:dws@ee.ethz.ch" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+<!--
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#overview">OVERVIEW</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<ul>
+
+		<li><a href="#new">new</a></li>
+		<li><a href="#length">Length</a></li>
+		<li><a href="#desc">Desc</a></li>
+		<li><a href="#test">Test</a></li>
+	</ul>
+
+	<li><a href="#copyright">COPYRIGHT</a></li>
+	<li><a href="#license">LICENSE</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+</ul>
+-->
+<!-- INDEX END -->
+
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>matchers::base - Base Class for implementing SmokePing Matchers</p>
+<p>
+</p>
+<hr />
+<h1><a name="overview">OVERVIEW</a></h1>
+<pre>
+
+This is the base class for writing SmokePing matchers. Every matcher must
+inherit from the base class and provide it's own methods for the 'buisness'
+logic.</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>Every matcher must provide the following methods:</p>
+<p>
+</p>
+<h2><a name="new">new</a></h2>
+<p>The new method expects hash elements as an argument
+eg new({x=&gt;'\d+',y=&gt;'\d+'},x=&gt;1,y=&gt;2). The first part is
+a syntax rule for the arguments it should expect and the second part
+are the arguments itself. The first part will be supplied
+by the child class as it calls the partent method.</p>
+<p>
+</p>
+<h2><a name="length">Length</a></h2>
+<p>The Length method returns the number of values the
+matcher will expect from SmokePing. This method must
+be overridden by the children of the base class.</p>
+<p>
+</p>
+<h2><a name="desc">Desc</a></h2>
+<p>Simply return the description of the function. This method must
+be overwritten by a children of the base class.</p>
+<p>
+</p>
+<h2><a name="test">Test</a></h2>
+<p>Run the matcher and return true or false. The Test method is called
+with a hash of two arrays giving it access to both rtt and loss values</p>
+<pre>
+  my $data=shift;
+  my @rtt = @{$data-&gt;{rtt}};
+  my @loss = @{$data-&gt;{loss}};</pre>
+<p>The arrays are ordered from old to new.</p>
+<pre>
+  @rdd[old..new]</pre>
+<p>There may be more than the expected number of elements in this array. Address them with
+$x[-1] to $x[-max].</p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright (c) 2004 by OETIKER+PARTNER AG. All rights reserved.</p>
+<p>
+</p>
+<hr />
+<h1><a name="license">LICENSE</a></h1>
+<p>This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.</p>
+<p>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.</p>
+<p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>Tobias Oetiker &lt;<a href="mailto:tobi@oetiker.ch">tobi@oetiker.ch</a>&gt;</p>
+
+</body>
+
+</html>

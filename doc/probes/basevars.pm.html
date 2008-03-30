@@ -1,0 +1,115 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>probes/basevars.pm</title>
+<link rev="made" href="mailto:dws@ee.ethz.ch" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+<!--
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#overview">OVERVIEW</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+	<li><a href="#bugs">BUGS</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+-->
+<!-- INDEX END -->
+
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>probes::basevars - Another Base Class for implementing SmokePing Probes</p>
+<p>
+</p>
+<hr />
+<h1><a name="overview">OVERVIEW</a></h1>
+<p>Like probes::base, but supports host-specific variables for the probe.</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ *** Targets ***</pre>
+<pre>
+ menu = Top
+ title = Top Page</pre>
+<pre>
+ + branch_1
+ menu = First menu
+ title = First title
+ host = host1
+ ++ PROBE_CONF
+ # vars for host host1
+ var1 = foo
+ var2 = bar
+ 
+ ++ branch_1_2
+ menu = Second menu
+ title = Second title
+ host = host2
+ +++ PROBE_CONF
+ # vars for host host2
+ # var1 and var2 are propagated from above, override var2
+ var2 = fii</pre>
+<pre>
+ + branch_2
+ # var1 and var2 are undefined here</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>Provides the method `targets' that returns a list of hashes.
+The hashes contain the entries:</p>
+<dl>
+<dt><strong><a name="item_addr">addr</a></strong><br />
+</dt>
+<dd>
+The address of the target.
+</dd>
+<p></p>
+<dt><strong><a name="item_vars">vars</a></strong><br />
+</dt>
+<dd>
+A hash containing variables defined in the corresponding
+`PROBE_CONF' config section.
+</dd>
+<p></p>
+<dt><strong><a name="item_tree">tree</a></strong><br />
+</dt>
+<dd>
+The unique index that `probe::base' uses for targets.
+</dd>
+<dd>
+<p>There's also the method 'vars' that returns the abovementioned
+hash corresponding to the 'tree' index parameter.</p>
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>Niko Tyni &lt;<a href="mailto:ntyni@iki.fi">ntyni@iki.fi</a>&gt;</p>
+<p>
+</p>
+<hr />
+<h1><a name="bugs">BUGS</a></h1>
+<p>Uses `probes::base' internals too much to be a derived class, but 
+I didn't want to touch the base class directly.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p>probes::base(3pm), probes::EchoPing(3pm)</p>
+
+</body>
+
+</html>

@@ -2,22 +2,22 @@ SMOKEPING.CGI(1)            SmokePing            SMOKEPING.CGI(1)
 
 
 
-NNNNAAAAMMMMEEEE
+NNAAMMEE
        smokeping.cgi - SmokePing webfrontend
 
-OOOOVVVVEEEERRRRVVVVIIIIEEEEWWWW
+OOVVEERRVVIIEEWW
        This script acts as a 'website' for your SmokePing moni-
        toring operation. It presents the targets you are looking
        at in a tree structure and draws graphs as they are
        required by people looking at the pages.
 
-DDDDEEEESSSSCCCCRRRRIIIIPPPPTTTTIIIIOOOONNNN
-       To get ssssmmmmooookkkkeeeeppppiiiinnnngggg....ccccggggiiii going, you need a webserver which
+DDEESSCCRRIIPPTTIIOONN
+       To get ssmmookkeeppiinngg..ccggii going, you need a webserver which
        allows you to run cgi scripts. The system must be setup so
-       that the ssssmmmmooookkkkeeeeppppiiiinnnngggg....ccccggggiiii is allowed to write to the image
+       that the ssmmookkeeppiinngg..ccggii is allowed to write to the image
        caching area as defined in the config file.
 
-       This script runs with normal perl. BBBBUUUUTTTT it will appear to
+       This script runs with normal perl. BBUUTT it will appear to
        be very slow, because it does a lot of things when start-
        ing up. So if the script has to be started a fresh on
        every click, this is both slow and a tough thing for your
@@ -26,13 +26,13 @@ DDDDEEEESSSSCCCCRRRRIIIIPPPPTTTTIIIIOOOONNNN
        Please refer to the installation document for detailed
        setup instructions.
 
-SSSSEEEETTTTUUUUPPPP
+SSEETTUUPP
        When installing SmokePing, this file has to be adjusted to
        fit your local system. Three paths have to be entered.
 
         use lib qw(/usr/pack/rrdtool-1.0.33-to/lib/perl);
 
-       One pointing to your rrrrrrrrddddttttoooooooollll installation
+       One pointing to your rrrrddttooooll installation
 
         use lib qw(/home/oetiker/public_html/smokeping/lib);
 
@@ -46,10 +46,10 @@ SSSSEEEETTTTUUUUPPPP
        The third path is the argument to the Smokeping::main com-
        mand. It points to the SmokePing configuration file.
 
-CCCCOOOOPPPPYYYYRRRRIIIIGGGGHHHHTTTT
+CCOOPPYYRRIIGGHHTT
        Copyright (c) 2001 by Tobias Oetiker. All right reserved.
 
-LLLLIIIICCCCEEEENNNNSSSSEEEE
+LLIICCEENNSSEE
        This program is free software; you can redistribute it
        and/or modify it under the terms of the GNU General Public
        License as published by the Free Software Foundation;
@@ -67,9 +67,9 @@ LLLLIIIICCCCEEEENNNNSSSSEEEE
        Software Foundation, Inc., 675 Mass Ave, Cambridge, MA
        02139, USA.
 
-AAAAUUUUTTTTHHHHOOOORRRR
+AAUUTTHHOORR
        Tobias Oetiker <tobi\@oetiker.ch>
 
 
 
-2002-02-26                     1.6               SMOKEPING.CGI(1)
+1.38                        2002-02-26           SMOKEPING.CGI(1)

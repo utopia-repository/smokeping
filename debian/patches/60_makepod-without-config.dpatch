@@ -1,0 +1,39 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 60_makepod-without-config.dpatch by Niko Tyni <ntyni@iki.fi>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: Let 'smokeping -makepod' be run without a config file.
+
+@DPATCH@
+diff -urNad smokeping-1.34/lib/Smokeping.pm /tmp/dpep.1bvDPZ/smokeping-1.34/lib/Smokeping.pm
+--- smokeping-1.34/lib/Smokeping.pm	2004-12-29 17:03:38.000000000 +0200
++++ /tmp/dpep.1bvDPZ/smokeping-1.34/lib/Smokeping.pm	2004-12-29 17:05:59.000000000 +0200
+@@ -2006,7 +2006,7 @@
+ 
+ 
+ sub makepod ($){
+-    my $cfg = shift;
++    my $parser = shift;
+     my $e='=';
+     print <<POD;
+ 
+@@ -2034,7 +2034,7 @@
+ 
+ POD
+ 
+-    print $cfg->{__parser}->makepod;
++    print $parser->makepod;
+     print <<POD;
+ 
+ ${e}head1 COPYRIGHT
+@@ -2182,9 +2182,9 @@
+     if($opt{version})  { print "$RCS_VERSION\n"; exit(0) };
+     if($opt{man})      {  pod2usage(-verbose => 2); exit 0 };
+     if($opt{help})     {  pod2usage(-verbose => 1); exit 0 };
++    if($opt{makepod})  { makepod(get_parser) ; exit 0}; 
+     load_cfg $cfgfile;
+     if(defined $opt{'static-pages'}) { makestaticpages $cfg, $opt{'static-pages'}; exit 0 };
+-    if($opt{makepod})  { makepod $cfg; exit 0}; 
+     if($opt{email})    { enable_dynamic $cfg, $cfg->{Targets},"",""; exit 0 };
+     if($opt{restart})  { kill_smoke $cfg->{General}{piddir}."/smokeping.pid";};
+     if($opt{logfile})      { initialize_filelog($opt{logfile}) };

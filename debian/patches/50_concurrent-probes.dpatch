@@ -1,0 +1,389 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 50_concurrent-probes.dpatch by Niko Tyni <ntyni@iki.fi>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: Make probes execute in separate processes
+
+@DPATCH@
+
+diff -ur smokeping.orig/lib/probes/base.pm smokeping/lib/probes/base.pm
+--- smokeping.orig/lib/probes/base.pm	2004-12-21 00:20:35.000000000 +0200
++++ smokeping/lib/probes/base.pm	2004-12-27 13:54:15.000000000 +0200
+@@ -155,4 +155,24 @@
+ 	$self->do_log("probing $count targets");
+ }
+ 
++sub step {
++	my $self = shift;
++	my $rv = $self->{cfg}{Database}{step};
++	if (defined $self->{cfg}{General}{concurrentprobes}
++	    and $self->{cfg}{General}{concurrentprobes} eq 'yes') {
++		$rv = $self->{properties}{step} if defined $self->{properties}{step};
++	}
++	return $rv;
++}
++
++sub offset {
++	my $self = shift;
++	my $rv = $self->{cfg}{General}{offset} || 0;
++	if (defined $self->{cfg}{General}{concurrentprobes}
++	    and $self->{cfg}{General}{concurrentprobes} eq 'yes') {
++		$rv = $self->{properties}{offset} if defined $self->{properties}{offset};
++	}
++	return $rv;
++}
++
+ 1;
+diff -ur smokeping.orig/lib/Smokeping.pm smokeping/lib/Smokeping.pm
+--- smokeping.orig/lib/Smokeping.pm	2004-12-21 00:20:35.000000000 +0200
++++ smokeping/lib/Smokeping.pm	2004-12-27 20:35:33.000000000 +0200
+@@ -329,20 +329,21 @@
+ 	}
+ 	if ($prop eq 'host' and check_filter($name)) {           
+ 	    # print "init $name\n";
++	    die "Error: Invalid Probe: $tree->{probe}" unless defined $probes->{$tree->{probe}};
++    	    my $step = $probes->{$tree->{probe}}->step();
+ 	    if (not -f $name.".rrd"){
+ 		RRDs::create
+-			($name.".rrd", "--step",$cfg->{Database}{step},
+-			      "DS:uptime:GAUGE:".(2*($cfg->{Database}{step})).":0:U",
+-			      "DS:loss:GAUGE:".(2*($cfg->{Database}{step})).":0:".($cfg->{Database}{pings}),
++			($name.".rrd", "--step",$step,
++			      "DS:uptime:GAUGE:".(2*$step).":0:U",
++			      "DS:loss:GAUGE:".(2*$step).":0:".($cfg->{Database}{pings}),
+                                # 180 Seconds  is the max rtt we consider valid ... 
+-			      "DS:median:GAUGE:".(2*($cfg->{Database}{step})).":0:180",
+-			      (map { "DS:ping${_}:GAUGE:".(2*($cfg->{Database}{step})).":0:180" }
++			      "DS:median:GAUGE:".(2*$step).":0:180",
++			      (map { "DS:ping${_}:GAUGE:".(2*$step).":0:180" }
+ 			                                                  1..($cfg->{Database}{pings})),
+ 			      (map { "RRA:".(join ":", @{$_}) } @{$cfg->{Database}{_table}} ));
+ 		my $ERROR = RRDs::error();
+ 		do_log "ERROR: $ERROR\n" if $ERROR;
+ 	    }
+-	    die "Error: Invalid Probe: $tree->{probe}" unless defined $probes->{$tree->{probe}};
+ 	    if($tree->{$prop} =~ /^DYNAMIC/) {
+ 		$probes->{$tree->{probe}}->add($tree,$name);
+ 	    } else {
+@@ -623,6 +624,7 @@
+     die "ERROR: ".(join ".", @dirs)." $tree->{probe} is not known\n"
+         unless $cfg->{__probes}{$tree->{probe}};
+     my $ProbeDesc = $cfg->{__probes}{$tree->{probe}}->ProbeDesc();
++    my $step = $cfg->{__probes}{$tree->{probe}}->step();
+ 
+     my $page;
+ 
+@@ -793,7 +795,7 @@
+ 		 ()),
+ 	   'HRULE:0#000000',
+ 	   'COMMENT:\s',
+-           "COMMENT:Probe: $cfg->{Database}{pings} $ProbeDesc every $cfg->{Database}{step} seconds",
++           "COMMENT:Probe: $cfg->{Database}{pings} $ProbeDesc every $step seconds",
+ 	   'COMMENT:created on '.$date.'\j' );
+ 	
+ 	my $ERROR = RRDs::error();
+@@ -811,6 +813,7 @@
+     my $q = shift;
+     my $open = [ split /\./,( $q->param('target') || '')];
+     my $tree = $cfg->{Targets};
++    my $step = $cfg->{__probes}{$tree->{probe}}->step();
+     for (@$open) {
+         die "ERROR: Section '$_' does not exist.\n" 
+                 unless exists $tree->{$_};
+@@ -834,7 +837,7 @@
+         contact => $cfg->{General}{contact},
+         author => '<A HREF="http://tobi.oetiker.ch/">Tobi&nbsp;Oetiker</A>',
+         smokeping => '<A HREF="http://people.ee.ethz.ch/~oetiker/webtools/smokeping/counter.cgi/'.$VERSION.'">SmokePing-'.$VERSION.'</A>',
+-        step => $cfg->{Database}{step},
++        step => $step,
+         rrdlogo => '<A HREF="http://people.ee.ethz.ch/~oetiker/webtools/rrdtool/"><img border="0" src="'.$cfg->{General}{imgurl}.'/rrdtool.png"></a>',
+         smokelogo => '<A HREF="http://people.ee.ethz.ch/~oetiker/webtools/smokeping/counter.cgi/'.$VERSION.'"><img border="0" src="'.$cfg->{General}{imgurl}.'/smokeping.png"></a>',
+        }
+@@ -842,35 +845,47 @@
+ }
+ 
+ # fetch all data.
+-sub run_probes($) {
++sub run_probes($$) {
+     my $probes = shift;
+-    foreach my $probe (keys %{$probes}){
+-        $probes->{$probe}->ping();
++    my $justthisprobe = shift;
++    if (defined $justthisprobe) {
++    	$probes->{$justthisprobe}->ping();
++    } else {
++    	foreach my $probe (keys %{$probes}) {
++        	$probes->{$probe}->ping();
++	}
+     }
+ }
+ # report probe status
+-sub report_probes($) {
++sub report_probes($$) {
+     my $probes = shift;
+-    foreach my $probe (keys %{$probes}){
+-        $probes->{$probe}->report();
++    my $justthisprobe = shift;
++    if (defined $justthisprobe) {
++    	$probes->{$justthisprobe}->report();
++    } else {
++    	foreach my $probe (keys %{$probes}){
++        	$probes->{$probe}->report();
++	}
+     }
+ }
+ 
+-sub update_rrds($$$$$);
+-sub update_rrds($$$$$) {
++sub update_rrds($$$$$$);
++sub update_rrds($$$$$$) {
+     my $cfg = shift;
+     my $probes = shift;
+     my $probe = shift;
+     my $tree = shift;
+     my $name = shift;
++    my $justthisprobe = shift; # if defined, update only the targets probed by this probe
+ 
+     $probe = $tree->{probe} if defined $tree->{probe};
+     foreach my $prop (keys %{$tree}) {
+ 
+     	next if $prop eq "PROBE_CONF";
+         if (ref $tree->{$prop} eq 'HASH'){
+-            update_rrds $cfg, $probes, $probe, $tree->{$prop}, $name."/$prop";
++            update_rrds $cfg, $probes, $probe, $tree->{$prop}, $name."/$prop", $justthisprobe;
+         } 
++	next if defined $justthisprobe and $probe ne $justthisprobe;
+         if ($prop eq 'host' and check_filter($name)) {
+             #print "update $name\n";
+ 	    my $updatestring = $probes->{$probe}->rrdupdate_string($tree);
+@@ -1128,7 +1143,7 @@
+ 	 _vars =>
+ 	 [ qw(owner imgcache imgurl datadir pagedir piddir sendmail offset
+               smokemail cgiurl mailhost contact netsnpp
+-	      syslogfacility syslogpriority) ],
++	      syslogfacility syslogpriority concurrentprobes changeprocessnames) ],
+ 	 _mandatory =>
+ 	 [ qw(owner imgcache imgurl datadir piddir
+               smokemail cgiurl contact) ],
+@@ -1257,12 +1272,38 @@
+          _doc => <<DOC,
+ If you run many instances of smokeping you may want to prevent them from
+ hitting your network all at the same time. Using the offset parameter you
+-can change the point in time when they will start. Offset is specified in %
+-of total interval, or alternatively as 'random'. I recomment to use
++can change the point in time when the probes are run. Offset is specified
++in % of total interval, or alternatively as 'random'. I recommend to use
+ 'random'. Note that this does NOT influence the rrds itself, it is just a
+-matter of when data accqusition is initiated.
++matter of when data acqusition is initiated. Also note that this does
++not affect the first round of data collection, which is always done
++immediately when smokeping is started, only subsequent rounds.
+ DOC
+          },
++	 concurrentprobes => {
++	  _re => '(yes|no)',
++          _re_error =>"this must either be 'yes' or 'no'",
++	  _doc => <<DOC,
++If you use multiple probes or multiple instances of the same probe and you
++want them to run concurrently in separate processes, set this to 'yes'. This
++gives you the possibility to specify probe-specific step and offset parameters 
++(see the 'Probes' section) for each probe and makes the probes unable to block
++each other in cases of service outages. The default is 'no', for backward
++compatibility with earlier Smokeping installations.
++DOC
++	 },
++	 changeprocessnames => {
++	  _re => '(yes|no)',
++          _re_error =>"this must either be 'yes' or 'no'",
++	  _doc => <<DOC,
++When using 'concurrentprobes' (see above), this controls whether the probe
++subprocesses should change their argv string to indicate their probe in
++the process name.  If set to 'yes' (the default), the probe name will
++be appended to the process name as '[probe]', eg.  '/usr/bin/smokeping
++[FPing]'. If you don't like this behaviour, set this variable to 'no'.
++If 'concurrentprobes' is not set to 'yes', this variable has no effect.
++DOC
++	 },
+ 	},
+ 	Database => 
+ 	{ 
+@@ -1279,6 +1320,10 @@
+ 	   _doc => <<DOC,
+ Duration of the base operation interval of SmokePing in seconds.
+ SmokePing will venture out every B<step> seconds to ping your target hosts.
++If 'concurrent_probes' is set to 'yes' (see above), this variable can be 
++overridden by each probe. Note that the step in the RRD files is fixed when 
++they are originally generated, and if you change the step parameter afterwards, 
++you'll have to delete the old RRD files or somehow convert them. 
+ DOC
+ 	 },
+ 	 pings  => 
+@@ -1613,10 +1658,36 @@
+ 		    "/$KEY_RE/" => {_doc => <<DOC,
+ Each module can take specific configuration information from this area. The jumble of letters above is a regular expression defining legal module names.
+ DOC
+-				    _vars => [ "module", "/$KEYD_RE/" ],
++				    _vars => [ "module", "step", "offset", "/$KEYD_RE/" ],
+ 				    "/$KEYD_RE/" => { _doc => 'Each module defines which
+ variables it wants to accept. So this expression here just defines legal variable names.'},
+ 				    "module" => { _doc => 'The perl module that is to be loaded for this probe, if it isn\'t the same as the probe name.' },
++				    "step" => { %$INTEGER_SUB,
++				    		_doc => <<DOC },
++Duration of the base interval that this probe should use, if different
++from the one specified in the 'Database' section. Note that the step in 
++the RRD files is fixed when they are originally generated, and if you
++change the step parameter afterwards, you'll have to delete the old RRD
++files or somehow convert them. (This variable is only applicable if 
++the variable 'concurrentprobes' is set in the 'General' section.)
++DOC
++				    "offset" => {
++	  				_re => '(\d+%|random)',
++	  				_re_error => 
++	  				"Use offset either in % of operation interval or 'random'",
++         				_doc => <<DOC },
++If you run many probes concurrently you may want to prevent them from
++hitting your network all at the same time. Using the probe-specific
++offset parameter you can change the point in time when each probe will
++be run. Offset is specified in % of total interval, or alternatively as
++'random', and the offset from the 'General' section is used if nothing
++is specified here. Note that this does NOT influence the rrds itself,
++it is just a matter of when data acqusition is initiated. Also note
++that this does not affect the first round of data collection, which is
++always done immediately when Smokeping is started, only subsequent rounds.
++(This variable is only applicable if the variable 'concurrentprobes' is set
++in the 'General' section.)
++DOC
+ 				   }
+ 		  },
+ 	Alerts  => {
+@@ -2039,6 +2110,8 @@
+     die "Can not open $cfg-{General}{pagedir}/$name for writing: $!" unless
+       open PAGEFILE, ">$cfg->{General}{pagedir}/$name";
+ 
++    my $step = $probes->{$tree->{probe}}->step();
++
+     $page = fill_template
+ 	($cfg->{Presentation}{template},
+ 	 {
+@@ -2054,7 +2127,7 @@
+ 	  contact => $cfg->{General}{contact},
+ 	  author => '<A HREF="http://tobi.oetiker.ch/">Tobi&nbsp;Oetiker</A>',
+ 	  smokeping => '<A HREF="http://people.ee.ethz.ch/~oetiker/webtools/smokeping/counter.cgi/'.$VERSION.'">SmokePing-'.$VERSION.'</A>',
+-	  step => $cfg->{Database}{step},
++	  step => $step,
+ 	  rrdlogo => '<A HREF="http://people.ee.ethz.ch/~oetiker/webtools/rrdtool/"><img border="0" src="'.$cfg->{General}{imgurl}.'/rrdtool.png"></a>',
+ 	  smokelogo => '<A HREF="http://people.ee.ethz.ch/~oetiker/webtools/smokeping/counter.cgi/'.$VERSION.'"><img border="0" src="'.$cfg->{General}{imgurl}.'/smokeping.png"></a>',
+ 	 });
+@@ -2124,14 +2197,88 @@
+     }
+     initialize_debuglog if $opt{debug};
+     do_log "Launched successfully";
+-    report_probes($probes);
+ 
+-    my $offset = $cfg->{offset} || 0;
++    my $myprobe;
++    my $forkprobes = $cfg->{General}{concurrentprobes};
++    if (defined $forkprobes and $forkprobes eq "yes" and not $opt{debug}) {
++    	my %probepids;
++	my $pid;
++    	for my $p (keys %$probes) {
++		my $sleep_count = 0;
++		do {
++			$pid = fork;
++			unless (defined $pid) {
++				do_log("Fatal: cannot fork: $!");
++				die "bailing out" 
++					if $sleep_count++ > 6;
++				sleep 10;
++			}
++		} until defined $pid;
++		$myprobe = $p;
++		goto KID unless $pid; # child skips rest of loop
++		do_log("Child process $pid started for probe $myprobe.");
++		$probepids{$pid} = $myprobe;
++	}
++	# parent
++	do_log("All probe processes started succesfully.");
++	my $exiting = 0;
++	for my $sig (qw(INT TERM)) {
++		$SIG{$sig} = sub {
++			do_log("Got $sig signal, terminating child processes.");
++			$exiting = 1;
++			kill $sig, $_ for keys %probepids;
++			my $now = time;
++			while(keys %probepids) { # SIGCHLD handler below removes the keys
++				if (time - $now > 2) {
++					do_log("Can't terminate all child processes, giving up.");
++					exit 1;
++				}
++				sleep 1;
++			}
++			do_log("All child processes succesfully terminated, exiting.");
++			exit 0;
++		}
++	};
++	$SIG{CHLD} = sub {
++		while ((my $dead = waitpid(-1, WNOHANG)) > 0) {
++			my $p = $probepids{$dead};
++			$p = 'unknown' unless defined $p;
++			do_log("Child process $dead (probe $p) exited unexpectedly with status $?.")
++				unless $exiting;
++			delete $probepids{$dead};
++		}
++	};
++	sleep while 1; # just wait for the signals
++	do_log("Exiting abnormally - this should not happen.");
++	exit 1; # not reached
++    }
++KID:
++    report_probes($probes, $myprobe);
++
++    my $offset;
++    my $step; 
++    if (defined $myprobe) {
++    	$offset = $probes->{$myprobe}->offset;
++	$step = $probes->{$myprobe}->step;
++	$0 .= " [$myprobe]" unless defined $cfg->{General}{changeprocessnames}
++	                    and $cfg->{General}{changeprocessnames} eq "no";
++    } else {
++	$offset = $cfg->{General}{offset} || 0;
++	$step = $cfg->{Database}{step};
++    	unless (defined $forkprobes and $forkprobes eq "yes") {
++    		for my $p (keys %$probes) {
++			for my $what (qw(offset step)) {
++				do_log("Warning: probe-specific parameter '$what' ignored for probe $p (fix: set 'concurrentprobes = yes' in the General section too)")
++					if defined $cfg->{Probes}{$p}{$what};
++			}
++		}
++	}
++    }
+     if ($offset eq 'random'){
+-	  $offset = int(rand($cfg->{Database}{step}));
++	  $offset = int(rand($step));
+     } else {   
+           $offset =~ s/%$//;
+-          $offset = $offset / 100 * $cfg->{Database}{step};
++          $offset = ( 1 - $offset / 100 ) * $step;
+     }
+     while (1) {
+         my $now = time;
+@@ -2139,14 +2286,14 @@
+ 		map { $probes->{$_}->debug(1) if $probes->{$_}->can('debug') } 
+ 			keys %$probes;
+ 	}
+-	run_probes $probes;
+-	update_rrds $cfg, $probes, $cfg->{Targets}{probe}, $cfg->{Targets}, $cfg->{General}{datadir};
++	run_probes $probes, $myprobe; # $myprobe is undef if running without 'concurrentprobes'
++	update_rrds $cfg, $probes, $cfg->{Targets}{probe}, $cfg->{Targets}, $cfg->{General}{datadir}, $myprobe;
+ 	exit 0 if $opt{debug};
+         my $runtime = time - $now;
+         do_log "WARNING: smokeping took $runtime seconds to complete 1 round of polling. ".
+-             "It should complete polling in $cfg->{Database}{step} seconds. ".
+-             "You may have unresponsive devices in your setup.\n" if $runtime > $cfg->{Database}{step};
+-	sleep $cfg->{Database}{step} - (time+$offset) % $cfg->{Database}{step} unless $opt{nosleep};
++             "It should complete polling in $step seconds. ".
++             "You may have unresponsive devices in your setup.\n" if $runtime > $step;
++	sleep $step - (time+$offset) % $step unless $opt{nosleep};
+     }
+ }
+ 

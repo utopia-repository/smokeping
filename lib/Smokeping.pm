@@ -8,26 +8,71 @@ use Pod::Usage;
 use Digest::MD5 qw(md5_base64);
 use SNMP_util;
 use SNMP_Session;
+use POSIX;
 use ISG::ParseConfig;
 use RRDs;
+use Sys::Syslog qw(:DEFAULT setlogsock);
+setlogsock('unix')
+   if grep /^ $^O $/xo, ("linux", "openbsd", "freebsd", "netbsd");
+use File::Basename;
 
 # globale persistent variables for speedy
-use vars qw($cfg $probes $VERSION);
-$VERSION="1.6";
+use vars qw($cfg $probes $VERSION $havegetaddrinfo $cgimode);
+$VERSION="1.38";
 
+# we want opts everywhere
+my %opt;
+
+BEGIN {
+  $havegetaddrinfo = 0;
+  eval 'use Socket6';
+  $havegetaddrinfo = 1 unless $@;
+}
+
+my $DEFAULTPRIORITY = 'info'; # default syslog priority
+
+my $logging = 0; # keeps track of whether we have a logging method enabled
+
+sub do_log(@);
+sub load_probe($$$$);
 
 sub load_probes ($){
     my $cfg = shift;
     my %prbs;
     foreach my $probe (keys %{$cfg->{Probes}}) {
-        eval 'require probes::'.$probe;
-        die "$@\n" if $@;
-	eval '$prbs{$probe} = probes::'.$probe.'->new( $cfg->{Probes}{${probe}},$cfg );';
-        die "$@\n" if $@;
-        die "Faild to load Probe $probe\n" unless defined $prbs{$probe};
+    	my @subprobes = grep { ref $cfg->{Probes}{$probe}{$_} eq 'HASH' } keys %{$cfg->{Probes}{$probe}};
+    	if (@subprobes) {
+		my $modname = $probe;
+		my %properties = %{$cfg->{Probes}{$probe}};
+		delete @properties{@subprobes};
+		for my $subprobe (@subprobes) {
+			for (keys %properties) {
+				$cfg->{Probes}{$probe}{$subprobe}{$_} = $properties{$_}
+					unless exists $cfg->{Probes}{$probe}{$subprobe}{$_};
+			}
+			$prbs{$subprobe} = load_probe($modname,  $cfg->{Probes}{$probe}{$subprobe},$cfg, $subprobe);
+		}
+	} else {
+		$prbs{$probe} = load_probe($probe, $cfg->{Probes}{$probe},$cfg, $probe);
+	}
     }
     return \%prbs;
 };
+
+sub load_probe ($$$$) {
+	my $modname = shift;
+	my $properties = shift;
+	my $cfg = shift;
+	my $name = shift;
+	$name = $modname unless defined $name;
+        eval 'require probes::'.$modname;
+        die "$@\n" if $@;
+	my $rv;
+	eval '$rv = probes::'.$modname.'->new( $properties,$cfg,$name);';
+        die "$@\n" if $@;
+        die "Failed to load Probe $name (module $modname)\n" unless defined $rv;
+	return $rv;
+}
 
 sub snmpget_ident ($) {
     my $host = shift;
@@ -37,6 +82,15 @@ sub snmpget_ident ($) {
     my $answer = join "/", grep { defined } @get;
     $answer =~ s/\s+//g;
     return $answer;
+}
+
+sub lnk ($$) {
+    my ($q, $path) = @_;
+    if ($q->isa('dummyCGI')) {
+	return $path . ".html";
+    } else {
+	return ($q->script_name() || '') . "?target=" . $path;
+    }
 }
 
 sub update_dynaddr ($$){
@@ -59,7 +113,7 @@ sub update_dynaddr ($$){
     my $snmp = snmpget_ident $address;
     if (-r "$file.adr" and not -z "$file.adr"){
 	open(D, "<$file.adr")
-	  or return "Error: opening $file.adr $!\n";            
+	  or return "Error opening $file.adr: $!\n";            
 	chomp($prevaddress = <D>);
 	close D;
     }
@@ -80,55 +134,255 @@ sub update_dynaddr ($$){
     } elsif ( -f "$file.snmp") { unlink "$file.snmp" };
         
 }
+sub sendmail ($$$){
+    my $from = shift;
+    my $to = shift;
+    $to = $1 if $to =~ /<(.*?)>/;
+    my $body = shift;
+    if ($cfg->{General}{mailhost}){
+	my $smtp = Net::SMTP->new($cfg->{General}{mailhost});
+	$smtp->mail($from);
+	$smtp->to(split(/\s*,\s*/, $to));
+	$smtp->data();
+	$smtp->datasend($body);
+	$smtp->dataend();
+	$smtp->quit;
+    } elsif ($cfg->{General}{sendmail} or -x "/usr/lib/sendmail"){
+	open (M, "|-") || exec (($cfg->{General}{sendmail} || "/usr/lib/sendmail"),"-f",$from,$to);
+	print M $body;
+	close M;
+    }
+}
 
-sub init_target_tree ($$$$$$); # predeclare recursive subs
-sub init_target_tree ($$$$$$) {
+sub sendsnpp ($$){
+   my $to = shift;
+   my $msg = shift;
+   if ($cfg->{General}{snpphost}){
+        my $snpp = Net::SNPP->new($cfg->{General}{snpphost}, Timeout => 60);
+        $snpp->send( Pager => $to,
+                     Message => $msg) || do_debuglog("ERROR - ". $snpp->message);
+        $snpp->quit;
+    }
+}
+
+sub init_alerts ($){
+    my $cfg = shift;
+    foreach my $al (keys %{$cfg->{Alerts}}) {
+	my $x = $cfg->{Alerts}{$al};
+        next unless ref $x eq 'HASH';
+	if ($x->{type} eq 'matcher'){
+	    $x->{pattern} =~ /(\S+)\((.+)\)/
+		or die "ERROR: Alert $al pattern entry '$_' is invalid\n";
+	    my $matcher = $1;
+	    my $arg = $2;
+	    eval 'require matchers::'.$matcher;
+	    die "Matcher '$matcher' could not be loaded: $@\n" if $@;
+	    my $hand;
+	    eval "\$hand = matchers::$matcher->new($arg)";
+  	    die "ERROR: Matcher '$matcher' could not be instantiated\nwith arguments $arg:\n$@\n" if $@;
+	    $x->{length} = $hand->Length;
+	    $x->{sub} = sub { $hand->Test(shift) } ;
+	} else {
+	    my $sub_front = <<SUB;
+sub { 
+    my \$d = shift;
+    my \$y = \$d->{$x->{type}};
+    for(1){
+SUB
+	    my $sub;
+	    my $sub_back = "        return 1;\n    }\n    return 0;\n}\n";
+	    my @ops = split /\s*,\s*/, $x->{pattern};
+	    $x->{length} = scalar grep /^[!=><]/, @ops;
+	    my $multis = scalar grep /^[*]/, @ops;
+	    my $it = "";
+	    for(1..$multis){
+		my $ind = "    " x ($_-1);
+		$sub .= <<FOR;
+$ind        my \$i$_;
+$ind        for(\$i$_=0; \$i$_<\$imax$_;\$i$_++){
+FOR
+	    };
+	    my $i = - $x->{length};
+	    my $incr = 0;
+	    for (@ops) {
+		my $extra = "";
+		$it = "    " x $multis;
+		for(1..$multis){
+		    $extra .= "-\$i$_";
+		};
+		/^(==|!=|<|>|<=|>=|\*)(\d+(?:\.\d*)?|U|S|\d*\*)(%?)$/
+		    or die "ERROR: Alert $al pattern entry '$_' is invalid\n";
+		my $op = $1;
+		my $value = $2;
+		my $perc = $3;
+		if ($op eq '*') {
+		    if ($value =~ /^([1-9]\d*)\*$/) {
+			$value = $1;
+			$x->{length} += $value;
+			$sub_front .= "        my \$imax$multis = $value;\n";
+			$sub_back .=  "\n";
+			$sub .= <<FOR;
+$it        last;
+$it    }
+$it    return 0 if \$i$multis >= \$imax$multis;
+FOR
+			
+			$multis--;
+                    next;
+		    } else {
+			die "ERROR: multi-match operator * must be followed by Number* in Alert $al definition\n";
+		    }
+		} elsif ($value eq 'U') {
+		    if ($op eq '==') {
+			$sub .= "$it        next if defined \$y->[$i$extra];\n";
+		} elsif ($op eq '!=') {
+		    $sub .= "$it        next unless defined \$y->[$i$extra];\n";
+		} else {
+		    die "ERROR: invalid operator $op in connection U in Alert $al definition\n";
+		}
+		} elsif ($value eq 'S') {
+		    if ($op eq '==') {
+			$sub .= "$it        next unless defined \$y->[$i$extra] and \$y->[$i$extra] eq 'S';\n";
+		    } else {
+			die "ERROR: S is only valid with == operator in Alert $al definition\n";
+		}
+		} elsif ($value eq '*') {
+		    if ($op ne '==') {
+			die "ERROR: operator $op makes no sense with * in Alert $al definition\n";
+		    } # do nothing else ...
+		} else {
+		    if ( $x->{type} eq 'loss') {
+			die "ERROR: loss should be specified in % (alert $al pattern)\n" unless $perc eq "%";
+		} elsif ( $x->{type} eq 'rtt' ) {
+		    $value /= 1000;
+		} else {
+		    die "ERROR: unknown alert type $x->{type}\n";
+		}
+		    $sub .= <<IF;
+$it        next unless defined \$y->[$i$extra]
+$it                        and \$y->[$i$extra] =~ /^\\d/
+$it                        and \$y->[$i$extra] $op $value;
+IF
+		}
+		$i++;
+	    }
+	    $sub_front .= "$it        next if scalar \@\$y < $x->{length} ;\n";
+	    do_debuglog(<<COMP);
+### Compiling alert detector pattern '$al'
+### $x->{pattern}
+$sub_front$sub$sub_back
+COMP
+	    $x->{sub} = eval ( $sub_front.$sub.$sub_back );
+	    die "ERROR: compiling alert pattern $al ($x->{pattern}): $@\n" if $@;
+	}
+    }
+}
+
+
+sub check_filter ($$) {
+    my $cfg = shift;
+    my $name = shift;
+    # remove the path prefix when filtering and make sure the path again starts with /
+    my $prefix = $cfg->{General}{datadir};
+    $name =~ s|^${prefix}/*|/|;
+    # if there is a filter do neither schedule these nor make rrds
+    if ($opt{filter} && scalar @{$opt{filter}}){
+         my $ok = 0;
+         for (@{$opt{filter}}){
+            /^\!(.+)$/ && do {
+    	        my $rx = $1;
+                $name !~ /^$rx/ && do{ $ok = 1};
+                next;
+            };
+            /^(.+)$/ && do {
+	        my $rx = $1;
+                $name =~ /^$rx/ && do {$ok = 1};
+                next;
+            }; 
+         }  
+         return $ok;
+      };
+      return 1;
+}
+
+sub init_target_tree ($$$$$$$$); # predeclare recursive subs
+sub init_target_tree ($$$$$$$$) {
     my $cfg = shift;
     my $probes = shift;
     my $probe = shift;
     my $tree = shift;
     my $name = shift;
     my $PROBE_CONF = shift;
-
+    my $alerts = shift;
+    my $alertee = shift;
 
     # inherit probe type from parent
     if (not defined $tree->{probe} or $tree->{probe} eq $probe){
 	$tree->{probe} = $probe;	
-	# inherit parent values if the probe type of the parent was the same
+	# inherit parent values if the probe type has not changed
 	for (keys %$PROBE_CONF) {
 	    $tree->{PROBE_CONF}{$_} = $PROBE_CONF->{$_} 
 	    unless exists $tree->{PROBE_CONF}{$_};
 	}
     };
     
-    $probe = $tree->{probe};
-    $PROBE_CONF = $tree->{PROBE_CONF};
-   
+    $tree->{alerts} = $alerts
+	if not defined $tree->{alerts} and defined $alerts;
+
+    $tree->{alertee} = $alertee
+	if not defined $tree->{alertee} and defined $alertee;
+
+    if ($tree->{alerts}){
+	die "ERROR: no Alerts section\n"
+	    unless exists $cfg->{Alerts};
+	$tree->{alerts} = [ split(/\s*,\s*/, $tree->{alerts}) ] unless ref $tree->{alerts} eq 'ARRAY';
+	$tree->{fetchlength} = 0;
+ 	foreach my $al (@{$tree->{alerts}}) {
+	    die "ERROR: alert $al ($name) is not defined\n"
+		unless defined $cfg->{Alerts}{$al};
+	    $tree->{fetchlength} = $cfg->{Alerts}{$al}{length}
+		if $tree->{fetchlength} < $cfg->{Alerts}{$al}{length};
+	}
+    };
+    # fill in menu and title if missing
+    $tree->{menu} ||=  $tree->{host} || "unknown";
+    $tree->{title} ||=  $tree->{host} || "unknown";
+
     foreach my $prop (keys %{$tree}) {
     	next if $prop eq 'PROBE_CONF';
 	if (ref $tree->{$prop} eq 'HASH'){
 	    if (not -d $name) {
 		mkdir $name, 0755 or die "ERROR: mkdir $name: $!\n";
 	    };
-	    init_target_tree $cfg, $probes, $probe, $tree->{$prop}, "$name/$prop", $PROBE_CONF;
+	    init_target_tree $cfg, $probes, $tree->{probe}, $tree->{$prop}, "$name/$prop", $tree->{PROBE_CONF},$tree->{alerts},$tree->{alertee};
 	}
-	if ($prop eq 'host') {
-	    if (not -f $name.".rrd"){
-		RRDs::create ($name.".rrd", "--step",$cfg->{Database}{step},
-			      "DS:uptime:GAUGE:".(2*($cfg->{Database}{step})).":0:U",
-			      "DS:loss:GAUGE:".(2*($cfg->{Database}{step})).":0:".($cfg->{Database}{pings}),
-			      "DS:median:GAUGE:".(2*($cfg->{Database}{step})).":0:10",
-			      (map { "DS:ping${_}:GAUGE:".(2*($cfg->{Database}{step})).":0:10" }
-			                                                  1..($cfg->{Database}{pings})),
-			      (map { "RRA:".(join ":", @{$_}) } @{$cfg->{Database}{_table}} ));
-		my $ERROR = RRDs::error();
-		die "ERROR: $ERROR\n" if $ERROR;
-	    }
-	    die "Error: Invalid Probe: $probe" unless defined $probes->{$probe};
+	if ($prop eq 'host' and check_filter($cfg,$name)) {           
+	    # print "init $name\n";
+	    die "Error: Invalid Probe: $tree->{probe}" unless defined $probes->{$tree->{probe}};
+	    my $probeobj = $probes->{$tree->{probe}};
+    	    my $step = $probeobj->step();
+	    # we have to do the add before calling the _pings method, it won't work otherwise
 	    if($tree->{$prop} =~ /^DYNAMIC/) {
-		$probes->{$probe}->add($tree,$name);
+		$probeobj->add($tree,$name);
 	    } else {
-		$probes->{$probe}->add($tree,$tree->{$prop});
+		$probeobj->add($tree,$tree->{$prop});
+	    }
+	    my $pings = $probeobj->_pings($tree);
+
+	    if (not -f $name.".rrd"){
+	    	my @create = 
+			($name.".rrd", "--step",$step,
+			      "DS:uptime:GAUGE:".(2*$step).":0:U",
+			      "DS:loss:GAUGE:".(2*$step).":0:".$pings,
+                               # 180 Seconds  is the max rtt we consider valid ... 
+			      "DS:median:GAUGE:".(2*$step).":0:180",
+			      (map { "DS:ping${_}:GAUGE:".(2*$step).":0:180" }
+			                                                  1..$pings),
+			      (map { "RRA:".(join ":", @{$_}) } @{$cfg->{Database}{_table}} ));
+		do_debuglog("Calling RRDs::create(@create)");
+		RRDs::create(@create);
+		my $ERROR = RRDs::error();
+		do_log "RRDs::create ERROR: $ERROR\n" if $ERROR;
 	    }
 	}
     }
@@ -142,8 +396,8 @@ sub enable_dynamic($$$$){
     my $path = shift;
     my $email = ($tree->{email} || shift);
     my $print;
-    die "ERROR: smokemail propery in $cfgfile not specified\n" unless defined $cfg->{General}{smokemail};
-    die "ERROR: cgiurl propery in $cfgfile not specified\n" unless defined $cfg->{General}{cgiurl};
+    die "ERROR: smokemail property in $cfgfile not specified\n" unless defined $cfg->{General}{smokemail};
+    die "ERROR: cgiurl property in $cfgfile not specified\n" unless defined $cfg->{General}{cgiurl};
     if (defined $tree->{host} and $tree->{host} eq 'DYNAMIC' ) {
         if ( not defined $email ) {
             warn "WARNING: No email address defined for $path\n";
@@ -176,7 +430,7 @@ sub enable_dynamic($$$$){
             rename "$cfgfile.new", $cfgfile;
 	    close C;
             my $body;
-	    open SMOKE, $cfg->{General}{smokemail} or die "ERROR: can't read $cfg->{General}{smokemail}\n";
+	    open SMOKE, $cfg->{General}{smokemail} or die "ERROR: can't read $cfg->{General}{smokemail}: $!\n";
 	    while (<SMOKE>){
 		s/<##PATH##>/$usepath/ig;
 		s/<##SECRET##>/$secret/ig;
@@ -191,23 +445,8 @@ sub enable_dynamic($$$$){
 
 	    my $mail;
             print STDERR "Sending smoke-agent for $usepath to $email ... ";
-            if ($cfg->{General}{mailhost}){
-                 eval "require Net::SMTP";
-                 unless ($@){
-                     my $smtp = Net::SMTP->new($cfg->{General}{mailhost});
-                     $smtp->mail($cfg->{General}{contact});
-                     $smtp->to($email);
-                     $smtp->data();
-                     $smtp->datasend($body);
-                     $smtp->dataend();
-                     $smtp->quit;
-                 }
-             } elsif ($cfg->{General}{sendmail} or -f "/usr/lib/sendmail"){
-        	open (M, "|-") || exec (($cfg->{General}{sendmail} || "/usr/lib/sendmail"),"-t");
-          	print M $body;
-                close M;
-             }
-             print STDERR "DONE\n";
+	    sendmail $cfg->{General}{contact},$email,$body;
+	    print STDERR "DONE\n";
         }
     }
     foreach my $prop ( keys %{$tree}) {
@@ -217,17 +456,20 @@ sub enable_dynamic($$$$){
 };
 
 
-sub target_menu($$$);
-sub target_menu($$$){
+sub target_menu($$$;$);
+sub target_menu($$$;$){
     my $tree = shift;
     my $open = shift;
     my $path = shift;
+    my $suffix = shift || '';
     my $print;
     my $current =  shift @{$open} || "";
      
     my @hashes;
-    foreach my $prop (sort {$a cmp $b} keys %{$tree}) {
-	push @hashes, $prop if ref $tree->{$prop} eq 'HASH' and $prop ne "PROBE_CONF";
+    foreach my $prop (sort { $tree->{$a}{_order} <=> $tree->{$b}{_order}}
+                      grep { ref $tree->{$_} eq 'HASH' and $_ ne "PROBE_CONF" }
+                      keys %{$tree}) {
+	push @hashes, $prop;
     }
     return "" unless @hashes;
     $print .= "<table width=\"100%\" class=\"menu\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n";
@@ -246,9 +488,9 @@ sub target_menu($$$){
 	$menu =~ s/ /&nbsp;/g;
 	my $menuadd ="";
 	$menuadd = "&nbsp;" x (20 - length($menu)) if length($menu) < 20;
-	$print .= "<tr><td class=\"$class\" colspan=\"2\">&nbsp;-&nbsp;<a class=\"menulink\" HREF=\"$path$_\">$menu</a>$menuadd</td></tr>\n";
+	$print .= "<tr><td class=\"$class\" colspan=\"2\">&nbsp;-&nbsp;<a class=\"menulink\" HREF=\"$path$_$suffix\">$menu</a>$menuadd</td></tr>\n";
 	if ($_ eq $current){
-	    my $prline = target_menu $tree->{$_}, $open, "$path$_.";
+	    my $prline = target_menu $tree->{$_}, $open, "$path$_.", $suffix;
 	    $print .= "<tr><td class=\"$class\">&nbsp;&nbsp;</td><td align=\"left\">$prline</td></tr>"
 	      if $prline;
 	}
@@ -303,13 +545,14 @@ sub get_overview ($$$$){
     my $date = $cfg->{Presentation}{overview}{strftime} ? 
         POSIX::strftime($cfg->{Presentation}{overview}{strftime},
                         localtime(time)) : scalar localtime(time);
-    foreach my $prop (sort {$a cmp $b} keys %$tree) {
-	next unless ref $tree->{$prop} eq 'HASH';
-	next if $prop eq "PROBE_CONF";
-	next unless defined $tree->{$prop}{host};
+    foreach my $prop (sort {$tree->{$a}{_order} <=> $tree->{$b}{_order}} 
+                      grep {  ref $tree->{$_} eq 'HASH' and $_ ne "PROBE_CONF" and defined $tree->{$_}{host}}
+                      keys %$tree) {
         my $rrd = $cfg->{General}{datadir}.$dir."/$prop.rrd";
         my $max =  $cfg->{Presentation}{overview}{max_rtt} || "100000";
         my $medc = $cfg->{Presentation}{overview}{median_color} || "ff0000";
+	my $probe = $probes->{$tree->{$prop}{probe}};
+	my $pings = $probe->_pings($tree->{$prop});
 	my ($graphret,$xs,$ys) = RRDs::graph 
 	  ($cfg->{General}{imgcache}.$dir."/${prop}_mini.png",
 	   '--lazy',
@@ -321,20 +564,22 @@ sub get_overview ($$$$){
 	   '--imgformat','PNG',
            '--lower-limit','0',
 	   "DEF:median=${rrd}:median:AVERAGE",
+	   "DEF:loss=${rrd}:loss:AVERAGE",
+           "CDEF:ploss=loss,$pings,/,100,*",
            "CDEF:dm=median,0,$max,LIMIT",
-           "CDEF:dm2=median,1.5,*",
+           "CDEF:dm2=median,1.5,*,0,$max,LIMIT",
 	   "LINE1:dm2", # this is for kicking things down a bit
-	   "LINE1:dm#$medc:median RTT",
-           "GPRINT:median:AVERAGE:     avg median RTT\\: %0.2lf %ss",
-              "GPRINT:median:LAST:     latest RTT\\: %0.2lf %ss          ",
-	   "COMMENT:           $date\\j");
+	   "LINE1:dm#$medc:median RTT avg\\:    ",
+           "GPRINT:median:AVERAGE: %0.2lf %ss     ",
+           "GPRINT:median:LAST:     latest RTT\\: %0.2lf %ss     ",
+   	   "GPRINT:ploss:AVERAGE:    avg pkg loss\\: %.2lf %% ",
+	   "COMMENT:         $date\\j");
 	my $ERROR = RRDs::error();
 	$page .= "<div>";
         if (defined $ERROR) {
                 $page .= "ERROR: $ERROR";
         } else {
-	 $page.="<A HREF=\"".($q->script_name() || '')."?target=".
-            (join ".", @$open, ${prop})."\">".
+	 $page.="<A HREF=\"".lnk($q, (join ".", @$open, ${prop}))."\">".
             "<IMG BORDER=\"0\" WIDTH=\"$xs\" HEIGHT=\"$ys\" ".
 	    "SRC=\"".$cfg->{General}{imgurl}.$dir."/${prop}_mini.png\"></A>";
         }
@@ -357,7 +602,7 @@ sub findmax ($$) {
            "DEF:maxping=${rrd}:median:AVERAGE",
            'PRINT:maxping:MAX:%le' );
         my $ERROR = RRDs::error();
-           die $ERROR if $ERROR;
+           do_log $ERROR if $ERROR;
         my $val = $graphret->[0];
         $val = 1 if $val =~ /nan/i;
         $maxmedian{$start} = $val;
@@ -379,25 +624,24 @@ sub findmax ($$) {
         } else {
                 $maxmedian{$x} = $max * 1.5;
         }
-        # make it a nice clean number
-        $maxmedian{$x} =~ s/^([0.]*)([1-9]).*/$1$2/;
-        $maxmedian{$x} += ( ${1}."1" + 0.0 ) ;
 
         $maxmedian{$x} = $cfg->{Presentation}{detail}{max_rtt} 
-                if $cfg->{Presentation}{detail}{max_rtt} && $maxmedian{$x} > $cfg->{Presentation}{detail}{max_rtt}        
+                if $cfg->{Presentation}{detail}{max_rtt} and
+		    $maxmedian{$x} > $cfg->{Presentation}{detail}{max_rtt}
      };
      return \%maxmedian;    
 }
 
 sub smokecol ($) {
     my $count = ( shift )- 2 ;
-    my $half = int($count/2);
+    return [] unless $count > 0;
+    my $half = $count/2;
     my @items;
-    for (my $i=$count; $i> $half; $i--){
+    for (my $i=$count; $i > $half; $i--){
 	my $color = int(190/$half * ($i-$half))+50;
 	push @items, "AREA:cp".($i+2)."#".(sprintf("%02x",$color) x 3);
     };
-    for (my $i=$half; $i >= 0; $i--){
+    for (my $i=int($half); $i >= 0; $i--){
 	my $color = int(190/$half * ($half - $i))+64;
 	push @items, "AREA:cp".($i+2)."#".(sprintf("%02x",$color) x 3);
     };
@@ -417,7 +661,10 @@ sub get_detail ($$$$){
         unless $tree->{probe};
     die "ERROR: ".(join ".", @dirs)." $tree->{probe} is not known\n"
         unless $cfg->{__probes}{$tree->{probe}};
-    my $ProbeDesc = $cfg->{__probes}{$tree->{probe}}->ProbeDesc();
+    my $probe = $cfg->{__probes}{$tree->{probe}};
+    my $ProbeDesc = $probe->ProbeDesc();
+    my $step = $probe->step();
+    my $pings = $probe->_pings($tree);
 
     my $page;
 
@@ -431,8 +678,10 @@ sub get_detail ($$$$){
 	
     }
     my $rrd = $cfg->{General}{datadir}."/".(join "/", @dirs)."/${file}.rrd";
+    my $img = $cfg->{General}{imgcache}."/".(join "/", @dirs)."/${file}.rrd";
+
     my %lasthight;
-    if (open (HG,"<${rrd}.maxhight")){
+    if (open (HG,"<${img}.maxhight")){
         while (<HG>){
           chomp;
           my @l = split / /;
@@ -441,14 +690,15 @@ sub get_detail ($$$$){
         close HG;
     }
     my $max = findmax $cfg, $rrd;
-    if (open (HG,">${rrd}.maxhight")){
+    if (open (HG,">${img}.maxhight")){
         foreach my $s (keys %{$max}){
           print HG "$s $max->{$s}\n";        
         }
         close HG;
     }
 
-    my $smoke = smokecol $cfg->{Database}{pings};
+    my $smoke = $pings - 3 > 0
+         ? smokecol $pings : [ 'COMMENT:"Not enough data collected to draw graph"'  ];
     my @upargs;
     my @upsmoke;
     my @median;
@@ -460,12 +710,13 @@ sub get_detail ($$$$){
 	my ($desc,$start) = @{$_};
 	$start = exp2seconds($start);
     do {
-	@median = ('COMMENT:Median Ping RTT  (', 
-		   "DEF:median=${rrd}:median:AVERAGE",
+	@median = ("DEF:median=${rrd}:median:AVERAGE",
 		   "DEF:loss=${rrd}:loss:AVERAGE",
-		   "LINE1:median#202020"
+                   "CDEF:ploss=loss,$pings,/,100,*",
+           	   "GPRINT:median:AVERAGE:Median Ping RTT (avg %.1lf %ss) ",
+                   "LINE1:median#202020"
         	   );
-	my $p = $cfg->{Database}{pings}; 
+	my $p = $pings;
 
         my %lc;
         my $lastup = 0;
@@ -487,18 +738,18 @@ sub get_detail ($$$$){
         my $last = -1;
         my $swidth = $max->{$start} / $cfg->{Presentation}{detail}{height};
 	foreach my $loss (sort {$a <=> $b} keys %lc){
+            my $lvar = $loss; $lvar =~ s/\./d/g ;
 	    push @median, 
 	    (
-	     "CDEF:me$loss=loss,$last,GT,loss,$loss,LE,*,1,UNKN,IF,median,*",
-	     "CDEF:meL$loss=me$loss,$swidth,-",
-	     "CDEF:meH$loss=me$loss,0,*,$swidth,2,*,+",             
-	     "AREA:meL$loss",
-	     "STACK:meH$loss$lc{$loss}[1]:$lc{$loss}[0]"
+	     "CDEF:me$lvar=loss,$last,GT,loss,$loss,LE,*,1,UNKN,IF,median,*",
+	     "CDEF:meL$lvar=me$lvar,$swidth,-",
+	     "CDEF:meH$lvar=me$lvar,0,*,$swidth,2,*,+",             
+	     "AREA:meL$lvar",
+	     "STACK:meH$lvar$lc{$loss}[1]:$lc{$loss}[0]"
 	     );
              $last = $loss;
 	}
-	push @median, ( 'GPRINT:median:AVERAGE:loss )  avg\: %.1lf %ss\l',
-		       );
+	push @median, ( "GPRINT:ploss:AVERAGE:    avg pkg loss\\: %.2lf %%\\l" );
 #	map {print "$_<br/>"} @median;
     };
         # if we have uptime draw a colorful background or the graph showing the uptime
@@ -511,7 +762,7 @@ sub get_detail ($$$$){
        		           'GPRINT:duptime:LAST: %0.1lf days  (');
         	my %upt;
                 if ( defined $cfg->{Presentation}{detail}{uptime_colors}{_table} ) {
-                    for (@{$cfg->{Presentation}{detail}{_table}}) {
+                    for (@{$cfg->{Presentation}{detail}{uptime_colors}{_table}}) {
                         my ($num,$col,$txt) = @{$_};
                         $upt{$num} = [ $txt, "#".$col];
                     }
@@ -541,11 +792,12 @@ sub get_detail ($$$$){
                	    $lastup=$uptime;
 	}
 	
-	push @upargs, 'COMMENT:)\l',
+	push @upargs, 'COMMENT:)\l';
 #	map {print "$_<br/>"} @upargs;
     };
         my @log = ();
-        push @log, "--logarithmic" if  $cfg->{Presentation}{detail}{logarithmic} and $cfg->{Presentation}{detail}{logarithmic} eq 'yes';
+        push @log, "--logarithmic" if  $cfg->{Presentation}{detail}{logarithmic} and
+	    $cfg->{Presentation}{detail}{logarithmic} eq 'yes';
 
         my @lazy =();
         @lazy = ('--lazy') if $lasthight{$start} and $lasthight{$start} == $max->{$start};
@@ -559,24 +811,30 @@ sub get_detail ($$$$){
            '--rigid',
            '--upper-limit', $max->{$start},
 	   @log,
-	   '--lower-limit',(@log ? '0.001' : '0'),
+	   '--lower-limit',(@log ? ($max->{$start} > 0.01) ? '0.001' : '0.0001' : '0'),
 	   '--vertical-label',"Seconds",
 	   '--imgformat','PNG',
 	   '--color', 'SHADEA#ffffff',
 	   '--color', 'SHADEB#ffffff',
 	   '--color', 'BACK#ffffff',
 	   '--color', 'CANVAS#ffffff',
-	   (map {"DEF:ping${_}=${rrd}:ping${_}:AVERAGE"} 1..$cfg->{Database}{pings}),
-	   (map {"CDEF:cp${_}=ping${_},0,$max->{$start},LIMIT"} 1..$cfg->{Database}{pings}),
+	   (map {"DEF:ping${_}=${rrd}:ping${_}:AVERAGE"} 1..$pings),
+	   (map {"CDEF:cp${_}=ping${_},0,$max->{$start},LIMIT"} 1..$pings),
 	   @upargs,# draw the uptime bg color
  	   @$smoke,
            @upsmoke, # draw the rest of the uptime bg color
 	   @median,
 #	   'LINE3:median#ff0000:Median RTT    in grey '.$cfg->{Database}{pings}.' pings sorted by RTT',
 #	   'LINE1:median#ff8080',
+           # Gray background for times when no data was collected, so they can
+           # be distinguished from network being down.
+           ( $cfg->{Presentation}{detail}{nodata_color} ? (
+		 'CDEF:nodata=loss,UN,INF,UNKN,IF',
+           	 "AREA:nodata#$cfg->{Presentation}{detail}{nodata_color}" ):
+		 ()),
 	   'HRULE:0#000000',
 	   'COMMENT:\s',
-           "COMMENT:Probe: $cfg->{Database}{pings} $ProbeDesc every $cfg->{Database}{step} seconds",
+           "COMMENT:Probe: $pings $ProbeDesc every $step seconds",
 	   'COMMENT:created on '.$date.'\j' );
 	
 	my $ERROR = RRDs::error();
@@ -592,9 +850,12 @@ sub get_detail ($$$$){
 sub display_webpage($$){
     my $cfg = shift;
     my $q = shift;
-    my $open = [split /\./,( $q->param('target') || '')];
+    my $open = [ split /\./,( $q->param('target') || '')];
     my $tree = $cfg->{Targets};
+    my $step = $cfg->{__probes}{$tree->{probe}}->step();
     for (@$open) {
+        die "ERROR: Section '$_' does not exist.\n" 
+                unless exists $tree->{$_};
 	last unless  ref $tree->{$_} eq 'HASH';
 	$tree = $tree->{$_};
     }
@@ -610,11 +871,12 @@ sub display_webpage($$){
 	remark => ($tree->{remark} || ''),
 	overview => get_overview( $cfg,$q,$tree,$open ),
 	body => get_detail( $cfg,$q,$tree,$open ),
+        target_ip => ($tree->{host} || ''),
 	owner => $cfg->{General}{owner},
         contact => $cfg->{General}{contact},
         author => '<A HREF="http://tobi.oetiker.ch/">Tobi&nbsp;Oetiker</A>',
         smokeping => '<A HREF="http://people.ee.ethz.ch/~oetiker/webtools/smokeping/counter.cgi/'.$VERSION.'">SmokePing-'.$VERSION.'</A>',
-        step => $cfg->{Database}{step},
+        step => $step,
         rrdlogo => '<A HREF="http://people.ee.ethz.ch/~oetiker/webtools/rrdtool/"><img border="0" src="'.$cfg->{General}{imgurl}.'/rrdtool.png"></a>',
         smokelogo => '<A HREF="http://people.ee.ethz.ch/~oetiker/webtools/smokeping/counter.cgi/'.$VERSION.'"><img border="0" src="'.$cfg->{General}{imgurl}.'/smokeping.png"></a>',
        }
@@ -622,51 +884,180 @@ sub display_webpage($$){
 }
 
 # fetch all data.
-sub run_probes($) {
+sub run_probes($$) {
     my $probes = shift;
-    foreach my $probe (keys %{$probes}){
-        $probes->{$probe}->ping();
+    my $justthisprobe = shift;
+    if (defined $justthisprobe) {
+      $probes->{$justthisprobe}->ping();
+    } else {
+      foreach my $probe (keys %{$probes}) {
+              $probes->{$probe}->ping();
+      }
     }
 }
 
+# report probe status
+sub report_probes($$) {
+    my $probes = shift;
+    my $justthisprobe = shift;
+    if (defined $justthisprobe) {
+      $probes->{$justthisprobe}->report();
+    } else {
+      foreach my $probe (keys %{$probes}){
+              $probes->{$probe}->report();
+      }
+    }
+}
 
-sub update_rrds($$$$$);
-sub update_rrds($$$$$) {
+sub update_rrds($$$$$$);
+sub update_rrds($$$$$$) {
     my $cfg = shift;
     my $probes = shift;
     my $probe = shift;
     my $tree = shift;
     my $name = shift;
+    my $justthisprobe = shift; # if defined, update only the targets probed by this probe
+
     $probe = $tree->{probe} if defined $tree->{probe};
+    my $probeobj = $probes->{$probe};
     foreach my $prop (keys %{$tree}) {
+
     	next if $prop eq "PROBE_CONF";
         if (ref $tree->{$prop} eq 'HASH'){
-            update_rrds $cfg, $probes, $probe, $tree->{$prop}, $name."/$prop";
+            update_rrds $cfg, $probes, $probe, $tree->{$prop}, $name."/$prop", $justthisprobe;
         } 
-        if ($prop eq 'host') {
-            RRDs::update ( $name.".rrd", 
-        	   '--template',(join ":", "uptime", "loss", "median", map { "ping${_}" } 1..($cfg->{Database}{pings})),
-	           "N:".$probes->{$probe}->rrdupdate_string($tree)
+        next if defined $justthisprobe and $probe ne $justthisprobe;
+        if ($prop eq 'host' and check_filter($cfg,$name)) {
+            #print "update $name\n";
+	    my $updatestring = $probeobj->rrdupdate_string($tree);
+	    my $pings = $probeobj->_pings($tree);
+	    if ( $tree->{rawlog} ){
+		my $file =  POSIX::strftime $tree->{rawlog},localtime(time);
+		if (open LOG,">>$name.$file.csv"){
+			print LOG time,"\t",join("\t",split /:/,$updatestring),"\n";
+			close LOG;
+		} else {
+			do_log "Warning: failed to open $file for logging: $!\n";
+		}
+            }	
+            my @update = ( $name.".rrd", 
+        	   '--template',(join ":", "uptime", "loss", "median",
+				 map { "ping${_}" } 1..$pings),
+	           "N:".$updatestring
 		 );     
+	    do_debuglog("Calling RRDs::update(@update)");
+            RRDs::update ( @update );
             my $ERROR = RRDs::error();
-	    die "ERROR: $ERROR\n" if $ERROR;
+	    do_log "RRDs::update ERROR: $ERROR\n" if $ERROR;
+	    # check alerts
+            # disabled
+	    if ( $tree->{alerts} ) {
+                $tree->{stack} = {loss=>['S'],rtt=>['S']} unless defined $tree->{stack};
+		my $x = $tree->{stack};
+		my ($loss,$rtt) = 
+		    (split /:/, $probeobj->rrdupdate_string($tree))[1,2];
+		$loss = undef if $loss eq 'U';
+		my $lossprct = $loss * 100 / $pings;
+		$rtt = undef if $rtt eq 'U';
+		push @{$x->{loss}}, $lossprct;
+		push @{$x->{rtt}}, $rtt;
+		if (scalar @{$x->{loss}} > $tree->{fetchlength}){
+		    shift @{$x->{loss}};
+		    shift @{$x->{rtt}};
+		}
+		for (@{$tree->{alerts}}) {
+                    if ( not $cfg->{Alerts}{$_} ) {
+                        do_log "WARNING: Empty alert in ".(join ",", @{$tree->{alerts}})." ($name)\n";
+                        next;
+                    };
+                    if ( ref $cfg->{Alerts}{$_}{sub} ne 'CODE' ) {
+       		        do_log "WARNING: Alert '$_' did not resolve to a Sub Ref. Skipping\n";
+                        next;
+                    };
+		    if ( &{$cfg->{Alerts}{$_}{sub}}($x) ){
+			# we got a match
+			my $from;
+                        my $line = "$name/$prop";
+                        my $base = $cfg->{General}{datadir};
+                        $line =~ s|^$base/||;
+                        $line =~ s|/host$||;
+                        $line =~ s|/|.|g;
+			do_log("Alert $_ triggered for $line");
+                        my $urlline = $line;
+                        $urlline =  $cfg->{General}{cgiurl}."?target=".$line;
+                        my $loss = "loss: ".join ", ",map {defined $_ ? (/^\d/ ? sprintf "%.0f%%", $_ :$_):"U" } @{$x->{loss}};
+                        my $rtt = "rtt: ".join ", ",map {defined $_ ? (/^\d/ ? sprintf "%.0fms", $_*1000 :$_):"U" } @{$x->{rtt}}; 
+                        my $stamp = scalar localtime time;
+			my @to;
+			foreach my $addr (map {$_ ? (split /\s*,\s*/,$_) : ()} $cfg->{Alerts}{to},$tree->{alertee},$cfg->{Alerts}{$_}{to}){
+			     next unless $addr;
+			     if ( $addr =~ /^\|(.+)/) {
+  			         system $1,$_,$line,$loss,$rtt,$tree->{host};				     
+			     } elsif ( $addr =~ /^snpp:(.+)/ ) {
+				 sendsnpp $1, <<SNPPALERT;
+$cfg->{Alerts}{$_}{comment}
+$_ on $line
+$loss
+$rtt
+SNPPALERT
+			     } else {
+			    	 push @to, $addr;
+			     }
+			};
+			if (@to){
+			    my $to = join ",",@to;
+			    sendmail $cfg->{Alerts}{from},$to, <<ALERT;
+To: $to
+From: $cfg->{Alerts}{from}
+Subject: [SmokeAlert] $_ on $line
+
+$stamp
+
+Got a match for alert "$_" for $urlline
+
+Pattern
+-------
+$cfg->{Alerts}{$_}{pattern}
+
+Data (old --> now)
+------------------
+$loss
+$rtt
+
+Comment
+-------
+$cfg->{Alerts}{$_}{comment}
+
+
+
+ALERT
+			}
+		    }
+		}
+	    }
 	}
     }
 }
 
 sub get_parser () {
     my $KEY_RE = '[-_0-9a-zA-Z]+';
+    my $KEYD_RE = '[-_0-9a-zA-Z.]+';
     my $TARGET = 
       {
        _sections => [ ( "PROBE_CONF", "/$KEY_RE/" ) ],
-       _vars     => [ qw (probe menu title note email host remark) ],
-       _mandatory=> [ qw (menu title) ],
+       _vars     => [ qw (probe menu title alerts note email host remark rawlog alertee) ],
+       _order    => 1,
        _doc => <<DOC,
 Each target section can contain information about a host to monitor as
 well as further target sections. Most variables have already been
 described above. The expression above defines legal names for target
 sections.
 DOC
+       alerts    => {
+		     _doc => 'Comma separated list of alert names',
+		     _re => '([^\s,]+(,[^\s,]+)*)?',
+		     _re_error => 'Comma separated list of alert names',
+		    },
        host      => 
        {
 	_doc => <<DOC,
@@ -687,14 +1078,33 @@ DOC
 	_sub => sub {
 	    for ( shift ) {
 		m|^DYNAMIC| && return undef;
-		/^\d+\.\d+\.\d+\.\d+$/ && return undef;
-# do not bomb, as this could be temporary
-		warn "WARNING: Hostname '$_' does currently not resolve to an IP address\n"
-		  unless gethostbyname( $_ );
+		/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/ && return undef;
+		/^[0-9a-f]{0,4}(\:[0-9a-f]{0,4}){0,6}\:[0-9a-f]{0,4}$/i && return undef;
+		my $addressfound = 0;
+		my @tried;
+		if ($havegetaddrinfo) {
+  		    my @ai;
+		    @ai = getaddrinfo( $_, "" );
+                    unless ($addressfound = scalar(@ai) > 5) {
+                        do_debuglog("WARNING: Hostname '$_' does currently not resolve to an IPv6 address\n");
+			@tried = qw{IPv6};
+		    }
+                }
+                unless ($addressfound) {
+                   unless ($addressfound = gethostbyname( $_ )) {
+                        do_debuglog("WARNING: Hostname '$_' does currently not resolve to an IPv4 address\n");
+			push @tried, qw{IPv4};
+                   }
+                }
+                unless ($addressfound) {
+                   # do not bomb, as this could be temporary
+	           my $tried = join " or ", @tried;
+                   warn "WARNING: Hostname '$_' does currently not resolve to an $tried address\n" unless $cgimode;
+		}
                 return undef;
 	    }
 	    return undef;
-	},
+        },
        },
        email => { _re => '.+\s<\S+@\S+>',
 		  _re_error =>
@@ -707,20 +1117,48 @@ DOC
        note => { _doc => <<DOC },
 Some information about this entry which does NOT get displayed on the web.
 DOC
+      rawlog => { _doc => <<DOC,
+Log the raw data, gathered for this target, in tab separated format, to a file with the
+same basename as the corresponding RRD file. Use posix strftime to format the timestamp to be
+put into the file name. The filename is built like this:
 
-      };
+ basename.strftime.csv
+
+Example:
+
+ rawlog=%Y-%m-%d
+
+this would create a new logfile every day with a name like this: 
+
+ targethost.2004-05-03.csv
+
+DOC
+       		  _sub => sub {
+               		eval ( "POSIX::strftime('$_[0]', localtime(time))");
+                        return $@ if $@;
+                        return undef;
+        	  }, 
+           },
+	   alertee => { _re => '(\|.+|.+@\S+|snpp:)',
+			_re_error => 'the alertee must be an email address here',
+			_doc => <<DOC },
+If you want to have alerts for this target and all targets below it go to a particular address
+on top of the address already specified in the alert, you can add it here. This can be a comma separated list of items.
+DOC
+
+    };
 
     $TARGET->{ "/$KEY_RE/" } = $TARGET;
 
     my $PROBEVARS = {
-    	_vars => [ "/$KEY_RE/" ],
+    	_vars => [ "/$KEYD_RE/" ],
 	_doc => <<DOC,
 Probe specific variables. 
 DOC
-	"/$KEY_RE/" => { _doc => <<DOC },
+	"/$KEYD_RE/" => { _doc => <<DOC },
 Should be found in the documentation of the
-corresponding probe. The values get propagated. If a child
-node uses the same Probe as the parent.
+corresponding probe. The values get propagated to those child
+nodes using the same Probe.
 DOC
     };
 
@@ -747,10 +1185,78 @@ DOC
         }
     };
 
+    my $PROBES = {
+		                    _doc => <<DOC,
+Each module can take specific configuration information from this area. The jumble of letters above is a regular expression defining legal module names.
+DOC
+				    _vars => [ "step", "offset", "pings", "/$KEYD_RE/" ],
+				    "/$KEYD_RE/" => { _doc => 'Each module defines which
+variables it wants to accept. So this expression here just defines legal variable names.'},
+				    "step" => { %$INTEGER_SUB,
+				    		_doc => <<DOC },
+Duration of the base interval that this probe should use, if different
+from the one specified in the 'Database' section. Note that the step in 
+the RRD files is fixed when they are originally generated, and if you
+change the step parameter afterwards, you'll have to delete the old RRD
+files or somehow convert them. (This variable is only applicable if 
+the variable 'concurrentprobes' is set in the 'General' section.)
+DOC
+				    "offset" => {
+	  				_re => '(\d+%|random)',
+	  				_re_error => 
+	  				"Use offset either in % of operation interval or 'random'",
+         				_doc => <<DOC },
+If you run many probes concurrently you may want to prevent them from
+hitting your network all at the same time. Using the probe-specific
+offset parameter you can change the point in time when each probe will
+be run. Offset is specified in % of total interval, or alternatively as
+'random', and the offset from the 'General' section is used if nothing
+is specified here. Note that this does NOT influence the rrds itself,
+it is just a matter of when data acqusition is initiated. 
+(This variable is only applicable if the variable 'concurrentprobes' is set
+in the 'General' section.)
+DOC
+				    "pings" => {
+	  				%$INTEGER_SUB,
+	  				_doc => <<DOC},
+How many pings should be sent to each target, if different from the global
+value specified in the Database section.  Some probes (those derived from
+basefork.pm, ie. most except the FPing variants) will even let this be
+overridden target-specifically in the PROBE_CONF section (see the
+basefork documentation for details).  Note that the number of pings in
+the RRD files is fixed when they are originally generated, and if you
+change this parameter afterwards, you'll have to delete the old RRD
+files or somehow convert them.
+DOC
+    }; # $PROBES
+
+    my $PROBESTOP = {};
+    %$PROBESTOP = %$PROBES;
+    $PROBESTOP->{_sections} = ["/$KEY_RE/"];
+    $PROBESTOP->{"/$KEY_RE/"} = $PROBES;
+    for (qw(step offset pings)) {
+    	# we need a deep copy of these
+	my %h = %{$PROBESTOP->{$_}};
+    	$PROBES->{$_} = \%h;
+    	delete $PROBES->{$_}{_doc} 
+    }
+    $PROBES->{_doc} = <<DOC;
+You can define multiple instances of the same probe with subsections. 
+These instances can have different values for their variables, so you
+can eg. have one instance of the FPing probe with packet size 1000 and
+step 30 and another instance with packet size 64 and step 300.
+The name of the subsection determines what the probe will be called, so
+you can write descriptive names for the probes.
+
+If there are any subsections defined, the main section for this probe
+will just provide default parameter values for the probe instances, ie.
+it will not become a probe instance itself.
+DOC
+
     my $parser = ISG::ParseConfig->new 
       (
        {
-	_sections  => [ qw(General Database Presentation Probes Targets) ],
+	_sections  => [ qw(General Database Presentation Probes Alerts Targets) ],
 	_mandatory => [ qw(General Database Presentation Probes Targets) ],
 	General    => 
 	{
@@ -758,8 +1264,9 @@ DOC
 General configuration values valid for the whole SmokePing setup.
 DOC
 	 _vars =>
-	 [ qw(owner imgcache imgurl datadir piddir sendmail
-              smokemail cgiurl mailhost contact) ],
+	 [ qw(owner imgcache imgurl datadir pagedir piddir sendmail offset
+              smokemail cgiurl mailhost contact netsnpp
+	      syslogfacility syslogpriority concurrentprobes changeprocessnames) ],
 	 _mandatory =>
 	 [ qw(owner imgcache imgurl datadir piddir
               smokemail cgiurl contact) ],
@@ -778,7 +1285,13 @@ SmokePing cgi.
 DOC
 	 },
 
-
+	 pagedir =>
+	 {
+	  %$DIRCHECK_SUB,
+	  _doc => <<DOC,
+Directory to store static representations of pages.
+DOC
+	 },
 	 owner  => 
 	 {
 	  _doc => <<DOC,
@@ -792,6 +1305,15 @@ DOC
 Instead of using sendmail, you can specify the name of an smtp server 
 and use perl's Net::SMTP module to send mail to DYNAMIC host owners (see below).
 DOC
+          _sub => sub { require Net::SMTP ||return "ERROR: loading Net::SMTP"; return undef; }
+	 },
+	 snpphost  => 
+	 {
+	  _doc => <<DOC,
+If you have a SNPP (Simple Network Pager Protocol) server at hand, you can have alerts
+sent there too. Use the syntax B<snpp:someaddress> to use a snpp address in any place where you can use a mail address otherwhise.
+DOC
+          _sub => sub { require Net::SNPP ||return "ERROR: loading Net::SNPP"; return undef; }
 	 },
 
 	 contact  => 
@@ -817,7 +1339,7 @@ DOC
 	{
 	 %$DIRCHECK_SUB,
 	 _doc => <<DOC,
-The directory where SmokePing keeps its pid when demonised.
+The directory where SmokePing keeps its pid when daemonised.
 DOC
 	 },
 	 sendmail => 
@@ -845,8 +1367,64 @@ DOC
 Complete URL path of the SmokePing.cgi
 DOC
 	  
-	 }
-	 
+	 },
+	 syslogfacility	=>
+	 {
+	  _re => '\w+',
+	  _re_error => 
+	  "syslogfacility must be alphanumeric",
+	  _doc => <<DOC,
+The syslog facility to use, eg. local0...local7. 
+Note: syslog logging is only used if you specify this.
+DOC
+	 },
+	 syslogpriority	=>
+	 {
+	  _re => '\w+',
+	  _re_error => 
+	  "syslogpriority must be alphanumeric",
+	  _doc => <<DOC,
+The syslog priority to use, eg. debug, notice or info. 
+Default is $DEFAULTPRIORITY.
+DOC
+	 },
+         offset => {
+	  _re => '(\d+%|random)',
+	  _re_error => 
+	  "Use offset either in % of operation interval or 'random'",
+         _doc => <<DOC,
+If you run many instances of smokeping you may want to prevent them from
+hitting your network all at the same time. Using the offset parameter you
+can change the point in time when the probes are run. Offset is specified
+in % of total interval, or alternatively as 'random'. I recommend to use
+'random'. Note that this does NOT influence the rrds itself, it is just a
+matter of when data acqusition is initiated.  The default offset is 'random'.
+DOC
+         },
+	 concurrentprobes => {
+	  _re => '(yes|no)',
+          _re_error =>"this must either be 'yes' or 'no'",
+	  _doc => <<DOC,
+If you use multiple probes or multiple instances of the same probe and you
+want them to run concurrently in separate processes, set this to 'yes'. This
+gives you the possibility to specify probe-specific step and offset parameters 
+(see the 'Probes' section) for each probe and makes the probes unable to block
+each other in cases of service outages. The default is 'yes', but if you for
+some reason want the old behaviour you can set this to 'no'.
+DOC
+	 },
+	 changeprocessnames => {
+	  _re => '(yes|no)',
+          _re_error =>"this must either be 'yes' or 'no'",
+	  _doc => <<DOC,
+When using 'concurrentprobes' (see above), this controls whether the probe
+subprocesses should change their argv string to indicate their probe in
+the process name.  If set to 'yes' (the default), the probe name will
+be appended to the process name as '[probe]', eg.  '/usr/bin/smokeping
+[FPing]'. If you don't like this behaviour, set this variable to 'no'.
+If 'concurrentprobes' is not set to 'yes', this variable has no effect.
+DOC
+	 },
 	},
 	Database => 
 	{ 
@@ -855,7 +1433,7 @@ DOC
 	 _doc => <<DOC,
 Describes the properties of the round robin database for storing the
 SmokePing data. Note that it is not possible to edit existing RRDs
-by changeing the entries in the cfg file.
+by changing the entries in the cfg file.
 DOC
 	 
 	 step   => 
@@ -863,6 +1441,10 @@ DOC
 	   _doc => <<DOC,
 Duration of the base operation interval of SmokePing in seconds.
 SmokePing will venture out every B<step> seconds to ping your target hosts.
+If 'concurrent_probes' is set to 'yes' (see above), this variable can be 
+overridden by each probe. Note that the step in the RRD files is fixed when 
+they are originally generated, and if you change the step parameter afterwards, 
+you'll have to delete the old RRD files or somehow convert them. 
 DOC
 	 },
 	 pings  => 
@@ -870,9 +1452,16 @@ DOC
 	  %$INTEGER_SUB,
 	  _doc => <<DOC,
 How many pings should be sent to each target. Suggested: 20 pings.
+This can be overridden by each probe. Some probes (those derived from
+basefork.pm, ie. most except the FPing variants) will even let this
+be overridden target-specifically in the PROBE_CONF section (see the
+basefork documentation for details).  Note that the number of pings in
+the RRD files is fixed when they are originally generated, and if you
+change this parameter afterwards, you'll have to delete the old RRD
+files or somehow convert them.
 DOC
-	 },		    
-	 
+	 },
+
 	 _table => 
 	 {
 	  _doc => <<DOC,
@@ -975,8 +1564,7 @@ Use posix strftime to format the timestamp in the left hand
 lower corner of the overview graph
 DOC
           _sub => sub {
-                eval ( "require POSIX;
-                        POSIX::strftime( '$_[0]', localtime(time))" );
+                eval ( "POSIX::strftime( '$_[0]', localtime(time))" );
                 return $@ if $@;
                 return undef;
 	    },
@@ -1019,7 +1607,7 @@ DOC
 	       },
 	 detail => 
 	 { 
-	  _vars => [ qw(width height logarithmic unison_tolerance max_rtt strftime) ],
+	  _vars => [ qw(width height logarithmic unison_tolerance max_rtt strftime nodata_color) ],
           _sections => [ qw(loss_colors uptime_colors) ],
 	  _mandatory => [ qw(width height) ],
 	  _table     => { _columns => 2,
@@ -1056,15 +1644,19 @@ Use posix strftime to format the timestamp in the left hand
 lower corner of the detail graph
 DOC
           _sub => sub {
-                eval ( " require POSIX;
+                eval ( " 
                          POSIX::strftime('$_[0]', localtime(time)) " );
                 return $@ if $@;
                 return undef;
 	    },
           },
-
+	 nodata_color => {
+		_re       => '[0-9a-f]{6}',
+                _re_error =>  "color must be defined with in rrggbb syntax",
+		_doc => "Paint the graph background in a special color when there is no data for this period because smokeping has not been running (#rrggbb)",
+			},
          logarithmic      => { _doc => 'should the graphs be shown in a logarithmic scale (yes/no)',
-                       _re  => 'yes|no',
+                       _re  => '(yes|no)',
                        _re_error =>"this must either be 'yes' or 'no'",
                      },
          unison_tolerance => { _doc => "if a graph is more than this factor of the median 'max' it drops out of the unison scaling algorithm. A factor of two would mean that any graph with a max either less than half or more than twice the median 'max' will be dropped from unison scaling",
@@ -1103,13 +1695,13 @@ Example:
  Loss Color   Legend
  1    00ff00    "<1"
  3    0000ff    "<3"
- 1000 ff0000    ">=3"
+ 100  ff0000    ">=3"
 
 DOC
 			  0 => 
 			  {
 			   _doc => <<DOC,
-Activate when the lossrate is larger of equal to this number
+Activate when the lossrate (in percent) is larger of equal to this number
 DOC
 			   _re       => '\d+.?\d*',
 			   _re_error =>
@@ -1137,18 +1729,19 @@ DOC
 	uptime_colors => {
 	  _table     => { _columns => 3,
 			  _doc => <<DOC,
-When monitoring a host with DYNAMIC addressing, SmokePing will keep track of how long
-the machine is able to keep the same IP address. This time is plotted as a color
-in the graphs background. SmokePing comes with a reasonable default setting,
-but you may choose to disagree. The table below
-lets you specify your own coloring
+When monitoring a host with DYNAMIC addressing, SmokePing will keep
+track of how long the machine is able to keep the same IP
+address. This time is plotted as a color in the graphs
+background. SmokePing comes with a reasonable default setting, but you
+may choose to disagree. The table below lets you specify your own
+coloring
 
 Example:
 
- Uptime Color     Legend
- 3600    00ff00   "<1h"
- 86400   0000ff   "<1d"
- 604800  ff0000   "<1w"
+ # Uptime      Color     Legend
+ 3600          00ff00   "<1h"
+ 86400         0000ff   "<1d"
+ 604800        ff0000   "<1w"
  1000000000000 ffff00   ">1w"
 
 Uptime is in days!
@@ -1187,25 +1780,142 @@ DOC
         }, #present
 	Probes => { _sections => [ "/$KEY_RE/" ],
 		    _doc => <<DOC,
-The Probes Section configures Probe modules. Probe modules integrate an external ping command into SmokePing. Check the documentation of the Ping module for configuration details.
+The Probes Section configures Probe modules. Probe modules integrate an external ping command into SmokePing. Check the documentation of the FPing module for configuration details.
+DOC
+		  "/$KEY_RE/" => $PROBESTOP,
+	},
+	Alerts  => {
+		    _doc => <<DOC,
+The Alert section lets you setup loss and RTT pattern detectors. After each
+round of polling, SmokePing will examine its data and determine which
+detectors match. Detectors are enabled per target and get inherited by
+the targets children.
+
+Detectors are not just simple thresholds which go off at first sight
+of a problem. They are configurable to detect special loss or RTT
+patterns. They let you look at a number of past readings to make a
+more educated decision on what kind of alert should be sent, or if an
+alert should be sent at all.
+
+The patterns are numbers prefixed with an operator indicating the type
+of comparison required for a match.
+
+The following RTT pattern detects if a target's RTT goes from constantly
+below 10ms to constantly 100ms and more:
+
+ old ------------------------------> new
+ <10,<10,<10,<10,<10,>10,>100,>100,>100
+
+Loss patterns work in a similar way, except that the loss is defined as the
+percentage the total number of received packets is of the total number of packets sent.
+
+ old ------------------------------> new
+ ==0%,==0%,==0%,==0%,>20%,>20%,>=20%
+
+Apart from normal numbers, patterns can also contain the values B<*>
+which is true for all values regardless of the operator. And B<U>
+which is true for B<unknown> data together with the B<==> and B<=!> operators.
+
+Detectors normally act on state changes. This has the disadvantage, that
+they will fail to find conditions which were already present when launching
+smokeping. For this it is possible to write detectors that begin with the
+special value B<==S> it is inserted whenever smokeping is started up.
+
+You can write
+
+ ==S,>20%,>20%
+
+to detect lines that have been losing more than 20% of the packets for two
+periods after startup.
+
+Sometimes it may be that conditions occur at irregular intervals. But still
+you only want to throw an alert if they occur several times within a certain
+amount of times. The operator B<*X*> will ignore up to I<X> values and still
+let the pattern match:
+
+  >10%,*10*,>10%
+
+will fire if more than 10% of the packets have been losst twice over the
+last 10 samples.
+
+A complete example
+
+ *** Alerts ***
+ to = admin\@company.xy,peter\@home.xy
+ from = smokealert\@company.xy
+
+ +lossdetect
+ type = loss
+ # in percent
+ pattern = ==0%,==0%,==0%,==0%,>20%,>20%,>20%
+ comment = suddenly there is packet loss
+
+ +miniloss
+ type = loss
+ # in percent
+ pattern = >0%,*12*,>0%,*12*,>0%
+ comment = detected loss 3 times over the last two hours
+
+ +rttdetect
+ type = rtt
+ # in milliseconds
+ pattern = <10,<10,<10,<10,<10,<100,>100,>100,>100
+ comment = routing messed up again ?
+
+ +rttbadstart
+ type = rtt
+ # in milliseconds
+ pattern = ==S,==U
+ comment = offline at startup
+  
 DOC
 
-		    "/$KEY_RE/" => {_doc => <<DOC,
-Each module can take specific configuration information from this area. The jumble of letters above is a regular expression defining legal module names.
+	     _sections => [ '/[^\s,]+/' ],
+	     _vars => [ qw(to from) ],
+	     _mandatory => [ qw(to from)],
+	     to => { doc => <<DOC,
+Either an email address to send alerts to, or the name of a program to
+execute when an alert matches. To call a program, the first character of the
+B<to> value must be a pipe symbol "|". The program will the be called
+whenever an alert matches, using the following 5 arguments:
+B<name-of-alert>, B<target>, B<loss-pattern>, B<rtt-pattern>, B<hostname>.
+You can also provide a comma separated list of addresses and programs.
 DOC
-				    _vars => [ "/$KEY_RE/" ],
-				    "/$KEY_RE/" => { _doc => 'Each module defines which
-variables it wants to accept. So this expression here just defines legal variable names.'}
-				   }
+			_re => '(\|.+|.+@\S+|snpp:)',
+			_re_error => 'put an email address or the name of a program here',
+		      },
+	     from => { doc => 'who should alerts appear to be coming from ?',
+		       _re => '.+@\S+',
+		       _re_error => 'put an email address here',
+		      },
+	     '/[^\s,]+/' => {
+		  _vars => [ qw(type pattern comment to) ],
+		  _mandatory => [ qw(type pattern comment) ],
+	          to => { doc => 'Similar to the "to" parameter on the top-level except that  it will only be used IN ADDITION to the value of the toplevel parameter. Same rules apply.',
+			_re => '(\|.+|.+@\S+|snpp:)',
+			_re_error => 'put an email address or the name of a program here',
+		          },
+		  
+		  type => {
+		     _doc => 'Currently the pattern types B<rtt> and B<loss> and B<matcher> are known',
+		     _re => '(rtt|loss|matcher)',
+                     _re_error => 'Use loss or rtt'
+			  },
+   	 	  pattern => {
+ 		     _doc => "a comma separated list of comparison operators and numbers. rtt patterns are in milliseconds, loss patterns are in percents",
+		     _re => '(?:([^,]+)(,[^,]+)*|\S+\(.+\s)',
+ 		     _re_error => 'Could not parse pattern or matcher',
+		             },
 		  },
-
+        },
        Targets => {_doc        => <<DOC,
 The Target Section defines the actual work of SmokePing. It contains a hierarchical list
 of hosts which mark the endpoints of the network connections the system should monitor.
 Each section can contain one host as well as other sections.
 DOC
-		   _vars       => [ qw(probe menu title remark) ],
+		   _vars       => [ qw(probe menu title remark alerts) ],
 		   _mandatory  => [ qw(probe menu title) ],
+                   _order => 1,
 		   _sections   => [ ( "PROBE_CONF", "/$KEY_RE/" ) ],
 		   probe => { _doc => <<DOC },
 The name of the probe module to be used for this host. The value of
@@ -1213,18 +1923,28 @@ this variable gets propagated
 DOC
 		   PROBE_CONF => $PROBEVARS,
 		   menu => { _doc => <<DOC },
-Menu entry for this section
+Menu entry for this section. If not set this will be set to the hostname.
+DOC
+                   alerts => { _doc => <<DOC },
+A comma separated list of alerts to check for this target. The alerts have
+to be setup in the Alerts section. Alerts are inherited by child nodes. Use
+an empty alerts definition to remove inherited alerts from the current target
+and its children.
+
 DOC
 		   title => { _doc => <<DOC },
-Title of the page when it is displayed.
+Title of the page when it is displayed. This will be set to the hostname if
+left empty.
 DOC
+
 		   remark => { _doc => <<DOC },
 An optional remark on the current section. It gets displayed on the webpage.
 DOC
 
 		   "/$KEY_RE/" => $TARGET
 		  }
-        }
+            
+      }
     );
     return $parser;
 }
@@ -1242,7 +1962,7 @@ sub kill_smoke ($) {
         if ( -f $pidfile && open PIDFILE, "<$pidfile" ) {
             <PIDFILE> =~ /(\d+)/;
             my $pid = $1;
-            kill 1, $pid if kill 0, $pid;
+            kill 2, $pid if kill 0, $pid;
             sleep 3; # let it die
             die "ERROR: Can not stop running instance of SmokePing ($pid)\n"
                 if kill 0, $pid;    
@@ -1253,19 +1973,21 @@ sub kill_smoke ($) {
     }
 }
 
-sub demonize_me ($) {
+sub daemonize_me ($) {
   my $pidfile = shift;
     if (defined $pidfile){ 
         if (-f $pidfile ) {
             open PIDFILE, "<$pidfile";
             <PIDFILE> =~ /(\d+)/;
+            close PIDFILE;
             my $pid = $1;
             die "ERROR: I Quit! Another copy of $0 ($pid) seems to be running.\n".
               "       Check $pidfile\n"
                 if kill 0, $pid;
-            close PIDFILE;
         }
     }
+    print "Warning: no logging method specified. Messages will be lost.\n"
+    	unless $logging;
     print "Daemonizing $0 ...\n";
     defined (my $pid = fork) or die "Can't fork: $!";
     if ($pid) {
@@ -1281,20 +2003,89 @@ sub demonize_me ($) {
         &POSIX::setsid or die "Can't start a new session: $!";
         open STDOUT,'>/dev/null' or die "ERROR: Redirecting STDOUT to /dev/null: $!";
         open STDIN, '</dev/null' or die "ERROR: Redirecting STDIN from /dev/null: $!";
-        open STDERR, '</dev/null' or die "ERROR: Redirecting STDERR from /dev/null: $!";
-        
+        open STDERR, '>/dev/null' or die "ERROR: Redirecting STDERR to /dev/null: $!";
+	# send warnings and die messages to log
+        $SIG{__WARN__} = sub { do_log ((shift)."\n") };
+        $SIG{__DIE__} = sub { do_log ((shift)."\n"); exit 1 };	
     }
+}
+
+# pseudo log system object
+{
+	my $use_syslog;
+	my $use_cgilog;
+	my $use_debuglog;
+        my $use_filelog;
+
+	my $syslog_facility;
+	my $syslog_priority = $DEFAULTPRIORITY;
+	
+	sub initialize_debuglog (){
+		$use_debuglog = 1;
+	}
+
+	sub initialize_cgilog (){
+		$use_cgilog = 1;
+		$logging=1;
+	}
+
+	sub initialize_filelog ($){
+		$use_filelog = shift;
+		$logging=1;
+	}
+	
+	sub initialize_syslog ($$) {
+		my $fac = shift;
+		my $pri = shift;
+		$use_syslog = 1;
+		$logging=1;
+		die "missing facility?" unless defined $fac;
+		$syslog_facility = $fac if defined $fac;
+		$syslog_priority = $pri if defined $pri;
+		print "Note: logging to syslog as $syslog_facility/$syslog_priority.\n";
+		openlog(basename($0), 'pid', $syslog_facility);
+	}
+
+	sub do_syslog ($){
+		syslog("$syslog_facility|$syslog_priority", shift);
+	}
+
+	sub do_cgilog ($){
+                my $str = shift;
+		print "<p>" , $str, "</p>\n";
+		print STDERR $str,"\n"; # for the webserver log
+	}
+
+	sub do_debuglog ($){
+		do_log(shift) if $use_debuglog;
+	}
+
+	sub do_filelog ($){
+                open X,">>$use_filelog" or return;
+                print X scalar localtime(time)," - ",shift,"\n";
+                close X;
+	}
+
+	sub do_log (@){
+		my $string = join(" ", @_);
+		chomp $string; 
+		do_syslog($string) if $use_syslog;
+		do_cgilog($string) if $use_cgilog;
+		do_filelog($string) if $use_filelog;
+		print STDERR $string,"\n" unless $logging;
+	}
+
 }
 
 ###########################################################################
 # The Main Program 
 ###########################################################################
 
-my $RCS_VERSION = '$Id: Smokeping.pm,v 1.4 2002/03/09 12:01:08 oetiker Exp $';
+my $RCS_VERSION = '$Id: Smokeping.pm,v 1.5 2004/10/21 21:10:51 oetiker Exp $';
 
 sub load_cfg ($) { 
     my $cfgfile = shift;
-    my $cfmod = (stat $cfgfile)[9];
+    my $cfmod = (stat $cfgfile)[9] || die "ERROR: calling stat on $cfgfile: $!\n";
     # when running under speedy this will prevent reloading on every run
     # if cfgfile has been modified we will still run.
     if (not defined $cfg or $cfg->{__last} < $cfmod ){
@@ -1307,18 +2098,20 @@ sub load_cfg ($) {
         $probes = undef;
 	$probes = load_probes $cfg;
 	$cfg->{__probes} = $probes;
-      	init_target_tree $cfg, $probes, $cfg->{Targets}{probe}, $cfg->{Targets}, $cfg->{General}{datadir}, $cfg->{Targets}{PROBE_CONF}; 
+	init_alerts $cfg if $cfg->{Alerts};
+      	init_target_tree $cfg, $probes, $cfg->{Targets}{probe}, $cfg->{Targets}, $cfg->{General}{datadir}, $cfg->{Targets}{PROBE_CONF},$cfg->{Targets}{alerts},undef; 
     }    
 }
 
 
 sub makepod ($){
-    my $cfg = shift;
+    my $parser = shift;
     my $e='=';
     print <<POD;
+
 ${e}head1 NAME
 
-smokeping.config - Reference for the SmokePing Config File
+smokeping_config - Reference for the SmokePing Config File
 
 ${e}head1 OVERVIEW
 
@@ -1332,7 +2125,7 @@ The Parser for the Configuration file is written using David Schweikers
 ParseConfig module. Read all about it in L<ISG::ParseConfig>.
 
 The Configuration file has a tree-like structure with section headings at
-various levels. It also contains variable assignements and tables.
+various levels. It also contains variable assignments and tables.
 
 ${e}head1 REFERENCE
 
@@ -1340,12 +2133,12 @@ The text below describes the syntax of the SmokePing configuration file.
 
 POD
 
-    print $cfg->{__parser}->makepod;
+    print $parser->makepod;
     print <<POD;
 
 ${e}head1 COPYRIGHT
 
-Copyright (c) 2001 by Tobias Oetiker. All right reserved.
+Copyright (c) 2001-2003 by Tobias Oetiker. All right reserved.
 
 ${e}head1 LICENSE
 
@@ -1377,14 +2170,25 @@ POD
 
 }
 sub cgi ($) {
+    $cgimode = 'yes';
+    # make sure error are shown in appropriate manner even when running from speedy
+    # and thus not getting BEGIN re-executed.
+    if ($ENV{SERVER_SOFTWARE}) {
+        $SIG{__WARN__} = sub { print "Content-Type: text/plain\n\n".(shift)."\n"; };
+        $SIG{__DIE__} = sub { print "Content-Type: text/plain\n\n".(shift)."\n"; exit 1 }
+    };
     umask 022;
     load_cfg shift;
     my $q=new CGI;
-    $SIG{__DIE__} = sub { print "<div>".$_[0]."</div>"; exit 1 };
     print $q->header(-type=>'text/html',
                      -expires=>'+'.($cfg->{Database}{step}).'s',
                      -charset=> ( $cfg->{Presentation}{charset} || 'iso-8859-15')                   
                      );
+    if ($ENV{SERVER_SOFTWARE}) {
+        $SIG{__WARN__} = sub { print "<pre>".(shift)."</pre>"; };
+        $SIG{__DIE__} = sub { print "<pre>".(shift)."</pre>"; exit 1 }
+    };
+    initialize_cgilog();
     if ($q->param(-name=>'secret') && $q->param(-name=>'target') ) {
 	update_dynaddr $cfg,$q;
     } else {
@@ -1392,28 +2196,245 @@ sub cgi ($) {
     }
 }
 
+    
+sub gen_page  ($$$);
+sub gen_page  ($$$) {
+    my ($cfg, $tree, $open) = @_;
+    my ($q, $name, $page);
+
+    $q = bless \$q, 'dummyCGI';
+
+    $name = @$open ? join('.', @$open) . ".html" : "index.html";
+
+    die "Can not open $cfg-{General}{pagedir}/$name for writing: $!" unless
+      open PAGEFILE, ">$cfg->{General}{pagedir}/$name";
+
+    my $step = $probes->{$tree->{probe}}->step();
+
+    $page = fill_template
+	($cfg->{Presentation}{template},
+	 {
+	  menu => target_menu($cfg->{Targets},
+			      [@$open], #copy this because it gets changed
+			      "", ".html"),
+	  title => $tree->{title},
+	  remark => ($tree->{remark} || ''),
+	  overview => get_overview( $cfg,$q,$tree,$open ),
+	  body => get_detail( $cfg,$q,$tree,$open ),
+	  target_ip => ($tree->{host} || ''),
+	  owner => $cfg->{General}{owner},
+	  contact => $cfg->{General}{contact},
+	  author => '<A HREF="http://tobi.oetiker.ch/">Tobi&nbsp;Oetiker</A>',
+	  smokeping => '<A HREF="http://people.ee.ethz.ch/~oetiker/webtools/smokeping/counter.cgi/'.$VERSION.'">SmokePing-'.$VERSION.'</A>',
+	  step => $step,
+	  rrdlogo => '<A HREF="http://people.ee.ethz.ch/~oetiker/webtools/rrdtool/"><img border="0" src="'.$cfg->{General}{imgurl}.'/rrdtool.png"></a>',
+	  smokelogo => '<A HREF="http://people.ee.ethz.ch/~oetiker/webtools/smokeping/counter.cgi/'.$VERSION.'"><img border="0" src="'.$cfg->{General}{imgurl}.'/smokeping.png"></a>',
+	 });
+
+    print PAGEFILE $page;
+    close PAGEFILE;
+
+    foreach my $key (keys %$tree) {
+	my $value = $tree->{$key};
+	next unless ref($value) eq 'HASH';
+	gen_page($cfg, $value, [ @$open, $key ]);
+    }
+}
+
+sub makestaticpages ($$) {
+  my $cfg = shift;
+  my $dir = shift;
+
+  # If directory is given, override current values (pagedir and and
+  # imgurl) so that all generated data is in $dir. If $dir is undef,
+  # use values from config file.
+  if ($dir) {
+    mkdir $dir, 0755 unless -d $dir;
+    $cfg->{General}{pagedir} = $dir;
+    $cfg->{General}{imgurl} = '.';
+  }
+  
+  die "ERROR: No pagedir defined for static pages\n"
+        unless $cfg->{General}{pagedir};
+  # Logos.
+  gen_imgs($cfg);
+
+  # Iterate over all targets.
+  my $tree = $cfg->{Targets};
+  gen_page($cfg, $tree, []);
+}
+
+sub pages ($) {
+  my ($config) = @_;
+  umask 022;
+  load_cfg($config);
+  makestaticpages($cfg, undef);
+}
+      
 sub main ($) {
+    $cgimode = 0;
     umask 022;
     my $cfgfile = shift;
-    load_cfg $cfgfile;
-    my %opt;
-    GetOptions(\%opt, 'version', 'email', 
-                      'makepod','debug','restart', 'nodemon|nodaemon');
+    $opt{filter}=[];
+    GetOptions(\%opt, 'version', 'email', ,'man','help','logfile=s','static-pages:s', 'debug-daemon',
+		      'nosleep', 'makepod','debug','restart', 'filter=s', 'nodaemon|nodemon') or pod2usage(2);
     if($opt{version})  { print "$RCS_VERSION\n"; exit(0) };
+    if($opt{man})      {  pod2usage(-verbose => 2); exit 0 };
+    if($opt{help})     {  pod2usage(-verbose => 1); exit 0 };
+    if($opt{makepod})  { makepod(get_parser) ; exit 0}; 
+    initialize_debuglog if $opt{debug} or $opt{'debug-daemon'};
+    load_cfg $cfgfile;
+    if(defined $opt{'static-pages'}) { makestaticpages $cfg, $opt{'static-pages'}; exit 0 };
     if($opt{email})    { enable_dynamic $cfg, $cfg->{Targets},"",""; exit 0 };
-    if($opt{makepod})  { makepod $cfg; }; 
-    if($opt{restart})  { kill_smoke $cfg->{General}{piddir}."/smokeping.pid"; };
-    demonize_me $cfg->{General}{piddir}."/smokeping.pid"
-      unless $opt{debug} or $opt{nodemon};
-    while (1) {
-    	if ($opt{debug}) {
-		map { $probes->{$_}->debug(1) if $probes->{$_}->can('debug') } 
-			keys %$probes;
+    if($opt{restart})  { kill_smoke $cfg->{General}{piddir}."/smokeping.pid";};
+    if($opt{logfile})      { initialize_filelog($opt{logfile}) };
+    if (not keys %$probes) {
+    	do_log("No probes defined, exiting.");
+	exit 1;
+    }
+    unless ($opt{debug} or $opt{nodaemon}) {
+    	if (defined $cfg->{General}{syslogfacility}) {
+		initialize_syslog($cfg->{General}{syslogfacility}, 
+				  $cfg->{General}{syslogpriority});
 	}
-	run_probes $probes;
-	update_rrds $cfg, $probes, $cfg->{Targets}{probe}, $cfg->{Targets}, $cfg->{General}{datadir};
+    	daemonize_me $cfg->{General}{piddir}."/smokeping.pid";
+    }
+    do_log "Launched successfully";
+
+    my $myprobe;
+    my $forkprobes = $cfg->{General}{concurrentprobes} || 'yes';
+    if ($forkprobes eq "yes" and keys %$probes > 1 and not $opt{debug}) {
+    	my %probepids;
+	my $pid;
+	do_log("Entering multiprocess mode.");
+    	for my $p (keys %$probes) {
+		if ($probes->{$p}->target_count == 0) {
+			do_log("No targets defined for probe $p, skipping.");
+			next;
+		}
+		my $sleep_count = 0;
+		do {
+			$pid = fork;
+			unless (defined $pid) {
+				do_log("Fatal: cannot fork: $!");
+				die "bailing out" 
+					if $sleep_count++ > 6;
+				sleep 10;
+			}
+		} until defined $pid;
+		$myprobe = $p;
+		goto KID unless $pid; # child skips rest of loop
+		do_log("Child process $pid started for probe $myprobe.");
+		$probepids{$pid} = $myprobe;
+	}
+	# parent
+	do_log("All probe processes started succesfully.");
+	my $exiting = 0;
+	for my $sig (qw(INT TERM)) {
+		$SIG{$sig} = sub {
+			do_log("Got $sig signal, terminating child processes.");
+			$exiting = 1;
+			kill $sig, $_ for keys %probepids;
+			my $now = time;
+			while(keys %probepids) { # SIGCHLD handler below removes the keys
+				if (time - $now > 2) {
+					do_log("Can't terminate all child processes, giving up.");
+					exit 1;
+				}
+				sleep 1;
+			}
+			do_log("All child processes succesfully terminated, exiting.");
+			exit 0;
+		}
+	};
+	$SIG{CHLD} = sub {
+		while ((my $dead = waitpid(-1, WNOHANG)) > 0) {
+			my $p = $probepids{$dead};
+			$p = 'unknown' unless defined $p;
+			do_log("Child process $dead (probe $p) exited unexpectedly with status $?.")
+				unless $exiting;
+			delete $probepids{$dead};
+		}
+	};
+	sleep while 1; # just wait for the signals
+	do_log("Exiting abnormally - this should not happen.");
+	exit 1; # not reached
+    } else {
+    	if ($forkprobes ne "yes") {
+		do_log("Not entering multiprocess mode because the 'concurrentprobes' variable is not set.");
+    		for my $p (keys %$probes) {
+			for my $what (qw(offset step)) {
+				do_log("Warning: probe-specific parameter '$what' ignored for probe $p in single-process mode."	)
+					if defined $cfg->{Probes}{$p}{$what};
+			}
+		}
+	} elsif ($opt{debug}) {
+    		do_debuglog("Not entering multiprocess mode with '--debug'. Use '--debug-daemon' for that.")
+	} elsif (keys %$probes == 1) {
+		do_log("Not entering multiprocess mode for just a single probe.");
+		$myprobe = (keys %$probes)[0]; # this way we won't ignore a probe-specific step parameter
+	}
+	for my $sig (qw(INT TERM)) {
+		$SIG{$sig} = sub {
+			do_log("Got $sig signal, terminating.");
+			exit 1;
+		}
+	}
+    }
+KID:
+    my $offset;
+    my $step; 
+    if (defined $myprobe) {
+    	$offset = $probes->{$myprobe}->offset || 'random';
+	$step = $probes->{$myprobe}->step;
+	$0 .= " [$myprobe]" unless defined $cfg->{General}{changeprocessnames}
+	                    and $cfg->{General}{changeprocessnames} eq "no";
+    } else {
+	$offset = $cfg->{General}{offset} || 'random';
+	$step = $cfg->{Database}{step};
+    }
+    if ($offset eq 'random'){
+	  $offset = int(rand($step));
+    } else {   
+          $offset =~ s/%$//;
+          $offset = $offset / 100 * $step;
+    }
+    for (keys %$probes) {
+    	next if defined $myprobe and $_ ne $myprobe;
+    	# fill this in for report_probes() below
+    	$probes->{$_}->offset_in_seconds($offset); # this is just for humans
+	if ($opt{debug} or $opt{'debug-daemon'}) {
+		$probes->{$_}->debug(1) if $probes->{$_}->can('debug');
+	}
+    }
+
+    report_probes($probes, $myprobe);
+
+    while (1) {
+	unless ($opt{nosleep} or $opt{debug}) {
+		my $sleeptime = $step - (time-$offset) % $step;
+		if (defined $myprobe) {
+        		$probes->{$myprobe}->do_debug("Sleeping $sleeptime seconds.");
+		} else {
+        		do_debuglog("Sleeping $sleeptime seconds.");
+		}
+		sleep $sleeptime;
+	}
+        my $now = time;
+	run_probes $probes, $myprobe; # $myprobe is undef if running without 'concurrentprobes'
+	update_rrds $cfg, $probes, $cfg->{Targets}{probe}, $cfg->{Targets}, $cfg->{General}{datadir}, $myprobe;
 	exit 0 if $opt{debug};
-	sleep $cfg->{Database}{step} - time % $cfg->{Database}{step};
+        my $runtime = time - $now;
+	if ($runtime > $step) {
+        	my $warn = "WARNING: smokeping took $runtime seconds to complete 1 round of polling. ".
+             	"It should complete polling in $step seconds. ".
+             	"You may have unresponsive devices in your setup.\n";
+		if (defined $myprobe) {
+        		$probes->{$myprobe}->do_log($warn);
+		} else {
+        		do_log($warn);
+		}
+	}
     }
 }
 
@@ -1421,7 +2442,8 @@ sub gen_imgs ($){
 
   my $cfg = shift;
   if (not -r $cfg->{General}{imgcache}."/rrdtool.png"){
-open W, ">".$cfg->{General}{imgcache}."/rrdtool.png" or do { warn "WARNING: creating $cfg->{General}{imgcache}/rrdtool.png: $!\n"; return 0 };
+open W, ">".$cfg->{General}{imgcache}."/rrdtool.png" 
+   or do { warn "WARNING: creating $cfg->{General}{imgcache}/rrdtool.png: $!\n"; return 0 };
 print W unpack ('u', <<'UUENC');
 MB5!.1PT*&@H    -24A$4@   '@    B! ,   !F7P!P    +5!,5$44&5T0
 M.(L@2)8N6* X9JQ)=+)QC[Q7AL"9J;63KL^SR=[]^\S____K^?S6XN6'_*P9
@@ -1468,7 +2490,8 @@ close W;
 }
 
   if (not -r $cfg->{General}{imgcache}."/smokeping.png"){
-open W, ">".$cfg->{General}{imgcache}."/smokeping.png" or do { warn "WARNING: creating $cfg->{General}{imgcache}/smokeping.png: $!\n"; return 0};
+open W, ">".$cfg->{General}{imgcache}."/smokeping.png" 
+   or do { warn "WARNING: creating $cfg->{General}{imgcache}/smokeping.png: $!\n"; return 0};
 print W unpack ('u', <<'UUENC');
 MB5!.1PT*&@H````-24A$4@```'@````6"`,````\1*C*```#`%!,5$7___\2
 M*FINUAH.Q"X+DD(.<DYFUAX.8E:"GL`.5EH2JCH.3ETB@D9RCK4NJC8.1EXT
@@ -1542,11 +2565,12 @@ Smokeping.pm - SmokePing Perl Module
 
 =head1 OVERVIEW
 
-Almost all SmokePing functionality sitts in this Module.
-The programs B<smokeping> and B<smokeping.cgi> are merily
+Almost all SmokePing functionality sits in this Module.
+The programs B<smokeping> and B<smokeping.cgi> are merely
 figure heads allowing to hardcode some pathnames.
 
-If you feel like documenting what is happening within this library you are most welcome todo so.
+If you feel like documenting what is happening within this library you are
+most welcome todo so.
 
 =head1 COPYRIGHT
 

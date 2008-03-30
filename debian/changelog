@@ -1,3 +1,303 @@
+smokeping (1.38-2) unstable; urgency=low
+
+  * Added missing Build-Dependecy in groff. (Closes: #292949)
+
+ -- Jose Carlos Garcia Sogo <jsogo@debian.org>  Sat,  5 Feb 2005 19:14:48 +0100
+
+smokeping (1.38-1) unstable; urgency=low
+
+  * The "upstream releases just when a new upstream release is uploaded to the
+    archive" release.
+  * New upstream release.
+  * debian/postinst: only create smokeping user if it does not exist yet. 
+
+ -- Jose Carlos Garcia Sogo <jsogo@debian.org>  Sun, 30 Jan 2005 18:36:24 +0100
+
+smokeping (1.37-1) unstable; urgency=low
+
+  * New upstream version (Closes: #289126)
+  * debian/patches:
+     + 40_fping-packet.dpatch,
+     + 50_concurrent-probes.dpatch,
+     + 60_makepod-without-config.dpatch,
+     + 65_fix_generating_docs.dpatch,
+     + 68_typos.dpatch: disabled. They are applied upstream
+     + 70_regenerated_docs.dpatch: updated. It is empty as docs are uptodate
+     in the upstream tarball.
+
+  * debian/postinst:
+     + don't edit unconditionally config file. (Closes: #288628)
+     + fix here permissions for different dirs instead of in rules file.
+     + create smokeping system user
+     
+  * debian/postrm:
+     + delete smokeping system user on purge.
+
+  * debian/init.d:
+     + run smokeping daemon as its own user. (Closes: #287253)
+     
+  * debian/rules:
+     + update-docs target should only regenerate pod files (Closes: #287508)
+     + install perl modules manpages with the probes::, matchers:: or ISG::
+       prefix, as neeeded. (Closes: #288922)
+   
+ -- Jose Carlos Garcia Sogo <jsogo@debian.org>  Sun, 30 Jan 2005 17:18:53 +0100
+
+smokeping (1.34-4) unstable; urgency=low
+
+  * debian/patches:
+     + 30_typos: moved to 68_typos.
+     + 50_concurrent-probes: patch the patch. Fix signal handling.
+       Thanks again to Niko Tyni. (Closes: #288082)
+     + 65_fix_generating_docs: patch Makefile to allow generating docs without
+       having SmokePing installed.
+     + 68_typos: fix different typos in sources.
+     + 70_regenerated_docs: updated.
+     
+  * debian/rules:
+     + New update-docs target, which should be used to upgrade
+       70_regenerated_docs patch.
+
+ -- Jose Carlos Garcia Sogo <jsogo@debian.org>  Mon,  3 Jan 2005 13:55:53 +0100
+
+smokeping (1.34-3) unstable; urgency=low
+
+  * The "2004 is death - Long life to 2005!" release.
+  * Some docs have been moved to subdirectories. Reinstall them in
+    /usr/share/doc/smokeping  (Closes: #287250)
+  * Documentation reorganized:
+     + *.pod files removed. We don't need to distribute those files.
+     + install documentation in two main subdirectories, txt and html.
+       Inside create both 'probes' and 'matchers' subdirectories.
+     + manpages are installed either in man1 or man3, depending on
+       the section described inside the file. File names are incorrect, so
+       we rename manpages being moved to section 3.
+  * debian/patches:
+     + 20_conffile: enable syslog logging by default. (Closes: #287825)
+     + 30_typos: New. s/secion/section/g and other typos in documentation and
+       source files. (Closes: #283643)
+     + 50_concurrent-probes: New. Allow probes to be executed in separate
+       processes. This permits probe-specific parameters and offset.
+       Thanks to Niko Tyni and Marc Haber (Closes: #283533)
+     + 60_makepod-without-config: New. Let 'smokeping -makepod' be run
+       without a config file. Thanks to Niko Tyni.
+     + 70_regenerated_docs: New. Contains doc regenerated to show new options
+       added in version 1.34-2. (Closes: #287508) 
+
+ -- Jose Carlos Garcia Sogo <jsogo@debian.org>  Fri, 31 Dec 2004 19:20:55 +0100
+
+smokeping (1.34-2) unstable; urgency=low
+
+  * Build-Depend on dpatch >= 2.0.9, as it now uses new dpatch-run 
+    (Closes: #286431)
+  * Applied patch from Niko Tyni to allow fping probes with different
+    packet sizes. Thanks! (Closes: #283647)
+
+ -- Jose Carlos Garcia Sogo <jsogo@debian.org>  Mon, 20 Dec 2004 23:15:52 +0100
+
+smokeping (1.34-1) unstable; urgency=low
+
+  * New upstream release. (Closes: #283621)
+     + Fixes whatis error in manpages. (Closes: #210622)
+  * debian/control: 
+     + depend on exim4 | mail-transport-agent, as we are using
+       "sendmail" command in default config. (Closes: #274718)
+     + Recommends apache | httpd to conform with Policy.
+  * debian/patches:
+     + 10_path_changes: updated
+     + 30_typos: new. s/secion/section/g on every the doc. 
+
+ -- Jose Carlos Garcia Sogo <jsogo@debian.org>  Sun, 19 Dec 2004 19:44:41 +0100
+
+smokeping (1.31-2) unstable; urgency=high
+
+  * init.d: If not running, restart should start the daemon. (Closes: #275861)
+  * Urgency high as it fixes a RC bug also present in Sarge.
+
+ -- Jose Carlos Garcia Sogo <jsogo@debian.org>  Mon, 11 Oct 2004 13:01:47 +0200
+
+smokeping (1.31-1) unstable; urgency=low
+
+  * New upstream version.
+
+ -- Jose Carlos Garcia Sogo <jsogo@debian.org>  Thu,  5 Aug 2004 22:56:20 +0200
+
+smokeping (1.30-1) unstable; urgency=low
+
+  * New upstrem version. (Closes: #248264)
+
+ -- Jose Carlos Garcia Sogo <jsogo@debian.org>  Fri, 14 May 2004 18:20:34 +0200
+
+smokeping (1.28-1) unstable; urgency=low
+
+  * New upstream version. (Closes: #240628)
+  * Removed 30_upstream_Smokeping.dpatch -- Included upstream.
+
+ -- Jose Carlos Garcia Sogo <jsogo@debian.org>  Sun, 28 Mar 2004 22:22:22 +0200
+
+smokeping (1.26-2) unstable; urgency=low
+
+  * Added dpatch to Build-Depends. (Closes: #235077)
+
+ -- Jose Carlos Garcia Sogo <jsogo@debian.org>  Fri, 27 Feb 2004 15:39:39 +0100
+
+smokeping (1.26-1) unstable; urgency=low
+
+  * New upstream version. (Closes: #233687)
+  * Ack previous NMU. Thanks Matthias. (Closes: #226829)
+  * Moved perl stuff from /usr/lib/perl5 to /usr/shre/perl5 as those files are
+    not Perl executables.
+  * Do not list /etc/smokeping files in conffiles, so they're not listed twice
+    when building the package.
+  * Using dpatch now. It makes really easier to mantain all those path changes
+    we need to do in upstream source:
+      - 10_path_changes.dpatch: Changes upstream paths to Debian ones.
+      - 20_conffile.dpatch: Creates a template conffile suitable for everyone.
+      - 30_upstream_Smokeping.dpatch: last minute upstream patch to
+      Smokeping.pm file fixing some typos.
+  * Suggests libnet-ldap-perl and libauthen-radius-perl for the new probes.
+
+ -- Jose Carlos Garcia Sogo <jsogo@debian.org>  Sat, 21 Feb 2004 14:09:16 +0100
+
+smokeping (1.25-1.1) unstable; urgency=low
+
+  * NMU.
+  * Include the correct cgi script (closes: #226829).
+  * Suggests curl.
+
+ -- Matthias Klose <doko@debian.org>  Wed, 21 Jan 2004 21:28:09 +0100
+
+smokeping (1.25-1) unstable; urgency=low
+
+  * New upstream release (Closes: #216163, #218974)
+  * Bumped Standars-Version. No changes needed.
+
+ -- Jose Carlos Garcia Sogo <jsogo@debian.org>  Mon,  5 Jan 2004 21:30:53 +0100
+
+smokeping (1.20-3) unstable; urgency=low
+
+  * Fixed how email adresses are parsed. (Closes: #193697)
+  * Fixed permissions in /var/lib/smokeping dir so the CGI can
+    also write in it. (Closes: #193749)
+  * Fixed init.d script so it doesn't fail when trying to remove a stopped
+    smokeping package. (Closes: #193855)
+
+ -- Jose Carlos Garcia Sogo <jsogo@debian.org>  Fri, 23 May 2003 22:16:27 +0200
+
+smokeping (1.20-2) unstable; urgency=low
+
+  * Changed the order in which /usr/share/doc/smokeping/pod/smokeping.pod link
+    is created, so we don't clash when installing *.pod files there. 
+    (Closes: #193095)
+
+ -- Jose Carlos Garcia Sogo <jsogo@debian.org>  Thu, 15 May 2003 23:18:21 +0200
+
+smokeping (1.20-1) unstable; urgency=low
+
+  * New upstream version.
+  * Added a dnsutils to recommends field, as it is used by DNS probe.
+  * Standars-Version bumped to 3.5.9.
+
+ -- Jose Carlos Garcia Sogo <jsogo@debian.org>  Mon, 12 May 2003 16:08:08 +0200
+
+smokeping (1.19-1) unstable; urgency=low
+
+  * New upstream version. Add a DNS probe.
+
+ -- Jose Carlos Garcia Sogo <jsogo@debian.org>  Thu, 20 Feb 2003 15:46:37 +0100
+
+smokeping (1.18-1) unstable; urgency=low
+
+  * New upstream release.
+    - Allow sub millisecond patterns.
+    - Report a full link in smokeping alerts.
+
+ -- Jose Carlos Garcia Sogo <jsogo@debian.org>  Mon, 16 Dec 2002 16:15:44 +0100
+
+smokeping (1.16-1) unstable; urgency=low
+
+  * New upstream release:
+    - Graphs are showed in logarithmic scale.
+    - Added IOSPing probe.
+
+ -- Jose Carlos Garcia Sogo <jsogo@debian.org>  Fri,  8 Nov 2002 20:50:19 +0100
+
+smokeping (1.15-2) unstable; urgency=low
+
+  * Changed postinst to check if $2 parameter passed to dpkg
+    --compare-versions isn't empty. (Closes: #164451)
+  * Upped dependencies to speedy-cgi-perl (2.21-1) and perl (5.8).
+
+ -- Jose Carlos Garcia Sogo <jsogo@debian.org>  Sat, 12 Oct 2002 13:05:49 +0200
+
+smokeping (1.15-1) unstable; urgency=low
+
+  * Another upstream release:
+    - Bugfixes.
+    - Allow to call an external script upon matching an alert pattern.
+    - Unified mail tools.
+
+ -- Jose Carlos Garcia Sogo <jsogo@debian.org>  Sat, 28 Sep 2002 12:42:28 +0200
+
+smokeping (1.14-1) unstable; urgency=low
+
+  * New upstream release:
+    - Some bugfixes.
+
+ -- Jose Carlos Garcia Sogo <jsogo@debian.org>  Sat, 28 Sep 2002 12:35:52 +0200
+
+smokeping (1.13-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Jose Carlos Garcia Sogo <jsogo@debian.org>  Mon,  9 Sep 2002 21:03:01 +0200
+
+smokeping (1.12-3) unstable; urgency=low
+
+  * Fixed dependencies for Perl 5.8
+  * Changed fping path to /usr/bin (Closes: #157905) 
+
+ -- Jose Carlos Garcia Sogo <jsogo@debian.org>  Sun,  1 Sep 2002 21:35:10 +0200
+
+smokeping (1.12-2) unstable; urgency=low
+
+  * Moved rddtool data files to /var/lib/smokeping to comply
+  with FHS. With this we don't need to make tricks with the owner 
+  of smokeping binary and with /var/www/smokeping perms. (Closes: #152475)
+
+ -- Jose Carlos Garcia Sogo <jsogo@debian.org>  Sat, 20 Jul 2002 13:43:34 +0200
+
+smokeping (1.12-1) unstable; urgency=low
+
+  * The "Once more I didn't received Freshmeat release announcement" release.
+  * New upstream release.
+
+ -- Jose Carlos Garcia Sogo <jsogo@debian.org>  Sat,  8 Jun 2002 09:23:10 +0200
+
+smokeping (1.11-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Jose Carlos Garcia Sogo <jsogo@debian.org>  Sat, 11 May 2002 15:49:10 +0200
+
+smokeping (1.9-2) unstable; urgency=low
+
+  * Added a recommends in libsocket6-perl (Closes: #145164)
+
+ -- Jose Carlos Garcia Sogo <jsogo@debian.org>  Wed,  1 May 2002 14:56:18 +0200
+
+smokeping (1.9-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Jose Carlos Garcia Sogo <jsogo@debian.org>  Tue, 30 Apr 2002 00:27:05 +0200
+
+smokeping (1.8-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Jose Carlos Garcia Sogo <jsogo@debian.org>  Fri, 26 Apr 2002 23:12:31 +0200
+
 smokeping (1.6-2) unstable; urgency=low
 
   * Changed /usr/bin/perl for /usr/bin/speedy in the smokeping binary and the

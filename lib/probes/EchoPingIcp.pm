@@ -82,7 +82,7 @@ sub test_usage {
 	my $self = shift;
 	my $bin = $self->{properties}{binary};
 	croak("Your echoping binary doesn't support ICP")
-		if `$bin -i/ foo 2>&1` =~ /not compiled|usage/i;
+		if `$bin -i/ 127.0.0.1 2>&1` =~ /not compiled|usage/i;
 	$self->SUPER::test_usage;
 	return;
 }

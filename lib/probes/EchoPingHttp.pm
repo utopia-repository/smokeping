@@ -22,9 +22,10 @@ Measures HTTP roundtrip times (web servers and caches) for SmokePing.
 
  + PROBE_CONF
  url = / 
- ignore-cache = yes
- force-revalidate = no
+ ignore_cache = yes
+ revalidate_data = no
  port = 80 # default value anyway
+ timeout = 50 # default is 10s
 
 =head1 DESCRIPTION
 
@@ -57,6 +58,12 @@ Enabled if the value is anything other than 'no' or '0'.
 
 The echoping(1) "-a" option: force the proxy to revalidate data with original 
 server. Enabled if the value is anything other than 'no' or '0'.
+
+=item timeout
+
+The echoping(1) "-t" option: Number  of  seconds  to  wait a reply before giving up. For TCP,
+this is the maximum number of seconds for the  whole  connection
+(setup and data exchange).
 
 =back
 
@@ -104,6 +111,11 @@ sub proto_args {
 
 	my @args = ("-h", $url);
 
+	# -t : timeout
+	my $timeout = $target->{vars}{timeout};
+	$timeout = $self->{properties}{timeout} 
+		unless defined $timeout;
+	push @args, "-t $timeout" if $timeout;
 
 	# -A : ignore cache
 	my $ignore = $target->{vars}{ignore_cache};
@@ -111,7 +123,7 @@ sub proto_args {
 		unless defined $ignore;
 	$ignore = 1 
 		if (defined $ignore and $ignore ne "no" 
-			and $ignore != 0);
+			and $ignore ne "0");
 	push @args, "-A" if $ignore and not exists $self->{_disabled}{A};
 
 	# -a : force cache to revalidate the data
@@ -119,7 +131,7 @@ sub proto_args {
 	$revalidate = $self->{properties}{revalidate_data} 
 		unless defined $revalidate;
 	$revalidate= 1 if (defined $revalidate and $revalidate ne "no" 
-		and $revalidate != 0);
+		and $revalidate ne "0");
 	push @args, "-a" if $revalidate and not exists $self->{_disabled}{a};
 
 	return @args;
@@ -129,13 +141,13 @@ sub test_usage {
 	my $self = shift;
 	my $bin = $self->{properties}{binary};
 	croak("Your echoping binary doesn't support HTTP")
-		if `$bin -h/ foo 2>&1` =~ /(invalid option|not compiled|usage)/i;
-	if (`$bin -a -h/ foo 2>&1` =~ /(invalid option|not compiled|usage)/i) {
+		if `$bin -h/ 127.0.0.1 2>&1` =~ /(invalid option|not compiled|usage)/i;
+	if (`$bin -a -h/ 127.0.0.1 2>&1` =~ /(invalid option|not compiled|usage)/i) {
 		carp("Note: your echoping binary doesn't support revalidating (-a), disabling it");
 		$self->{_disabled}{a} = undef;
 	}
 
-	if (`$bin -A -h/ foo 2>&1` =~ /(invalid option|not compiled|usage)/i) {
+	if (`$bin -A -h/ 127.0.0.1 2>&1` =~ /(invalid option|not compiled|usage)/i) {
 		carp("Note: your echoping binary doesn't support ignoring cache (-A), disabling it");
 		$self->{_disabled}{A} = undef;
 	}

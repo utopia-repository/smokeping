@@ -1,0 +1,62 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 40_fping-packet.dpatch by Jose Carlos Garcia Sogo <jsogo@debian.org>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: No description.
+
+@DPATCH@
+diff -urNad smokeping-1.34/lib/probes/base.pm /tmp/dpep.tZStPt/smokeping-1.34/lib/probes/base.pm
+--- smokeping-1.34/lib/probes/base.pm	2004-05-11 09:23:20.000000000 +0200
++++ /tmp/dpep.tZStPt/smokeping-1.34/lib/probes/base.pm	2004-12-20 23:18:51.000000000 +0100
+@@ -29,6 +29,7 @@
+     my $this   = shift;
+     my $class   = ref($this) || $this;
+     my $self = { properties => shift, cfg => shift, 
++    name => shift,
+     targets => {}, rtts => {}, addrlookup => {}};
+     bless $self, $class;
+     return $self;
+@@ -145,9 +146,7 @@
+ 
+ sub do_log {
+         my $self = shift;
+-        my $name = ref $self;
+-        $name =~ s/^probes:://;
+-        Smokeping::do_log("$name:", @_);
++        Smokeping::do_log("$self->{name}:", @_);
+ }
+ 
+ sub report {
+diff -urNad smokeping-1.34/lib/Smokeping.pm /tmp/dpep.tZStPt/smokeping-1.34/lib/Smokeping.pm
+--- smokeping-1.34/lib/Smokeping.pm	2004-12-01 01:26:11.000000000 +0100
++++ /tmp/dpep.tZStPt/smokeping-1.34/lib/Smokeping.pm	2004-12-20 23:18:51.000000000 +0100
+@@ -37,11 +37,13 @@
+     my $cfg = shift;
+     my %prbs;
+     foreach my $probe (keys %{$cfg->{Probes}}) {
+-        eval 'require probes::'.$probe;
++        my $modname = $cfg->{Probes}{$probe}{module};
++        $modname = $probe unless defined $modname;
++        eval 'require probes::'.$modname;
+         die "$@\n" if $@;
+-	eval '$prbs{$probe} = probes::'.$probe.'->new( $cfg->{Probes}{${probe}},$cfg );';
++	eval '$prbs{$probe} = probes::'.$modname.'->new( $cfg->{Probes}{${probe}},$cfg,$probe );';
+         die "$@\n" if $@;
+-        die "Failed to load Probe $probe\n" unless defined $prbs{$probe};
++        die "Failed to load Probe $probe (module $modname)\n" unless defined $prbs{$probe};
+     }
+     return \%prbs;
+ };
+@@ -1611,9 +1613,10 @@
+ 		    "/$KEY_RE/" => {_doc => <<DOC,
+ Each module can take specific configuration information from this area. The jumble of letters above is a regular expression defining legal module names.
+ DOC
+-				    _vars => [ "/$KEYD_RE/" ],
++				    _vars => [ "module", "/$KEYD_RE/" ],
+ 				    "/$KEYD_RE/" => { _doc => 'Each module defines which
+-variables it wants to accept. So this expression here just defines legal variable names.'}
++variables it wants to accept. So this expression here just defines legal variable names.'},
++				    "module" => { _doc => 'The perl module that is to be loaded for this probe, if it isn\'t the same as the probe name.' },
+ 				   }
+ 		  },
+ 	Alerts  => {

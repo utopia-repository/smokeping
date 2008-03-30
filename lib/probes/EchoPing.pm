@@ -94,7 +94,16 @@ The "-p" echoping(1) option.
 
 =item tos
 
-The "-P" echoping option.
+The "-P" echoping(1) option.
+
+=item ipversion
+
+The IP protocol used. Possible values are "4" and "6". 
+Passed to echoping(1) as the "-4" or "-6" options.
+
+=item extraopts
+
+Any extra options specified here will be passed unmodified to echoping(1).
 
 =back
 
@@ -166,9 +175,9 @@ sub test_usage {
 	my %arghash = %$arghashref;
 
 	for my $feature (keys %arghash) {
-		if (`$bin $arghash{$feature} 1 foo 2>&1` =~ /invalid option|usage/i) {
+		if (`$bin $arghash{$feature} 1 127.0.0.1 2>&1` =~ /invalid option|usage/i) {
 			push @unsupported, $feature;
-			carp("Note: your echoping doesn't support the $feature feature (option $arghash{$feature}), disabling it") unless $ENV{SERVER_SOFTWARE};
+			$self->do_log("Note: your echoping doesn't support the $feature feature (option $arghash{$feature}), disabling it");
 		}
 	}
 	map { delete $arghashref->{$_} } @unsupported;
@@ -201,6 +210,10 @@ sub make_args {
 		$val = $self->{properties}{$_} unless defined $val;
 		push @args, ($arghash{$_}, $val) if defined $val;
 	}
+	push @args, $self->ipversion_arg($target);
+	push @args, $self->{properties}{extraopts} if exists $self->{properties}{extraopts};
+	push @args, $target->{vars}{extraopts} if exists $target->{vars}{extraopts};
+
 	return @args;
 }
 
@@ -210,7 +223,7 @@ sub count_args {
 	my $self = shift;
 	my $count = shift;
 
-	$count = $self->{cfg}{Database}{pings} unless defined $count;
+	$count = $self->pings() unless defined $count;
 	return ("-n", $count);
 }
 
@@ -228,15 +241,30 @@ sub udp_arg {
 
 	my $udp = $target->{vars}{udp};
 	$udp = $self->{properties}{udp} unless defined $udp;
-	push @args, "-u" if (defined $udp and $udp ne "no" and $udp != 0);
+	push @args, "-u" if (defined $udp and $udp ne "no" and $udp ne "0");
 
 	return @args;
+}
+
+sub ipversion_arg {
+	my $self = shift;
+	my $target = shift;
+	my $vers = $target->{vars}{ipversion};
+	$vers = $self->{properties}{ipversion} unless defined $vers;
+	if (defined $vers and $vers =~ /^([46])$/) {
+		return ("-" . $1);
+	} else {
+		$self->do_log("Invalid `ipversion' value: $vers") if defined $vers;
+		return ();
+	}
 }
 
 sub make_commandline {
 	my $self = shift;
 	my $target = shift;
 	my $count = shift;
+
+	$count |= $self->pings($target);
 
 	my @args = $self->make_args($target);
 	my $host = $self->make_host($target);
@@ -254,27 +282,22 @@ sub pingone {
 
 	my $cmd = join(" ", @cmd);
 
-	carp "executing cmd $cmd\n" if $self->debug;
+	$self->do_debug("executing cmd $cmd");
 
 	my @times;
 
-	open(P, "$cmd 2>&1 |") or croak("fork: $!");
-
+	open(P, "$cmd 2>&1 |") or carp("fork: $!");
+	
 	# what should we do with error messages?
+	my $echoret;
 	while (<P>) {
+		$echoret .= $_;
 		/^Elapsed time: (\d+\.\d+) seconds/ and push @times, $1;
 	}
 	close P;
-	
+	carp "WARNING: $cmd was not happy: $echoret\n" if $?;
 	# carp("Got @times") if $self->debug;
 	return sort { $a <=> $b } @times;
-}
-
-sub debug {
-	my $self = shift;
-	my $newval = shift;
-	$self->{debug} = $newval if defined $newval;
-	return $self->{debug};
 }
 
 1;

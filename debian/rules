@@ -11,17 +11,39 @@ export DH_COMPAT=3
 PACKAGE=smokeping
 TMP=$(CURDIR)/debian/$(PACKAGE)
 
-build:
+include /usr/share/dpatch/dpatch.make
+
+update-docs:
+	
+	# Regenerate docs from sources.
+	# This target is intended to be used to make up 70_regenerate_docs patch, and
+	# should be run after applying every patch that is numbered below this, with
+	# 'dpatch-edit-patch 70_regenerate_docs 68_typos'
+	
+	$(MAKE) ref
+		
+	-rm -f *tmp
+	-rm -f doc/*tmp
+
+	rm -f doc/smokeping.pod
+	ln -sf ../bin/smokeping.dist doc/smokeping.pod
+
+build: patch-stamp
+	$(MAKE) man html txt
 	touch build-stamp
 
-clean:
+clean: clean-patched unpatch
+
+clean-patched:
 	dh_testdir
 	dh_testroot
 	
 	dh_clean
 
 	rm -f build-stamp
-
+	
+	rm -f doc/smokeping.pod
+	ln -sf ../bin/smokeping.dist doc/smokeping.pod
 
 install: build
 	dh_testdir
@@ -29,17 +51,17 @@ install: build
 	dh_clean -k
 	dh_installdirs
 
-	install -d $(TMP)/usr/lib/perl5/smokeping
-	install -m 644 lib/*pm $(TMP)/usr/lib/perl5/smokeping
-	rm -f $(TMP)/usr/lib/perl5/smokeping/BER.pm
-	rm -f $(TMP)/usr/lib/perl5/smokeping/SNMP_*
+	install -d $(TMP)/usr/share/perl5/smokeping
+	install -m 644 lib/*pm $(TMP)/usr/share/perl5/smokeping
+	rm -f $(TMP)/usr/share/perl5/smokeping/BER.pm
+	rm -f $(TMP)/usr/share/perl5/smokeping/SNMP_*
 			        
 
-	install -d $(TMP)/usr/lib/perl5/smokeping/probes
-	install -m 644 lib/probes/*pm $(TMP)/usr/lib/perl5/smokeping/probes
+	install -d $(TMP)/usr/share/perl5/smokeping/probes
+	install -m 644 lib/probes/*pm $(TMP)/usr/share/perl5/smokeping/probes
 
-	install -d $(TMP)/usr/lib/perl5/smokeping/ISG
-	install -m 644 lib/ISG/*pm $(TMP)/usr/lib/perl5/smokeping/ISG/
+	install -d $(TMP)/usr/share/perl5/smokeping/ISG
+	install -m 644 lib/ISG/*pm $(TMP)/usr/share/perl5/smokeping/ISG/
 
 	install -d $(TMP)/usr/sbin/
 	install -m 755 bin/smokeping.dist $(TMP)/usr/sbin/smokeping
@@ -48,61 +70,52 @@ install: build
 	install -m 644 etc/basepage.html.dist $(TMP)/etc/smokeping/basepage.html
 	install -m 644 etc/config.dist $(TMP)/etc/smokeping/config
 	install -m 644 etc/smokemail.dist $(TMP)/etc/smokeping/smokemail
-	install -m 644 etc/config-echoping.dist $(TMP)/etc/smokeping/config-echoping
 
 	install -d $(TMP)/usr/lib/cgi-bin
 	install htdocs/smokeping.cgi.dist $(TMP)/usr/lib/cgi-bin/smokeping.cgi
 
 	install -d $(TMP)/usr/share/doc/$(PACKAGE)/html
-	install -d $(TMP)/usr/share/doc/$(PACKAGE)/pod
+	install -d $(TMP)/usr/share/doc/$(PACKAGE)/html/probes
+	install -d $(TMP)/usr/share/doc/$(PACKAGE)/html/matchers
+	install -d $(TMP)/usr/share/doc/$(PACKAGE)/txt
+	install -d $(TMP)/usr/share/doc/$(PACKAGE)/txt/probes
+	install -d $(TMP)/usr/share/doc/$(PACKAGE)/txt/matchers
 	install -d $(TMP)/usr/share/man/man1
+	install -d $(TMP)/usr/share/man/man3
 
-	install -m 644 doc/*.txt $(TMP)/usr/share/doc/$(PACKAGE)
-	install -m 644 doc/*.html $(TMP)/usr/share/doc/$(PACKAGE)/html
-	install -m 644 doc/*.pod $(TMP)/usr/share/doc/$(PACKAGE)/pod
-	install -m 644 doc/*.1 $(TMP)/usr/share/man/man1
-
-	# We have to rename base.1 manpage
-	mv $(TMP)/usr/share/man/man1/base.pm.1 $(TMP)/usr/share/man/man1/smokeping-base.pm.1
+	install -m 644 doc/*.txt $(TMP)/usr/share/doc/$(PACKAGE)/txt
+	install -m 644 doc/probes/*.txt $(TMP)/usr/share/doc/$(PACKAGE)/txt/probes
+	install -m 644 doc/matchers/*.txt $(TMP)/usr/share/doc/$(PACKAGE)/txt/matchers
 	
+	install -m 644 doc/*.html $(TMP)/usr/share/doc/$(PACKAGE)/html
+	install -m 644 doc/probes/*.html $(TMP)/usr/share/doc/$(PACKAGE)/html/probes
+	install -m 644 doc/matchers/*.html $(TMP)/usr/share/doc/$(PACKAGE)/html/matchers
+	install -m 644 etc/config-echoping.dist $(TMP)/usr/share/doc/$(PACKAGE)/config-echoping.example
+	
+	install -m 644 doc/*.1 $(TMP)/usr/share/man/man1
+	mv $(TMP)/usr/share/man/man1/ParseConfig.pm.1 $(TMP)/usr/share/man/man3/ISG::ParseConfig.pm.3
+	
+	for i in doc/probes/*.1 ; do install -m 644 $$i $(TMP)/usr/share/man/man3/probes::`echo $$i | cut -d/ -f3 | cut -d. -f1,2`.3 ; done
+	
+	for i in doc/matchers/*.1 ; do install -m 644 $$i $(TMP)/usr/share/man/man3/matchers::`echo $$i | cut -d/ -f3 | cut -d. -f1,2`.3 ; done
+			
+        # Move man pages in section 3 from .1 files to .3
+	for i in `grep ".TH\ " $(TMP)/usr/share/man/man1/*.1 | grep "\ 3\ " | cut -f 1,2 -d .` ; do mv $$i.pm.1 $$i.pm.3 ; done
+	mv $(TMP)/usr/share/man/man1/*.3 $(TMP)/usr/share/man/man3/
 
-# Build architecture-independent files here.
 binary-indep: build install
 	dh_testdir
 	dh_testroot
-#	dh_installdebconf	
 	dh_installdocs
-#	dh_installexamples
-#	dh_installmenu
-#	dh_installlogrotate
-#	dh_installemacsen
-#	dh_installpam
-#	dh_installmime
 	dh_installinit
-#	dh_installcron
 	dh_installman
-#	dh_installinfo
-#	dh_undocumented
 	dh_installchangelogs CHANGES
 	dh_link
 	dh_strip
 	dh_compress
 	dh_fixperms
-	
-	# We need smokeping.cgi to be able to write in
-	# /var/www/smokeping
-	chown www-data.www-data $(TMP)/var/www/smokeping
-	chmod 4755 $(TMP)/var/www/smokeping
-	
-	chown www-data.www-data $(TMP)/usr/sbin/smokeping
-	chmod 4754 $(TMP)/usr/sbin/smokeping
-	
-	chown www-data.www-data $(TMP)/var/run/smokeping
-	
-#	dh_makeshlibs
+	dh_perl
 	dh_installdeb
-	dh_perl /usr/sbin /usr/lib/perl5/smokeping/
-#	dh_shlibdeps
 	dh_gencontrol
 	dh_md5sums
 	dh_builddeb

@@ -1,0 +1,274 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 68_typos.dpatch by Jose Carlos Garcia Sogo <jsogo@debian.org>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: s/secion/section/g and other typos in sources 
+## DP: Documentation will be fixed in 70_regenerated_docs, which
+## DP: should be created using update-docs target in debian/rules
+## DP: Please, read debian/rules to see how it works.
+
+@DPATCH@
+diff -urNad smokeping-1.34/bin/smokeping.dist /tmp/dpep.kLpndb/smokeping-1.34/bin/smokeping.dist
+--- smokeping-1.34/bin/smokeping.dist	2004-12-31 00:28:36.000000000 +0100
++++ /tmp/dpep.kLpndb/smokeping-1.34/bin/smokeping.dist	2004-12-31 00:28:36.000000000 +0100
+@@ -48,18 +48,18 @@
+ The B<smokeping> tool is the commandline part of the SmokePing system. Its
+ main function is to run as a daemon and send Pings to all the Targets you
+ have specified in the Config file. When you call B<smokeping> without
+-arguments it will start as a daemon and do it's work.
++arguments it will start as a daemon and do its work.
+ 
+ If called with an argument, then further functions can be activated, as seen
+ in the Synopsis above. The B<--email> function is explained in the
+ documentation on the config file.
+ 
+-The B<--filter> option allows you to run the deamon on a big config file,
++The B<--filter> option allows you to run the daemon on a big config file,
+ but have the config file filtered and only measure the entries that pass the
+ filter. This is useful for remote measurement. Run Smokeping with two
+ exclusive filters in two locations and rsync the rrds back to the webserver
+-host where you run the cgi. Filters act on the secion names in the config
+-file. Multiple secions names are concatenated with B</> like path names:
++host where you run the cgi. Filters act on the section names in the config
++file. Multiple section names are concatenated with B</> like path names:
+ 
+  *** targets ***
+  + A
+@@ -81,7 +81,7 @@
+  --filter=/A
+ 
+ Filters follow regular expression syntax. The are always anchored at the tip of the string.
+-by adding a B<!> to the front of the filter string you negate it. Matching entreis will be excluded from monitoring.
++by adding a B<!> to the front of the filter string you negate it. Matching entries will be excluded from monitoring.
+ Multiple B<--filter> arguments can be used to assemble complex filters:
+ 
+   --filter=/A --filter=/B
+diff -urNad smokeping-1.34/lib/probes/FPing.pm /tmp/dpep.kLpndb/smokeping-1.34/lib/probes/FPing.pm
+--- smokeping-1.34/lib/probes/FPing.pm	2004-12-31 00:28:36.000000000 +0100
++++ /tmp/dpep.kLpndb/smokeping-1.34/lib/probes/FPing.pm	2004-12-31 00:28:36.000000000 +0100
+@@ -18,7 +18,7 @@
+ your system yet, you can get it from http://www.fping.com/.
+ 
+ The (optional) packetsize option lets you configure the packetsize for the pings sent.
+-The FPing manpage has the following to say on this toppic:
++The FPing manpage has the following to say on this topic:
+ 
+ Number of bytes of ping data to send.  The minimum size (normally 12) allows
+ room for the data that fping needs to do its work (sequence number,
+@@ -64,10 +64,10 @@
+ 
+         if ($return =~ m/bytes, ([0-9.]+)\sms\s+.*\n.*\n.*:\s+([0-9.]+)/ and $1 > 0){
+             $self->{pingfactor} = 1000 * $2/$1;
+-            print "### fping seems to report in ", $1/$2, " miliseconds\n";
++            print "### fping seems to report in ", $1/$2, " milliseconds\n";
+         } else {
+             $self->{pingfactor} = 1000; # Gives us a good-guess default
+-            print "### assuming you are using an fping copy reporting in miliseconds\n";
++            print "### assuming you are using an fping copy reporting in milliseconds\n";
+         }
+     };
+ 
+diff -urNad smokeping-1.34/lib/Smokeping.pm /tmp/dpep.kLpndb/smokeping-1.34/lib/Smokeping.pm
+--- smokeping-1.34/lib/Smokeping.pm	2004-12-30 23:35:59.000000000 +0100
++++ /tmp/dpep.kLpndb/smokeping-1.34/lib/Smokeping.pm	2004-12-31 00:28:36.000000000 +0100
+@@ -85,7 +85,7 @@
+     my $snmp = snmpget_ident $address;
+     if (-r "$file.adr" and not -z "$file.adr"){
+ 	open(D, "<$file.adr")
+-	  or return "Error: opening $file.adr $!\n";            
++	  or return "Error opening $file.adr: $!\n";            
+ 	chomp($prevaddress = <D>);
+ 	close D;
+     }
+@@ -144,7 +144,7 @@
+         next unless ref $x eq 'HASH';
+ 	if ($x->{type} eq 'matcher'){
+ 	    $x->{pattern} =~ /(\S+)\((.+)\)/
+-		or die "ERROR Alert $al pattern entry '$_' is invalid\n";
++		or die "ERROR: Alert $al pattern entry '$_' is invalid\n";
+ 	    my $matcher = $1;
+ 	    my $arg = $2;
+ 	    eval 'require matchers::'.$matcher;
+@@ -183,7 +183,7 @@
+ 		    $extra .= "-\$i$_";
+ 		};
+ 		/^(==|!=|<|>|<=|>=|\*)(\d+(?:\.\d*)?|U|S|\d*\*)(%?)$/
+-		    or die "ERROR Alert $al pattern entry '$_' is invalid\n";
++		    or die "ERROR: Alert $al pattern entry '$_' is invalid\n";
+ 		my $op = $1;
+ 		my $value = $2;
+ 		my $perc = $3;
+@@ -358,8 +358,8 @@
+     my $path = shift;
+     my $email = ($tree->{email} || shift);
+     my $print;
+-    die "ERROR: smokemail propery in $cfgfile not specified\n" unless defined $cfg->{General}{smokemail};
+-    die "ERROR: cgiurl propery in $cfgfile not specified\n" unless defined $cfg->{General}{cgiurl};
++    die "ERROR: smokemail property in $cfgfile not specified\n" unless defined $cfg->{General}{smokemail};
++    die "ERROR: cgiurl property in $cfgfile not specified\n" unless defined $cfg->{General}{cgiurl};
+     if (defined $tree->{host} and $tree->{host} eq 'DYNAMIC' ) {
+         if ( not defined $email ) {
+             warn "WARNING: No email address defined for $path\n";
+@@ -392,7 +392,7 @@
+             rename "$cfgfile.new", $cfgfile;
+ 	    close C;
+             my $body;
+-	    open SMOKE, $cfg->{General}{smokemail} or die "ERROR: can't read $cfg->{General}{smokemail}\n";
++	    open SMOKE, $cfg->{General}{smokemail} or die "ERROR: can't read $cfg->{General}{smokemail}: $!\n";
+ 	    while (<SMOKE>){
+ 		s/<##PATH##>/$usepath/ig;
+ 		s/<##SECRET##>/$secret/ig;
+@@ -878,7 +878,7 @@
+ 			print LOG time,"\t",join("\t",split /:/,$updatestring),"\n";
+ 			close LOG;
+ 		} else {
+-			do_log "Warning: faild to open $file for logging\n";
++			do_log "Warning: failed to open $file for logging: $!\n";
+ 		}
+             }	
+             RRDs::update ( $name.".rrd", 
+@@ -909,7 +909,7 @@
+                         next;
+                     };
+                     if ( ref $cfg->{Alerts}{$_}{sub} ne 'CODE' ) {
+-       		        do_log "WARNING: Alert '$_' did not resolve to s Sub Ref. Skipping\n";
++       		        do_log "WARNING: Alert '$_' did not resolve to a Sub Ref. Skipping\n";
+                         next;
+                     };
+ 		    if ( &{$cfg->{Alerts}{$_}{sub}}($x) ){
+@@ -1046,7 +1046,7 @@
+ Some information about this entry which does NOT get displayed on the web.
+ DOC
+       rawlog => { _doc => <<DOC,
+-Log the raw data, gatherd for this target, in tab separated format, to a file with the
++Log the raw data, gathered for this target, in tab separated format, to a file with the
+ same basename as the corresponding RRD file. Use posix strftime to format the timestamp to be
+ put into the file name. The filename is built like this:
+ 
+@@ -1085,8 +1085,8 @@
+ DOC
+ 	"/$KEYD_RE/" => { _doc => <<DOC },
+ Should be found in the documentation of the
+-corresponding probe. The values get propagated. If a child
+-node uses the same Probe as the parent.
++corresponding probe. The values get propagated to those child
++nodes using the same Probe.
+ DOC
+     };
+ 
+@@ -1269,7 +1269,7 @@
+ 	 _doc => <<DOC,
+ Describes the properties of the round robin database for storing the
+ SmokePing data. Note that it is not possible to edit existing RRDs
+-by changeing the entries in the cfg file.
++by changing the entries in the cfg file.
+ DOC
+ 	 
+ 	 step   => 
+@@ -1605,7 +1605,7 @@
+         }, #present
+ 	Probes => { _sections => [ "/$KEY_RE/" ],
+ 		    _doc => <<DOC,
+-The Probes Section configures Probe modules. Probe modules integrate an external ping command into SmokePing. Check the documentation of the Ping module for configuration details.
++The Probes Section configures Probe modules. Probe modules integrate an external ping command into SmokePing. Check the documentation of the FPing module for configuration details.
+ DOC
+ 
+ 		    "/$KEY_RE/" => {_doc => <<DOC,
+@@ -1632,14 +1632,14 @@
+ The patterns are numbers prefixed with an operator indicating the type
+ of comparison required for a match.
+ 
+-The following RTT pattern detects if a targets RTT goes from constanty
++The following RTT pattern detects if a target's RTT goes from constantly
+ below 10ms to constantly 100ms and more:
+ 
+  old ------------------------------> new
+  <10,<10,<10,<10,<10,>10,>100,>100,>100
+ 
+-Loss patterns work in a similar way, only that the
+-loss is defined in percentage off the total of packets total sent packets.
++Loss patterns work in a similar way, except that the loss is defined as the
++percentage the total number of received packets is of the total number of packets sent.
+ 
+  old ------------------------------> new
+  ==0%,==0%,==0%,==0%,>20%,>20%,>=20%
+@@ -1657,11 +1657,11 @@
+ 
+  ==S,>20%,>20%
+ 
+-to detect lines that have been loosing more than 20% of the packets for two
+-periodes after startup.
++to detect lines that have been losing more than 20% of the packets for two
++periods after startup.
+ 
+-Sometimes it may be that conditions occure at irregular intervals. But still
+-you only want to throw an aert if they occure several times within a certain
++Sometimes it may be that conditions occur at irregular intervals. But still
++you only want to throw an alert if they occur several times within a certain
+ amount of times. The operator B<*X*> will ignore up to I<X> values and still
+ let the pattern match:
+ 
+@@ -1690,13 +1690,13 @@
+ 
+  +rttdetect
+  type = rtt
+- # in milli seconds
++ # in milliseconds
+  pattern = <10,<10,<10,<10,<10,<100,>100,>100,>100
+- comment = routing mesed up again ?
++ comment = routing messed up again ?
+ 
+  +rttbadstart
+  type = rtt
+- # in milli seconds
++ # in milliseconds
+  pattern = ==S,==U
+  comment = offline at startup
+   
+@@ -1716,7 +1716,7 @@
+ 			_re => '(\|.+|.+@\S+|snpp:)',
+ 			_re_error => 'put an email address or the name of a program here',
+ 		      },
+-	     from => { doc => 'whom should alerts appear to be coming from ?',
++	     from => { doc => 'who should alerts appear to be coming from ?',
+ 		       _re => '.+@\S+',
+ 		       _re_error => 'put an email address here',
+ 		      },
+@@ -1734,7 +1734,7 @@
+                      _re_error => 'Use loss or rtt'
+ 			  },
+    	 	  pattern => {
+- 		     _doc => "a comma separated list of comparison operators and numbers. rtt patterns are in milli seconds, loss patterns are in percent",
++ 		     _doc => "a comma separated list of comparison operators and numbers. rtt patterns are in milliseconds, loss patterns are in percents",
+ 		     _re => '(?:([^,]+)(,[^,]+)*|\S+\(.+\s)',
+  		     _re_error => 'Could not parse pattern or matcher',
+ 		             },
+@@ -1761,7 +1761,7 @@
+ A comma separated list of alerts to check for this target. The alerts have
+ to be setup in the Alerts section. Alerts are inherited by child nodes. Use
+ an empty alerts definition to remove inherited alerts from the current target
+-and ist childern.
++and its children.
+ 
+ DOC
+ 		   title => { _doc => <<DOC },
+@@ -1952,7 +1952,7 @@
+ ParseConfig module. Read all about it in L<ISG::ParseConfig>.
+ 
+ The Configuration file has a tree-like structure with section headings at
+-various levels. It also contains variable assignements and tables.
++various levels. It also contains variable assignments and tables.
+ 
+ ${e}head1 REFERENCE
+ 
+@@ -2274,8 +2274,8 @@
+ 
+ =head1 OVERVIEW
+ 
+-Almost all SmokePing functionality sitts in this Module.
+-The programs B<smokeping> and B<smokeping.cgi> are merily
++Almost all SmokePing functionality sits in this Module.
++The programs B<smokeping> and B<smokeping.cgi> are merely
+ figure heads allowing to hardcode some pathnames.
+ 
+ If you feel like documenting what is happening within this library you are

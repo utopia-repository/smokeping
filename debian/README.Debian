@@ -2,7 +2,7 @@
   After installing the package you have to edit the file 
  /etc/smokeping/config to set your preferences. You can follow
  the example provided (note that the domain names are bogus to 
- avoid all the people who installs the package DoSing the same 
+ avoid all the people who install the package DoSing the same 
  servers).
 
   You can also edit the file /etc/smokeping/basepage.html to suit 
