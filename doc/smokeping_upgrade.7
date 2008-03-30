@@ -129,7 +129,7 @@
 .\" ========================================================================
 .\"
 .IX Title "SMOKEPING_UPGRADE 7"
-.TH SMOKEPING_UPGRADE 7 "2007-12-01" "2.3.0" "SmokePing"
+.TH SMOKEPING_UPGRADE 7 "2008-01-23" "2.3.2" "SmokePing"
 .SH "NAME"
 smokeping_upgrade \- Notes on upgrading Smokeping
 .SH "OVERVIEW"
@@ -152,6 +152,15 @@ to it from the previous release.
 An official list of changes with each release can be found in the \s-1CHANGES\s0
 file in the Smokeping distribution. This document tries to complement
 that with upgrading instructions etc.
+.SH "2.2.x to 2.3.x"
+.IX Header "2.2.x to 2.3.x"
+2.3.0 is mainly about new features. Check out the reference documentation on
+\&\fIhierarchies\fR and the target properties \fIparents\fR, \fIhidden\fR and
+\&\fInomasterpoll\fR.
+.PP
+The only thing you have to take a look at, is the file \fIbasepage.html.dist\fR
+which got some new css properties. Without them the results of the new
+filter function will look quite bad.
 .SH "2.1.x to 2.2.0"
 .IX Header "2.1.x to 2.2.0"
 .Sh "\s-1LWP\s0 Dependency"

@@ -1,3 +1,14 @@
+smokeping (2.3.2-1) unstable; urgency=low
+
+  * New upstream release. (Closes: #468928)
+  * Add support for the new "slave mode", enabled via 
+    /etc/default/smokeping. (Closes: #466533)
+  * debian/patches/30_slave_piddir.dpatch: Add an optional 
+    --pid-dir option to specify the pid directory when running as a slave.
+  * Change the doc-base section to Network/Monitoring. Thanks, lintian.
+
+ -- Niko Tyni <ntyni@debian.org>  Tue, 04 Mar 2008 23:36:58 +0200
+
 smokeping (2.3.0-1) unstable; urgency=low
 
   * New upstream version.

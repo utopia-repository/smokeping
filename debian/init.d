@@ -29,16 +29,57 @@ DESC="latency logger daemon"
 CONFIG=/etc/smokeping/config
 PIDFILE=/var/run/smokeping/$NAME.pid
 DAEMON_USER=smokeping
+DEFAULTS=/etc/default/smokeping
+MODE=master
+DAEMON_ARGS=""
 
 # Check whether the binary is still present:
 test -f "$DAEMON" || exit 0
 
+# source defaults for master vs. slave mode
+if [ -f "$DEFAULTS" ]
+then
+    . "$DEFAULTS"
+fi
+
+check_slave() {
+    if [ "$MODE" != "slave" ]
+    then
+        return
+    fi
+    if [ -z "$SHARED_SECRET" ]
+    then
+        log_progress_msg "(missing \$SHARED_SECRET setting)"
+        log_end_msg 6 # program is not configured
+        exit 6
+    fi
+    if [ ! -r "$SHARED_SECRET" ]
+    then
+        log_progress_msg "(invalid \$SHARED_SECRET setting)"
+        log_end_msg 2 # invalid or excess argument(s)
+        exit 2
+    fi
+    if [ -z "$MASTER_URL" ]
+    then
+        log_progress_msg "(missing \$MASTER_URL setting)"
+        log_end_msg 6 # program is not configured
+        exit 6
+    fi
+    DAEMON_ARGS="--master-url $MASTER_URL --shared-secret $SHARED_SECRET"
+    if [ -n "$SLAVE_NAME" ]
+    then
+        DAEMON_ARGS="$DAEMON_ARGS --slave-name $SLAVE_NAME"
+    fi
+    DAEMON_ARGS="$DAEMON_ARGS --cache-dir /var/lib/smokeping"
+    DAEMON_ARGS="$DAEMON_ARGS --pid-dir /var/run/smokeping"
+}
+
 check_config () {
     # Check whether the configuration file is available
-    if [ ! -r "$CONFIG" ]
+    if [ ! -r "$CONFIG" ] && [ "$MODE" = "master" ]
     then
         log_progress_msg "($CONFIG does not exist)"
-        log_end_msg 6 
+        log_end_msg 6 # program is not configured
         exit 6
     fi
 }
@@ -47,6 +88,7 @@ case "$1" in
     start)
     log_daemon_msg "Starting $DESC" $NAME
     check_config
+    check_slave
     set +e
     pidofproc "$DAEMON" > /dev/null
     STATUS=$?
@@ -67,6 +109,7 @@ case "$1" in
     set +e
     start-stop-daemon --start --quiet --exec $DAEMON --oknodo \
                             --chuid $DAEMON_USER --pidfile $PIDFILE \
+                            -- $DAEMON_ARGS \
                             | logger -p daemon.notice -t $NAME
     STATUS=$?
     set -e

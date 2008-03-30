@@ -21,7 +21,7 @@ DDEESSCCRRIIPPTTIIOONN
          sorter = StdDev(entries=>4)
          title = Top StdDev
          menu = Std Deviation
-         format = Stdandard Deviation %f
+         format = Standard Deviation %f
 
 CCOOPPYYRRIIGGHHTT
        Copyright (c) 2007 by OETIKER+PARTNER AG. All rights reserved.
@@ -46,4 +46,4 @@ AAUUTTHHOORR
 
 
 
-2.3.0                             2007-01-15     Smokeping::sorters::StdDev(3)
+2.3.2                             2008-02-04     Smokeping::sorters::StdDev(3)
