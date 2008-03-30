@@ -27,6 +27,7 @@ SSYYNNOOPPSSIISS
         password = mypass
         pings = 5
         port = 389
+        scope = one
         start_tls = 1
         timeout = 10
         version = 3
@@ -50,6 +51,7 @@ SSYYNNOOPPSSIISS
         password = mypass
         pings = 5
         port = 389
+        scope = one
         start_tls = 1
         timeout = 10
         version = 3
@@ -180,6 +182,14 @@ VVAARRIIAABBLLEESS
 
            Example value: 389
 
+       scope
+           The scope of the query. Can be either 'base', 'one' or
+           'sub'. See the Net::LDAP documentation for details.
+
+           Example value: one
+
+           Default value: sub
+
        start_tls
            If true, encrypt the connection with the starttls com-
            mand. Disabled by default.
@@ -212,4 +222,4 @@ BBUUGGSS
 
 
 
-2.0.4                       2005-10d-o1c2::Smokeping::probes::LDAP(3)
+2.0.5                       2005-11d-o1c4::Smokeping::probes::LDAP(3)

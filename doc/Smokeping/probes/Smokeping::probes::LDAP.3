@@ -129,7 +129,7 @@
 .\" ========================================================================
 .\"
 .IX Title "doc::Smokeping::probes::LDAP 3"
-.TH doc::Smokeping::probes::LDAP 3 "2005-10-12" "2.0.4" "SmokePing"
+.TH doc::Smokeping::probes::LDAP 3 "2005-11-14" "2.0.5" "SmokePing"
 .SH "NAME"
 Smokeping::probes::LDAP \- a LDAP probe for SmokePing
 .SH "OVERVIEW"
@@ -152,7 +152,7 @@ Measures \s-1LDAP\s0 search latency for SmokePing
 \& step = 300
 .Ve
 .PP
-.Vb 12
+.Vb 13
 \& # The following variables can be overridden in each target section
 \& attrs = uid,someotherattr
 \& base = dc=foo,dc=bar
@@ -162,6 +162,7 @@ Measures \s-1LDAP\s0 search latency for SmokePing
 \& password = mypass
 \& pings = 5
 \& port = 389
+\& scope = one
 \& start_tls = 1
 \& timeout = 10
 \& version = 3
@@ -183,7 +184,7 @@ Measures \s-1LDAP\s0 search latency for SmokePing
 \& # [...]
 .Ve
 .PP
-.Vb 14
+.Vb 15
 \& + mytarget
 \& # probe = LDAP # if the default probe is something else
 \& host = my.host
@@ -195,6 +196,7 @@ Measures \s-1LDAP\s0 search latency for SmokePing
 \& password = mypass
 \& pings = 5
 \& port = 389
+\& scope = one
 \& start_tls = 1
 \& timeout = 10
 \& version = 3
@@ -311,6 +313,13 @@ Example value: 5
 \&\s-1TCP\s0 port of the \s-1LDAP\s0 server
 .Sp
 Example value: 389
+.IP "scope" 4
+.IX Item "scope"
+The scope of the query. Can be either 'base', 'one' or 'sub'. See the Net::LDAP documentation for details.
+.Sp
+Example value: one
+.Sp
+Default value: sub
 .IP "start_tls" 4
 .IX Item "start_tls"
 If true, encrypt the connection with the starttls command. Disabled by default.

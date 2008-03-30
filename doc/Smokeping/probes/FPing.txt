@@ -17,7 +17,6 @@ SSYYNNOOPPSSIISS
         packetsize = 5000
         pings = 20
         step = 300
-        timeout = 1.5
 
         # [...]
 
@@ -128,21 +127,9 @@ VVAARRIIAABBLLEESS
 
            Example value: 300
 
-       timeout
-           The fping "-t" parameter, but in (possibly fractional)
-           seconds rather than milliseconds, for consistency with
-           other Smokeping probes. From _f_p_i_n_g(1):
-
-           Initial target timeout. In the default mode, this is
-           the  amount  of  time  that ping waits for a response
-           to its first request.  Successive timeouts are multi-
-           plied by the backoff factor.
-
-           Example value: 1.5
-
 AAUUTTHHOORRSS
        Tobias Oetiker <tobi@oetiker.ch>
 
 
 
-2.0.4                       2005-1d0o-c1:2:Smokeping::probes::FPing(3)
+2.0.5                       2005-1d1o-c1:4:Smokeping::probes::FPing(3)

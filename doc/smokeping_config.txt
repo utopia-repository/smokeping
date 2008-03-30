@@ -1980,7 +1980,6 @@ RREEFFEERREENNCCEE
                ppaacckkeettssiizzee
                ppiinnggss
                sstteepp
-               ttiimmeeoouutt
 
                Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
@@ -2019,11 +2018,6 @@ RREEFFEERREENNCCEE
                        here.
 
                    sstteepp
-                       This variable _i_n_h_e_r_i_t_s its value from the
-                       parent section if nothing is specified
-                       here.
-
-                   ttiimmeeoouutt
                        This variable _i_n_h_e_r_i_t_s its value from the
                        parent section if nothing is specified
                        here.
@@ -2044,7 +2038,6 @@ RREEFFEERREENNCCEE
                ppaacckkeettssiizzee
                ppiinnggss
                sstteepp
-               ttiimmeeoouutt
 
                Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
@@ -2083,11 +2076,6 @@ RREEFFEERREENNCCEE
                        here.
 
                    sstteepp
-                       This variable _i_n_h_e_r_i_t_s its value from the
-                       parent section if nothing is specified
-                       here.
-
-                   ttiimmeeoouutt
                        This variable _i_n_h_e_r_i_t_s its value from the
                        parent section if nothing is specified
                        here.
@@ -2228,6 +2216,11 @@ RREEFFEERREENNCCEE
                ppoorrtt
                     (This variable can be overridden target-specifically in the Targets section.)
 
+               ssccooppee
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+                   Default value: scope = sub
+
                ssttaarrtt__ttllss
                     (This variable can be overridden target-specifically in the Targets section.)
 
@@ -2306,6 +2299,13 @@ RREEFFEERREENNCCEE
                        This variable _i_n_h_e_r_i_t_s its value from the
                        parent section if nothing is specified
                        here.
+
+                   ssccooppee
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: scope = sub
 
                    ssttaarrtt__ttllss
                        This variable _i_n_h_e_r_i_t_s its value from the
@@ -2463,7 +2463,6 @@ RREEFFEERREENNCCEE
                rrhhoosstt _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
                rruusseerr
                sstteepp
-               ttiimmeeoouutt
 
                Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
@@ -2517,11 +2516,6 @@ RREEFFEERREENNCCEE
                        here.
 
                    sstteepp
-                       This variable _i_n_h_e_r_i_t_s its value from the
-                       parent section if nothing is specified
-                       here.
-
-                   ttiimmeeoouutt
                        This variable _i_n_h_e_r_i_t_s its value from the
                        parent section if nothing is specified
                        here.
@@ -2769,12 +2763,12 @@ RREEFFEERREENNCCEE
         pattern = >0%,*12*,>0%,*12*,>0%
         comment = detected loss 3 times over the last two hours
 
-
         +rttdetect
         type = rtt
         # in milliseconds
         pattern = <10,<10,<10,<10,<10,<100,>100,>100,>100
         comment = routing messed up again ?
+
 
         +rttbadstart
         type = rtt
@@ -3165,8 +3159,8 @@ RREEFFEERREENNCCEE
                    This variable _i_n_h_e_r_i_t_s its value from the par-
                    ent section if nothing is specified here.
 
-               ttooss This variable _i_n_h_e_r_i_t_s its value from the
-                   parent section if nothing is specified here.
+               ttooss This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
 
            (End of dynamical grammar changes for variable "probe"
            example value "CiscoRTTMonTcpConnect".)
@@ -3297,8 +3291,8 @@ RREEFFEERREENNCCEE
                    This variable _i_n_h_e_r_i_t_s its value from the par-
                    ent section if nothing is specified here.
 
-               ttooss This variable _i_n_h_e_r_i_t_s its value from the
-                   parent section if nothing is specified here.
+               ttooss This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
 
                uuddpp This variable _i_n_h_e_r_i_t_s its value from the par-
                    ent section if nothing is specified here.
@@ -3627,8 +3621,8 @@ RREEFFEERREENNCCEE
                    ent section if nothing is specified here.
 
                iippvveerrssiioonn
-                   This variable _i_n_h_e_r_i_t_s its value from the
-                   parent section if nothing is specified here.
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
 
                ppiinnggss
                    This variable _i_n_h_e_r_i_t_s its value from the par-
@@ -3710,6 +3704,7 @@ RREEFFEERREENNCCEE
            ppaasssswwoorrdd
            ppiinnggss
            ppoorrtt
+           ssccooppee
            ssttaarrtt__ttllss
            ttiimmeeoouutt
            vveerrssiioonn
@@ -3750,6 +3745,10 @@ RREEFFEERREENNCCEE
                    This variable _i_n_h_e_r_i_t_s its value from the par-
                    ent section if nothing is specified here.
 
+               ssccooppee
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
                ssttaarrtt__ttllss
                    This variable _i_n_h_e_r_i_t_s its value from the par-
                    ent section if nothing is specified here.
@@ -3759,8 +3758,8 @@ RREEFFEERREENNCCEE
                    ent section if nothing is specified here.
 
                vveerrssiioonn
-                   This variable _i_n_h_e_r_i_t_s its value from the
-                   parent section if nothing is specified here.
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
 
            (End of dynamical grammar changes for variable "probe"
            example value "LDAP".)
@@ -3908,4 +3907,4 @@ AAUUTTHHOORR
 
 
 
-2.0.4                       2005-10-12        SMOKEPING_CONFIG(5)
+2.0.5                       2005-11-14        SMOKEPING_CONFIG(5)

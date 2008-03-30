@@ -21,7 +21,6 @@ SSYYNNOOPPSSIISS
         rhost = my.pinger.host # mandatory
         ruser = foo
         step = 300
-        timeout = 1.5
 
         # [...]
 
@@ -145,18 +144,6 @@ VVAARRIIAABBLLEESS
 
            Example value: 300
 
-       timeout
-           The fping "-t" parameter, but in (possibly fractional)
-           seconds rather than milliseconds, for consistency with
-           other Smokeping probes. From _f_p_i_n_g(1):
-
-           Initial target timeout. In the default mode, this is
-           the  amount  of  time  that ping waits for a response
-           to its first request.  Successive timeouts are multi-
-           plied by the backoff factor.
-
-           Example value: 1.5
-
 AAUUTTHHOORRSS
         Luis F Balbinot <hades@inf.ufrgs.br>
 
@@ -190,4 +177,4 @@ BBUUGGSS
 
 
 
-2.0.4                      d2o0c0:5:-S1m0o-k1e2ping::probes::RemoteFPing(3)
+2.0.5                      d2o0c0:5:-S1m1o-k1e4ping::probes::RemoteFPing(3)

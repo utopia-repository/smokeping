@@ -2797,8 +2797,6 @@ Default value: mininterval = 0.01
 
 </dt><dt><strong><strong>step</strong></strong><br />
 
-</dt><dt><strong><strong>timeout</strong></strong><br />
-
 </dt></dl>
 <p>Syntax changes for subsection <strong>/[-_0-9a-zA-Z]+/</strong></p>
 <p>The following new variables are valid:</p>
@@ -2843,12 +2841,6 @@ This variable <em>inherits</em> its value from the parent section if nothing is 
 
 <p></p>
 </dd><dt><strong><strong>step</strong></strong><br />
-
-</dt><dd>
-This variable <em>inherits</em> its value from the parent section if nothing is specified here.
-
-<p></p>
-</dd><dt><strong><strong>timeout</strong></strong><br />
 
 </dt><dd>
 This variable <em>inherits</em> its value from the parent section if nothing is specified here.
@@ -2879,8 +2871,6 @@ Default value: mininterval = 0.01
 
 </dt><dt><strong><strong>step</strong></strong><br />
 
-</dt><dt><strong><strong>timeout</strong></strong><br />
-
 </dt></dl>
 <p>Syntax changes for subsection <strong>/[-_0-9a-zA-Z]+/</strong></p>
 <p>The following new variables are valid:</p>
@@ -2925,12 +2915,6 @@ This variable <em>inherits</em> its value from the parent section if nothing is 
 
 <p></p>
 </dd><dt><strong><strong>step</strong></strong><br />
-
-</dt><dd>
-This variable <em>inherits</em> its value from the parent section if nothing is specified here.
-
-<p></p>
-</dd><dt><strong><strong>timeout</strong></strong><br />
 
 </dt><dd>
 This variable <em>inherits</em> its value from the parent section if nothing is specified here.
@@ -3140,6 +3124,15 @@ Default value: forks = 5
 <pre>
  (This variable can be overridden target-specifically in the Targets section.)</pre>
 
+</dd><dt><strong><a name="item_scope"><strong>scope</strong></a></strong><br />
+
+</dt><dd>
+<pre>
+ (This variable can be overridden target-specifically in the Targets section.)</pre>
+
+</dd><dd>
+<p>Default value: scope = sub</p>
+
 </dd><dt><strong><a name="item_start_tls"><strong>start_tls</strong></a></strong><br />
 
 </dt><dd>
@@ -3241,6 +3234,15 @@ This variable <em>inherits</em> its value from the parent section if nothing is 
 
 </dt><dd>
 This variable <em>inherits</em> its value from the parent section if nothing is specified here.
+
+<p></p>
+</dd><dt><strong><strong>scope</strong></strong><br />
+
+</dt><dd>
+This variable <em>inherits</em> its value from the parent section if nothing is specified here.
+
+</dd><dd>
+<p>Default value: scope = sub</p>
 
 <p></p>
 </dd><dt><strong><strong>start_tls</strong></strong><br />
@@ -3464,8 +3466,6 @@ Default value: mininterval = 0.01
 
 </dt><dt><strong><strong>step</strong></strong><br />
 
-</dt><dt><strong><strong>timeout</strong></strong><br />
-
 </dt></dl>
 <p>Syntax changes for subsection <strong>/[-_0-9a-zA-Z]+/</strong></p>
 <p>The following new variables are valid:</p>
@@ -3528,12 +3528,6 @@ This variable <em>inherits</em> its value from the parent section if nothing is 
 
 <p></p>
 </dd><dt><strong><strong>step</strong></strong><br />
-
-</dt><dd>
-This variable <em>inherits</em> its value from the parent section if nothing is specified here.
-
-<p></p>
-</dd><dt><strong><strong>timeout</strong></strong><br />
 
 </dt><dd>
 This variable <em>inherits</em> its value from the parent section if nothing is specified here.
@@ -5152,6 +5146,8 @@ The following new variables are valid:
 
 </dt><dt><strong><strong>port</strong></strong><br />
 
+</dt><dt><strong><strong>scope</strong></strong><br />
+
 </dt><dt><strong><strong>start_tls</strong></strong><br />
 
 </dt><dt><strong><strong>timeout</strong></strong><br />
@@ -5205,6 +5201,12 @@ This variable <em>inherits</em> its value from the parent section if nothing is 
 
 <p></p>
 </dd><dt><strong><strong>port</strong></strong><br />
+
+</dt><dd>
+This variable <em>inherits</em> its value from the parent section if nothing is specified here.
+
+<p></p>
+</dd><dt><strong><strong>scope</strong></strong><br />
 
 </dt><dd>
 This variable <em>inherits</em> its value from the parent section if nothing is specified here.

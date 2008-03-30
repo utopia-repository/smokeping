@@ -26,6 +26,7 @@ Measures LDAP search latency for SmokePing
  password = mypass
  pings = 5
  port = 389
+ scope = one
  start_tls = 1
  timeout = 10
  version = 3
@@ -49,6 +50,7 @@ Measures LDAP search latency for SmokePing
  password = mypass
  pings = 5
  port = 389
+ scope = one
  start_tls = 1
  timeout = 10
  version = 3
@@ -184,6 +186,14 @@ Example value: 5
 TCP port of the LDAP server
 
 Example value: 389
+
+=item scope
+
+The scope of the query. Can be either 'base', 'one' or 'sub'. See the Net::LDAP documentation for details.
+
+Example value: one
+
+Default value: sub
 
 =item start_tls
 

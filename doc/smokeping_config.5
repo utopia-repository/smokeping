@@ -129,7 +129,7 @@
 .\" ========================================================================
 .\"
 .IX Title "SMOKEPING_CONFIG 5"
-.TH SMOKEPING_CONFIG 5 "2005-10-12" "2.0.4" "SmokePing"
+.TH SMOKEPING_CONFIG 5 "2005-11-14" "2.0.5" "SmokePing"
 .SH "NAME"
 smokeping_config \- Reference for the SmokePing Config File
 .SH "OVERVIEW"
@@ -2148,8 +2148,6 @@ Default value: mininterval = 0.01
 .IX Item "pings"
 .IP "\fBstep\fR" 4
 .IX Item "step"
-.IP "\fBtimeout\fR" 4
-.IX Item "timeout"
 .RE
 .RS 4
 .PD
@@ -2180,9 +2178,6 @@ This variable \fIinherits\fR its value from the parent section if nothing is spe
 This variable \fIinherits\fR its value from the parent section if nothing is specified here.
 .IP "\fBstep\fR" 4
 .IX Item "step"
-This variable \fIinherits\fR its value from the parent section if nothing is specified here.
-.IP "\fBtimeout\fR" 4
-.IX Item "timeout"
 This variable \fIinherits\fR its value from the parent section if nothing is specified here.
 .RE
 .RS 4
@@ -2214,8 +2209,6 @@ Default value: mininterval = 0.01
 .IX Item "pings"
 .IP "\fBstep\fR" 4
 .IX Item "step"
-.IP "\fBtimeout\fR" 4
-.IX Item "timeout"
 .RE
 .RS 4
 .PD
@@ -2246,9 +2239,6 @@ This variable \fIinherits\fR its value from the parent section if nothing is spe
 This variable \fIinherits\fR its value from the parent section if nothing is specified here.
 .IP "\fBstep\fR" 4
 .IX Item "step"
-This variable \fIinherits\fR its value from the parent section if nothing is specified here.
-.IP "\fBtimeout\fR" 4
-.IX Item "timeout"
 This variable \fIinherits\fR its value from the parent section if nothing is specified here.
 .RE
 .RS 4
@@ -2415,6 +2405,13 @@ Default value: mininterval = 1
 .Vb 1
 \& (This variable can be overridden target-specifically in the Targets section.)
 .Ve
+.IP "\fBscope\fR" 4
+.IX Item "scope"
+.Vb 1
+\& (This variable can be overridden target-specifically in the Targets section.)
+.Ve
+.Sp
+Default value: scope = sub
 .IP "\fBstart_tls\fR" 4
 .IX Item "start_tls"
 .Vb 1
@@ -2479,6 +2476,11 @@ This variable \fIinherits\fR its value from the parent section if nothing is spe
 .IP "\fBport\fR" 4
 .IX Item "port"
 This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBscope\fR" 4
+.IX Item "scope"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.Sp
+Default value: scope = sub
 .IP "\fBstart_tls\fR" 4
 .IX Item "start_tls"
 This variable \fIinherits\fR its value from the parent section if nothing is specified here.
@@ -2649,8 +2651,6 @@ Default value: mininterval = 0.01
 .IX Item "ruser"
 .IP "\fBstep\fR" 4
 .IX Item "step"
-.IP "\fBtimeout\fR" 4
-.IX Item "timeout"
 .RE
 .RS 4
 .PD
@@ -2690,9 +2690,6 @@ This variable \fIinherits\fR its value from the parent section if nothing is spe
 This variable \fIinherits\fR its value from the parent section if nothing is specified here.
 .IP "\fBstep\fR" 4
 .IX Item "step"
-This variable \fIinherits\fR its value from the parent section if nothing is specified here.
-.IP "\fBtimeout\fR" 4
-.IX Item "timeout"
 This variable \fIinherits\fR its value from the parent section if nothing is specified here.
 .RE
 .RS 4
@@ -4041,6 +4038,8 @@ The following new variables are valid:
 .IX Item "pings"
 .IP "\fBport\fR" 4
 .IX Item "port"
+.IP "\fBscope\fR" 4
+.IX Item "scope"
 .IP "\fBstart_tls\fR" 4
 .IX Item "start_tls"
 .IP "\fBtimeout\fR" 4
@@ -4078,6 +4077,9 @@ This variable \fIinherits\fR its value from the parent section if nothing is spe
 This variable \fIinherits\fR its value from the parent section if nothing is specified here.
 .IP "\fBport\fR" 4
 .IX Item "port"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBscope\fR" 4
+.IX Item "scope"
 This variable \fIinherits\fR its value from the parent section if nothing is specified here.
 .IP "\fBstart_tls\fR" 4
 .IX Item "start_tls"

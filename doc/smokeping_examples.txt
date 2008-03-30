@@ -584,4 +584,4 @@ SSEEEE AALLSSOO
 
 
 
-2.0.4                       2005-10-12      SMOKEPING_EXAMPLES(7)
+2.0.5                       2005-11-14      SMOKEPING_EXAMPLES(7)

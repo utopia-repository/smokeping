@@ -27,7 +27,7 @@ use Smokeping::RRDtools;
 
 # globale persistent variables for speedy
 use vars qw($cfg $probes $VERSION $havegetaddrinfo $cgimode);
-$VERSION="2.000004";
+$VERSION="2.000005";
 
 # we want opts everywhere
 my %opt;
@@ -106,7 +106,7 @@ sub lnk ($$) {
     if ($q->isa('dummyCGI')) {
 	return $path . ".html";
     } else {
-	return ($q->script_name() || '') . "?target=" . $path;
+	return $cfg->{General}->{cgiurl} . "?target=" . $path;
     }
 }
 
@@ -670,17 +670,17 @@ sub findmax ($$) {
 }
 
 sub smokecol ($) {
-    my $count = ( shift )- 2 ;
-    return [] unless $count > 0;
+    my $count = shift;
+    return [] unless $count > 2;
     my $half = $count/2;
     my @items;
     for (my $i=$count; $i > $half; $i--){
 	my $color = int(190/$half * ($i-$half))+50;
-	push @items, "AREA:cp".($i+2)."#".(sprintf("%02x",$color) x 3);
+	push @items, "AREA:cp".($i)."#".(sprintf("%02x",$color) x 3);
     };
-    for (my $i=int($half); $i >= 0; $i--){
-	my $color = int(190/$half * ($half - $i))+64;
-	push @items, "AREA:cp".($i+2)."#".(sprintf("%02x",$color) x 3);
+    for (my $i=int($half); $i > 0; $i--){
+	my $color = int(190/$half * ($half - $i + 1))+64;
+	push @items, "AREA:cp".($i)."#".(sprintf("%02x",$color) x 3);
     };
     return \@items;
 }
@@ -734,7 +734,7 @@ sub get_detail ($$$$){
                 unless -d  $cfg->{General}{imgcache}.$dir;
 	
     }
-    my $rrd = $cfg->{General}{datadir}."/".$dir."/${file}.rrd";
+    my $rrd = $cfg->{General}{datadir}.$dir."/${file}.rrd";
 
     my $imgbase;
     my $imghref;
@@ -999,7 +999,7 @@ sub display_webpage($$){
        {
 	menu => target_menu($cfg->{Targets},
 			    [@$open], #copy this because it gets changed
-			    ($q->script_name() || '')."?target="),
+			    $cfg->{General}->{cgiurl}."?target="),
 	title => $tree->{title},
 	remark => ($tree->{remark} || ''),
 	overview => get_overview( $cfg,$q,$tree,$open ),
@@ -1109,7 +1109,7 @@ sub update_rrds($$$$$) {
                         next;
                     };
                     my $prevmatch = $tree->{prevmatch}{$_} || 0;
-                    my $match = &{$cfg->{Alerts}{$_}{sub}}($x);
+                    my $match = &{$cfg->{Alerts}{$_}{sub}}($x) || 0; # Avgratio returns undef
                     my $edgetrigger = $cfg->{Alerts}{$_}{edgetrigger} eq 'yes';
                     my $what;
                     if ($edgetrigger and $prevmatch != $match) {

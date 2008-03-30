@@ -1,3 +1,20 @@
+2005/11/14 -- released version 2.0.5
+
+* remove the FPing 'timeout' variable, since it never really did anything
+  -- niko
+* use the 'cgiurl' variable from the 'General' section for all CGI self-refering 
+  links -- niko, from Christian Hammers <ch .*debian.org> (Debian bug #339019)
+* Curl.pm: don't take '0' for 'true' with the 'ssl2' or 'insecure_ssl' options
+  -- niko, reported by Michael McCarn <mmccarn *sierracorp.us>
+* add the 'scope' Net::LDAP search option to the LDAP probe
+  -- niko, from Seppo Syrjänen <seppo.syrjanen *helsinki.fi>
+* make the Curl probe compatible with Perl 5.6
+  -- niko, reported by Ben Eisenbraun <bene *klatsch.org>
+* get rid of 'Use of uninitialized value' messages when using the Avgratio matcher
+  and 'edgetrigger' -- niko, reported by John L Hoo <jhoo *antapex.ca>
+* include the smallest ping value in the graphs too
+  -- niko, from ChunjingHan <chjhan *cstnet.cn>
+
 2005/10/12 -- released version 2.0.4
 
 * avoid creating new RRD files as the user running 'smokeping --reload'
