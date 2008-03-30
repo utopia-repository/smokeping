@@ -22,7 +22,8 @@ update-docs:
 	-rm -f *tmp
 	-rm -f doc/*tmp
 
-build: patch-stamp
+build: patch-stamp build-stamp
+build-stamp:
 	$(MAKE) man html txt rename-man
 	touch build-stamp
 
@@ -36,7 +37,7 @@ clean-patched:
 
 	rm -f build-stamp
 	
-install: build
+install: build-stamp
 	dh_testdir
 	dh_testroot
 	dh_clean -k

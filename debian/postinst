@@ -25,7 +25,7 @@ set -e
 #     `abort-remove' or `abort-deconfigure'.
 
 case "$1" in
-    configure)
+    configure|reconfigure)
 
     if [ ! -z "$2" ]
     then

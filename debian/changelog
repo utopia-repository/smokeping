@@ -1,3 +1,18 @@
+smokeping (2.0.8-2) unstable; urgency=low
+
+  * debian/patches/10_path_changes.dpatch: fix the library path.
+    (Closes: #363439)
+  * debian/control: move dpatch to Build-Depends, as it's
+    required for the 'clean' target.
+  * debian/po/cs.po: include a Czech translation from Miroslav Kure.
+    (Closes: #363118)
+  * debian/po/fr.po: include a French translation from Olivier Trichet.
+    (Closes: #364165)
+  * debian/rules: don't run the 'build' target twice.
+  * debian/postinst: accept 'reconfigure' as the first parameter.
+
+ -- Niko Tyni <ntyni@iki.fi>  Sun, 23 Apr 2006 20:33:29 +0300
+
 smokeping (2.0.8-1) unstable; urgency=low
 
   [ Niko Tyni ]
