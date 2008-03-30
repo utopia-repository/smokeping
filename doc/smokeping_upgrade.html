@@ -15,10 +15,17 @@
 
 	<li><a href="#name">NAME</a></li>
 	<li><a href="#overview">OVERVIEW</a></li>
+	<li><a href="#2_0_5_to_2_0_6">2.0.5 to 2.0.6</a></li>
+	<ul>
+
+		<li><a href="#cgi_selfreferring_links__again_">CGI self-referring links (again)</a></li>
+	</ul>
+
 	<li><a href="#2_0_4_to_2_0_5">2.0.4 to 2.0.5</a></li>
 	<ul>
 
 		<li><a href="#fping_smokeping__probes__fping"><a href="./Smokeping/probes/FPing.html">FPing</a></a></li>
+		<li><a href="#cgi_selfreferring_links">CGI self-referring links</a></li>
 	</ul>
 
 	<li><a href="#2_0_1_to_2_0_2">2.0.1 to 2.0.2</a></li>
@@ -70,6 +77,20 @@ that with upgrading instructions etc.</p>
 <p>
 </p>
 <hr />
+<h1><a name="N2_0_5_to_2_0_6">2.0.5 to 2.0.6</a></h1>
+<p>
+</p>
+<h2><a name="cgi_selfreferring_links__again_">CGI self-referring links (again)</a></h2>
+<p>The way Smokeping creates the self-referring links was changed once more.
+See the section under '2.0.4 to 2.0.5' for a description of the previous
+change.</p>
+<p>The behaviour is now customizable via the <code>linkstyle</code> variable in the
+<code>General</code> section of the configuration file. The default is now <code>relative</code>,
+creating links like &lt;a&nbsp;href=``?foo=bar''&gt;. I hope this works for everybody,
+but if it doesn't, see <a href="././smokeping_config.html">the smokeping_config manpage</a> for the alternatives.</p>
+<p>
+</p>
+<hr />
 <h1><a name="N2_0_4_to_2_0_5">2.0.4 to 2.0.5</a></h1>
 <p>
 </p>
@@ -79,6 +100,14 @@ It was used to give the <code>fping</code> command the <code>-t</code> parameter
 but as this parameter is only effective in <code>fping</code>'s <em>default</em> mode,
 while Smokeping uses the <em>counting</em> mode (<code>-c</code>), it never actually
 did anything.</p>
+<p>
+</p>
+<h2><a name="cgi_selfreferring_links">CGI self-referring links</a></h2>
+<p>The way Smokeping creates the self-referring links was changed. The old
+behaviour used the script name but not the host part, resulting in links
+like &lt;a&nbsp;href=``/path/smokeping.cgi?foo=bar''&gt;. The new behaviour uses the
+<code>cgiurl</code> variable: the links are always absolute like 
+&lt;a&nbsp;href=``http://some.host/path/smokeping.cgi?foo=bar''&gt;.</p>
 <p>
 </p>
 <hr />

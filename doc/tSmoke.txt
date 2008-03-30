@@ -92,4 +92,4 @@ AAUUTTHHOORR
 
 
 
-2.0.5                       2005-11-14             TSMOKE.DIST(1)
+2.0.8                       2006-04-14             TSMOKE.DIST(1)

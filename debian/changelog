@@ -1,3 +1,31 @@
+smokeping (2.0.8-1) unstable; urgency=low
+
+  [ Niko Tyni ]
+  * New upstream version.
+    + makes all the CGI self-referring links relative and provides a
+      new variable to configure this behaviour. (Closes: #351783)
+  * debian/postrm:
+    + only call deluser if the smokeping user exists
+    + redirect all deluser output to stderr so debconf won't get confused
+  * Delay init.d startup so the SSH probe can test against localhost
+    (Closes: #349832)
+  * Upgrade to debhelper compatibility level 5.
+  * Move debhelper from Build-Depends-Indep to Build-Depends, since it's
+    required in the 'clean' target.
+  * (po-)debconfize the postinst note on failed upgrade
+    + debian/po/fi.po: include a Finnish translation
+    + debian/po/es.po: include a Spanish translation
+    + debian/rules: add a dh_installdebconf call
+    + debian/control: Build-Depend on po-debconf, Depend on ${misc:Depends}
+
+  [ Jose Carlos Garcia Sogo ]
+  * Integrate Niko work in latest versions. Again, a big thanks goes to him.
+  * debian/patches:
+     + 10_path_changes: included again. Also change tSmoke.dist paths.
+     + 20_conffile: included again.
+
+ -- Jose Carlos Garcia Sogo <jsogo@debian.org>  Sun, 16 Apr 2006 13:03:43 +0200
+
 smokeping (2.0.5-2) unstable; urgency=low
 
   * Merge smokeping--debian--2.0.5 branch when preparing the package:

@@ -19,6 +19,7 @@ SSYYNNOOPPSSIISS
         # The following variables can be overridden in each target section
         lookup = www.example.org
         pings = 5
+        server = ns1.someisp.net
 
         # [...]
 
@@ -33,6 +34,7 @@ SSYYNNOOPPSSIISS
         host = my.host
         lookup = www.example.org
         pings = 5
+        server = ns1.someisp.net
 
 DDEESSCCRRIIPPTTIIOONN
        Integrates dig as a probe into smokeping. The variable
@@ -113,6 +115,11 @@ VVAARRIIAABBLLEESS
 
            Example value: 5
 
+       server
+           Name of the dns server to use.
+
+           Example value: ns1.someisp.net
+
 AAUUTTHHOORRSS
         Igor Petrovski <pigor@myrealbox.com>,
         Carl Elkins <carl@celkins.org.uk>,
@@ -122,4 +129,4 @@ AAUUTTHHOORRSS
 
 
 
-2.0.5                       2005-11-d1o4c::Smokeping::probes::DNS(3)
+2.0.8                       2006-04-d1o4c::Smokeping::probes::DNS(3)

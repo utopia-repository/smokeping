@@ -129,7 +129,7 @@
 .\" ========================================================================
 .\"
 .IX Title "doc::Smokeping::probes::DNS 3"
-.TH doc::Smokeping::probes::DNS 3 "2005-11-14" "2.0.5" "SmokePing"
+.TH doc::Smokeping::probes::DNS 3 "2006-04-14" "2.0.8" "SmokePing"
 .SH "NAME"
 Smokeping::probes::DNS \- Name Service Probe for SmokePing
 .SH "SYNOPSIS"
@@ -150,10 +150,11 @@ Smokeping::probes::DNS \- Name Service Probe for SmokePing
 \& timeout = 15
 .Ve
 .PP
-.Vb 3
+.Vb 4
 \& # The following variables can be overridden in each target section
 \& lookup = www.example.org
 \& pings = 5
+\& server = ns1.someisp.net
 .Ve
 .PP
 .Vb 1
@@ -172,12 +173,13 @@ Smokeping::probes::DNS \- Name Service Probe for SmokePing
 \& # [...]
 .Ve
 .PP
-.Vb 5
+.Vb 6
 \& + mytarget
 \& # probe = DNS # if the default probe is something else
 \& host = my.host
 \& lookup = www.example.org
 \& pings = 5
+\& server = ns1.someisp.net
 .Ve
 .SH "DESCRIPTION"
 .IX Header "DESCRIPTION"
@@ -250,6 +252,11 @@ change this parameter afterwards, you'll have to delete the old \s-1RRD\s0
 files or somehow convert them.
 .Sp
 Example value: 5
+.IP "server" 4
+.IX Item "server"
+Name of the dns server to use.
+.Sp
+Example value: ns1.someisp.net
 .SH "AUTHORS"
 .IX Header "AUTHORS"
 .Vb 5

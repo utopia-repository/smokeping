@@ -5,9 +5,6 @@
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
-# This is the debhelper compatability version to use.
-export DH_COMPAT=3
-
 PACKAGE=smokeping
 TMP=$(CURDIR)/debian/$(PACKAGE)
 
@@ -104,7 +101,13 @@ binary-indep: build install
 	dh_testdir
 	dh_testroot
 	dh_installdocs
-	dh_installinit
+
+	dh_installdebconf
+
+	# We should start later than ssh (20), so the SSH probe can test against localhost.
+	# Just in case, delay initialization even after apache (91).
+	dh_installinit -- defaults 92 20
+
 	dh_installman
 	dh_installchangelogs CHANGES
 	dh_link

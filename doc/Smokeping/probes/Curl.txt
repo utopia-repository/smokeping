@@ -22,6 +22,8 @@ SSYYNNOOPPSSIISS
         agent = User-Agent: Lynx/2.8.4rel.1 libwww-FM/2.14 SSL-MM/1.4.1 OpenSSL/0.9.6c
         extraargs = -6 --head --user user:password
         extrare = / /
+        follow_redirects = yes
+        include_redirects = yes
         insecure_ssl = 1
         interface = eth0
         pings = 5
@@ -43,6 +45,8 @@ SSYYNNOOPPSSIISS
         agent = User-Agent: Lynx/2.8.4rel.1 libwww-FM/2.14 SSL-MM/1.4.1 OpenSSL/0.9.6c
         extraargs = -6 --head --user user:password
         extrare = / /
+        follow_redirects = yes
+        include_redirects = yes
         insecure_ssl = 1
         interface = eth0
         pings = 5
@@ -137,6 +141,26 @@ VVAARRIIAABBLLEESS
 
            Default value: / /
 
+       follow_redirects
+           If this variable is set to 'yes', curl will follow any
+           HTTP redirection steps (the '-L' option).  If set to
+           'no', HTTP Location: headers will not be followed. See
+           also 'include_redirects'.
+
+           Example value: yes
+
+           Default value: no
+
+       include_redirects
+           If this variable is set to 'yes', the measurement
+           result will include the time spent on following any
+           HTTP redirection steps. If set to 'no', only the last
+           step is measured. See also 'follow_redirects'.
+
+           Example value: yes
+
+           Default value: no
+
        insecure_ssl
            The "-k" _c_u_r_l(1) option. Accept SSL connections that
            don't have a secure certificate chain to a trusted CA.
@@ -205,4 +229,4 @@ SSEEEE AALLSSOO
 
 
 
-2.0.5                       2005-11d-o1c4::Smokeping::probes::Curl(3)
+2.0.8                       2006-04d-o1c4::Smokeping::probes::Curl(3)

@@ -1,0 +1,44 @@
+#
+#    Translators, if you are not familiar with the PO format, gettext
+#    documentation is worth reading, especially sections dedicated to
+#    this format, e.g. by running:
+#         info -n '(gettext)PO Files'
+#         info -n '(gettext)Header Entry'
+#
+#    Some information specific to po-debconf are available at
+#            /usr/share/doc/po-debconf/README-trans
+#         or http://www.debian.org/intl/l10n/po-debconf/README-trans
+#
+#    Developers do not need to manually edit POT or PO files.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: 2.0.8-1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-12-06 19:14+0000\n"
+"PO-Revision-Date: 2006-15-04 12:00:34+0200\n"
+"Last-Translator: Jose Carlos Garcia Sogo <jsogo@debian.org>\n"
+"Language-Team: es_ES <ES@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. Type: note
+#. Description
+#: ../templates:3
+msgid "Smokeping upgrade failed"
+msgstr "Falló la actualización de Smokeping"
+
+#. Type: note
+#. Description
+#: ../templates:3
+msgid ""
+"Your Smokeping configuration file /etc/smokeping/config is incompatible with "
+"this Smokeping version and could not be upgraded automatically. The "
+"Smokeping daemon could not be started. Please read smokeping_upgrade(7)."
+msgstr ""
+"Su fichero de configuración de Smokeping /etc/smokeping/config no es "
+"compatible con esta versión de Smokeping y no pudo ser actualizado "
+"automáticamente. El demonio Smokeping no pudo ser lanzado. Por favor "
+"lea la página de manual smokeping_upgrade(7)."

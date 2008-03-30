@@ -1,0 +1,192 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 20_conffile.dpatch by Jose Carlos Garcia Sogo <jsogo@debian.org>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: No description.
+
+@DPATCH@
+diff -urNad smokeping-2.0.8~/etc/config.dist smokeping-2.0.8/etc/config.dist
+--- smokeping-2.0.8~/etc/config.dist	2006-03-24 17:51:02.000000000 +0100
++++ smokeping-2.0.8/etc/config.dist	2006-04-16 13:01:48.000000000 +0200
+@@ -4,17 +4,27 @@
+ 
+ *** General ***
+ 
++################################################
++# DON'T TOUCH UNLESS YOU KNOW WHAT YOU'RE DOING
++# BETWEEN THESE MARKS!
++################################################
++sendmail = /usr/sbin/sendmail
++imgcache = /var/www/smokeping
++imgurl   = ../smokeping
++datadir  = /var/lib/smokeping
++piddir   = /var/run/smokeping
++smokemail = /etc/smokeping/smokemail
++tmail    = /etc/smokeping/tmail
++################################################
++# END OF DON'T TOUCH SECTION
++################################################
++
++
++# Please edit this to suit your installation
+ owner    = Joe Random
+ contact  = joe@some.place.xyz
++cgiurl   = http://put_here_your_domain/cgi-bin/smokeping.cgi
+ mailhost = smtp.mailhost.abc
+-sendmail = /usr/lib/sendmail
+-imgcache = /home/oetiker/public_html/.simg
+-imgurl   = ../.simg
+-datadir  = /home/oetiker/data/projects/AADJ-smokeping/dist/var
+-piddir  = /home/oetiker/data/projects/AADJ-smokeping/dist/var
+-cgiurl   = http://people.ee.ethz.ch/~oetiker/smokeping/smokeping.cgi
+-smokemail = /home/oetiker/data/projects/AADJ-smokeping/dist/etc/smokemail.dist
+-tmail = /home/oetiker/data/projects/AADJ-smokeping/dist/etc/tmail.dist
+ # specify this to get syslog logging
+ syslogfacility = local0
+ # each probe is now run in its own process
+@@ -66,7 +76,7 @@
+ 
+ *** Presentation ***
+ 
+-template = /home/oetiker/data/projects/AADJ-smokeping/dist/etc/basepage.html.dist
++template = /etc/smokeping/basepage.html
+ 
+ + overview 
+ 
+@@ -89,16 +99,31 @@
+ 
+ + FPing
+ 
+-binary = /usr/sepp/bin/fping
++binary = /usr/bin/fping
+ 
+ *** Targets ***
+ 
+ probe = FPing
+ 
++## You have to edit and uncomment all what you want below this.
++# Please, refer to smokeping_config man page for more info
++# The given adresses aren't real to avoid DoS.
++
+ menu = Top
+ title = Network Latency Grapher
+-remark = Welcome to the SmokePing website of xxx Company. \
+-         Here you will learn all about the latency of our network.
++remark = Welcome to the SmokePing website of 'A poorly \
++	mantained site running Debian.'
++
+++ Local
++
++menu = Local
++title = Local Network
++
++++ LocalMachine
++
++menu = Local Machine
++title = This own machine
++host = localhost
+ 
+ + World
+ 
+@@ -116,62 +141,62 @@
+ title =Swiss Connectivity
+ alerts = bigloss,someloss,startloss
+ 
+-++++ SBB
+-
+-menu = SBB/CFF/FFS
+-title =Swiss Federal Railways Webserver
+-host = www.railway-server.abc
+-
++# ++++ SBB
++#
++# menu = SBB/CFF/FFS
++# title =Swiss Federal Railways Webserver
++# host = www.railway-server.abc
+ 
+-++++ Tiscali
+ 
+-menu = Tiscali Web
+-title = Tiscali Webserver www.tiscali.abc
+-host = www.tiscali-web.abc
++# ++++ Tiscali
++#
++# menu = Tiscali Web
++# title = Tiscali Webserver www.tiscali.abc
++# host = www.tiscali-web.abc
+ 
+ +++ UK
+ 
+ menu = United Kingdom
+ title = United Kingdom
+ 
+-++++ UCL
+-
+-menu = UCL
+-title = UCL
+-host = www.ucl-abc.acc.uk
++# ++++ UCL
++#
++# menu = UCL
++# title = UCL
++# host = www.ucl-abc.acc.uk
+ 
+ ++ USA
+ 
+ menu = North America
+ title =North American Connectivity
+ 
+-+++ MIT
+-
+-menu = MIT
+-title = Massachusetts Institute of Technology Webserver
+-host = www.gurkoman.ybc
+-
+-+++ IU
+-
+-menu = IU
+-title = Indiana University
+-host = www.iu.ali
+-
+-+++ UCB
++# +++ MIT
+ 
+-menu = U. C. Berkeley
+-title = U. C. Berkeley Webserver
+-host = www.berkly.udi
++# menu = MIT
++# title = Massachusetts Institute of Technology Webserver
++# host = www.gurkoman.ybc
+ 
+-+++ UCSD
++# +++ IU
++# 
++# menu = IU
++# title = Indiana University
++# host = www.iu.ali
+ 
+-menu = U. C. San Diego
+-title = U. C. San Diego Webserver
+-host = www.ucsdddar.art
++# +++ UCB
++#
++# menu = U. C. Berkeley
++# title = U. C. Berkeley Webserver
++# host = www.berkly.udi
+ 
+-+++ Sun
++# +++ UCSD
++#
++# menu = U. C. San Diego
++# title = U. C. San Diego Webserver
++# host = www.ucsdddar.art
+ 
+-menu = Sun Microsystems
+-title = Sun Microsystems Webserver
+-host = www.sun-web.com
++# +++ Sun
++#
++# menu = Sun Microsystems
++# title = Sun Microsystems Webserver
++# host = www.sun-web.com
+ 

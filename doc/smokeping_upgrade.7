@@ -129,7 +129,7 @@
 .\" ========================================================================
 .\"
 .IX Title "SMOKEPING_UPGRADE 7"
-.TH SMOKEPING_UPGRADE 7 "2005-11-14" "2.0.5" "SmokePing"
+.TH SMOKEPING_UPGRADE 7 "2006-02-08" "2.0.8" "SmokePing"
 .SH "NAME"
 smokeping_upgrade \- Notes on upgrading Smokeping
 .SH "OVERVIEW"
@@ -152,6 +152,18 @@ to it from the previous release.
 An official list of changes with each release can be found in the \s-1CHANGES\s0
 file in the Smokeping distribution. This document tries to complement
 that with upgrading instructions etc.
+.SH "2.0.5 to 2.0.6"
+.IX Header "2.0.5 to 2.0.6"
+.Sh "\s-1CGI\s0 self-referring links (again)"
+.IX Subsection "CGI self-referring links (again)"
+The way Smokeping creates the self-referring links was changed once more.
+See the section under '2.0.4 to 2.0.5' for a description of the previous
+change.
+.PP
+The behaviour is now customizable via the \f(CW\*(C`linkstyle\*(C'\fR variable in the
+\&\f(CW\*(C`General\*(C'\fR section of the configuration file. The default is now \f(CW\*(C`relative\*(C'\fR,
+creating links like <a\ href=\*(L"?foo=bar\*(R">. I hope this works for everybody,
+but if it doesn't, see smokeping_config for the alternatives.
 .SH "2.0.4 to 2.0.5"
 .IX Header "2.0.4 to 2.0.5"
 .Sh "FPing"
@@ -161,6 +173,13 @@ It was used to give the \f(CW\*(C`fping\*(C'\fR command the \f(CW\*(C`\-t\*(C'\f
 but as this parameter is only effective in \f(CW\*(C`fping\*(C'\fR's \fIdefault\fR mode,
 while Smokeping uses the \fIcounting\fR mode (\f(CW\*(C`\-c\*(C'\fR), it never actually
 did anything.
+.Sh "\s-1CGI\s0 self-referring links"
+.IX Subsection "CGI self-referring links"
+The way Smokeping creates the self-referring links was changed. The old
+behaviour used the script name but not the host part, resulting in links
+like <a\ href=\*(L"/path/smokeping.cgi?foo=bar\*(R">. The new behaviour uses the
+\&\f(CW\*(C`cgiurl\*(C'\fR variable: the links are always absolute like 
+<a\ href=\*(L"http://some.host/path/smokeping.cgi?foo=bar\*(R">.
 .SH "2.0.1 to 2.0.2"
 .IX Header "2.0.1 to 2.0.2"
 .Sh "Edge-triggered alerts"

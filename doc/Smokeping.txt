@@ -41,4 +41,4 @@ AAUUTTHHOORR
 
 
 
-2.0.5                       2005-11-14               Smokeping(3)
+2.0.8                       2006-04-14               Smokeping(3)

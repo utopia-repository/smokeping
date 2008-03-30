@@ -54,7 +54,8 @@
  iosint = 10.33.22.11
  packetsize = 56
  pings = 5
- tos = 160</pre>
+ tos = 160
+ vrf = INTERNET</pre>
 <pre>
  # [...]</pre>
 <pre>
@@ -71,7 +72,8 @@
  iosint = 10.33.22.11
  packetsize = 56
  pings = 5
- tos = 160</pre>
+ tos = 160
+ vrf = INTERNET</pre>
 <p>
 </p>
 <hr />
@@ -207,6 +209,18 @@ MIB versions before IOS 12.0(3)T didn't support this parameter.
 </dd><dd>
 <p>Default value: 0</p>
 
+<p></p>
+</dd><dt><strong><a name="item_vrf">vrf</a></strong><br />
+
+</dt><dd>
+The the VPN name in which the RTT operation will be used. For regular RTT
+operation this field should not be configured. The agent
+will use this field to identify the VPN routing Table for
+this operation.
+
+</dd><dd>
+<p>Example value: INTERNET</p>
+
 <p></p></dd></dl>
 <p>
 </p>
@@ -246,7 +260,7 @@ If you want to be a bit more restrictive with SNMP write access to the router, t
 </p>
 <hr />
 <h1><a name="see_also">SEE ALSO</a></h1>
-<p><a href="http://people.ee.ethz.ch/~oetiker/webtools/smokeping/">http://people.ee.ethz.ch/~oetiker/webtools/smokeping/</a></p>
+<p><a href="http://oss.oetiker.ch/smokeping/">http://oss.oetiker.ch/smokeping/</a></p>
 <p><a href="http://www.switch.ch/misc/leinen/snmp/perl/">http://www.switch.ch/misc/leinen/snmp/perl/</a></p>
 <p>The best source for background info on SAA is Cisco's documentation on <a href="http://www.cisco.com">http://www.cisco.com</a> and the CISCO-RTTMON-MIB documentation, which is available at:
 <a href="ftp://ftp.cisco.com/pub/mibs/v2/CISCO-RTTMON-MIB.my">ftp://ftp.cisco.com/pub/mibs/v2/CISCO-RTTMON-MIB.my</a></p>

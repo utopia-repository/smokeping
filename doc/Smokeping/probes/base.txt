@@ -79,4 +79,4 @@ AAUUTTHHOORRSS
 
 
 
-2.0.5                       2005-11d-o1c4::Smokeping::probes::base(3)
+2.0.8                       2006-04d-o1c4::Smokeping::probes::base(3)

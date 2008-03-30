@@ -22,6 +22,7 @@ SSYYNNOOPPSSIISS
         packetsize = 56
         pings = 5
         tos = 160
+        vrf = INTERNET
 
         # [...]
 
@@ -39,6 +40,7 @@ SSYYNNOOPPSSIISS
         packetsize = 56
         pings = 5
         tos = 160
+        vrf = INTERNET
 
 DDEESSCCRRIIPPTTIIOONN
        A probe for smokeping, which uses the ciscoRttMon MIB
@@ -146,6 +148,13 @@ VVAARRIIAABBLLEESS
 
            Default value: 0
 
+       vrf The the VPN name in which the RTT operation will be
+           used. For regular RTT operation this field should not
+           be configured. The agent will use this field to iden-
+           tify the VPN routing Table for this operation.
+
+           Example value: INTERNET
+
 AAUUTTHHOORRSS
        Joerg.Kummer at Roche.com
 
@@ -202,7 +211,7 @@ BBUUGGSS
        out value hardcoded into this probe).
 
 SSEEEE AALLSSOO
-       <http://people.ee.ethz.ch/~oetiker/webtools/smokeping/>
+       <http://oss.oetiker.ch/smokeping/>
 
        <http://www.switch.ch/misc/leinen/snmp/perl/>
 
@@ -213,4 +222,4 @@ SSEEEE AALLSSOO
 
 
 
-2.0.5              doc::Smok2e0p0i5n-g1:1:-p1r4obes::CiscoRTTMonEchoICMP(3)
+2.0.8              doc::Smok2e0p0i6n-g0:4:-p1r4obes::CiscoRTTMonEchoICMP(3)

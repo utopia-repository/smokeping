@@ -177,7 +177,7 @@ BBUUGGSS
        out value hardcoded into this probe).
 
 SSEEEE AALLSSOO
-       <http://people.ee.ethz.ch/~oetiker/webtools/smokeping/>
+       <http://oss.oetiker.ch/smokeping/>
 
        <http://www.switch.ch/misc/leinen/snmp/perl/>
 
@@ -189,4 +189,4 @@ SSEEEE AALLSSOO
 
 
 
-2.0.5                   doc:2:0S0m5o-k1e1p-i1n4g::probes::CiscoRTTMonDNS(3)
+2.0.8                   doc:2:0S0m6o-k0e4p-i1n4g::probes::CiscoRTTMonDNS(3)

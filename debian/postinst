@@ -4,6 +4,7 @@
 # see: dh_installdeb(1)
 
 set -e
+. /usr/share/debconf/confmodule
 
 # summary of how this script can be called:
 #        * <postinst> `configure' <most-recently-configured-version>
@@ -30,7 +31,7 @@ case "$1" in
     then
       if dpkg --compare-versions $2 lt 1.12-2 ;
       then
-        echo "Moving rrd data files..."
+        # Move rrd data files
 	find /var/www/smokeping -type f -name '*.rrd' |
 	 while read F
 	 do
@@ -60,20 +61,20 @@ case "$1" in
       then
 	if grep -q PROBE_CONF /etc/smokeping/config
 	then
-	  echo "Upgrading configuration file..."
+	  # Upgrade the configuration file
 	  TMPFILE=/etc/smokeping/config.dpkg-save
 	  cp -f /etc/smokeping/config /etc/smokeping/config.dpkg-save
 	  grep -E -v '^[[:space:]]*\++[[:space:]]*PROBE_CONF' /etc/smokeping/config.dpkg-save > /etc/smokeping/config
 	fi
-	echo "Testing configuration file..."
+	# Test the configuration file
 	if ! smokeping --check 2>/dev/null # the user will get the same output later with start--stop--daemon
 	then
-	  echo "NOTE: your configuration file (/etc/smokeping/config) is incompatible"
-          echo "      with this Smokeping version and could not be upgraded automatically."
-	  echo "      Please read the smokeping_upgrade document."
+	  db_input high smokeping/upgrade-2.x-failed || true
+	  db_go || true
 	fi
       fi
     fi
+    db_stop
     
     getent passwd smokeping > /dev/null || \
       adduser --system --group --home /var/lib/smokeping --no-create-home --gecos "SmokePing daemon" smokeping

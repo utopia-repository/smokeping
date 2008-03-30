@@ -52,6 +52,8 @@
  agent = User-Agent: Lynx/2.8.4rel.1 libwww-FM/2.14 SSL-MM/1.4.1 OpenSSL/0.9.6c
  extraargs = -6 --head --user user:password
  extrare = / /
+ follow_redirects = yes
+ include_redirects = yes
  insecure_ssl = 1
  interface = eth0
  pings = 5
@@ -73,6 +75,8 @@
  agent = User-Agent: Lynx/2.8.4rel.1 libwww-FM/2.14 SSL-MM/1.4.1 OpenSSL/0.9.6c
  extraargs = -6 --head --user user:password
  extrare = / /
+ follow_redirects = yes
+ include_redirects = yes
  insecure_ssl = 1
  interface = eth0
  pings = 5
@@ -188,6 +192,33 @@ you can set this variable to a different value.
 
 </dd><dd>
 <p>Default value: / /</p>
+
+<p></p>
+</dd><dt><strong><a name="item_follow_redirects">follow_redirects</a></strong><br />
+
+</dt><dd>
+If this variable is set to 'yes', curl will follow any HTTP redirection steps (the '-L' option).
+If set to 'no', HTTP Location: headers will not be followed. See also 'include_redirects'.
+
+</dd><dd>
+<p>Example value: yes</p>
+
+</dd><dd>
+<p>Default value: no</p>
+
+<p></p>
+</dd><dt><strong><a name="item_include_redirects">include_redirects</a></strong><br />
+
+</dt><dd>
+If this variable is set to 'yes', the measurement result will include the time
+spent on following any HTTP redirection steps. If set to 'no', only the last
+step is measured. See also 'follow_redirects'.
+
+</dd><dd>
+<p>Example value: yes</p>
+
+</dd><dd>
+<p>Default value: no</p>
 
 <p></p>
 </dd><dt><strong><a name="item_insecure_ssl">insecure_ssl</a></strong><br />

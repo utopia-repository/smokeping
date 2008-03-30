@@ -185,6 +185,38 @@ L<the installation document|smokeping_install> for details.
 
 Default value: changecgiprogramname = yes
 
+=item B<linkstyle>
+
+How the CGI self-referring links are created. The possible values are 
+
+=over
+
+=item absolute 
+
+Full hostname and path derived from the 'cgiurl' variable 
+
+S<<a href="http://hostname/path/smokeping.cgi?foo=bar">>
+
+=item relative 
+
+Only the parameter part is specified 
+
+S<<a href="?foo=bar">>
+
+=item original 
+
+The way the links were generated before Smokeping version 2.0.4:
+no hostname, only the path 
+
+S<<a href="/path/smokeping.cgi?foo=bar">>
+
+=back
+
+The default is "relative", which hopefully works for everybody.
+
+
+Default value: linkstyle = relative
+
 =back
 
 =head2 *** Database *** I<(mandatory section)>
@@ -907,6 +939,10 @@ Default value: packetsize = 56
 
  (This variable can be overridden target-specifically in the Targets section.)
 
+=item B<vrf>
+
+ (This variable can be overridden target-specifically in the Targets section.)
+
 =back
 
 Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
@@ -956,6 +992,10 @@ Default value: packetsize = 56
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<tos>
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<vrf>
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -1097,6 +1137,18 @@ Default value: forks = 5
 
 Default value: extrare = / /
 
+=item B<follow_redirects>
+
+ (This variable can be overridden target-specifically in the Targets section.)
+
+Default value: follow_redirects = no
+
+=item B<include_redirects>
+
+ (This variable can be overridden target-specifically in the Targets section.)
+
+Default value: include_redirects = no
+
 =item B<insecure_ssl>
 
  (This variable can be overridden target-specifically in the Targets section.)
@@ -1169,6 +1221,18 @@ This variable I<inherits> its value from the parent section if nothing is specif
 
 Default value: extrare = / /
 
+=item B<follow_redirects>
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+Default value: follow_redirects = no
+
+=item B<include_redirects>
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+Default value: include_redirects = no
+
 =item B<insecure_ssl>
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
@@ -1229,6 +1293,10 @@ Default value: timeout = 5
 
  (This variable can be overridden target-specifically in the Targets section.)
 
+=item B<server>
+
+ (This variable can be overridden target-specifically in the Targets section.)
+
 =back
 
 Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
@@ -1268,6 +1336,10 @@ Default value: timeout = 5
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<pings>
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<server>
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -2857,6 +2929,12 @@ Default value: forks = 5
 
 Default value: timeout = 5
 
+=item B<keytype>
+
+ (This variable can be overridden target-specifically in the Targets section.)
+
+Default value: keytype = rsa
+
 =item B<pings>
 
  (This variable can be overridden target-specifically in the Targets section.)
@@ -2894,6 +2972,12 @@ This variable I<inherits> its value from the parent section if nothing is specif
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 Default value: timeout = 5
+
+=item B<keytype>
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+Default value: keytype = rsa
 
 =item B<pings>
 
@@ -3521,6 +3605,8 @@ The following new variables are valid:
 
 =item B<tos>
 
+=item B<vrf>
+
 =back
 
 Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
@@ -3548,6 +3634,10 @@ This variable I<inherits> its value from the parent section if nothing is specif
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<tos>
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<vrf>
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -3621,6 +3711,10 @@ The following new variables are valid:
 
 =item B<extrare>
 
+=item B<follow_redirects>
+
+=item B<include_redirects>
+
 =item B<insecure_ssl>
 
 =item B<interface>
@@ -3652,6 +3746,14 @@ This variable I<inherits> its value from the parent section if nothing is specif
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<extrare>
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<follow_redirects>
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<include_redirects>
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -3695,6 +3797,8 @@ The following new variables are valid:
 
 =item B<pings>
 
+=item B<server>
+
 =back
 
 Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
@@ -3710,6 +3814,10 @@ The following new variables are valid:
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<pings>
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<server>
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -4503,6 +4611,8 @@ The following new variables are valid:
 
 =over
 
+=item B<keytype>
+
 =item B<pings>
 
 =back
@@ -4514,6 +4624,10 @@ Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
 The following new variables are valid:
 
 =over
+
+=item B<keytype>
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<pings>
 
