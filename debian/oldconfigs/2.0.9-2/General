@@ -1,0 +1,29 @@
+*** General ***
+
+################################################
+# DON'T TOUCH UNLESS YOU KNOW WHAT YOU'RE DOING
+# BETWEEN THESE MARKS!
+################################################
+sendmail = /usr/sbin/sendmail
+imgcache = /var/www/smokeping
+imgurl   = ../smokeping
+datadir  = /var/lib/smokeping
+piddir   = /var/run/smokeping
+smokemail = /etc/smokeping/smokemail
+tmail    = /etc/smokeping/tmail
+################################################
+# END OF DON'T TOUCH SECTION
+################################################
+
+
+# Please edit this to suit your installation
+owner    = Joe Random
+contact  = joe@some.place.xyz
+cgiurl   = http://put_here_your_domain/cgi-bin/smokeping.cgi
+mailhost = smtp.mailhost.abc
+# specify this to get syslog logging
+syslogfacility = local0
+# each probe is now run in its own process
+# disable this to revert to the old behaviour
+# concurrentprobes = no
+

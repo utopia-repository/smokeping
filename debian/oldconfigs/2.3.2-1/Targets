@@ -1,0 +1,98 @@
+*** Targets ***
+
+probe = FPing
+
+## You have to edit and uncomment all what you want below this.
+# Please, refer to smokeping_config man page for more info
+# The given adresses aren't real to avoid DoS.
+
+menu = Top
+title = Network Latency Grapher
+remark = Welcome to the SmokePing website of 'A poorly \
+	mantained site running Debian.'
+
++ Local
+
+menu = Local
+title = Local Network
+
+++ LocalMachine
+
+menu = Local Machine
+title = This host
+host = localhost
+
++ World
+
+menu = World
+title = Worldwide Connectivity
+
+++ Europe
+
+menu = Europe
+title =European Connectivity
+
++++ Switzerland
+
+menu = Switzerland
+title =Swiss Connectivity
+alerts = bigloss,someloss,startloss
+
+# ++++ SBB
+#
+# menu = SBB/CFF/FFS
+# title =Swiss Federal Railways Webserver
+# host = www.railway-server.abc
+
+
+# ++++ Tiscali
+#
+# menu = Tiscali Web
+# title = Tiscali Webserver www.tiscali.abc
+# host = www.tiscali-web.abc
+
++++ UK
+
+menu = United Kingdom
+title = United Kingdom
+
+# ++++ UCL
+#
+# menu = UCL
+# title = UCL
+# host = www.ucl-abc.acc.uk
+
+++ USA
+
+menu = North America
+title =North American Connectivity
+
+# +++ MIT
+
+# menu = MIT
+# title = Massachusetts Institute of Technology Webserver
+# host = www.gurkoman.ybc
+
+# +++ IU
+# 
+# menu = IU
+# title = Indiana University
+# host = www.iu.ali
+
+# +++ UCB
+#
+# menu = U. C. Berkeley
+# title = U. C. Berkeley Webserver
+# host = www.berkly.udi
+
+# +++ UCSD
+#
+# menu = U. C. San Diego
+# title = U. C. San Diego Webserver
+# host = www.ucsdddar.art
+
+# +++ Sun
+#
+# menu = Sun Microsystems
+# title = Sun Microsystems Webserver
+# host = www.sun-web.com
