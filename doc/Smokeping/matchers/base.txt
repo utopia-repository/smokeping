@@ -41,8 +41,8 @@ DDEESSCCRRIIPPTTIIOONN
        TTeesstt
 
        Run the matcher and return true or false. The Test method
-       is called with a hash of two arrays giving it access to
-       both rtt and loss values.
+       is called with a hash containing two arrays giving it
+       access to both rtt and loss values.
 
          my $data=shift;
          my @rtt = @{$data->{rtt}};
@@ -54,6 +54,13 @@ DDEESSCCRRIIPPTTIIOONN
 
        There may be more than the expected number of elements in
        this array. Address them with $x[-1] to $x[-max].
+
+       There's also a key called 'prevmatch' in the hash. It con-
+       tains the value returned by the previous call of the
+       'Test' method. This allows for somewhat more intelligent
+       alerting due to state awareness.
+
+         my $prevmatch = $data->{prevmatch};
 
 CCOOPPYYRRIIGGHHTT
        Copyright (c) 2004 by OETIKER+PARTNER AG. All rights
@@ -82,4 +89,4 @@ AAUUTTHHOORR
 
 
 
-2.0.8                       2005-02-22Smokeping::matchers::base(3)
+2.0.9                       2006-07-14Smokeping::matchers::base(3)

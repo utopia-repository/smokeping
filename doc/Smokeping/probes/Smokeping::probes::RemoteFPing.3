@@ -129,7 +129,7 @@
 .\" ========================================================================
 .\"
 .IX Title "doc::Smokeping::probes::RemoteFPing 3"
-.TH doc::Smokeping::probes::RemoteFPing 3 "2006-04-14" "2.0.8" "SmokePing"
+.TH doc::Smokeping::probes::RemoteFPing 3 "2006-07-14" "2.0.9" "SmokePing"
 .SH "NAME"
 Smokeping::probes::RemoteFPing \- Remote FPing Probe for SmokePing
 .SH "SYNOPSIS"
@@ -142,7 +142,7 @@ Smokeping::probes::RemoteFPing \- Remote FPing Probe for SmokePing
 \& +RemoteFPing
 .Ve
 .PP
-.Vb 10
+.Vb 11
 \& binary = /usr/bin/ssh # mandatory
 \& hostinterval = 1.5
 \& mininterval = 0.001
@@ -153,6 +153,7 @@ Smokeping::probes::RemoteFPing \- Remote FPing Probe for SmokePing
 \& rhost = my.pinger.host # mandatory
 \& ruser = foo
 \& step = 300
+\& timeout = 1.5
 .Ve
 .PP
 .Vb 1
@@ -274,6 +275,14 @@ files or somehow convert them. (This variable is only applicable if
 the variable 'concurrentprobes' is set in the 'General' section.)
 .Sp
 Example value: 300
+.IP "timeout" 4
+.IX Item "timeout"
+The fping \*(L"\-t\*(R" parameter, but in (possibly fractional) seconds rather than
+milliseconds, for consistency with other Smokeping probes. Note that as
+Smokeping uses the fping 'counting' mode (\-C), this apparently only affects
+the last ping.
+.Sp
+Example value: 1.5
 .SH "AUTHORS"
 .IX Header "AUTHORS"
 .Vb 1

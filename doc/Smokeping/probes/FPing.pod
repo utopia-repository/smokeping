@@ -15,6 +15,7 @@ Smokeping::probes::FPing - FPing Probe for SmokePing
  packetsize = 5000
  pings = 20
  step = 300
+ timeout = 1.5
 
  # [...]
 
@@ -121,6 +122,15 @@ files or somehow convert them. (This variable is only applicable if
 the variable 'concurrentprobes' is set in the 'General' section.)
 
 Example value: 300
+
+=item timeout
+
+The fping "-t" parameter, but in (possibly fractional) seconds rather than
+milliseconds, for consistency with other Smokeping probes. Note that as
+Smokeping uses the fping 'counting' mode (-C), this apparently only affects
+the last ping.
+
+Example value: 1.5
 
 =back
 

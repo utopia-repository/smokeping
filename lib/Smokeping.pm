@@ -27,7 +27,7 @@ use Smokeping::RRDtools;
 
 # globale persistent variables for speedy
 use vars qw($cfg $probes $VERSION $havegetaddrinfo $cgimode);
-$VERSION="2.000008";
+$VERSION="2.000009";
 
 # we want opts everywhere
 my %opt;
@@ -1124,6 +1124,12 @@ sub update_rrds($$$$$) {
                         next;
                     };
                     my $prevmatch = $tree->{prevmatch}{$_} || 0;
+
+		    # add the current state of an edge triggered alert to the
+		    # data passed into a matcher, which allows for somewhat 
+		    # more intelligent alerting due to state awareness.
+		    $x->{prevmatch} = $prevmatch;
+
                     my $match = &{$cfg->{Alerts}{$_}{sub}}($x) || 0; # Avgratio returns undef
                     my $edgetrigger = $cfg->{Alerts}{$_}{edgetrigger} eq 'yes';
                     my $what;
@@ -1153,10 +1159,11 @@ sub update_rrds($$$$$) {
 			foreach my $addr (map {$_ ? (split /\s*,\s*/,$_) : ()} $cfg->{Alerts}{to},$tree->{alertee},$cfg->{Alerts}{$_}{to}){
 			     next unless $addr;
 			     if ( $addr =~ /^\|(.+)/) {
+			     	 my $cmd = $1;
                                  if ($edgetrigger) {
-  			                system $1,$_,$line,$loss,$rtt,$tree->{host}, ($what =~/raise/);
+  			                system $cmd,$_,$line,$loss,$rtt,$tree->{host}, ($what =~/raise/);
                                  } else {
-  			                system $1,$_,$line,$loss,$rtt,$tree->{host};
+  			                system $cmd,$_,$line,$loss,$rtt,$tree->{host};
                                  }
 			     } elsif ( $addr =~ /^snpp:(.+)/ ) {
 				 sendsnpp $1, <<SNPPALERT;
@@ -2132,13 +2139,13 @@ Example:
  Loss Color   Legend
  1    00ff00    "<1"
  3    0000ff    "<3"
- 100  ff0000    ">=3"
+ 1000 ff0000    ">=3"
 
 DOC
 			  0 => 
 			  {
 			   _doc => <<DOC,
-Activate when the lossrate (in percent) is larger of equal to this number
+Activate when the number of losst pings is larger or equal to this number                       
 DOC
 			   _re       => '\d+.?\d*',
 			   _re_error =>

@@ -46,7 +46,8 @@
  rbinary = /usr/bin/fping # mandatory
  rhost = my.pinger.host # mandatory
  ruser = foo
- step = 300</pre>
+ step = 300
+ timeout = 1.5</pre>
 <pre>
  # [...]</pre>
 <pre>
@@ -208,6 +209,18 @@ the variable 'concurrentprobes' is set in the 'General' section.)
 
 </dd><dd>
 <p>Example value: 300</p>
+
+<p></p>
+</dd><dt><strong><a name="item_timeout">timeout</a></strong><br />
+
+</dt><dd>
+The fping ``-t'' parameter, but in (possibly fractional) seconds rather than
+milliseconds, for consistency with other Smokeping probes. Note that as
+Smokeping uses the fping 'counting' mode (-C), this apparently only affects
+the last ping.
+
+</dd><dd>
+<p>Example value: 1.5</p>
 
 <p></p></dd></dl>
 <p>

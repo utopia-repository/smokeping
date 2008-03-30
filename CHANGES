@@ -1,3 +1,19 @@
+2006/07/14 -- released version 2.0.9
+
+* added matchers CheckLatency and CheckLoss -- tobi, from Dylan Vanderhoof DylanV semaphore.com
+* added TacacsPlus probe -- tobi, from Gary.Mikula * nasd.com
+* pass 'prevmatch' to alert matcher plugins.
+  -- niko, from Dylan Vanderhoof <DylanV *semaphore.com>
+* fix subject in tSmoke 'morning' emails.  --niko, 
+   from Jean-Philippe Luiggi <Jean-Philippe.Luiggi *revolutionlinux.com>
+* AnotherDNS.pm: added option 'require_answers' for testing
+  recursive DNS servers. -- niko
+* fixed loss_color documentation (this is not in percent) -- tobi
+* brought back the FPing.pm 'timeout' parameter, since it does something
+   after all. -- niko, requested by Peter Klausner <peter.klausner *gmail.com>
+* fix running an external program on edge-triggered alerts.
+  -- niko, from Peter Klausner <peter.klausner *gmail.com>
+
 2006/04/14 -- released version 2.0.8
 
 * adjusted links to new home on oss.oetiker.ch

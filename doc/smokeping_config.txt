@@ -384,11 +384,11 @@ RREEFFEERREENNCCEE
                 Loss Color   Legend
                 1    00ff00    "<1"
                 3    0000ff    "<3"
-                100  ff0000    ">=3"
+                1000 ff0000    ">=3"
 
                column 0
-                   Activate when the lossrate (in percent) is
-                   larger of equal to this number
+                   Activate when the number of losst pings is
+                   larger or equal to this number
 
                column 1
                    Color for this range.
@@ -512,6 +512,9 @@ RREEFFEERREENNCCEE
 
                    Default value: recordtype = A
 
+               rreeqquuiirree__aannsswweerrss
+                    (This variable can be overridden target-specifically in the Targets section.)
+
                rreeqquuiirree__nnooeerrrroorr
                     (This variable can be overridden target-specifically in the Targets section.)
 
@@ -571,6 +574,11 @@ RREEFFEERREENNCCEE
                        here.
 
                        Default value: recordtype = A
+
+                   rreeqquuiirree__aannsswweerrss
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
 
                    rreeqquuiirree__nnooeerrrroorr
                        This variable _i_n_h_e_r_i_t_s its value from the
@@ -2048,6 +2056,7 @@ RREEFFEERREENNCCEE
                ppaacckkeettssiizzee
                ppiinnggss
                sstteepp
+               ttiimmeeoouutt
 
                Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
@@ -2086,6 +2095,11 @@ RREEFFEERREENNCCEE
                        here.
 
                    sstteepp
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ttiimmeeoouutt
                        This variable _i_n_h_e_r_i_t_s its value from the
                        parent section if nothing is specified
                        here.
@@ -2106,6 +2120,7 @@ RREEFFEERREENNCCEE
                ppaacckkeettssiizzee
                ppiinnggss
                sstteepp
+               ttiimmeeoouutt
 
                Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
@@ -2144,6 +2159,11 @@ RREEFFEERREENNCCEE
                        here.
 
                    sstteepp
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ttiimmeeoouutt
                        This variable _i_n_h_e_r_i_t_s its value from the
                        parent section if nothing is specified
                        here.
@@ -2531,6 +2551,7 @@ RREEFFEERREENNCCEE
                rrhhoosstt _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
                rruusseerr
                sstteepp
+               ttiimmeeoouutt
 
                Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
@@ -2584,6 +2605,11 @@ RREEFFEERREENNCCEE
                        here.
 
                    sstteepp
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ttiimmeeoouutt
                        This variable _i_n_h_e_r_i_t_s its value from the
                        parent section if nothing is specified
                        here.
@@ -2659,6 +2685,134 @@ RREEFFEERREENNCCEE
 
                (End of dynamical grammar changes for example
                instance "SSH".)
+
+           TTaaccaaccssPPlluuss: (See the separate module documentation for
+           details about each variable.)
+               The following new variables are valid:
+
+               ffoorrkkss
+                   Default value: forks = 5
+
+               ooffffsseett
+               ppaasssswwoorrddffiillee
+               sseeccrreettffiillee
+               sstteepp
+               aauutthhttyyppee
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+                   Default value: authtype = ASCII
+
+               mmiinniinntteerrvvaall
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+                   Default value: mininterval = 1
+
+               ppaasssswwoorrdd
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               ppiinnggss
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               ppoorrtt
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+                   Default value: port = 49
+
+               sseeccrreett
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               ttiimmeeoouutt
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+                   Default value: timeout = 5
+
+               uusseerrnnaammee
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+                   This variable _d_y_n_a_m_i_c_a_l_l_y modifies the grammar
+                   based on its value.
+
+               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
+
+                   The following new variables are valid:
+
+                   ffoorrkkss
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: forks = 5
+
+                   ooffffsseett
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ppaasssswwoorrddffiillee
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   sseeccrreettffiillee
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   sstteepp
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   aauutthhttyyppee
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: authtype = ASCII
+
+                   mmiinniinntteerrvvaall
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: mininterval = 1
+
+                   ppaasssswwoorrdd
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ppiinnggss
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ppoorrtt
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: port = 49
+
+                   sseeccrreett
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ttiimmeeoouutt
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: timeout = 5
+
+                   uusseerrnnaammee
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+               (End of dynamical grammar changes for example
+               instance "TacacsPlus".)
 
            TTeellnneettIIOOSSPPiinngg: (See the separate module documentation
            for details about each variable.)
@@ -2897,7 +3051,8 @@ RREEFFEERREENNCCEE
                mmaattcchheerr are known.
 
                Matchers are plugin modules that extend the alert
-               conditions.  Known matchers are Avgratio, Median.
+               conditions.  Known matchers are Avgratio, CheckLa-
+               tency, CheckLoss, Median.
 
                See the documentation of the corresponding matcher
                module (eg. Smokeping::matchers::Avgratio) for
@@ -3060,6 +3215,7 @@ RREEFFEERREENNCCEE
            ppiinnggss
            ppoorrtt
            rreeccoorrddttyyppee
+           rreeqquuiirree__aannsswweerrss
            rreeqquuiirree__nnooeerrrroorr
            ttiimmeeoouutt
 
@@ -3084,6 +3240,10 @@ RREEFFEERREENNCCEE
                    ent section if nothing is specified here.
 
                rreeccoorrddttyyppee
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               rreeqquuiirree__aannsswweerrss
                    This variable _i_n_h_e_r_i_t_s its value from the par-
                    ent section if nothing is specified here.
 
@@ -3203,8 +3363,8 @@ RREEFFEERREENNCCEE
                    This variable _i_n_h_e_r_i_t_s its value from the par-
                    ent section if nothing is specified here.
 
-               ttooss This variable _i_n_h_e_r_i_t_s its value from the par-
-                   ent section if nothing is specified here.
+               ttooss This variable _i_n_h_e_r_i_t_s its value from the
+                   parent section if nothing is specified here.
 
                vvrrff This variable _i_n_h_e_r_i_t_s its value from the par-
                    ent section if nothing is specified here.
@@ -3231,8 +3391,8 @@ RREEFFEERREENNCCEE
                    ent section if nothing is specified here.
 
                iioossiinntt
-                   This variable _i_n_h_e_r_i_t_s its value from the
-                   parent section if nothing is specified here.
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
 
                ppiinnggss
                    This variable _i_n_h_e_r_i_t_s its value from the par-
@@ -3269,8 +3429,8 @@ RREEFFEERREENNCCEE
                The following new variables are valid:
 
                aaggeenntt
-                   This variable _i_n_h_e_r_i_t_s its value from the par-
-                   ent section if nothing is specified here.
+                   This variable _i_n_h_e_r_i_t_s its value from the
+                   parent section if nothing is specified here.
 
                eexxttrraaaarrggss
                    This variable _i_n_h_e_r_i_t_s its value from the par-
@@ -3297,8 +3457,8 @@ RREEFFEERREENNCCEE
                    ent section if nothing is specified here.
 
                ppiinnggss
-                   This variable _i_n_h_e_r_i_t_s its value from the
-                   parent section if nothing is specified here.
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
 
                ssssll22
                    This variable _i_n_h_e_r_i_t_s its value from the par-
@@ -3429,8 +3589,8 @@ RREEFFEERREENNCCEE
                    ent section if nothing is specified here.
 
                iippvveerrssiioonn
-                   This variable _i_n_h_e_r_i_t_s its value from the
-                   parent section if nothing is specified here.
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
 
                ppiinnggss
                    This variable _i_n_h_e_r_i_t_s its value from the par-
@@ -3731,8 +3891,8 @@ RREEFFEERREENNCCEE
                    ent section if nothing is specified here.
 
                ttiimmeeoouutt
-                   This variable _i_n_h_e_r_i_t_s its value from the par-
-                   ent section if nothing is specified here.
+                   This variable _i_n_h_e_r_i_t_s its value from the
+                   parent section if nothing is specified here.
 
                ttooss This variable _i_n_h_e_r_i_t_s its value from the par-
                    ent section if nothing is specified here.
@@ -3943,6 +4103,58 @@ RREEFFEERREENNCCEE
            (End of dynamical grammar changes for variable "probe"
            example value "SSH".)
 
+       TTaaccaaccssPPlluuss: (See the separate module documentation for
+       details about each variable.)
+           The following new variables are valid:
+
+           aauutthhttyyppee
+           mmiinniinntteerrvvaall
+           ppaasssswwoorrdd
+           ppiinnggss
+           ppoorrtt
+           sseeccrreett
+           ttiimmeeoouutt
+           uusseerrnnaammee
+
+           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
+
+               The following new variables are valid:
+
+               aauutthhttyyppee
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               mmiinniinntteerrvvaall
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               ppaasssswwoorrdd
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               ppiinnggss
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               ppoorrtt
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               sseeccrreett
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               ttiimmeeoouutt
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               uusseerrnnaammee
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+           (End of dynamical grammar changes for variable "probe"
+           example value "TacacsPlus".)
+
        TTeellnneettIIOOSSPPiinngg: (See the separate module documentation for
        details about each variable.)
            The following new variables are valid:
@@ -4010,4 +4222,4 @@ AAUUTTHHOORR
 
 
 
-2.0.8                       2006-04-14        SMOKEPING_CONFIG(5)
+2.0.9                       2006-07-14        SMOKEPING_CONFIG(5)

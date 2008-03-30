@@ -449,7 +449,7 @@ Example:
  Loss Color   Legend
  1    00ff00    "<1"
  3    0000ff    "<3"
- 100  ff0000    ">=3"
+ 1000 ff0000    ">=3"
 
 
 
@@ -457,7 +457,7 @@ Example:
 
 =item column 0
 
-Activate when the lossrate (in percent) is larger of equal to this number
+Activate when the number of losst pings is larger or equal to this number                       
 
 
 =item column 1
@@ -619,6 +619,10 @@ Default value: port = 53
 
 Default value: recordtype = A
 
+=item B<require_answers>
+
+ (This variable can be overridden target-specifically in the Targets section.)
+
 =item B<require_noerror>
 
  (This variable can be overridden target-specifically in the Targets section.)
@@ -678,6 +682,10 @@ Default value: port = 53
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 Default value: recordtype = A
+
+=item B<require_answers>
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<require_noerror>
 
@@ -2315,6 +2323,8 @@ Default value: mininterval = 0.01
 
 =item B<step>
 
+=item B<timeout>
+
 =back
 
 Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
@@ -2352,6 +2362,10 @@ This variable I<inherits> its value from the parent section if nothing is specif
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<step>
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<timeout>
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -2383,6 +2397,8 @@ Default value: mininterval = 0.01
 
 =item B<step>
 
+=item B<timeout>
+
 =back
 
 Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
@@ -2420,6 +2436,10 @@ This variable I<inherits> its value from the parent section if nothing is specif
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<step>
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<timeout>
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -2851,6 +2871,8 @@ Default value: mininterval = 0.01
 
 =item B<step>
 
+=item B<timeout>
+
 =back
 
 Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
@@ -2900,6 +2922,10 @@ This variable I<inherits> its value from the parent section if nothing is specif
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<step>
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<timeout>
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -2988,6 +3014,144 @@ This variable I<inherits> its value from the parent section if nothing is specif
 =back
 
 (End of dynamical grammar changes for example instance C<SSH>.)
+
+=item B<TacacsPlus>: (See the L<separate module documentation|Smokeping::probes::TacacsPlus> for details about each variable.)
+
+The following new variables are valid:
+
+=over
+
+=item B<forks>
+
+Default value: forks = 5
+
+=item B<offset>
+
+=item B<passwordfile>
+
+=item B<secretfile>
+
+=item B<step>
+
+=item B<authtype>
+
+ (This variable can be overridden target-specifically in the Targets section.)
+
+Default value: authtype = ASCII
+
+=item B<mininterval>
+
+ (This variable can be overridden target-specifically in the Targets section.)
+
+Default value: mininterval = 1
+
+=item B<password>
+
+ (This variable can be overridden target-specifically in the Targets section.)
+
+=item B<pings>
+
+ (This variable can be overridden target-specifically in the Targets section.)
+
+=item B<port>
+
+ (This variable can be overridden target-specifically in the Targets section.)
+
+Default value: port = 49
+
+=item B<secret>
+
+ (This variable can be overridden target-specifically in the Targets section.)
+
+=item B<timeout>
+
+ (This variable can be overridden target-specifically in the Targets section.)
+
+Default value: timeout = 5
+
+=item B<username>
+
+ (This variable can be overridden target-specifically in the Targets section.)
+
+This variable I<dynamically> modifies the grammar based on its value.
+
+=back
+
+Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
+
+=over
+
+The following new variables are valid:
+
+=over
+
+=item B<forks>
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+Default value: forks = 5
+
+=item B<offset>
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<passwordfile>
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<secretfile>
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<step>
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<authtype>
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+Default value: authtype = ASCII
+
+=item B<mininterval>
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+Default value: mininterval = 1
+
+=item B<password>
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<pings>
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<port>
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+Default value: port = 49
+
+=item B<secret>
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<timeout>
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+Default value: timeout = 5
+
+=item B<username>
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=back
+
+=back
+
+(End of dynamical grammar changes for example instance C<TacacsPlus>.)
 
 =item B<TelnetIOSPing>: (See the L<separate module documentation|Smokeping::probes::TelnetIOSPing> for details about each variable.)
 
@@ -3241,7 +3405,7 @@ The following variables can be set in this section:
 Currently the pattern types B<rtt> and B<loss> and B<matcher> are known. 
 
 Matchers are plugin modules that extend the alert conditions.  Known
-matchers are L<Avgratio|Smokeping::matchers::Avgratio>, L<Median|Smokeping::matchers::Median>.
+matchers are L<Avgratio|Smokeping::matchers::Avgratio>, L<CheckLatency|Smokeping::matchers::CheckLatency>, L<CheckLoss|Smokeping::matchers::CheckLoss>, L<Median|Smokeping::matchers::Median>.
 
 See the documentation of the corresponding matcher module
 (eg. L<Smokeping::matchers::Avgratio>) for instructions on
@@ -3437,6 +3601,8 @@ The following new variables are valid:
 
 =item B<recordtype>
 
+=item B<require_answers>
+
 =item B<require_noerror>
 
 =item B<timeout>
@@ -3468,6 +3634,10 @@ This variable I<inherits> its value from the parent section if nothing is specif
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<recordtype>
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<require_answers>
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -4638,6 +4808,76 @@ This variable I<inherits> its value from the parent section if nothing is specif
 =back
 
 (End of dynamical grammar changes for variable C<probe> example value C<SSH>.)
+
+=item B<TacacsPlus>: (See the L<separate module documentation|Smokeping::probes::TacacsPlus> for details about each variable.)
+
+The following new variables are valid:
+
+=over
+
+=item B<authtype>
+
+=item B<mininterval>
+
+=item B<password>
+
+=item B<pings>
+
+=item B<port>
+
+=item B<secret>
+
+=item B<timeout>
+
+=item B<username>
+
+=back
+
+Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
+
+=over
+
+The following new variables are valid:
+
+=over
+
+=item B<authtype>
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<mininterval>
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<password>
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<pings>
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<port>
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<secret>
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<timeout>
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<username>
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=back
+
+=back
+
+(End of dynamical grammar changes for variable C<probe> example value C<TacacsPlus>.)
 
 =item B<TelnetIOSPing>: (See the L<separate module documentation|Smokeping::probes::TelnetIOSPing> for details about each variable.)
 

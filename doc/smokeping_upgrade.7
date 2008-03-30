@@ -129,7 +129,7 @@
 .\" ========================================================================
 .\"
 .IX Title "SMOKEPING_UPGRADE 7"
-.TH SMOKEPING_UPGRADE 7 "2006-02-08" "2.0.8" "SmokePing"
+.TH SMOKEPING_UPGRADE 7 "2006-07-07" "2.0.9" "SmokePing"
 .SH "NAME"
 smokeping_upgrade \- Notes on upgrading Smokeping
 .SH "OVERVIEW"
@@ -164,6 +164,14 @@ The behaviour is now customizable via the \f(CW\*(C`linkstyle\*(C'\fR variable i
 \&\f(CW\*(C`General\*(C'\fR section of the configuration file. The default is now \f(CW\*(C`relative\*(C'\fR,
 creating links like <a\ href=\*(L"?foo=bar\*(R">. I hope this works for everybody,
 but if it doesn't, see smokeping_config for the alternatives.
+.SH "2.0.8 to 2.0.9"
+.IX Header "2.0.8 to 2.0.9"
+.Sh "FPing"
+.IX Subsection "FPing"
+The 'timeout' variable removed in 2.0.5 has been brought back.
+It is used to give the \f(CW\*(C`fping\*(C'\fR command the \f(CW\*(C`\-t\*(C'\fR parameter,
+which apparently affects the timeout of the last ping in the
+counting (\f(CW\*(C`\-C\*(C'\fR) mode used by Smokeping.
 .SH "2.0.4 to 2.0.5"
 .IX Header "2.0.4 to 2.0.5"
 .Sh "FPing"

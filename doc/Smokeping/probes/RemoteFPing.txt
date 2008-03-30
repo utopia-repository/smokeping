@@ -21,6 +21,7 @@ SSYYNNOOPPSSIISS
         rhost = my.pinger.host # mandatory
         ruser = foo
         step = 300
+        timeout = 1.5
 
         # [...]
 
@@ -144,6 +145,15 @@ VVAARRIIAABBLLEESS
 
            Example value: 300
 
+       timeout
+           The fping "-t" parameter, but in (possibly fractional)
+           seconds rather than milliseconds, for consistency with
+           other Smokeping probes. Note that as Smokeping uses
+           the fping 'counting' mode (-C), this apparently only
+           affects the last ping.
+
+           Example value: 1.5
+
 AAUUTTHHOORRSS
         Luis F Balbinot <hades@inf.ufrgs.br>
 
@@ -177,4 +187,4 @@ BBUUGGSS
 
 
 
-2.0.8                      d2o0c0:6:-S0m4o-k1e4ping::probes::RemoteFPing(3)
+2.0.9                      d2o0c0:6:-S0m7o-k1e4ping::probes::RemoteFPing(3)

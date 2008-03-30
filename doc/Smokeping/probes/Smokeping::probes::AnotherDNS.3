@@ -129,7 +129,7 @@
 .\" ========================================================================
 .\"
 .IX Title "doc::Smokeping::probes::AnotherDNS 3"
-.TH doc::Smokeping::probes::AnotherDNS 3 "2006-04-14" "2.0.8" "SmokePing"
+.TH doc::Smokeping::probes::AnotherDNS 3 "2006-07-14" "2.0.9" "SmokePing"
 .SH "NAME"
 Smokeping::probes::AnotherDNS \- Alternate DNS Probe
 .SH "SYNOPSIS"
@@ -148,13 +148,14 @@ Smokeping::probes::AnotherDNS \- Alternate DNS Probe
 \& step = 300
 .Ve
 .PP
-.Vb 8
+.Vb 9
 \& # The following variables can be overridden in each target section
 \& lookup = www.example.org
 \& mininterval = 0.5
 \& pings = 5
 \& port = 53
 \& recordtype = A
+\& require_answers = 0
 \& require_noerror = 0
 \& timeout = 5
 .Ve
@@ -175,7 +176,7 @@ Smokeping::probes::AnotherDNS \- Alternate DNS Probe
 \& # [...]
 .Ve
 .PP
-.Vb 10
+.Vb 11
 \& + mytarget
 \& # probe = AnotherDNS # if the default probe is something else
 \& host = my.host
@@ -184,6 +185,7 @@ Smokeping::probes::AnotherDNS \- Alternate DNS Probe
 \& pings = 5
 \& port = 53
 \& recordtype = A
+\& require_answers = 0
 \& require_noerror = 0
 \& timeout = 5
 .Ve
@@ -262,6 +264,11 @@ Default value: 53
 Record type to look up.
 .Sp
 Default value: A
+.IP "require_answers" 4
+.IX Item "require_answers"
+Only Count Answers with answer count >= this value.
+.Sp
+Default value: 0
 .IP "require_noerror" 4
 .IX Item "require_noerror"
 Only Count Answers with Response Status \s-1NOERROR\s0.

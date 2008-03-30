@@ -502,13 +502,13 @@ lets you specify your own coloring.
  Loss Color   Legend
  1    00ff00    &quot;&lt;1&quot;
  3    0000ff    &quot;&lt;3&quot;
- 100  ff0000    &quot;&gt;=3&quot;</pre>
+ 1000 ff0000    &quot;&gt;=3&quot;</pre>
 
 <dl>
 <dt><strong>column 0</strong><br />
 
 </dt><dd>
-Activate when the lossrate (in percent) is larger of equal to this number
+Activate when the number of losst pings is larger or equal to this number
 
 <p></p>
 </dd><dt><strong>column 1</strong><br />
@@ -691,6 +691,12 @@ Default value: forks = 5
 </dd><dd>
 <p>Default value: recordtype = A</p>
 
+</dd><dt><strong><a name="item_require_answers"><strong>require_answers</strong></a></strong><br />
+
+</dt><dd>
+<pre>
+ (This variable can be overridden target-specifically in the Targets section.)</pre>
+
 </dd><dt><strong><a name="item_require_noerror"><strong>require_noerror</strong></a></strong><br />
 
 </dt><dd>
@@ -768,6 +774,12 @@ This variable <em>inherits</em> its value from the parent section if nothing is 
 
 </dd><dd>
 <p>Default value: recordtype = A</p>
+
+<p></p>
+</dd><dt><strong><strong>require_answers</strong></strong><br />
+
+</dt><dd>
+This variable <em>inherits</em> its value from the parent section if nothing is specified here.
 
 <p></p>
 </dd><dt><strong><strong>require_noerror</strong></strong><br />
@@ -2894,6 +2906,8 @@ Default value: mininterval = 0.01
 
 </dt><dt><strong><strong>step</strong></strong><br />
 
+</dt><dt><strong><strong>timeout</strong></strong><br />
+
 </dt></dl>
 <p>Syntax changes for subsection <strong>/[-_0-9a-zA-Z]+/</strong></p>
 <p>The following new variables are valid:</p>
@@ -2938,6 +2952,12 @@ This variable <em>inherits</em> its value from the parent section if nothing is 
 
 <p></p>
 </dd><dt><strong><strong>step</strong></strong><br />
+
+</dt><dd>
+This variable <em>inherits</em> its value from the parent section if nothing is specified here.
+
+<p></p>
+</dd><dt><strong><strong>timeout</strong></strong><br />
 
 </dt><dd>
 This variable <em>inherits</em> its value from the parent section if nothing is specified here.
@@ -2968,6 +2988,8 @@ Default value: mininterval = 0.01
 
 </dt><dt><strong><strong>step</strong></strong><br />
 
+</dt><dt><strong><strong>timeout</strong></strong><br />
+
 </dt></dl>
 <p>Syntax changes for subsection <strong>/[-_0-9a-zA-Z]+/</strong></p>
 <p>The following new variables are valid:</p>
@@ -3012,6 +3034,12 @@ This variable <em>inherits</em> its value from the parent section if nothing is 
 
 <p></p>
 </dd><dt><strong><strong>step</strong></strong><br />
+
+</dt><dd>
+This variable <em>inherits</em> its value from the parent section if nothing is specified here.
+
+<p></p>
+</dd><dt><strong><strong>timeout</strong></strong><br />
 
 </dt><dd>
 This variable <em>inherits</em> its value from the parent section if nothing is specified here.
@@ -3563,6 +3591,8 @@ Default value: mininterval = 0.01
 
 </dt><dt><strong><strong>step</strong></strong><br />
 
+</dt><dt><strong><strong>timeout</strong></strong><br />
+
 </dt></dl>
 <p>Syntax changes for subsection <strong>/[-_0-9a-zA-Z]+/</strong></p>
 <p>The following new variables are valid:</p>
@@ -3625,6 +3655,12 @@ This variable <em>inherits</em> its value from the parent section if nothing is 
 
 <p></p>
 </dd><dt><strong><strong>step</strong></strong><br />
+
+</dt><dd>
+This variable <em>inherits</em> its value from the parent section if nothing is specified here.
+
+<p></p>
+</dd><dt><strong><strong>timeout</strong></strong><br />
 
 </dt><dd>
 This variable <em>inherits</em> its value from the parent section if nothing is specified here.
@@ -3726,6 +3762,187 @@ This variable <em>inherits</em> its value from the parent section if nothing is 
 
 </dd></dl>
 <p>(End of dynamical grammar changes for example instance <code>SSH</code>.)</p>
+</dd><dt><strong><a name="item_tacacsplus_3a__28see_the_separate_module_documenta"><strong>TacacsPlus</strong>: (See the </a><a href="./Smokeping/probes/TacacsPlus.html">separate module documentation</a> for details about each variable.)</strong><br />
+
+</dt><dd>
+The following new variables are valid:
+
+<dl>
+<dt><strong><strong>forks</strong></strong><br />
+
+</dt><dd>
+Default value: forks = 5
+
+<p></p>
+</dd><dt><strong><strong>offset</strong></strong><br />
+
+</dt><dt><strong><strong>passwordfile</strong></strong><br />
+
+</dt><dt><strong><strong>secretfile</strong></strong><br />
+
+</dt><dt><strong><strong>step</strong></strong><br />
+
+</dt><dt><strong><a name="item_authtype"><strong>authtype</strong></a></strong><br />
+
+</dt><dd>
+<pre>
+ (This variable can be overridden target-specifically in the Targets section.)</pre>
+
+</dd><dd>
+<p>Default value: authtype = ASCII</p>
+
+</dd><dt><strong><strong>mininterval</strong></strong><br />
+
+</dt><dd>
+<pre>
+ (This variable can be overridden target-specifically in the Targets section.)</pre>
+
+</dd><dd>
+<p>Default value: mininterval = 1</p>
+
+</dd><dt><strong><strong>password</strong></strong><br />
+
+</dt><dd>
+<pre>
+ (This variable can be overridden target-specifically in the Targets section.)</pre>
+
+</dd><dt><strong><strong>pings</strong></strong><br />
+
+</dt><dd>
+<pre>
+ (This variable can be overridden target-specifically in the Targets section.)</pre>
+
+</dd><dt><strong><strong>port</strong></strong><br />
+
+</dt><dd>
+<pre>
+ (This variable can be overridden target-specifically in the Targets section.)</pre>
+
+</dd><dd>
+<p>Default value: port = 49</p>
+
+</dd><dt><strong><strong>secret</strong></strong><br />
+
+</dt><dd>
+<pre>
+ (This variable can be overridden target-specifically in the Targets section.)</pre>
+
+</dd><dt><strong><strong>timeout</strong></strong><br />
+
+</dt><dd>
+<pre>
+ (This variable can be overridden target-specifically in the Targets section.)</pre>
+
+</dd><dd>
+<p>Default value: timeout = 5</p>
+
+</dd><dt><strong><strong>username</strong></strong><br />
+
+</dt><dd>
+<pre>
+ (This variable can be overridden target-specifically in the Targets section.)</pre>
+
+</dd><dd>
+<p>This variable <em>dynamically</em> modifies the grammar based on its value.</p>
+
+</dd></dl>
+<p>Syntax changes for subsection <strong>/[-_0-9a-zA-Z]+/</strong></p>
+<p>The following new variables are valid:</p>
+<dl>
+<dt><strong><strong>forks</strong></strong><br />
+
+</dt><dd>
+This variable <em>inherits</em> its value from the parent section if nothing is specified here.
+
+</dd><dd>
+<p>Default value: forks = 5</p>
+
+<p></p>
+</dd><dt><strong><strong>offset</strong></strong><br />
+
+</dt><dd>
+This variable <em>inherits</em> its value from the parent section if nothing is specified here.
+
+<p></p>
+</dd><dt><strong><strong>passwordfile</strong></strong><br />
+
+</dt><dd>
+This variable <em>inherits</em> its value from the parent section if nothing is specified here.
+
+<p></p>
+</dd><dt><strong><strong>secretfile</strong></strong><br />
+
+</dt><dd>
+This variable <em>inherits</em> its value from the parent section if nothing is specified here.
+
+<p></p>
+</dd><dt><strong><strong>step</strong></strong><br />
+
+</dt><dd>
+This variable <em>inherits</em> its value from the parent section if nothing is specified here.
+
+<p></p>
+</dd><dt><strong><strong>authtype</strong></strong><br />
+
+</dt><dd>
+This variable <em>inherits</em> its value from the parent section if nothing is specified here.
+
+</dd><dd>
+<p>Default value: authtype = ASCII</p>
+
+<p></p>
+</dd><dt><strong><strong>mininterval</strong></strong><br />
+
+</dt><dd>
+This variable <em>inherits</em> its value from the parent section if nothing is specified here.
+
+</dd><dd>
+<p>Default value: mininterval = 1</p>
+
+<p></p>
+</dd><dt><strong><strong>password</strong></strong><br />
+
+</dt><dd>
+This variable <em>inherits</em> its value from the parent section if nothing is specified here.
+
+<p></p>
+</dd><dt><strong><strong>pings</strong></strong><br />
+
+</dt><dd>
+This variable <em>inherits</em> its value from the parent section if nothing is specified here.
+
+<p></p>
+</dd><dt><strong><strong>port</strong></strong><br />
+
+</dt><dd>
+This variable <em>inherits</em> its value from the parent section if nothing is specified here.
+
+</dd><dd>
+<p>Default value: port = 49</p>
+
+<p></p>
+</dd><dt><strong><strong>secret</strong></strong><br />
+
+</dt><dd>
+This variable <em>inherits</em> its value from the parent section if nothing is specified here.
+
+<p></p>
+</dd><dt><strong><strong>timeout</strong></strong><br />
+
+</dt><dd>
+This variable <em>inherits</em> its value from the parent section if nothing is specified here.
+
+</dd><dd>
+<p>Default value: timeout = 5</p>
+
+<p></p>
+</dd><dt><strong><strong>username</strong></strong><br />
+
+</dt><dd>
+This variable <em>inherits</em> its value from the parent section if nothing is specified here.
+
+</dd></dl>
+<p>(End of dynamical grammar changes for example instance <code>TacacsPlus</code>.)</p>
 </dd><dt><strong><a name="item_telnetiosping_3a__28see_the_separate_module_docume"><strong>TelnetIOSPing</strong>: (See the </a><a href="././Smokeping/probes/TelnetIOSPing.html">separate module documentation</a> for details about each variable.)</strong><br />
 
 </dt><dd>
@@ -3995,7 +4212,7 @@ Currently the pattern types <strong>rtt</strong> and <strong>loss</strong> and <
 
 </dd><dd>
 <p>Matchers are plugin modules that extend the alert conditions.  Known
-matchers are <a href="./Smokeping/matchers/Avgratio.html">Avgratio</a>, <a href="./Smokeping/matchers/Median.html">Median</a>.</p>
+matchers are <a href="./Smokeping/matchers/Avgratio.html">Avgratio</a>, <a href="./Smokeping/matchers/CheckLatency.html">CheckLatency</a>, <a href="./Smokeping/matchers/CheckLoss.html">CheckLoss</a>, <a href="./Smokeping/matchers/Median.html">Median</a>.</p>
 
 </dd><dd>
 <p>See the documentation of the corresponding matcher module
@@ -4208,6 +4425,8 @@ The following new variables are valid:
 
 </dt><dt><strong><strong>recordtype</strong></strong><br />
 
+</dt><dt><strong><strong>require_answers</strong></strong><br />
+
 </dt><dt><strong><strong>require_noerror</strong></strong><br />
 
 </dt><dt><strong><strong>timeout</strong></strong><br />
@@ -4241,6 +4460,12 @@ This variable <em>inherits</em> its value from the parent section if nothing is 
 
 <p></p>
 </dd><dt><strong><strong>recordtype</strong></strong><br />
+
+</dt><dd>
+This variable <em>inherits</em> its value from the parent section if nothing is specified here.
+
+<p></p>
+</dd><dt><strong><strong>require_answers</strong></strong><br />
 
 </dt><dd>
 This variable <em>inherits</em> its value from the parent section if nothing is specified here.
@@ -5489,6 +5714,81 @@ This variable <em>inherits</em> its value from the parent section if nothing is 
 
 </dd></dl>
 <p>(End of dynamical grammar changes for variable <a href="#item_probe"><code>probe</code></a> example value <code>SSH</code>.)</p>
+</dd><dt><strong><strong>TacacsPlus</strong>: (See the <a href="./Smokeping/probes/TacacsPlus.html">separate module documentation</a> for details about each variable.)</strong><br />
+
+</dt><dd>
+The following new variables are valid:
+
+<dl>
+<dt><strong><strong>authtype</strong></strong><br />
+
+</dt><dt><strong><strong>mininterval</strong></strong><br />
+
+</dt><dt><strong><strong>password</strong></strong><br />
+
+</dt><dt><strong><strong>pings</strong></strong><br />
+
+</dt><dt><strong><strong>port</strong></strong><br />
+
+</dt><dt><strong><strong>secret</strong></strong><br />
+
+</dt><dt><strong><strong>timeout</strong></strong><br />
+
+</dt><dt><strong><strong>username</strong></strong><br />
+
+</dt></dl>
+<p>Syntax changes for subsection <strong>/[-_0-9a-zA-Z]+/</strong></p>
+<p>The following new variables are valid:</p>
+<dl>
+<dt><strong><strong>authtype</strong></strong><br />
+
+</dt><dd>
+This variable <em>inherits</em> its value from the parent section if nothing is specified here.
+
+<p></p>
+</dd><dt><strong><strong>mininterval</strong></strong><br />
+
+</dt><dd>
+This variable <em>inherits</em> its value from the parent section if nothing is specified here.
+
+<p></p>
+</dd><dt><strong><strong>password</strong></strong><br />
+
+</dt><dd>
+This variable <em>inherits</em> its value from the parent section if nothing is specified here.
+
+<p></p>
+</dd><dt><strong><strong>pings</strong></strong><br />
+
+</dt><dd>
+This variable <em>inherits</em> its value from the parent section if nothing is specified here.
+
+<p></p>
+</dd><dt><strong><strong>port</strong></strong><br />
+
+</dt><dd>
+This variable <em>inherits</em> its value from the parent section if nothing is specified here.
+
+<p></p>
+</dd><dt><strong><strong>secret</strong></strong><br />
+
+</dt><dd>
+This variable <em>inherits</em> its value from the parent section if nothing is specified here.
+
+<p></p>
+</dd><dt><strong><strong>timeout</strong></strong><br />
+
+</dt><dd>
+This variable <em>inherits</em> its value from the parent section if nothing is specified here.
+
+<p></p>
+</dd><dt><strong><strong>username</strong></strong><br />
+
+</dt><dd>
+This variable <em>inherits</em> its value from the parent section if nothing is specified here.
+
+</dd></dl>
+<p>(End of dynamical grammar changes for variable <a href="#item_probe"><code>probe</code></a> example value <code>TacacsPlus</code>.)</p>
 </dd><dt><strong><strong>TelnetIOSPing</strong>: (See the <a href="././Smokeping/probes/TelnetIOSPing.html">separate module documentation</a> for details about each variable.)</strong><br />
 
 </dt><dd>
