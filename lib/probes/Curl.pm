@@ -37,6 +37,8 @@ Fetches an HTTP or HTTPS URL using curl(1).
  ++ PROBE_CONF
  agent = "User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.2.1) Gecko/20021130"
  url = https://some.host/some/where
+ # note that 'url' overrides the 'host' variable, although 'host'
+ # must still be present and is shown on graphs etc. See below.
 
 =head1 DESCRIPTION
 
@@ -55,7 +57,10 @@ for details.
 
 =item url
 
-The URL to fetch.  Can be any one that curl supports.
+The URL to fetch.  Can be any one that curl supports.  Note that if this
+variable is present, it overrides the 'host' variable for the actual
+target pinged. Still, 'host' must be present in those targets that should
+be pinged, and its contents will show up on the graphs.
 
 =back
 
@@ -74,6 +79,14 @@ shell metacharacters
 
 The "-2" curl(1) option.  Force SSL2.
 
+=item insecure_ssl
+
+The "-k" curl(1) option. Accept SSL connections that don't have a secure
+certificate chain to a trusted CA. Note that if you are going to monitor
+https targets, you'll probably have to either enable this option or specify
+the CA path to curl through "extraargs" below. For more info, see the
+curl(1) manual page.
+
 =item timeout
 
 The "-m" curl(1) option.  Maximum timeout in seconds.
@@ -82,6 +95,11 @@ The "-m" curl(1) option.  Maximum timeout in seconds.
 
 The "--interface" curl(1) option.  Bind to a specific interface, IP address or
 host name.
+
+=item extraargs
+
+Put any extra curl(1) options you want on the right side of the equals and
+they will be used when executing the command.
 
 =back
 
@@ -189,6 +207,10 @@ sub proto_args {
 	my @args = ("-o /dev/null", "-w 'Time: %{time_total} DNS time: %{time_namelookup}\\n'");
 	my $ssl2 = $target->{vars}{ssl2};
 	push (@args, "-2") if defined($ssl2);
+    my $insecure_ssl = $target->{vars}{insecure_ssl};
+    push (@args, '-k') if defined $insecure_ssl;
+    my $curl_extraopt = $target->{vars}{extraargs};
+    push (@args, $curl_extraopt) if defined($curl_extraopt);
 	return(@args);
 
 }

@@ -34,6 +34,8 @@ SSYYNNOOPPSSYYSS
         ++ PROBE_CONF
         agent = "User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.2.1) Gecko/20021130"
         url = https://some.host/some/where
+        # note that 'url' overrides the 'host' variable, although 'host'
+        # must still be present and is shown on graphs etc. See below.
 
 DDEESSCCRRIIPPTTIIOONN
        Supported probe-specific variables:
@@ -46,6 +48,11 @@ DDEESSCCRRIIPPTTIIOONN
            _p_r_o_b_e_s_:_:_b_a_s_e_f_o_r_k(3pm) for details.
 
        url The URL to fetch.  Can be any one that curl supports.
+           Note that if this variable is present, it overrides
+           the 'host' variable for the actual target pinged.
+           Still, 'host' must be present in those targets that
+           should be pinged, and its contents will show up on the
+           graphs.
 
        Supported target-level probe variables (see _c_u_r_l(1) for
        details of the options):
@@ -59,12 +66,25 @@ DDEESSCCRRIIPPTTIIOONN
        ssl2
            The "-2" _c_u_r_l(1) option.  Force SSL2.
 
+       insecure_ssl
+           The "-k" _c_u_r_l(1) option. Accept SSL connections that
+           don't have a secure certificate chain to a trusted CA.
+           Note that if you are going to monitor https targets,
+           you'll probably have to either enable this option or
+           specify the CA path to curl through "extraargs" below.
+           For more info, see the _c_u_r_l(1) manual page.
+
        timeout
            The "-m" _c_u_r_l(1) option.  Maximum timeout in seconds.
 
        interface
            The "--interface" _c_u_r_l(1) option.  Bind to a specific
            interface, IP address or host name.
+
+       extraargs
+           Put any extra _c_u_r_l(1) options you want on the right
+           side of the equals and they will be used when execut-
+           ing the command.
 
 AAUUTTHHOORRSS
        Gerald Combs <gerald [AT] ethereal.com> Niko Tyni
@@ -75,4 +95,4 @@ SSEEEE AALLSSOO
 
 
 
-1.38                        2005-01-15            probes::Curl(3)
+1.41                        2005-05-10            probes::Curl(3)

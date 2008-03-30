@@ -1,5 +1,5 @@
 SHELL = /bin/sh
-VERSION = 1.38
+VERSION = 1.42
 IGNORE = ~|CVS|var/|smokeping-$(VERSION)/smokeping-$(VERSION)|cvsignore|rej|orig|DEAD
 GROFF = groff
 .PHONY: man html txt ref patch killdoc doc tar

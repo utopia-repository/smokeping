@@ -142,4 +142,4 @@ AAUUTTHHOORR
 
 
 
-1.38                        2005-01-12               SMOKEPING(1)
+1.42                        2005-05-10               SMOKEPING(1)

@@ -22,8 +22,34 @@ OOVVEERRVVIIEEWW
        assignments and tables.
 
 RREEFFEERREENNCCEE
-       The text below describes the syntax of the SmokePing con-
-       figuration file.
+       GGEENNEERRAALL SSYYNNTTAAXX
+
+       The text below describes the general syntax of the
+       SmokePing configuration file.  It was copied from the
+       ISG::ParseConfig documentation.
+
+       '#' denotes a comment up to the end-of-line, empty lines
+       are allowed and space at the beginning and end of lines is
+       trimmed.
+
+       '\' at the end of the line marks a continued line on the
+       next line. A single space will be inserted between the
+       concatenated lines.
+
+       '@include filename' is used to include another file.
+
+       '@define a some value' will replace all occurences of 'a'
+       in the following text with 'some value'.
+
+       Fields in tables that contain white space can be enclosed
+       in either "'" or """.  Whitespace can also be escaped with
+       "\". Quotes inside quotes are allowed but must be escaped
+       with a backslash as well.
+
+       SSPPEECCIIFFIICC SSYYNNTTAAXX
+
+       The text below describes the specific syntax of the
+       SmokePing configuration file.
 
        ****** GGeenneerraall ****** _(_m_a_n_d_a_t_o_r_y _s_e_c_t_i_o_n_)
 
@@ -195,8 +221,8 @@ RREEFFEERREENNCCEE
            to how widely used the tool is.
 
        cchhaarrsseett
-           By default, SmokePing assumes the 'iso-8859-15'
-           character set. If you use something else, this is the
+           By default, SmokePing assumes the 'iso-8859-15' char-
+           acter set. If you use something else, this is the
            place to speak up.
 
        The following sections are valid on level 1:
@@ -669,11 +695,7 @@ RREEFFEERREENNCCEE
                    to those child nodes using the same Probe.
 
            ++++//[[--__00--99aa--zzAA--ZZ]]++//
-               Each target section can contain information about
-               a host to monitor as well as further target sec-
-               tions. Most variables have already been described
-               above. The expression above defines legal names
-               for target sections.
+               This subsection has the same syntax as its parent.
 
 CCOOPPYYRRIIGGHHTT
        Copyright (c) 2001-2003 by Tobias Oetiker. All right
@@ -702,4 +724,4 @@ AAUUTTHHOORR
 
 
 
-1.38                        2005-01-30        SMOKEPING_CONFIG(1)
+1.42                        2005-05-31        SMOKEPING_CONFIG(1)

@@ -129,7 +129,7 @@
 .\" ========================================================================
 .\"
 .IX Title "SMOKEPING_CONFIG 1"
-.TH SMOKEPING_CONFIG 1 "2005-01-30" "1.38" "SmokePing"
+.TH SMOKEPING_CONFIG 1 "2005-05-31" "1.42" "SmokePing"
 .SH "NAME"
 smokeping_config \- Reference for the SmokePing Config File
 .SH "OVERVIEW"
@@ -147,7 +147,28 @@ The Configuration file has a tree-like structure with section headings at
 various levels. It also contains variable assignments and tables.
 .SH "REFERENCE"
 .IX Header "REFERENCE"
-The text below describes the syntax of the SmokePing configuration file.
+.Sh "\s-1GENERAL\s0 \s-1SYNTAX\s0"
+.IX Subsection "GENERAL SYNTAX"
+The text below describes the general syntax of the SmokePing configuration file.
+It was copied from the ISG::ParseConfig documentation.
+.PP
+\&'#' denotes a comment up to the end\-of\-line, empty lines are allowed and space
+at the beginning and end of lines is trimmed.
+.PP
+\&'\e' at the end of the line marks a continued line on the next line. A single
+space will be inserted between the concatenated lines.
+.PP
+\&'@include filename' is used to include another file.
+.PP
+\&'@define a some value' will replace all occurences of 'a' in the following text
+with 'some value'.
+.PP
+Fields in tables that contain white space can be enclosed in either \f(CW\*(C`'\*(C'\fR or \f(CW\*(C`"\*(C'\fR.
+Whitespace can also be escaped with \f(CW\*(C`\e\*(C'\fR. Quotes inside quotes are allowed but must
+be escaped with a backslash as well.
+.Sh "\s-1SPECIFIC\s0 \s-1SYNTAX\s0"
+.IX Subsection "SPECIFIC SYNTAX"
+The text below describes the specific syntax of the SmokePing configuration file.
 .Sh "*** General *** \fI(mandatory section)\fP"
 .IX Subsection "*** General *** (mandatory section)"
 General configuration values valid for the whole SmokePing setup.
@@ -786,10 +807,7 @@ nodes using the same Probe.
 .RE
 .IP "\fB++/[\-_0\-9a\-zA\-Z]+/\fR" 4
 .IX Item "++/[-_0-9a-zA-Z]+/"
-Each target section can contain information about a host to monitor as
-well as further target sections. Most variables have already been
-described above. The expression above defines legal names for target
-sections.
+This subsection has the same syntax as its parent.
 .RE
 .RS 4
 .RE

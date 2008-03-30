@@ -198,18 +198,6 @@ sub ping {
 
 				$self->do_debug("$target->{addr}: got $response");
 			}
-			my @errorhandles;
-			if( $s->can('has_exception') ) {
-				@errorhandles = $s->has_exception(0);
-			} elsif( $s->can('has_error') ) {
-				@errorhandles = $s->has_error(0);
-			} else {
-				$self->fatal('IO::Select neither knows has_exception() nor has_error()');
- 			};
-			for (@errorhandles) {
-				$self->do_log("$targetlookup{$_}{addr}: caught exception");
-				$s->remove($_);
-			}
 			$timeleft = $timeout - (time() - $starttime);
 		}
 		my @left = $s->handles;

@@ -1,3 +1,32 @@
+2005/5/31 -- 1.42
+
+* make it work with the --statis option and PROBE_CONF -- Niko
+* make it work with rrdtool 1.2.x (technically) ! -- Niko
+
+2005/5/10 -- 1.41
+
+* stop Parse::Config from complaining about it being out of date.
+* die when someone tries to start with rrdtool 1.2.x loaded
+* documentation fixes for Smokeping Config -- Niko
+* documentation fixes for Curl Probe -- Niko
+* new options insecure_ssl and extraargs for the curl probe -- Niko
+* make --static work again -- Niko
+
+2005/4/17 -- 1.40
+* a last minute bug had broken the new navigator feature. now it works.
+
+2005/4/15 -- 1.39
+
+* NEW Feature: when clicking on the graphs in detail view
+  you can select different time ranges for the graph. The creation of this
+  feature has been sponsored by BeverlyCorp.com -- tobi
+
+* make sure mailsetup works before using it -- tobi
+
+* fix for basefork.pm IO::Select property has_exception is very platform dependent
+  by ignoring it altogether things actually work better. Especially on Solaris which
+  does have propper support for has_exception as oposed to linux. --  Niko Tyni <ntyni *iki.fi>
+  
 2005/1/30 -- 1.38
 
 * fixed error messages for environments with mixed ipv6 and ipv4 setups  -- Peter W. Osel <pwo *Infineon.COM>

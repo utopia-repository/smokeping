@@ -18,6 +18,8 @@
 	<li><a href="#reference">REFERENCE</a></li>
 	<ul>
 
+		<li><a href="#general_syntax">GENERAL SYNTAX</a></li>
+		<li><a href="#specific_syntax">SPECIFIC SYNTAX</a></li>
 		<li><a href="#____general______mandatory_section_">*** General *** <em>(mandatory section)</em></a></li>
 		<li><a href="#____database______mandatory_section_">*** Database *** <em>(mandatory section)</em></a></li>
 		<li><a href="#____presentation______mandatory_section_">*** Presentation *** <em>(mandatory section)</em></a></li>
@@ -53,7 +55,25 @@ various levels. It also contains variable assignments and tables.</p>
 </p>
 <hr />
 <h1><a name="reference">REFERENCE</a></h1>
-<p>The text below describes the syntax of the SmokePing configuration file.</p>
+<p>
+</p>
+<h2><a name="general_syntax">GENERAL SYNTAX</a></h2>
+<p>The text below describes the general syntax of the SmokePing configuration file.
+It was copied from the ISG::ParseConfig documentation.</p>
+<p>'#' denotes a comment up to the end-of-line, empty lines are allowed and space
+at the beginning and end of lines is trimmed.</p>
+<p>'\' at the end of the line marks a continued line on the next line. A single
+space will be inserted between the concatenated lines.</p>
+<p>'@include filename' is used to include another file.</p>
+<p>'@define a some value' will replace all occurences of 'a' in the following text
+with 'some value'.</p>
+<p>Fields in tables that contain white space can be enclosed in either <code>'</code> or <code>&quot;</code>.
+Whitespace can also be escaped with <code>\</code>. Quotes inside quotes are allowed but must
+be escaped with a backslash as well.</p>
+<p>
+</p>
+<h2><a name="specific_syntax">SPECIFIC SYNTAX</a></h2>
+<p>The text below describes the specific syntax of the SmokePing configuration file.</p>
 <p>
 </p>
 <h2><a name="____general______mandatory_section_">*** General *** <em>(mandatory section)</em></a></h2>
@@ -853,10 +873,7 @@ nodes using the same Probe.
 <dt><strong><strong>++/[-_0-9a-zA-Z]+/</strong></strong><br />
 </dt>
 <dd>
-Each target section can contain information about a host to monitor as
-well as further target sections. Most variables have already been
-described above. The expression above defines legal names for target
-sections.
+This subsection has the same syntax as its parent.
 </dd>
 <p></p></dl>
 </dl>
