@@ -96,7 +96,7 @@ The directory where SmokePing keeps its pid when daemonised.
 
 =item B<sendmail>
 
-Path to your sendmail binary. It will be used for sending mails in connection with the support of DYNAMIC addresses.			     
+Path to your sendmail binary. It will be used for sending mails in connection with the support of DYNAMIC addresses.                         
 
 
 =item B<offset>
@@ -130,12 +130,22 @@ script). Several comma separated mailhosts can be specified. SmokePing will
 try one after the other if one does not answer for 5 seconds.
 
 
+=item B<snpphost>
+
+If you have a SNPP (Simple Network Pager Protocol) server at hand, you can have alerts
+sent there too. Use the syntax B<snpp:someaddress> to use a snpp address in any place where you can use a mail address otherwhise.
+
+
 =item B<contact> I<(mandatory setting)>
 
 Mail address of the person responsible for this smokeping installation.
 
 
-=item B<netsnpp>
+=item B<display_name>
+
+What should the master host be called when working in master/slave mode. This is used in the overview
+graph for example.
+
 
 =item B<syslogfacility>
 
@@ -360,7 +370,8 @@ Any roundtrip time larger than this value will cropped in the overview graph
 =item B<median_color>
 
 By default the median line is drawn in red. Override it here with a hex color
-in the format I<rrggbb>.
+in the format I<rrggbb>. Note that if you work with slaves, the slaves medians will
+be drawn in the slave color in the overview graph.
 
 
 =item B<strftime>
@@ -509,7 +520,7 @@ Activate when uptime in days is larger of equal to this number
 
 =item column 1
 
-Color for this uptime range range.
+Color for this uptime range.
 
 
 =item column 2
@@ -573,11 +584,29 @@ Page title
 
 =item B<sorter> I<(mandatory setting)>
 
+sorter for this charts sections
+
 =item B<format>
 
 sprintf format string to format curent value
 
 =back
+
+=back
+
+=item B<+multihost>
+
+Settings for the multihost graphs. At the moment this is only used for the color setting. Check the documentation on the host property of the target section for more.
+
+The following variables can be set in this section:
+
+=over
+
+=item B<colors>
+
+Space separated list of colors for multihost graphs
+
+Example: colors = ff0000 00ff00 0000ff
 
 =back
 
@@ -654,49 +683,55 @@ The following new variables are valid:
 
 =item B<forks>
 
+see above
+
 Default value: forks = 5
 
 =item B<offset>
 
+see above
+
 =item B<step>
+
+see above
 
 =item B<lookup>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<mininterval>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 Default value: mininterval = 0.5
 
 =item B<pings>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<port>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 Default value: port = 53
 
 =item B<recordtype>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 Default value: recordtype = A
 
 =item B<require_answers>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<require_noerror>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<timeout>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 Default value: timeout = 5
 
@@ -712,15 +747,21 @@ The following new variables are valid:
 
 =item B<forks>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 Default value: forks = 5
 
 =item B<offset>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<step>
+
+see above
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -778,43 +819,49 @@ The following new variables are valid:
 
 =item B<forks>
 
+see above
+
 Default value: forks = 5
 
 =item B<offset>
 
+see above
+
 =item B<step>
+
+see above
 
 =item B<greeting>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 Default value: greeting = SSH-Latency-Measurement-Sorry-for-this-logmessage
 
 =item B<interval>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 Default value: interval = established
 
 =item B<mininterval>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 Default value: mininterval = 0.5
 
 =item B<pings>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<port>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 Default value: port = 22
 
 =item B<timeout>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 Default value: timeout = 5
 
@@ -830,15 +877,21 @@ The following new variables are valid:
 
 =item B<forks>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 Default value: forks = 5
 
 =item B<offset>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<step>
+
+see above
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -890,35 +943,43 @@ The following new variables are valid:
 
 =item B<forks>
 
+see above
+
 Default value: forks = 5
 
 =item B<offset>
 
+see above
+
 =item B<step>
 
+see above
+
 =item B<timeout>
+
+see above
 
 Default value: timeout = 5
 
 =item B<ioshost>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 This variable I<dynamically> modifies the grammar based on its value.
 
 =item B<iosint>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<name>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 This variable I<dynamically> modifies the grammar based on its value.
 
 =item B<pings>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =back
 
@@ -932,19 +993,27 @@ The following new variables are valid:
 
 =item B<forks>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 Default value: forks = 5
 
 =item B<offset>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<step>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<timeout>
+
+see above
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -980,43 +1049,51 @@ The following new variables are valid:
 
 =item B<forks>
 
+see above
+
 Default value: forks = 5
 
 =item B<offset>
 
+see above
+
 =item B<step>
 
+see above
+
 =item B<timeout>
+
+see above
 
 Default value: timeout = 5
 
 =item B<ioshost>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 This variable I<dynamically> modifies the grammar based on its value.
 
 =item B<iosint>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<packetsize>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 Default value: packetsize = 56
 
 =item B<pings>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<tos>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<vrf>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =back
 
@@ -1030,19 +1107,27 @@ The following new variables are valid:
 
 =item B<forks>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 Default value: forks = 5
 
 =item B<offset>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<step>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<timeout>
+
+see above
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -1088,39 +1173,47 @@ The following new variables are valid:
 
 =item B<forks>
 
+see above
+
 Default value: forks = 5
 
 =item B<offset>
 
+see above
+
 =item B<step>
 
+see above
+
 =item B<timeout>
+
+see above
 
 Default value: timeout = 5
 
 =item B<ioshost>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 This variable I<dynamically> modifies the grammar based on its value.
 
 =item B<iosint>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<pings>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<port>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 Default value: port = 80
 
 =item B<tos>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =back
 
@@ -1134,19 +1227,27 @@ The following new variables are valid:
 
 =item B<forks>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 Default value: forks = 5
 
 =item B<offset>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<step>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<timeout>
+
+see above
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -1188,67 +1289,75 @@ The following new variables are valid:
 
 =item B<binary>
 
+see above
+
 Default value: binary = /usr/bin/curl
 
 =item B<forks>
+
+see above
 
 Default value: forks = 5
 
 =item B<offset>
 
+see above
+
 =item B<step>
+
+see above
 
 =item B<agent>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<extraargs>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<extrare>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 Default value: extrare = / /
 
 =item B<follow_redirects>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 Default value: follow_redirects = no
 
 =item B<include_redirects>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 Default value: include_redirects = no
 
 =item B<insecure_ssl>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<interface>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<pings>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<ssl2>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<timeout>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 Default value: timeout = 10
 
 =item B<urlformat>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 This variable I<dynamically> modifies the grammar based on its value.
 
@@ -1264,11 +1373,15 @@ The following new variables are valid:
 
 =item B<binary>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 Default value: binary = /usr/bin/curl
 
 =item B<forks>
+
+see above
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -1276,9 +1389,13 @@ Default value: forks = 5
 
 =item B<offset>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<step>
+
+see above
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -1348,29 +1465,39 @@ The following new variables are valid:
 
 =item B<binary> I<(mandatory setting)>
 
+see above
+
 =item B<forks>
+
+see above
 
 Default value: forks = 5
 
 =item B<offset>
 
+see above
+
 =item B<step>
 
+see above
+
 =item B<timeout>
+
+see above
 
 Default value: timeout = 5
 
 =item B<lookup>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<pings>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<server>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =back
 
@@ -1384,9 +1511,13 @@ The following new variables are valid:
 
 =item B<binary> I<(mandatory setting)>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<forks>
+
+see above
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -1394,13 +1525,19 @@ Default value: forks = 5
 
 =item B<offset>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<step>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<timeout>
+
+see above
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -1432,57 +1569,65 @@ The following new variables are valid:
 
 =item B<binary>
 
+see above
+
 Default value: binary = /usr/bin/echoping
 
 =item B<forks>
+
+see above
 
 Default value: forks = 5
 
 =item B<offset>
 
+see above
+
 =item B<step>
+
+see above
 
 =item B<extraopts>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<fill>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<ipversion>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<pings>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<priority>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<size>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<timeout>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 Default value: timeout = 5
 
 =item B<tos>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<udp>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<waittime>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =back
 
@@ -1496,11 +1641,15 @@ The following new variables are valid:
 
 =item B<binary>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 Default value: binary = /usr/bin/echoping
 
 =item B<forks>
+
+see above
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -1508,9 +1657,13 @@ Default value: forks = 5
 
 =item B<offset>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<step>
+
+see above
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -1570,53 +1723,61 @@ The following new variables are valid:
 
 =item B<binary>
 
+see above
+
 Default value: binary = /usr/bin/echoping
 
 =item B<forks>
+
+see above
 
 Default value: forks = 5
 
 =item B<offset>
 
+see above
+
 =item B<step>
+
+see above
 
 =item B<extraopts>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<fill>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<ipversion>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<pings>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<priority>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<size>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<timeout>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 Default value: timeout = 5
 
 =item B<tos>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<waittime>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =back
 
@@ -1630,11 +1791,15 @@ The following new variables are valid:
 
 =item B<binary>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 Default value: binary = /usr/bin/echoping
 
 =item B<forks>
+
+see above
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -1642,9 +1807,13 @@ Default value: forks = 5
 
 =item B<offset>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<step>
+
+see above
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -1700,71 +1869,79 @@ The following new variables are valid:
 
 =item B<binary>
 
+see above
+
 Default value: binary = /usr/bin/echoping
 
 =item B<forks>
+
+see above
 
 Default value: forks = 5
 
 =item B<offset>
 
+see above
+
 =item B<step>
+
+see above
 
 =item B<dns_request>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 This variable I<dynamically> modifies the grammar based on its value.
 
 =item B<dns_tcp>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<dns_type>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 Default value: dns_type = A
 
 =item B<extraopts>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<ipversion>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<pings>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<plugin>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 Default value: plugin = dns
 
 =item B<pluginargs>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<priority>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<timeout>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 Default value: timeout = 5
 
 =item B<tos>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<waittime>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =back
 
@@ -1778,11 +1955,15 @@ The following new variables are valid:
 
 =item B<binary>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 Default value: binary = /usr/bin/echoping
 
 =item B<forks>
+
+see above
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -1790,9 +1971,13 @@ Default value: forks = 5
 
 =item B<offset>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<step>
+
+see above
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -1864,57 +2049,65 @@ The following new variables are valid:
 
 =item B<binary>
 
+see above
+
 Default value: binary = /usr/bin/echoping
 
 =item B<forks>
+
+see above
 
 Default value: forks = 5
 
 =item B<offset>
 
+see above
+
 =item B<step>
+
+see above
 
 =item B<extraopts>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<fill>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<ipversion>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<pings>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<priority>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<size>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<timeout>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 Default value: timeout = 5
 
 =item B<tos>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<udp>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<waittime>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =back
 
@@ -1928,11 +2121,15 @@ The following new variables are valid:
 
 =item B<binary>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 Default value: binary = /usr/bin/echoping
 
 =item B<forks>
+
+see above
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -1940,9 +2137,13 @@ Default value: forks = 5
 
 =item B<offset>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<step>
+
+see above
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -2002,63 +2203,71 @@ The following new variables are valid:
 
 =item B<binary>
 
+see above
+
 Default value: binary = /usr/bin/echoping
 
 =item B<forks>
+
+see above
 
 Default value: forks = 5
 
 =item B<offset>
 
+see above
+
 =item B<step>
+
+see above
 
 =item B<extraopts>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<ignore_cache>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<ipversion>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<pings>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<port>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<priority>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<revalidate_data>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<timeout>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 Default value: timeout = 5
 
 =item B<tos>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<url>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 Default value: url = /
 
 =item B<waittime>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =back
 
@@ -2072,11 +2281,15 @@ The following new variables are valid:
 
 =item B<binary>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 Default value: binary = /usr/bin/echoping
 
 =item B<forks>
+
+see above
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -2084,9 +2297,13 @@ Default value: forks = 5
 
 =item B<offset>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<step>
+
+see above
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -2152,63 +2369,71 @@ The following new variables are valid:
 
 =item B<binary>
 
+see above
+
 Default value: binary = /usr/bin/echoping
 
 =item B<forks>
+
+see above
 
 Default value: forks = 5
 
 =item B<offset>
 
+see above
+
 =item B<step>
+
+see above
 
 =item B<extraopts>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<ignore_cache>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<ipversion>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<pings>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<port>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<priority>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<revalidate_data>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<timeout>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 Default value: timeout = 5
 
 =item B<tos>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<url>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 Default value: url = /
 
 =item B<waittime>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =back
 
@@ -2222,11 +2447,15 @@ The following new variables are valid:
 
 =item B<binary>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 Default value: binary = /usr/bin/echoping
 
 =item B<forks>
+
+see above
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -2234,9 +2463,13 @@ Default value: forks = 5
 
 =item B<offset>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<step>
+
+see above
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -2302,51 +2535,59 @@ The following new variables are valid:
 
 =item B<binary>
 
+see above
+
 Default value: binary = /usr/bin/echoping
 
 =item B<forks>
+
+see above
 
 Default value: forks = 5
 
 =item B<offset>
 
+see above
+
 =item B<step>
+
+see above
 
 =item B<extraopts>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<ipversion>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<pings>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<priority>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<timeout>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 Default value: timeout = 5
 
 =item B<tos>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<url>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 This variable I<dynamically> modifies the grammar based on its value.
 
 =item B<waittime>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =back
 
@@ -2360,11 +2601,15 @@ The following new variables are valid:
 
 =item B<binary>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 Default value: binary = /usr/bin/echoping
 
 =item B<forks>
+
+see above
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -2372,9 +2617,13 @@ Default value: forks = 5
 
 =item B<offset>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<step>
+
+see above
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -2426,67 +2675,75 @@ The following new variables are valid:
 
 =item B<binary>
 
+see above
+
 Default value: binary = /usr/bin/echoping
 
 =item B<forks>
+
+see above
 
 Default value: forks = 5
 
 =item B<offset>
 
+see above
+
 =item B<step>
+
+see above
 
 =item B<extraopts>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<ipversion>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<ldap_base>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<ldap_request>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<ldap_scope>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<pings>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<plugin>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 Default value: plugin = ldap
 
 =item B<pluginargs>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<priority>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<timeout>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 Default value: timeout = 5
 
 =item B<tos>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<waittime>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =back
 
@@ -2500,11 +2757,15 @@ The following new variables are valid:
 
 =item B<binary>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 Default value: binary = /usr/bin/echoping
 
 =item B<forks>
+
+see above
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -2512,9 +2773,13 @@ Default value: forks = 5
 
 =item B<offset>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<step>
+
+see above
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -2584,55 +2849,63 @@ The following new variables are valid:
 
 =item B<binary>
 
+see above
+
 Default value: binary = /usr/bin/echoping
 
 =item B<forks>
+
+see above
 
 Default value: forks = 5
 
 =item B<offset>
 
+see above
+
 =item B<step>
+
+see above
 
 =item B<extraopts>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<ipversion>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<pings>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<plugin>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 This variable I<dynamically> modifies the grammar based on its value.
 
 =item B<pluginargs>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<priority>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<timeout>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 Default value: timeout = 5
 
 =item B<tos>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<waittime>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =back
 
@@ -2646,11 +2919,15 @@ The following new variables are valid:
 
 =item B<binary>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 Default value: binary = /usr/bin/echoping
 
 =item B<forks>
+
+see above
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -2658,9 +2935,13 @@ Default value: forks = 5
 
 =item B<offset>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<step>
+
+see above
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -2716,45 +2997,53 @@ The following new variables are valid:
 
 =item B<binary>
 
+see above
+
 Default value: binary = /usr/bin/echoping
 
 =item B<forks>
+
+see above
 
 Default value: forks = 5
 
 =item B<offset>
 
+see above
+
 =item B<step>
+
+see above
 
 =item B<extraopts>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<ipversion>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<pings>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<priority>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<timeout>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 Default value: timeout = 5
 
 =item B<tos>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<waittime>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =back
 
@@ -2768,11 +3057,15 @@ The following new variables are valid:
 
 =item B<binary>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 Default value: binary = /usr/bin/echoping
 
 =item B<forks>
+
+see above
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -2780,9 +3073,13 @@ Default value: forks = 5
 
 =item B<offset>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<step>
+
+see above
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -2830,59 +3127,67 @@ The following new variables are valid:
 
 =item B<binary>
 
+see above
+
 Default value: binary = /usr/bin/echoping
 
 =item B<forks>
+
+see above
 
 Default value: forks = 5
 
 =item B<offset>
 
+see above
+
 =item B<step>
+
+see above
 
 =item B<extraopts>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<ipversion>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<pings>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<plugin>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 Default value: plugin = whois
 
 =item B<pluginargs>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<priority>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<timeout>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 Default value: timeout = 5
 
 =item B<tos>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<waittime>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<whois_request>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 This variable I<dynamically> modifies the grammar based on its value.
 
@@ -2898,11 +3203,15 @@ The following new variables are valid:
 
 =item B<binary>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 Default value: binary = /usr/bin/echoping
 
 =item B<forks>
+
+see above
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -2910,9 +3219,13 @@ Default value: forks = 5
 
 =item B<offset>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<step>
+
+see above
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -2974,23 +3287,41 @@ The following new variables are valid:
 
 =item B<binary> I<(mandatory setting)>
 
+see above
+
 =item B<hostinterval>
 
+see above
+
 =item B<mininterval>
+
+see above
 
 Default value: mininterval = 0.01
 
 =item B<offset>
 
+see above
+
 =item B<packetsize>
+
+see above
 
 =item B<pings>
 
+see above
+
 =item B<sourceaddress>
+
+see above
 
 =item B<step>
 
+see above
+
 =item B<timeout>
+
+see above
 
 =back
 
@@ -3004,13 +3335,19 @@ The following new variables are valid:
 
 =item B<binary> I<(mandatory setting)>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<hostinterval>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<mininterval>
+
+see above
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -3018,25 +3355,37 @@ Default value: mininterval = 0.01
 
 =item B<offset>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<packetsize>
+
+see above
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<pings>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<sourceaddress>
+
+see above
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<step>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<timeout>
+
+see above
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -3054,23 +3403,41 @@ The following new variables are valid:
 
 =item B<binary> I<(mandatory setting)>
 
+see above
+
 =item B<hostinterval>
 
+see above
+
 =item B<mininterval>
+
+see above
 
 Default value: mininterval = 0.01
 
 =item B<offset>
 
+see above
+
 =item B<packetsize>
+
+see above
 
 =item B<pings>
 
+see above
+
 =item B<sourceaddress>
+
+see above
 
 =item B<step>
 
+see above
+
 =item B<timeout>
+
+see above
 
 =back
 
@@ -3084,13 +3451,19 @@ The following new variables are valid:
 
 =item B<binary> I<(mandatory setting)>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<hostinterval>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<mininterval>
+
+see above
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -3098,25 +3471,37 @@ Default value: mininterval = 0.01
 
 =item B<offset>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<packetsize>
+
+see above
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<pings>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<sourceaddress>
+
+see above
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<step>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<timeout>
+
+see above
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -3134,51 +3519,67 @@ The following new variables are valid:
 
 =item B<destfile>
 
+see above
+
 =item B<forks>
+
+see above
 
 Default value: forks = 5
 
 =item B<min_interval>
 
+see above
+
 Default value: min_interval = 1
 
 =item B<mode> I<(mandatory setting)>
 
+see above
+
 =item B<offset>
+
+see above
 
 =item B<passwordfile>
 
+see above
+
 =item B<srcfile> I<(mandatory setting)>
+
+see above
 
 =item B<step>
 
+see above
+
 =item B<localaddr>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<passive>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<password>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<pings>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<port>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<timeout> I<(mandatory setting)>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<username>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =back
 
@@ -3192,9 +3593,13 @@ The following new variables are valid:
 
 =item B<destfile>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<forks>
+
+see above
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -3202,27 +3607,39 @@ Default value: forks = 5
 
 =item B<min_interval>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 Default value: min_interval = 1
 
 =item B<mode> I<(mandatory setting)>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<offset>
+
+see above
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<passwordfile>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<srcfile> I<(mandatory setting)>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<step>
+
+see above
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -3268,39 +3685,51 @@ The following new variables are valid:
 
 =item B<binary> I<(mandatory setting)>
 
+see above
+
 =item B<forks>
+
+see above
 
 Default value: forks = 5
 
 =item B<offset>
 
+see above
+
 =item B<packetsize>
+
+see above
 
 Default value: packetsize = 56
 
 =item B<step>
 
+see above
+
 =item B<timeout>
+
+see above
 
 Default value: timeout = 5
 
 =item B<ioshost>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 This variable I<dynamically> modifies the grammar based on its value.
 
 =item B<iosint>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<iosuser>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<pings>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =back
 
@@ -3314,9 +3743,13 @@ The following new variables are valid:
 
 =item B<binary> I<(mandatory setting)>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<forks>
+
+see above
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -3324,9 +3757,13 @@ Default value: forks = 5
 
 =item B<offset>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<packetsize>
+
+see above
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -3334,9 +3771,13 @@ Default value: packetsize = 56
 
 =item B<step>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<timeout>
+
+see above
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -3372,69 +3813,77 @@ The following new variables are valid:
 
 =item B<forks>
 
+see above
+
 Default value: forks = 5
 
 =item B<offset>
 
+see above
+
 =item B<passwordfile>
+
+see above
 
 =item B<step>
 
+see above
+
 =item B<attrs>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<base>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<binddn>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<filter>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 This variable I<dynamically> modifies the grammar based on its value.
 
 =item B<mininterval>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 Default value: mininterval = 1
 
 =item B<password>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<pings>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<port>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<scope>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 Default value: scope = sub
 
 =item B<start_tls>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<timeout>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 Default value: timeout = 5
 
 =item B<version>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =back
 
@@ -3448,19 +3897,27 @@ The following new variables are valid:
 
 =item B<forks>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 Default value: forks = 5
 
 =item B<offset>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<passwordfile>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<step>
+
+see above
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -3532,51 +3989,61 @@ The following new variables are valid:
 
 =item B<forks>
 
+see above
+
 Default value: forks = 5
 
 =item B<offset>
 
+see above
+
 =item B<passwordfile>
+
+see above
 
 =item B<secretfile>
 
+see above
+
 =item B<step>
+
+see above
 
 =item B<mininterval>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 Default value: mininterval = 1
 
 =item B<nas_ip_address>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<password>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<pings>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<port>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<secret>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<timeout>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 Default value: timeout = 5
 
 =item B<username>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 This variable I<dynamically> modifies the grammar based on its value.
 
@@ -3592,23 +4059,33 @@ The following new variables are valid:
 
 =item B<forks>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 Default value: forks = 5
 
 =item B<offset>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<passwordfile>
+
+see above
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<secretfile>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<step>
+
+see above
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -3662,29 +4139,53 @@ The following new variables are valid:
 
 =item B<binary> I<(mandatory setting)>
 
+see above
+
 =item B<hostinterval>
 
+see above
+
 =item B<mininterval>
+
+see above
 
 Default value: mininterval = 0.01
 
 =item B<offset>
 
+see above
+
 =item B<packetsize>
+
+see above
 
 =item B<pings>
 
+see above
+
 =item B<rbinary> I<(mandatory setting)>
+
+see above
 
 =item B<rhost> I<(mandatory setting)>
 
+see above
+
 =item B<ruser>
+
+see above
 
 =item B<sourceaddress>
 
+see above
+
 =item B<step>
 
+see above
+
 =item B<timeout>
+
+see above
 
 =back
 
@@ -3698,13 +4199,19 @@ The following new variables are valid:
 
 =item B<binary> I<(mandatory setting)>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<hostinterval>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<mininterval>
+
+see above
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -3712,37 +4219,55 @@ Default value: mininterval = 0.01
 
 =item B<offset>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<packetsize>
+
+see above
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<pings>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<rbinary> I<(mandatory setting)>
+
+see above
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<rhost> I<(mandatory setting)>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<ruser>
+
+see above
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<sourceaddress>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<step>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<timeout>
+
+see above
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -3760,27 +4285,37 @@ The following new variables are valid:
 
 =item B<binary> I<(mandatory setting)>
 
+see above
+
 =item B<forks>
+
+see above
 
 Default value: forks = 5
 
 =item B<offset>
 
+see above
+
 =item B<step>
 
+see above
+
 =item B<timeout>
+
+see above
 
 Default value: timeout = 5
 
 =item B<keytype>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 Default value: keytype = rsa
 
 =item B<pings>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =back
 
@@ -3794,9 +4329,13 @@ The following new variables are valid:
 
 =item B<binary> I<(mandatory setting)>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<forks>
+
+see above
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -3804,13 +4343,19 @@ Default value: forks = 5
 
 =item B<offset>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<step>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<timeout>
+
+see above
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -3840,55 +4385,65 @@ The following new variables are valid:
 
 =item B<forks>
 
+see above
+
 Default value: forks = 5
 
 =item B<offset>
 
+see above
+
 =item B<passwordfile>
+
+see above
 
 =item B<secretfile>
 
+see above
+
 =item B<step>
+
+see above
 
 =item B<authtype>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 Default value: authtype = ASCII
 
 =item B<mininterval>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 Default value: mininterval = 1
 
 =item B<password>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<pings>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<port>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 Default value: port = 49
 
 =item B<secret>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<timeout>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 Default value: timeout = 5
 
 =item B<username>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 This variable I<dynamically> modifies the grammar based on its value.
 
@@ -3904,23 +4459,33 @@ The following new variables are valid:
 
 =item B<forks>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 Default value: forks = 5
 
 =item B<offset>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<passwordfile>
+
+see above
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<secretfile>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<step>
+
+see above
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -3978,43 +4543,53 @@ The following new variables are valid:
 
 =item B<forks>
 
+see above
+
 Default value: forks = 5
 
 =item B<offset>
 
+see above
+
 =item B<packetsize>
+
+see above
 
 Default value: packetsize = 56
 
 =item B<step>
 
+see above
+
 =item B<timeout>
+
+see above
 
 Default value: timeout = 5
 
 =item B<iospass>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 This variable I<dynamically> modifies the grammar based on its value.
 
 =item B<iosuser>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 This variable I<dynamically> modifies the grammar based on its value.
 
 =item B<pings>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<psource>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<source>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 This variable I<dynamically> modifies the grammar based on its value.
 
@@ -4030,15 +4605,21 @@ The following new variables are valid:
 
 =item B<forks>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 Default value: forks = 5
 
 =item B<offset>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<packetsize>
+
+see above
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -4046,9 +4627,13 @@ Default value: packetsize = 56
 
 =item B<step>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<timeout>
+
+see above
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -4088,43 +4673,53 @@ The following new variables are valid:
 
 =item B<forks>
 
+see above
+
 Default value: forks = 5
 
 =item B<offset>
 
+see above
+
 =item B<packetsize>
+
+see above
 
 Default value: packetsize = 100
 
 =item B<step>
 
+see above
+
 =item B<timeout>
+
+see above
 
 Default value: timeout = 5
 
 =item B<junospass>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 This variable I<dynamically> modifies the grammar based on its value.
 
 =item B<junosuser>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 This variable I<dynamically> modifies the grammar based on its value.
 
 =item B<pings>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<psource>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<source>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 This variable I<dynamically> modifies the grammar based on its value.
 
@@ -4140,15 +4735,21 @@ The following new variables are valid:
 
 =item B<forks>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 Default value: forks = 5
 
 =item B<offset>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<packetsize>
+
+see above
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -4156,9 +4757,13 @@ Default value: packetsize = 100
 
 =item B<step>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<timeout>
+
+see above
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -4198,39 +4803,51 @@ The following new variables are valid:
 
 =item B<forks>
 
+see above
+
 Default value: forks = 5
 
 =item B<maxsize>
+
+see above
 
 Default value: maxsize = 2000
 
 =item B<min_interval>
 
+see above
+
 Default value: min_interval = 1
 
 =item B<offset>
 
+see above
+
 =item B<step>
 
+see above
+
 =item B<useragent>
+
+see above
 
 Default value: useragent = SmokePing/2.x (WebProxyFilter Probe)
 
 =item B<deny_re> I<(mandatory setting)>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<more_hosts>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<pings>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 =item B<timeout>
 
- (This variable can be overridden target-specifically in the Targets section.)
+(This variable can be overridden target-specifically in the Targets section.)
 
 Default value: timeout = 2
 
@@ -4246,11 +4863,15 @@ The following new variables are valid:
 
 =item B<forks>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 Default value: forks = 5
 
 =item B<maxsize>
+
+see above
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -4258,19 +4879,27 @@ Default value: maxsize = 2000
 
 =item B<min_interval>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 Default value: min_interval = 1
 
 =item B<offset>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<step>
 
+see above
+
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<useragent>
+
+see above
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
@@ -4305,6 +4934,2876 @@ Default value: timeout = 2
 (End of dynamical grammar changes for example instances of section C</[-_0-9a-zA-Z.]+/>.)
 
 =back
+
+=head2 *** Targets *** I<(mandatory section)>
+
+The Target Section defines the actual work of SmokePing. It contains a
+hierarchical list of hosts which mark the endpoints of the network
+connections the system should monitor. Each section can contain one host as
+well as other sections. By adding slaves you can measure the connectivity of
+an endpoint looking from several sources.
+
+
+The following variables can be set in this section:
+
+=over
+
+=item B<probe> I<(mandatory setting)>
+
+The name of the probe module to be used for this host. The value of
+this variable gets propagated
+
+
+This variable I<dynamically> modifies the grammar based on its value.
+
+=item B<menu> I<(mandatory setting)>
+
+Menu entry for this section. If not set this will be set to the hostname.
+
+
+=item B<title> I<(mandatory setting)>
+
+Title of the page when it is displayed. This will be set to the hostname if
+left empty.
+
+
+=item B<remark>
+
+An optional remark on the current section. It gets displayed on the webpage.
+
+
+=item B<alerts>
+
+A comma separated list of alerts to check for this target. The alerts have
+to be setup in the Alerts section. Alerts are inherited by child nodes. Use
+an empty alerts definition to remove inherited alerts from the current target
+and its children.
+
+
+
+=item B<slaves>
+
+=back
+
+The following sections are valid on level 1:
+
+=over
+
+=item B<+/[-_0-9a-zA-Z.]+/>
+
+Each target section can contain information about a host to monitor as
+well as further target sections. Most variables have already been
+described above. The expression above defines legal names for target
+sections.
+
+
+This section is I<recursive>: it can contain subsection(s) with the same syntax.
+
+The following variables can be set in this section:
+
+=over
+
+=item B<probe>
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+This variable I<dynamically> modifies the grammar based on its value.
+
+=item B<menu>
+
+=item B<title>
+
+=item B<alerts>
+
+Comma separated list of alert names
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<note>
+
+Some information about this entry which does NOT get displayed on the web.
+
+
+=item B<email>
+
+This is the contact address for the owner of the current host. In connection with the B<DYNAMIC> hosts,
+the address will be used for sending the belowmentioned script.
+
+
+=item B<host>
+
+There are three types of "hosts" in smokeping.
+
+=over
+
+=item 1
+
+The 'hostname' is a name of a host you want to target from smokeping
+
+=item 2
+
+The string B<DYNAMIC>. Is for machines that have a dynamic IP address. These boxes
+are required to regularly contact the SmokePing server to confirm their IP address.
+ When starting SmokePing with the commandline argument
+B<--email> it will add a secret password to each of the B<DYNAMIC>
+host lines and send a script to the owner of each host. This script
+must be started periodically (cron) on the host in question to let smokeping know
+where the host is curently located. If the target machine supports
+SNMP SmokePing will also query the hosts
+sysContact, sysName and sysLocation properties to make sure it is
+still the same host.
+
+=item 3
+
+A space separated list of 'target-path' entries (multihost target). All
+targets mentioned in this list will be displayed in one graph. Note that the
+graph will look different from the normal smokeping graphs. The syntax for
+multihost targets is as follows:
+
+ host = /world/town/host1 /world/town2/host33 /world/town2/host1~slave
+
+=back
+
+
+
+=item B<remark>
+
+=item B<rawlog>
+
+Log the raw data, gathered for this target, in tab separated format, to a file with the
+same basename as the corresponding RRD file. Use posix strftime to format the timestamp to be
+put into the file name. The filename is built like this:
+
+ basename.strftime.csv
+
+Example:
+
+ rawlog=%Y-%m-%d
+
+this would create a new logfile every day with a name like this: 
+
+ targethost.2004-05-03.csv
+
+
+
+=item B<alertee>
+
+If you want to have alerts for this target and all targets below it go to a particular address
+on top of the address already specified in the alert, you can add it here. This can be a comma separated list of items.
+
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<slaves>
+
+The slave names must match the slaves you have setup in the slaves section.
+
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=back
+
+The following sections are valid on level 2:
+
+=over
+
+=item B<++/[-_0-9a-zA-Z.]+/>
+
+This section is I<recursive>: it can contain subsection(s) with the same syntax.
+
+=back
+
+=back
+
+Dynamical grammar changes for example values of variable C<probe>:
+
+=over
+
+=item B<AnotherDNS>: (See the L<separate module documentation|Smokeping::probes::AnotherDNS> for details about each variable.)
+
+The following new variables are valid:
+
+=over
+
+=item B<lookup>
+
+see above
+
+=item B<mininterval>
+
+see above
+
+=item B<pings>
+
+see above
+
+=item B<port>
+
+see above
+
+=item B<recordtype>
+
+see above
+
+=item B<require_answers>
+
+see above
+
+=item B<require_noerror>
+
+see above
+
+=item B<timeout>
+
+see above
+
+=back
+
+Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+
+=over
+
+The following new variables are valid:
+
+=over
+
+=item B<lookup>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<mininterval>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<pings>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<port>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<recordtype>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<require_answers>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<require_noerror>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<timeout>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=back
+
+=back
+
+(End of dynamical grammar changes for variable C<probe> example value C<AnotherDNS>.)
+
+=item B<AnotherSSH>: (See the L<separate module documentation|Smokeping::probes::AnotherSSH> for details about each variable.)
+
+The following new variables are valid:
+
+=over
+
+=item B<greeting>
+
+see above
+
+=item B<interval>
+
+see above
+
+=item B<mininterval>
+
+see above
+
+=item B<pings>
+
+see above
+
+=item B<port>
+
+see above
+
+=item B<timeout>
+
+see above
+
+=back
+
+Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+
+=over
+
+The following new variables are valid:
+
+=over
+
+=item B<greeting>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<interval>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<mininterval>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<pings>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<port>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<timeout>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=back
+
+=back
+
+(End of dynamical grammar changes for variable C<probe> example value C<AnotherSSH>.)
+
+=item B<CiscoRTTMonDNS>: (See the L<separate module documentation|Smokeping::probes::CiscoRTTMonDNS> for details about each variable.)
+
+The following new variables are valid:
+
+=over
+
+=item B<ioshost>
+
+see above
+
+=item B<iosint>
+
+see above
+
+=item B<name>
+
+see above
+
+=item B<pings>
+
+see above
+
+=back
+
+Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+
+=over
+
+The following new variables are valid:
+
+=over
+
+=item B<ioshost>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<iosint>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<name>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<pings>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=back
+
+=back
+
+(End of dynamical grammar changes for variable C<probe> example value C<CiscoRTTMonDNS>.)
+
+=item B<CiscoRTTMonEchoICMP>: (See the L<separate module documentation|Smokeping::probes::CiscoRTTMonEchoICMP> for details about each variable.)
+
+The following new variables are valid:
+
+=over
+
+=item B<ioshost>
+
+see above
+
+=item B<iosint>
+
+see above
+
+=item B<packetsize>
+
+see above
+
+=item B<pings>
+
+see above
+
+=item B<tos>
+
+see above
+
+=item B<vrf>
+
+see above
+
+=back
+
+Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+
+=over
+
+The following new variables are valid:
+
+=over
+
+=item B<ioshost>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<iosint>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<packetsize>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<pings>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<tos>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<vrf>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=back
+
+=back
+
+(End of dynamical grammar changes for variable C<probe> example value C<CiscoRTTMonEchoICMP>.)
+
+=item B<CiscoRTTMonTcpConnect>: (See the L<separate module documentation|Smokeping::probes::CiscoRTTMonTcpConnect> for details about each variable.)
+
+The following new variables are valid:
+
+=over
+
+=item B<ioshost>
+
+see above
+
+=item B<iosint>
+
+see above
+
+=item B<pings>
+
+see above
+
+=item B<port>
+
+see above
+
+=item B<tos>
+
+see above
+
+=back
+
+Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+
+=over
+
+The following new variables are valid:
+
+=over
+
+=item B<ioshost>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<iosint>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<pings>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<port>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<tos>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=back
+
+=back
+
+(End of dynamical grammar changes for variable C<probe> example value C<CiscoRTTMonTcpConnect>.)
+
+=item B<Curl>: (See the L<separate module documentation|Smokeping::probes::Curl> for details about each variable.)
+
+The following new variables are valid:
+
+=over
+
+=item B<agent>
+
+see above
+
+=item B<extraargs>
+
+see above
+
+=item B<extrare>
+
+see above
+
+=item B<follow_redirects>
+
+see above
+
+=item B<include_redirects>
+
+see above
+
+=item B<insecure_ssl>
+
+see above
+
+=item B<interface>
+
+see above
+
+=item B<pings>
+
+see above
+
+=item B<ssl2>
+
+see above
+
+=item B<timeout>
+
+see above
+
+=item B<urlformat>
+
+see above
+
+=back
+
+Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+
+=over
+
+The following new variables are valid:
+
+=over
+
+=item B<agent>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<extraargs>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<extrare>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<follow_redirects>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<include_redirects>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<insecure_ssl>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<interface>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<pings>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<ssl2>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<timeout>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<urlformat>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=back
+
+=back
+
+(End of dynamical grammar changes for variable C<probe> example value C<Curl>.)
+
+=item B<DNS>: (See the L<separate module documentation|Smokeping::probes::DNS> for details about each variable.)
+
+The following new variables are valid:
+
+=over
+
+=item B<lookup>
+
+see above
+
+=item B<pings>
+
+see above
+
+=item B<server>
+
+see above
+
+=back
+
+Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+
+=over
+
+The following new variables are valid:
+
+=over
+
+=item B<lookup>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<pings>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<server>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=back
+
+=back
+
+(End of dynamical grammar changes for variable C<probe> example value C<DNS>.)
+
+=item B<EchoPing>: (See the L<separate module documentation|Smokeping::probes::EchoPing> for details about each variable.)
+
+The following new variables are valid:
+
+=over
+
+=item B<extraopts>
+
+see above
+
+=item B<fill>
+
+see above
+
+=item B<ipversion>
+
+see above
+
+=item B<pings>
+
+see above
+
+=item B<priority>
+
+see above
+
+=item B<size>
+
+see above
+
+=item B<timeout>
+
+see above
+
+=item B<tos>
+
+see above
+
+=item B<udp>
+
+see above
+
+=item B<waittime>
+
+see above
+
+=back
+
+Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+
+=over
+
+The following new variables are valid:
+
+=over
+
+=item B<extraopts>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<fill>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<ipversion>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<pings>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<priority>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<size>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<timeout>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<tos>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<udp>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<waittime>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=back
+
+=back
+
+(End of dynamical grammar changes for variable C<probe> example value C<EchoPing>.)
+
+=item B<EchoPingChargen>: (See the L<separate module documentation|Smokeping::probes::EchoPingChargen> for details about each variable.)
+
+The following new variables are valid:
+
+=over
+
+=item B<extraopts>
+
+see above
+
+=item B<fill>
+
+see above
+
+=item B<ipversion>
+
+see above
+
+=item B<pings>
+
+see above
+
+=item B<priority>
+
+see above
+
+=item B<size>
+
+see above
+
+=item B<timeout>
+
+see above
+
+=item B<tos>
+
+see above
+
+=item B<waittime>
+
+see above
+
+=back
+
+Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+
+=over
+
+The following new variables are valid:
+
+=over
+
+=item B<extraopts>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<fill>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<ipversion>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<pings>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<priority>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<size>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<timeout>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<tos>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<waittime>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=back
+
+=back
+
+(End of dynamical grammar changes for variable C<probe> example value C<EchoPingChargen>.)
+
+=item B<EchoPingDNS>: (See the L<separate module documentation|Smokeping::probes::EchoPingDNS> for details about each variable.)
+
+The following new variables are valid:
+
+=over
+
+=item B<dns_request>
+
+see above
+
+=item B<dns_tcp>
+
+see above
+
+=item B<dns_type>
+
+see above
+
+=item B<extraopts>
+
+see above
+
+=item B<ipversion>
+
+see above
+
+=item B<pings>
+
+see above
+
+=item B<plugin>
+
+see above
+
+=item B<pluginargs>
+
+see above
+
+=item B<priority>
+
+see above
+
+=item B<timeout>
+
+see above
+
+=item B<tos>
+
+see above
+
+=item B<waittime>
+
+see above
+
+=back
+
+Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+
+=over
+
+The following new variables are valid:
+
+=over
+
+=item B<dns_request>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<dns_tcp>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<dns_type>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<extraopts>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<ipversion>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<pings>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<plugin>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<pluginargs>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<priority>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<timeout>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<tos>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<waittime>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=back
+
+=back
+
+(End of dynamical grammar changes for variable C<probe> example value C<EchoPingDNS>.)
+
+=item B<EchoPingDiscard>: (See the L<separate module documentation|Smokeping::probes::EchoPingDiscard> for details about each variable.)
+
+The following new variables are valid:
+
+=over
+
+=item B<extraopts>
+
+see above
+
+=item B<fill>
+
+see above
+
+=item B<ipversion>
+
+see above
+
+=item B<pings>
+
+see above
+
+=item B<priority>
+
+see above
+
+=item B<size>
+
+see above
+
+=item B<timeout>
+
+see above
+
+=item B<tos>
+
+see above
+
+=item B<udp>
+
+see above
+
+=item B<waittime>
+
+see above
+
+=back
+
+Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+
+=over
+
+The following new variables are valid:
+
+=over
+
+=item B<extraopts>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<fill>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<ipversion>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<pings>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<priority>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<size>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<timeout>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<tos>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<udp>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<waittime>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=back
+
+=back
+
+(End of dynamical grammar changes for variable C<probe> example value C<EchoPingDiscard>.)
+
+=item B<EchoPingHttp>: (See the L<separate module documentation|Smokeping::probes::EchoPingHttp> for details about each variable.)
+
+The following new variables are valid:
+
+=over
+
+=item B<extraopts>
+
+see above
+
+=item B<ignore_cache>
+
+see above
+
+=item B<ipversion>
+
+see above
+
+=item B<pings>
+
+see above
+
+=item B<port>
+
+see above
+
+=item B<priority>
+
+see above
+
+=item B<revalidate_data>
+
+see above
+
+=item B<timeout>
+
+see above
+
+=item B<tos>
+
+see above
+
+=item B<url>
+
+see above
+
+=item B<waittime>
+
+see above
+
+=back
+
+Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+
+=over
+
+The following new variables are valid:
+
+=over
+
+=item B<extraopts>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<ignore_cache>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<ipversion>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<pings>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<port>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<priority>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<revalidate_data>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<timeout>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<tos>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<url>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<waittime>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=back
+
+=back
+
+(End of dynamical grammar changes for variable C<probe> example value C<EchoPingHttp>.)
+
+=item B<EchoPingHttps>: (See the L<separate module documentation|Smokeping::probes::EchoPingHttps> for details about each variable.)
+
+The following new variables are valid:
+
+=over
+
+=item B<extraopts>
+
+see above
+
+=item B<ignore_cache>
+
+see above
+
+=item B<ipversion>
+
+see above
+
+=item B<pings>
+
+see above
+
+=item B<port>
+
+see above
+
+=item B<priority>
+
+see above
+
+=item B<revalidate_data>
+
+see above
+
+=item B<timeout>
+
+see above
+
+=item B<tos>
+
+see above
+
+=item B<url>
+
+see above
+
+=item B<waittime>
+
+see above
+
+=back
+
+Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+
+=over
+
+The following new variables are valid:
+
+=over
+
+=item B<extraopts>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<ignore_cache>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<ipversion>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<pings>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<port>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<priority>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<revalidate_data>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<timeout>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<tos>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<url>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<waittime>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=back
+
+=back
+
+(End of dynamical grammar changes for variable C<probe> example value C<EchoPingHttps>.)
+
+=item B<EchoPingIcp>: (See the L<separate module documentation|Smokeping::probes::EchoPingIcp> for details about each variable.)
+
+The following new variables are valid:
+
+=over
+
+=item B<extraopts>
+
+see above
+
+=item B<ipversion>
+
+see above
+
+=item B<pings>
+
+see above
+
+=item B<priority>
+
+see above
+
+=item B<timeout>
+
+see above
+
+=item B<tos>
+
+see above
+
+=item B<url>
+
+see above
+
+=item B<waittime>
+
+see above
+
+=back
+
+Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+
+=over
+
+The following new variables are valid:
+
+=over
+
+=item B<extraopts>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<ipversion>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<pings>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<priority>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<timeout>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<tos>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<url>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<waittime>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=back
+
+=back
+
+(End of dynamical grammar changes for variable C<probe> example value C<EchoPingIcp>.)
+
+=item B<EchoPingLDAP>: (See the L<separate module documentation|Smokeping::probes::EchoPingLDAP> for details about each variable.)
+
+The following new variables are valid:
+
+=over
+
+=item B<extraopts>
+
+see above
+
+=item B<ipversion>
+
+see above
+
+=item B<ldap_base>
+
+see above
+
+=item B<ldap_request>
+
+see above
+
+=item B<ldap_scope>
+
+see above
+
+=item B<pings>
+
+see above
+
+=item B<plugin>
+
+see above
+
+=item B<pluginargs>
+
+see above
+
+=item B<priority>
+
+see above
+
+=item B<timeout>
+
+see above
+
+=item B<tos>
+
+see above
+
+=item B<waittime>
+
+see above
+
+=back
+
+Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+
+=over
+
+The following new variables are valid:
+
+=over
+
+=item B<extraopts>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<ipversion>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<ldap_base>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<ldap_request>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<ldap_scope>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<pings>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<plugin>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<pluginargs>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<priority>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<timeout>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<tos>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<waittime>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=back
+
+=back
+
+(End of dynamical grammar changes for variable C<probe> example value C<EchoPingLDAP>.)
+
+=item B<EchoPingPlugin>: (See the L<separate module documentation|Smokeping::probes::EchoPingPlugin> for details about each variable.)
+
+The following new variables are valid:
+
+=over
+
+=item B<extraopts>
+
+see above
+
+=item B<ipversion>
+
+see above
+
+=item B<pings>
+
+see above
+
+=item B<plugin>
+
+see above
+
+=item B<pluginargs>
+
+see above
+
+=item B<priority>
+
+see above
+
+=item B<timeout>
+
+see above
+
+=item B<tos>
+
+see above
+
+=item B<waittime>
+
+see above
+
+=back
+
+Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+
+=over
+
+The following new variables are valid:
+
+=over
+
+=item B<extraopts>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<ipversion>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<pings>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<plugin>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<pluginargs>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<priority>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<timeout>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<tos>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<waittime>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=back
+
+=back
+
+(End of dynamical grammar changes for variable C<probe> example value C<EchoPingPlugin>.)
+
+=item B<EchoPingSmtp>: (See the L<separate module documentation|Smokeping::probes::EchoPingSmtp> for details about each variable.)
+
+The following new variables are valid:
+
+=over
+
+=item B<extraopts>
+
+see above
+
+=item B<ipversion>
+
+see above
+
+=item B<pings>
+
+see above
+
+=item B<priority>
+
+see above
+
+=item B<timeout>
+
+see above
+
+=item B<tos>
+
+see above
+
+=item B<waittime>
+
+see above
+
+=back
+
+Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+
+=over
+
+The following new variables are valid:
+
+=over
+
+=item B<extraopts>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<ipversion>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<pings>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<priority>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<timeout>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<tos>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<waittime>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=back
+
+=back
+
+(End of dynamical grammar changes for variable C<probe> example value C<EchoPingSmtp>.)
+
+=item B<EchoPingWhois>: (See the L<separate module documentation|Smokeping::probes::EchoPingWhois> for details about each variable.)
+
+The following new variables are valid:
+
+=over
+
+=item B<extraopts>
+
+see above
+
+=item B<ipversion>
+
+see above
+
+=item B<pings>
+
+see above
+
+=item B<plugin>
+
+see above
+
+=item B<pluginargs>
+
+see above
+
+=item B<priority>
+
+see above
+
+=item B<timeout>
+
+see above
+
+=item B<tos>
+
+see above
+
+=item B<waittime>
+
+see above
+
+=item B<whois_request>
+
+see above
+
+=back
+
+Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+
+=over
+
+The following new variables are valid:
+
+=over
+
+=item B<extraopts>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<ipversion>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<pings>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<plugin>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<pluginargs>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<priority>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<timeout>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<tos>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<waittime>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<whois_request>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=back
+
+=back
+
+(End of dynamical grammar changes for variable C<probe> example value C<EchoPingWhois>.)
+
+=item B<FPing>: (See the L<separate module documentation|Smokeping::probes::FPing> for details about each variable.)
+
+No changes that can be automatically described.
+
+(End of dynamical grammar changes for variable C<probe> example value C<FPing>.)
+
+=item B<FPing6>: (See the L<separate module documentation|Smokeping::probes::FPing6> for details about each variable.)
+
+No changes that can be automatically described.
+
+(End of dynamical grammar changes for variable C<probe> example value C<FPing6>.)
+
+=item B<FTPtransfer>: (See the L<separate module documentation|Smokeping::probes::FTPtransfer> for details about each variable.)
+
+The following new variables are valid:
+
+=over
+
+=item B<localaddr>
+
+see above
+
+=item B<passive>
+
+see above
+
+=item B<password>
+
+see above
+
+=item B<pings>
+
+see above
+
+=item B<port>
+
+see above
+
+=item B<timeout>
+
+see above
+
+=item B<username>
+
+see above
+
+=back
+
+Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+
+=over
+
+The following new variables are valid:
+
+=over
+
+=item B<localaddr>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<passive>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<password>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<pings>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<port>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<timeout>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<username>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=back
+
+=back
+
+(End of dynamical grammar changes for variable C<probe> example value C<FTPtransfer>.)
+
+=item B<IOSPing>: (See the L<separate module documentation|Smokeping::probes::IOSPing> for details about each variable.)
+
+The following new variables are valid:
+
+=over
+
+=item B<ioshost>
+
+see above
+
+=item B<iosint>
+
+see above
+
+=item B<iosuser>
+
+see above
+
+=item B<pings>
+
+see above
+
+=back
+
+Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+
+=over
+
+The following new variables are valid:
+
+=over
+
+=item B<ioshost>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<iosint>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<iosuser>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<pings>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=back
+
+=back
+
+(End of dynamical grammar changes for variable C<probe> example value C<IOSPing>.)
+
+=item B<LDAP>: (See the L<separate module documentation|Smokeping::probes::LDAP> for details about each variable.)
+
+The following new variables are valid:
+
+=over
+
+=item B<attrs>
+
+see above
+
+=item B<base>
+
+see above
+
+=item B<binddn>
+
+see above
+
+=item B<filter>
+
+see above
+
+=item B<mininterval>
+
+see above
+
+=item B<password>
+
+see above
+
+=item B<pings>
+
+see above
+
+=item B<port>
+
+see above
+
+=item B<scope>
+
+see above
+
+=item B<start_tls>
+
+see above
+
+=item B<timeout>
+
+see above
+
+=item B<version>
+
+see above
+
+=back
+
+Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+
+=over
+
+The following new variables are valid:
+
+=over
+
+=item B<attrs>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<base>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<binddn>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<filter>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<mininterval>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<password>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<pings>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<port>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<scope>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<start_tls>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<timeout>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<version>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=back
+
+=back
+
+(End of dynamical grammar changes for variable C<probe> example value C<LDAP>.)
+
+=item B<Radius>: (See the L<separate module documentation|Smokeping::probes::Radius> for details about each variable.)
+
+The following new variables are valid:
+
+=over
+
+=item B<mininterval>
+
+see above
+
+=item B<nas_ip_address>
+
+see above
+
+=item B<password>
+
+see above
+
+=item B<pings>
+
+see above
+
+=item B<port>
+
+see above
+
+=item B<secret>
+
+see above
+
+=item B<timeout>
+
+see above
+
+=item B<username>
+
+see above
+
+=back
+
+Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+
+=over
+
+The following new variables are valid:
+
+=over
+
+=item B<mininterval>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<nas_ip_address>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<password>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<pings>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<port>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<secret>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<timeout>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<username>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=back
+
+=back
+
+(End of dynamical grammar changes for variable C<probe> example value C<Radius>.)
+
+=item B<RemoteFPing>: (See the L<separate module documentation|Smokeping::probes::RemoteFPing> for details about each variable.)
+
+No changes that can be automatically described.
+
+(End of dynamical grammar changes for variable C<probe> example value C<RemoteFPing>.)
+
+=item B<SSH>: (See the L<separate module documentation|Smokeping::probes::SSH> for details about each variable.)
+
+The following new variables are valid:
+
+=over
+
+=item B<keytype>
+
+see above
+
+=item B<pings>
+
+see above
+
+=back
+
+Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+
+=over
+
+The following new variables are valid:
+
+=over
+
+=item B<keytype>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<pings>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=back
+
+=back
+
+(End of dynamical grammar changes for variable C<probe> example value C<SSH>.)
+
+=item B<TacacsPlus>: (See the L<separate module documentation|Smokeping::probes::TacacsPlus> for details about each variable.)
+
+The following new variables are valid:
+
+=over
+
+=item B<authtype>
+
+see above
+
+=item B<mininterval>
+
+see above
+
+=item B<password>
+
+see above
+
+=item B<pings>
+
+see above
+
+=item B<port>
+
+see above
+
+=item B<secret>
+
+see above
+
+=item B<timeout>
+
+see above
+
+=item B<username>
+
+see above
+
+=back
+
+Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+
+=over
+
+The following new variables are valid:
+
+=over
+
+=item B<authtype>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<mininterval>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<password>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<pings>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<port>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<secret>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<timeout>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<username>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=back
+
+=back
+
+(End of dynamical grammar changes for variable C<probe> example value C<TacacsPlus>.)
+
+=item B<TelnetIOSPing>: (See the L<separate module documentation|Smokeping::probes::TelnetIOSPing> for details about each variable.)
+
+The following new variables are valid:
+
+=over
+
+=item B<iospass>
+
+see above
+
+=item B<iosuser>
+
+see above
+
+=item B<pings>
+
+see above
+
+=item B<psource>
+
+see above
+
+=item B<source>
+
+see above
+
+=back
+
+Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+
+=over
+
+The following new variables are valid:
+
+=over
+
+=item B<iospass>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<iosuser>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<pings>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<psource>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<source>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=back
+
+=back
+
+(End of dynamical grammar changes for variable C<probe> example value C<TelnetIOSPing>.)
+
+=item B<TelnetJunOSPing>: (See the L<separate module documentation|Smokeping::probes::TelnetJunOSPing> for details about each variable.)
+
+The following new variables are valid:
+
+=over
+
+=item B<junospass>
+
+see above
+
+=item B<junosuser>
+
+see above
+
+=item B<pings>
+
+see above
+
+=item B<psource>
+
+see above
+
+=item B<source>
+
+see above
+
+=back
+
+Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+
+=over
+
+The following new variables are valid:
+
+=over
+
+=item B<junospass>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<junosuser>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<pings>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<psource>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<source>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=back
+
+=back
+
+(End of dynamical grammar changes for variable C<probe> example value C<TelnetJunOSPing>.)
+
+=item B<WebProxyFilter>: (See the L<separate module documentation|Smokeping::probes::WebProxyFilter> for details about each variable.)
+
+The following new variables are valid:
+
+=over
+
+=item B<deny_re>
+
+see above
+
+=item B<more_hosts>
+
+see above
+
+=item B<pings>
+
+see above
+
+=item B<timeout>
+
+see above
+
+=back
+
+Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+
+=over
+
+The following new variables are valid:
+
+=over
+
+=item B<deny_re>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<more_hosts>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<pings>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<timeout>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=back
+
+=back
+
+(End of dynamical grammar changes for variable C<probe> example value C<WebProxyFilter>.)
+
+=back
+
+(End of dynamical grammar changes for example values of variable C<probe>.)
 
 =head2 *** Alerts ***
 
@@ -4500,48 +7999,25 @@ alert to be sent. Alerts without priority will be sent in any case.
 
 =back
 
-=head2 *** Targets *** I<(mandatory section)>
+=head2 *** Slaves ***
 
-The Target Section defines the actual work of SmokePing. It contains a hierarchical list
-of hosts which mark the endpoints of the network connections the system should monitor.
-Each section can contain one host as well as other sections.
+Your smokeping can remote control other somkeping instances running in slave
+mode on different hosts. Use this section to tell your master smokeping about the
+slaves you are going to use.
 
 
 The following variables can be set in this section:
 
 =over
 
-=item B<probe> I<(mandatory setting)>
+=item B<secrets> I<(mandatory setting)>
 
-The name of the probe module to be used for this host. The value of
-this variable gets propagated
+The slave secrets file contines one line per slave with the name of the slave followed by a colon
+and the secret:
 
-
-This variable I<dynamically> modifies the grammar based on its value.
-
-=item B<menu> I<(mandatory setting)>
-
-Menu entry for this section. If not set this will be set to the hostname.
-
-
-=item B<title> I<(mandatory setting)>
-
-Title of the page when it is displayed. This will be set to the hostname if
-left empty.
-
-
-=item B<remark>
-
-An optional remark on the current section. It gets displayed on the webpage.
-
-
-=item B<alerts>
-
-A comma separated list of alerts to check for this target. The alerts have
-to be setup in the Alerts section. Alerts are inherited by child nodes. Use
-an empty alerts definition to remove inherited alerts from the current target
-and its children.
-
+ slave1:secret1
+ slave2:secret2
+ ...
 
 
 =back
@@ -4552,88 +8028,27 @@ The following sections are valid on level 1:
 
 =item B<+/[-_0-9a-zA-Z.]+/>
 
-Each target section can contain information about a host to monitor as
-well as further target sections. Most variables have already been
-described above. The expression above defines legal names for target
-sections.
+Define some basic properties for the slave.
 
-
-This section is I<recursive>: it can contain subsection(s) with the same syntax.
 
 The following variables can be set in this section:
 
 =over
 
-=item B<probe>
+=item B<display_name> I<(mandatory setting)>
 
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-This variable I<dynamically> modifies the grammar based on its value.
-
-=item B<menu>
-
-=item B<title>
-
-=item B<alerts>
-
-Comma separated list of alert names
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<note>
-
-Some information about this entry which does NOT get displayed on the web.
+Name of the Slave host.
 
 
-=item B<email>
+=item B<location>
 
-This is the contact address for the owner of the current host. In connection with the B<DYNAMIC> hosts,
-the address will be used for sending the belowmentioned script.
-
-
-=item B<host>
-
-Can either contain the name of a target host or the string B<DYNAMIC>.
-
-In the second case, the target machine has a dynamic IP address and
-thus is required to regularly contact the SmokePing server to verify
-its IP address.  When starting SmokePing with the commandline argument
-B<--email> it will add a secret password to each of the B<DYNAMIC>
-host lines and send a script to the owner of each host. This script
-must be started regularly on the host in question to make sure
-SmokePing monitors the right box. If the target machine supports
-SNMP SmokePing will also query the hosts
-sysContact, sysName and sysLocation properties to make sure it is
-still the same host.
+Where is the slave located.
 
 
-=item B<remark>
+=item B<color> I<(mandatory setting)>
 
-=item B<rawlog>
+Color for the slave in graphs where input from multiple hosts is presented.
 
-Log the raw data, gathered for this target, in tab separated format, to a file with the
-same basename as the corresponding RRD file. Use posix strftime to format the timestamp to be
-put into the file name. The filename is built like this:
-
- basename.strftime.csv
-
-Example:
-
- rawlog=%Y-%m-%d
-
-this would create a new logfile every day with a name like this: 
-
- targethost.2004-05-03.csv
-
-
-
-=item B<alertee>
-
-If you want to have alerts for this target and all targets below it go to a particular address
-on top of the address already specified in the alert, you can add it here. This can be a comma separated list of items.
-
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =back
 
@@ -4641,1879 +8056,38 @@ The following sections are valid on level 2:
 
 =over
 
-=item B<++/[-_0-9a-zA-Z.]+/>
+=item B<++override>
 
-This section is I<recursive>: it can contain subsection(s) with the same syntax.
+If part of the configuration information must be overwritten to match the
+settings of the you can specify this in this section. A setting is
+overwritten by giveing the full path of the configuration variable. If you
+have this configuration in the Probes section:
 
-=back
-
-=back
-
-Dynamical grammar changes for example values of variable C<probe>:
-
-=over
-
-=item B<AnotherDNS>: (See the L<separate module documentation|Smokeping::probes::AnotherDNS> for details about each variable.)
-
-The following new variables are valid:
-
-=over
-
-=item B<lookup>
-
-=item B<mininterval>
-
-=item B<pings>
-
-=item B<port>
-
-=item B<recordtype>
-
-=item B<require_answers>
-
-=item B<require_noerror>
-
-=item B<timeout>
-
-=back
-
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
-
-=over
-
-The following new variables are valid:
-
-=over
-
-=item B<lookup>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<mininterval>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<pings>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<port>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<recordtype>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<require_answers>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<require_noerror>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<timeout>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=back
-
-=back
-
-(End of dynamical grammar changes for variable C<probe> example value C<AnotherDNS>.)
-
-=item B<AnotherSSH>: (See the L<separate module documentation|Smokeping::probes::AnotherSSH> for details about each variable.)
-
-The following new variables are valid:
-
-=over
-
-=item B<greeting>
-
-=item B<interval>
-
-=item B<mininterval>
-
-=item B<pings>
-
-=item B<port>
-
-=item B<timeout>
-
-=back
-
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
-
-=over
-
-The following new variables are valid:
-
-=over
-
-=item B<greeting>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<interval>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<mininterval>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<pings>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<port>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<timeout>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=back
-
-=back
-
-(End of dynamical grammar changes for variable C<probe> example value C<AnotherSSH>.)
-
-=item B<CiscoRTTMonDNS>: (See the L<separate module documentation|Smokeping::probes::CiscoRTTMonDNS> for details about each variable.)
-
-The following new variables are valid:
-
-=over
-
-=item B<ioshost>
-
-=item B<iosint>
-
-=item B<name>
-
-=item B<pings>
-
-=back
-
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
-
-=over
-
-The following new variables are valid:
-
-=over
-
-=item B<ioshost>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<iosint>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<name>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<pings>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=back
-
-=back
-
-(End of dynamical grammar changes for variable C<probe> example value C<CiscoRTTMonDNS>.)
-
-=item B<CiscoRTTMonEchoICMP>: (See the L<separate module documentation|Smokeping::probes::CiscoRTTMonEchoICMP> for details about each variable.)
-
-The following new variables are valid:
-
-=over
-
-=item B<ioshost>
-
-=item B<iosint>
-
-=item B<packetsize>
-
-=item B<pings>
-
-=item B<tos>
-
-=item B<vrf>
-
-=back
-
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
-
-=over
-
-The following new variables are valid:
-
-=over
-
-=item B<ioshost>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<iosint>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<packetsize>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<pings>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<tos>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<vrf>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=back
-
-=back
-
-(End of dynamical grammar changes for variable C<probe> example value C<CiscoRTTMonEchoICMP>.)
-
-=item B<CiscoRTTMonTcpConnect>: (See the L<separate module documentation|Smokeping::probes::CiscoRTTMonTcpConnect> for details about each variable.)
-
-The following new variables are valid:
-
-=over
-
-=item B<ioshost>
-
-=item B<iosint>
-
-=item B<pings>
-
-=item B<port>
-
-=item B<tos>
-
-=back
-
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
-
-=over
-
-The following new variables are valid:
-
-=over
-
-=item B<ioshost>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<iosint>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<pings>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<port>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<tos>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=back
-
-=back
-
-(End of dynamical grammar changes for variable C<probe> example value C<CiscoRTTMonTcpConnect>.)
-
-=item B<Curl>: (See the L<separate module documentation|Smokeping::probes::Curl> for details about each variable.)
-
-The following new variables are valid:
-
-=over
-
-=item B<agent>
-
-=item B<extraargs>
-
-=item B<extrare>
-
-=item B<follow_redirects>
-
-=item B<include_redirects>
-
-=item B<insecure_ssl>
-
-=item B<interface>
-
-=item B<pings>
-
-=item B<ssl2>
-
-=item B<timeout>
-
-=item B<urlformat>
-
-=back
-
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
-
-=over
-
-The following new variables are valid:
-
-=over
-
-=item B<agent>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<extraargs>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<extrare>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<follow_redirects>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<include_redirects>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<insecure_ssl>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<interface>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<pings>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<ssl2>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<timeout>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<urlformat>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=back
-
-=back
-
-(End of dynamical grammar changes for variable C<probe> example value C<Curl>.)
-
-=item B<DNS>: (See the L<separate module documentation|Smokeping::probes::DNS> for details about each variable.)
-
-The following new variables are valid:
-
-=over
-
-=item B<lookup>
-
-=item B<pings>
-
-=item B<server>
-
-=back
-
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
-
-=over
-
-The following new variables are valid:
-
-=over
-
-=item B<lookup>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<pings>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<server>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=back
-
-=back
-
-(End of dynamical grammar changes for variable C<probe> example value C<DNS>.)
-
-=item B<EchoPing>: (See the L<separate module documentation|Smokeping::probes::EchoPing> for details about each variable.)
-
-The following new variables are valid:
-
-=over
-
-=item B<extraopts>
-
-=item B<fill>
-
-=item B<ipversion>
-
-=item B<pings>
-
-=item B<priority>
-
-=item B<size>
-
-=item B<timeout>
-
-=item B<tos>
-
-=item B<udp>
-
-=item B<waittime>
-
-=back
-
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
-
-=over
-
-The following new variables are valid:
-
-=over
-
-=item B<extraopts>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<fill>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<ipversion>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<pings>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<priority>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<size>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<timeout>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<tos>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<udp>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<waittime>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=back
-
-=back
-
-(End of dynamical grammar changes for variable C<probe> example value C<EchoPing>.)
-
-=item B<EchoPingChargen>: (See the L<separate module documentation|Smokeping::probes::EchoPingChargen> for details about each variable.)
-
-The following new variables are valid:
-
-=over
-
-=item B<extraopts>
-
-=item B<fill>
-
-=item B<ipversion>
-
-=item B<pings>
-
-=item B<priority>
-
-=item B<size>
-
-=item B<timeout>
-
-=item B<tos>
-
-=item B<waittime>
-
-=back
-
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
-
-=over
-
-The following new variables are valid:
-
-=over
-
-=item B<extraopts>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<fill>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<ipversion>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<pings>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<priority>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<size>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<timeout>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<tos>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<waittime>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=back
-
-=back
-
-(End of dynamical grammar changes for variable C<probe> example value C<EchoPingChargen>.)
-
-=item B<EchoPingDNS>: (See the L<separate module documentation|Smokeping::probes::EchoPingDNS> for details about each variable.)
-
-The following new variables are valid:
-
-=over
-
-=item B<dns_request>
-
-=item B<dns_tcp>
-
-=item B<dns_type>
-
-=item B<extraopts>
-
-=item B<ipversion>
-
-=item B<pings>
-
-=item B<plugin>
-
-=item B<pluginargs>
-
-=item B<priority>
-
-=item B<timeout>
-
-=item B<tos>
-
-=item B<waittime>
-
-=back
-
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
-
-=over
-
-The following new variables are valid:
-
-=over
-
-=item B<dns_request>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<dns_tcp>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<dns_type>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<extraopts>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<ipversion>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<pings>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<plugin>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<pluginargs>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<priority>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<timeout>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<tos>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<waittime>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=back
-
-=back
-
-(End of dynamical grammar changes for variable C<probe> example value C<EchoPingDNS>.)
-
-=item B<EchoPingDiscard>: (See the L<separate module documentation|Smokeping::probes::EchoPingDiscard> for details about each variable.)
-
-The following new variables are valid:
-
-=over
-
-=item B<extraopts>
-
-=item B<fill>
-
-=item B<ipversion>
-
-=item B<pings>
-
-=item B<priority>
-
-=item B<size>
-
-=item B<timeout>
-
-=item B<tos>
-
-=item B<udp>
-
-=item B<waittime>
-
-=back
-
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
-
-=over
-
-The following new variables are valid:
-
-=over
-
-=item B<extraopts>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<fill>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<ipversion>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<pings>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<priority>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<size>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<timeout>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<tos>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<udp>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<waittime>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=back
-
-=back
-
-(End of dynamical grammar changes for variable C<probe> example value C<EchoPingDiscard>.)
-
-=item B<EchoPingHttp>: (See the L<separate module documentation|Smokeping::probes::EchoPingHttp> for details about each variable.)
-
-The following new variables are valid:
-
-=over
-
-=item B<extraopts>
-
-=item B<ignore_cache>
-
-=item B<ipversion>
-
-=item B<pings>
-
-=item B<port>
-
-=item B<priority>
-
-=item B<revalidate_data>
-
-=item B<timeout>
-
-=item B<tos>
-
-=item B<url>
-
-=item B<waittime>
-
-=back
-
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
-
-=over
-
-The following new variables are valid:
-
-=over
-
-=item B<extraopts>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<ignore_cache>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<ipversion>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<pings>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<port>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<priority>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<revalidate_data>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<timeout>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<tos>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<url>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<waittime>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=back
-
-=back
-
-(End of dynamical grammar changes for variable C<probe> example value C<EchoPingHttp>.)
-
-=item B<EchoPingHttps>: (See the L<separate module documentation|Smokeping::probes::EchoPingHttps> for details about each variable.)
-
-The following new variables are valid:
-
-=over
-
-=item B<extraopts>
-
-=item B<ignore_cache>
-
-=item B<ipversion>
-
-=item B<pings>
-
-=item B<port>
-
-=item B<priority>
-
-=item B<revalidate_data>
-
-=item B<timeout>
-
-=item B<tos>
-
-=item B<url>
-
-=item B<waittime>
-
-=back
-
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
-
-=over
-
-The following new variables are valid:
-
-=over
-
-=item B<extraopts>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<ignore_cache>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<ipversion>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<pings>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<port>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<priority>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<revalidate_data>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<timeout>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<tos>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<url>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<waittime>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=back
-
-=back
-
-(End of dynamical grammar changes for variable C<probe> example value C<EchoPingHttps>.)
-
-=item B<EchoPingIcp>: (See the L<separate module documentation|Smokeping::probes::EchoPingIcp> for details about each variable.)
-
-The following new variables are valid:
-
-=over
-
-=item B<extraopts>
-
-=item B<ipversion>
-
-=item B<pings>
-
-=item B<priority>
-
-=item B<timeout>
-
-=item B<tos>
-
-=item B<url>
-
-=item B<waittime>
-
-=back
-
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
-
-=over
-
-The following new variables are valid:
-
-=over
-
-=item B<extraopts>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<ipversion>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<pings>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<priority>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<timeout>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<tos>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<url>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<waittime>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=back
-
-=back
-
-(End of dynamical grammar changes for variable C<probe> example value C<EchoPingIcp>.)
-
-=item B<EchoPingLDAP>: (See the L<separate module documentation|Smokeping::probes::EchoPingLDAP> for details about each variable.)
-
-The following new variables are valid:
-
-=over
-
-=item B<extraopts>
-
-=item B<ipversion>
-
-=item B<ldap_base>
-
-=item B<ldap_request>
-
-=item B<ldap_scope>
-
-=item B<pings>
-
-=item B<plugin>
-
-=item B<pluginargs>
-
-=item B<priority>
-
-=item B<timeout>
-
-=item B<tos>
-
-=item B<waittime>
-
-=back
-
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
-
-=over
-
-The following new variables are valid:
-
-=over
-
-=item B<extraopts>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<ipversion>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<ldap_base>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<ldap_request>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<ldap_scope>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<pings>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<plugin>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<pluginargs>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<priority>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<timeout>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<tos>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<waittime>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=back
-
-=back
-
-(End of dynamical grammar changes for variable C<probe> example value C<EchoPingLDAP>.)
-
-=item B<EchoPingPlugin>: (See the L<separate module documentation|Smokeping::probes::EchoPingPlugin> for details about each variable.)
-
-The following new variables are valid:
-
-=over
-
-=item B<extraopts>
-
-=item B<ipversion>
-
-=item B<pings>
-
-=item B<plugin>
-
-=item B<pluginargs>
-
-=item B<priority>
-
-=item B<timeout>
-
-=item B<tos>
-
-=item B<waittime>
-
-=back
-
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
-
-=over
-
-The following new variables are valid:
-
-=over
-
-=item B<extraopts>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<ipversion>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<pings>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<plugin>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<pluginargs>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<priority>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<timeout>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<tos>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<waittime>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=back
-
-=back
-
-(End of dynamical grammar changes for variable C<probe> example value C<EchoPingPlugin>.)
-
-=item B<EchoPingSmtp>: (See the L<separate module documentation|Smokeping::probes::EchoPingSmtp> for details about each variable.)
-
-The following new variables are valid:
-
-=over
-
-=item B<extraopts>
-
-=item B<ipversion>
-
-=item B<pings>
-
-=item B<priority>
-
-=item B<timeout>
-
-=item B<tos>
-
-=item B<waittime>
-
-=back
-
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
-
-=over
-
-The following new variables are valid:
-
-=over
-
-=item B<extraopts>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<ipversion>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<pings>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<priority>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<timeout>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<tos>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<waittime>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=back
-
-=back
-
-(End of dynamical grammar changes for variable C<probe> example value C<EchoPingSmtp>.)
-
-=item B<EchoPingWhois>: (See the L<separate module documentation|Smokeping::probes::EchoPingWhois> for details about each variable.)
-
-The following new variables are valid:
-
-=over
-
-=item B<extraopts>
-
-=item B<ipversion>
-
-=item B<pings>
-
-=item B<plugin>
-
-=item B<pluginargs>
-
-=item B<priority>
-
-=item B<timeout>
-
-=item B<tos>
-
-=item B<waittime>
-
-=item B<whois_request>
-
-=back
-
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
-
-=over
-
-The following new variables are valid:
-
-=over
-
-=item B<extraopts>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<ipversion>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<pings>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<plugin>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<pluginargs>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<priority>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<timeout>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<tos>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<waittime>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<whois_request>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=back
-
-=back
-
-(End of dynamical grammar changes for variable C<probe> example value C<EchoPingWhois>.)
-
-=item B<FPing>: (See the L<separate module documentation|Smokeping::probes::FPing> for details about each variable.)
-
-No changes that can be automatically described.
-
-(End of dynamical grammar changes for variable C<probe> example value C<FPing>.)
-
-=item B<FPing6>: (See the L<separate module documentation|Smokeping::probes::FPing6> for details about each variable.)
-
-No changes that can be automatically described.
-
-(End of dynamical grammar changes for variable C<probe> example value C<FPing6>.)
-
-=item B<FTPtransfer>: (See the L<separate module documentation|Smokeping::probes::FTPtransfer> for details about each variable.)
-
-The following new variables are valid:
-
-=over
-
-=item B<localaddr>
-
-=item B<passive>
-
-=item B<password>
-
-=item B<pings>
-
-=item B<port>
-
-=item B<timeout>
-
-=item B<username>
-
-=back
-
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
-
-=over
-
-The following new variables are valid:
-
-=over
-
-=item B<localaddr>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<passive>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<password>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<pings>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<port>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<timeout>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<username>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=back
-
-=back
-
-(End of dynamical grammar changes for variable C<probe> example value C<FTPtransfer>.)
-
-=item B<IOSPing>: (See the L<separate module documentation|Smokeping::probes::IOSPing> for details about each variable.)
-
-The following new variables are valid:
-
-=over
-
-=item B<ioshost>
-
-=item B<iosint>
-
-=item B<iosuser>
-
-=item B<pings>
-
-=back
-
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
-
-=over
-
-The following new variables are valid:
-
-=over
+ *** Probes ***
+ +FPing
+ binary = /usr/sepp/bin/fping
 
-=item B<ioshost>
+You can override it for a particular slave like this:
 
-This variable I<inherits> its value from the parent section if nothing is specified here.
+ ++override
+ Probes.FPing.binary = /usr/bin/fping
 
-=item B<iosint>
 
-This variable I<inherits> its value from the parent section if nothing is specified here.
+The following variables can be set in this section:
 
-=item B<iosuser>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<pings>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=back
-
-=back
-
-(End of dynamical grammar changes for variable C<probe> example value C<IOSPing>.)
-
-=item B<LDAP>: (See the L<separate module documentation|Smokeping::probes::LDAP> for details about each variable.)
-
-The following new variables are valid:
-
-=over
-
-=item B<attrs>
-
-=item B<base>
-
-=item B<binddn>
-
-=item B<filter>
-
-=item B<mininterval>
-
-=item B<password>
-
-=item B<pings>
-
-=item B<port>
-
-=item B<scope>
-
-=item B<start_tls>
-
-=item B<timeout>
-
-=item B<version>
-
-=back
-
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
-
-=over
-
-The following new variables are valid:
-
-=over
-
-=item B<attrs>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<base>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<binddn>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<filter>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<mininterval>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<password>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<pings>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<port>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<scope>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<start_tls>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<timeout>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<version>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=back
-
-=back
-
-(End of dynamical grammar changes for variable C<probe> example value C<LDAP>.)
-
-=item B<Radius>: (See the L<separate module documentation|Smokeping::probes::Radius> for details about each variable.)
-
-The following new variables are valid:
-
-=over
-
-=item B<mininterval>
-
-=item B<nas_ip_address>
-
-=item B<password>
-
-=item B<pings>
-
-=item B<port>
-
-=item B<secret>
-
-=item B<timeout>
-
-=item B<username>
-
-=back
-
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
-
-=over
-
-The following new variables are valid:
-
-=over
-
-=item B<mininterval>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<nas_ip_address>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<password>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<pings>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<port>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<secret>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<timeout>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<username>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=back
-
-=back
-
-(End of dynamical grammar changes for variable C<probe> example value C<Radius>.)
-
-=item B<RemoteFPing>: (See the L<separate module documentation|Smokeping::probes::RemoteFPing> for details about each variable.)
-
-No changes that can be automatically described.
-
-(End of dynamical grammar changes for variable C<probe> example value C<RemoteFPing>.)
-
-=item B<SSH>: (See the L<separate module documentation|Smokeping::probes::SSH> for details about each variable.)
-
-The following new variables are valid:
-
-=over
-
-=item B<keytype>
-
-=item B<pings>
-
-=back
-
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
-
-=over
-
-The following new variables are valid:
-
-=over
-
-=item B<keytype>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<pings>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=back
-
-=back
-
-(End of dynamical grammar changes for variable C<probe> example value C<SSH>.)
-
-=item B<TacacsPlus>: (See the L<separate module documentation|Smokeping::probes::TacacsPlus> for details about each variable.)
-
-The following new variables are valid:
-
-=over
-
-=item B<authtype>
-
-=item B<mininterval>
-
-=item B<password>
-
-=item B<pings>
-
-=item B<port>
-
-=item B<secret>
-
-=item B<timeout>
-
-=item B<username>
-
-=back
-
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
-
-=over
-
-The following new variables are valid:
-
-=over
-
-=item B<authtype>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<mininterval>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<password>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<pings>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<port>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<secret>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<timeout>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<username>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=back
-
-=back
-
-(End of dynamical grammar changes for variable C<probe> example value C<TacacsPlus>.)
-
-=item B<TelnetIOSPing>: (See the L<separate module documentation|Smokeping::probes::TelnetIOSPing> for details about each variable.)
-
-The following new variables are valid:
-
-=over
-
-=item B<iospass>
-
-=item B<iosuser>
-
-=item B<pings>
-
-=item B<psource>
-
-=item B<source>
-
-=back
-
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
-
-=over
-
-The following new variables are valid:
-
-=over
-
-=item B<iospass>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<iosuser>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<pings>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<psource>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<source>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=back
-
-=back
-
-(End of dynamical grammar changes for variable C<probe> example value C<TelnetIOSPing>.)
-
-=item B<TelnetJunOSPing>: (See the L<separate module documentation|Smokeping::probes::TelnetJunOSPing> for details about each variable.)
-
-The following new variables are valid:
-
-=over
-
-=item B<junospass>
-
-=item B<junosuser>
-
-=item B<pings>
-
-=item B<psource>
-
-=item B<source>
-
-=back
-
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
-
-=over
-
-The following new variables are valid:
-
-=over
-
-=item B<junospass>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<junosuser>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<pings>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<psource>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<source>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=back
-
-=back
-
-(End of dynamical grammar changes for variable C<probe> example value C<TelnetJunOSPing>.)
-
-=item B<WebProxyFilter>: (See the L<separate module documentation|Smokeping::probes::WebProxyFilter> for details about each variable.)
-
-The following new variables are valid:
-
-=over
-
-=item B<deny_re>
-
-=item B<more_hosts>
-
-=item B<pings>
-
-=item B<timeout>
-
-=back
-
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
-
-=over
-
-The following new variables are valid:
-
 =over
 
-=item B<deny_re>
+=item B</\S+/>
 
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<more_hosts>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<pings>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
-=item B<timeout>
-
-This variable I<inherits> its value from the parent section if nothing is specified here.
-
 =back
 
 =back
 
-(End of dynamical grammar changes for variable C<probe> example value C<WebProxyFilter>.)
-
 =back
-
-(End of dynamical grammar changes for example values of variable C<probe>.)
 
 =head1 COPYRIGHT
 
-Copyright (c) 2001-2003 by Tobias Oetiker. All right reserved.
+Copyright (c) 2001-2007 by Tobias Oetiker. All right reserved.
 
 =head1 LICENSE
 

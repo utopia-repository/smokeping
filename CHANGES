@@ -1,5 +1,50 @@
+2007/9/16 -- released version 2.2.4
+
+* Fixed zooming mode in multi host graphs -- tobi
+* Warn when smokeping uses takes over 80% of the time available for a polling cycle -- tobi
+* don't complain when there is no data in a graph yet while calculation stddev -- tobi
+* in a multihost graph take the number of pings for each component into consideration  -- tobi
+* fixed problem with rounding error in calculating stddev -- tobi
+* include the prototype.js license for completeness -- niko
+* fix Smokeping.pm POD documentation -- niko
+
+2007/9/06 -- released version 2.2.3
+* alter ajax grapher mode to use seconds timestamps and not iso dates
+  this prevents timezone problems with the browser -- tobi
+* 1.2 is required now ... -- tobi
+* make sure start is before end in the cropper zoom -- tobi
+* better documentation on multihost syntax added -- tobi
+* slaves should skip multi target hosts -- tobi
+* set Content-Length header to help multi request queries -- tobi
+
+2007/8/30 -- released version 2.2.2
+* fixed links to slave graphs from chart mode -- tobi
+* minor cosmetic fixes -- tobi
+
+2007/8/30 -- released version 2.2.1
+* minor cosmetic fixes -- tobi
+
+2007/08/30 -- released version 2.2.0
+*** all the new features in this release has been done under contract with DynDNS ***
+
+* Added multi-host function (show data from several links in one graph) -- tobi
+* Added stddev caclulation -- tobi
+* Added slave support into detail graphs -- tobi
+* Made interactive Graph zoomer somewhat work on ie6 and ie7 -- tobi
+* Integrated interactive Graph zoomer -- Roman Plessl rplessl oetiker.ch
+* first drop of the master/slave code added. now the debugging beginns. -- tobi
+* fix uses of uninitialized value in the loss_background code
+  -- niko, reported by yilmaz.atag *abs.gov.au
+* added description of the master/slave mode I am implementing
+  for dyndns -- tobi
+* fixed smoke when there is a lot of 'loss' -- tobi
+* do not use 127.0.0.1 when testing echoping and curl functionality. There may be someone
+  behind this address. -- Michael Hanselmann public hansmi ch
+* show all smoke in the detail graphs, even if it's out of the scale. -- niko,
+  reported by Oskar Liljeblad <oskar *osk.mine.nu> as Debian bug #412826
+
 2007/05/02 -- released version 2.1.1
-* fixed scaling of detail graphs. They were all sacled to max_rtt
+* fixed scaling of detail graphs. They were all scaled to max_rtt
   if it was defined --tobi
 
 2007/04/29 -- released version 2.1.0

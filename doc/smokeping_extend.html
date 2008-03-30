@@ -1,7 +1,9 @@
+<?xml version="1.0" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>smokeping_extend</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <link rev="made" href="mailto:root@localhost" />
 </head>
 
@@ -134,55 +136,57 @@ probes for examples.</p>
 <p>For reference, here are the keys the hash should have. Much of this
 is taken straight from the <code>Config::Grammar</code> manual.</p>
 <dl>
-<dt><strong><a name="item_keys_you_must_provide">Keys you <strong>must</strong> provide</a></strong><br />
+<dt><strong><a name="item_keys_you_must_provide">Keys you <strong>must</strong> provide</a></strong>
 
-</dt><dd><dl>
-<dt><strong><a name="item__doc">_doc</a></strong><br />
+<dl>
+<dt><strong><a name="item__doc">_doc</a></strong>
 
-</dt><dd>
-Description of the variable.
+<dd>
+<p>Description of the variable.</p>
 
-<p></p>
-</dd><dt><strong><a name="item__example">_example</a></strong><br />
+</li>
+</dd><dt><strong><a name="item__example">_example</a></strong>
 
-</dt><dd>
-An example value. This will be used in the SYNOPSIS section in the
-probe manual.
+<dd>
+<p>An example value. This will be used in the SYNOPSIS section in the
+probe manual.</p>
 
-<p></p></dd></dl>
-</dd><dt><strong><a name="item_optional_keys">Optional keys</a></strong><br />
+</li>
+</dd></dl>
+<dt><strong><a name="item_optional_keys">Optional keys</a></strong>
 
-</dt><dd><dl>
-<dt><strong><a name="item__default">_default</a></strong><br />
+<dl>
+<dt><strong><a name="item__default">_default</a></strong>
 
-</dt><dd>
-A default value that will be assigned to the variable if none is specified or inherited.
+<dd>
+<p>A default value that will be assigned to the variable if none is specified or inherited.</p>
 
-<p></p>
-</dd><dt><strong><a name="item__re">_re</a></strong><br />
+</li>
+</dd><dt><strong><a name="item__re">_re</a></strong>
 
-</dt><dd>
-Regular expression upon which the value will be checked.
+<dd>
+<p>Regular expression upon which the value will be checked.</p>
 
-<p></p>
-</dd><dt><strong><a name="item__re_error">_re_error</a></strong><br />
+</li>
+</dd><dt><strong><a name="item__re_error">_re_error</a></strong>
 
-</dt><dd>
-String containing the returned error in case the regular expression
+<dd>
+<p>String containing the returned error in case the regular expression
 doesn't match (if not specified, a generic 'syntax error' message will
-be returned).
+be returned).</p>
 
-<p></p>
-</dd><dt><strong><a name="item__sub">_sub</a></strong><br />
+</li>
+</dd><dt><strong><a name="item__sub">_sub</a></strong>
 
-</dt><dd>
-A function pointer. It is called for every value, with the value passed
+<dd>
+<p>A function pointer. It is called for every value, with the value passed
 as its first argument. If the function returns a defined value it is
 assumed that the test was not successful and an error is generated with
-the returned string as content.
+the returned string as content.</p>
 
-<p></p></dd></dl>
+</li>
 </dd></dl>
+</dl>
 <p>The <code>probevars</code> and <code>targetvars</code> methods should return hash references
 that contain the variable names as keys and the hashes described above
 as values. In addition the <code>Config::Grammar</code> special section key

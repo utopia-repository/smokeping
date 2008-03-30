@@ -1,7 +1,9 @@
+<?xml version="1.0" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>Smokeping/probes/TelnetJunOSPing</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <link rev="made" href="mailto:root@localhost" />
 </head>
 
@@ -88,10 +90,10 @@ the option to specify which interface the ping is sourced from as well.</p>
 <h1><a name="variables">VARIABLES</a></h1>
 <p>Supported probe-specific variables:</p>
 <dl>
-<dt><strong><a name="item_forks">forks</a></strong><br />
+<dt><strong><a name="item_forks">forks</a></strong>
 
-</dt><dd>
-Run this many concurrent processes at maximum
+<dd>
+<p>Run this many concurrent processes at maximum</p>
 
 </dd><dd>
 <p>Example value: 5</p>
@@ -99,11 +101,11 @@ Run this many concurrent processes at maximum
 </dd><dd>
 <p>Default value: 5</p>
 
-<p></p>
-</dd><dt><strong><a name="item_offset">offset</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_offset">offset</a></strong>
 
-</dt><dd>
-If you run many probes concurrently you may want to prevent them from
+<dd>
+<p>If you run many probes concurrently you may want to prevent them from
 hitting your network all at the same time. Using the probe-specific
 offset parameter you can change the point in time when each probe will
 be run. Offset is specified in % of total interval, or alternatively as
@@ -111,40 +113,40 @@ be run. Offset is specified in % of total interval, or alternatively as
 is specified here. Note that this does NOT influence the rrds itself,
 it is just a matter of when data acqusition is initiated.
 (This variable is only applicable if the variable 'concurrentprobes' is set
-in the 'General' section.)
+in the 'General' section.)</p>
 
 </dd><dd>
 <p>Example value: 50%</p>
 
-<p></p>
-</dd><dt><strong><a name="item_packetsize">packetsize</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_packetsize">packetsize</a></strong>
 
-</dt><dd>
-The (optional) packetsize option lets you configure the packetsize for
-the pings sent.
+<dd>
+<p>The (optional) packetsize option lets you configure the packetsize for
+the pings sent.</p>
 
 </dd><dd>
 <p>Default value: 100</p>
 
-<p></p>
-</dd><dt><strong><a name="item_step">step</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_step">step</a></strong>
 
-</dt><dd>
-Duration of the base interval that this probe should use, if different
+<dd>
+<p>Duration of the base interval that this probe should use, if different
 from the one specified in the 'Database' section. Note that the step in
 the RRD files is fixed when they are originally generated, and if you
 change the step parameter afterwards, you'll have to delete the old RRD
 files or somehow convert them. (This variable is only applicable if
-the variable 'concurrentprobes' is set in the 'General' section.)
+the variable 'concurrentprobes' is set in the 'General' section.)</p>
 
 </dd><dd>
 <p>Example value: 300</p>
 
-<p></p>
-</dd><dt><strong><a name="item_timeout">timeout</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_timeout">timeout</a></strong>
 
-</dt><dd>
-How long a single 'ping' takes at maximum
+<dd>
+<p>How long a single 'ping' takes at maximum</p>
 
 </dd><dd>
 <p>Example value: 15</p>
@@ -152,14 +154,15 @@ How long a single 'ping' takes at maximum
 </dd><dd>
 <p>Default value: 5</p>
 
-<p></p></dd></dl>
+</li>
+</dd></dl>
 <p>Supported target-specific variables:</p>
 <dl>
-<dt><strong><a name="item_junospass">junospass</a></strong><br />
+<dt><strong><a name="item_junospass">junospass</a></strong>
 
-</dt><dd>
-The junospass option allows you to specify the password for the username
-specified with the option junosuser.
+<dd>
+<p>The junospass option allows you to specify the password for the username
+specified with the option junosuser.</p>
 
 </dd><dd>
 <p>Example value: password</p>
@@ -167,12 +170,12 @@ specified with the option junosuser.
 </dd><dd>
 <p>This setting is mandatory.</p>
 
-<p></p>
-</dd><dt><strong><a name="item_junosuser">junosuser</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_junosuser">junosuser</a></strong>
 
-</dt><dd>
-The junosuser option allows you to specify a username that has ping
-capability on the JunOS Device.
+<dd>
+<p>The junosuser option allows you to specify a username that has ping
+capability on the JunOS Device.</p>
 
 </dd><dd>
 <p>Example value: user</p>
@@ -180,24 +183,24 @@ capability on the JunOS Device.
 </dd><dd>
 <p>This setting is mandatory.</p>
 
-<p></p>
-</dd><dt><strong><a name="item_pings">pings</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_pings">pings</a></strong>
 
-</dt><dd>
-How many pings should be sent to each target, if different from the global
+<dd>
+<p>How many pings should be sent to each target, if different from the global
 value specified in the Database section. Note that the number of pings in
 the RRD files is fixed when they are originally generated, and if you
 change this parameter afterwards, you'll have to delete the old RRD
-files or somehow convert them.
+files or somehow convert them.</p>
 
 </dd><dd>
 <p>Example value: 5</p>
 
-<p></p>
-</dd><dt><strong><a name="item_psource">psource</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_psource">psource</a></strong>
 
-</dt><dd>
-The (optional) psource option specifies an alternate IP address or
+<dd>
+<p>The (optional) psource option specifies an alternate IP address or
 Interface from which you wish to source your pings from.  Routers
 can have many many IP addresses, and interfaces.  When you ping from a
 router you have the ability to choose which interface and/or which IP
@@ -206,19 +209,19 @@ necessarily specify the interface from which the ping will leave, but
 will specify which address the <code>packet(s)</code> appear to come from.  If this
 option is left out the JunOS Device will source the packet automatically
 based on routing and/or metrics.  If this doesn't make sense to you
-then just leave it out.
+then just leave it out.</p>
 
 </dd><dd>
 <p>Example value: 192.168.2.129</p>
 
-<p></p>
-</dd><dt><strong><a name="item_source">source</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_source">source</a></strong>
 
-</dt><dd>
-The source option specifies the JunOS device to which we telnet.  This
+<dd>
+<p>The source option specifies the JunOS device to which we telnet.  This
 is an IP address of an JunOS Device that you/your server:
 	1)  Have the ability to telnet to
-	2)  Have a valid username and password for
+	2)  Have a valid username and password for</p>
 
 </dd><dd>
 <p>Example value: 192.168.2.1</p>
@@ -226,7 +229,8 @@ is an IP address of an JunOS Device that you/your server:
 </dd><dd>
 <p>This setting is mandatory.</p>
 
-<p></p></dd></dl>
+</li>
+</dd></dl>
 <p>
 </p>
 <hr />

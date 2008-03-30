@@ -1,4 +1,0 @@
-fix name of ftp probe in documentation
---This line, and those below, will be ignored--
-
-M    Smokeping/probes/FTPtransfer.pm

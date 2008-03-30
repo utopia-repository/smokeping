@@ -5,41 +5,41 @@
 ## DP: No description.
 
 @DPATCH@
-diff -urNad smokeping-2.1.1~/Makefile smokeping-2.1.1/Makefile
---- smokeping-2.1.1~/Makefile	2007-05-06 23:36:18.000000000 +0300
-+++ smokeping-2.1.1/Makefile	2007-05-06 23:37:27.000000000 +0300
+diff -urNad smokeping-2.2.4~/Makefile smokeping-2.2.4/Makefile
+--- smokeping-2.2.4~/Makefile	2007-09-17 11:04:25.000000000 +0300
++++ smokeping-2.2.4/Makefile	2007-09-17 11:04:29.000000000 +0300
 @@ -8,7 +8,7 @@
- NUMVERSION = 2.001001
- IGNORE = ~|CVS|var/|smokeping-$(VERSION)/smokeping-$(VERSION)|cvsignore|rej|orig|DEAD|pod2htm[di]\.tmp|\.svn|tar\.gz|DEADJOE
+ NUMVERSION = 2.002004 
+ IGNORE = ~|CVS|var/|smokeping-$(VERSION)/smokeping-$(VERSION)|cvsignore|rej|orig|DEAD|pod2htm[di]\.tmp|\.svn|tar\.gz|DEADJOE|svn-commit\.tmp
  GROFF = groff
 -PERL = perl-5.8.8
 +PERL = perl
  .PHONY: man html txt ref examples check-examples patch killdoc doc tar rename-man symlinks remove-symlinks
  .SUFFIXES:
  .SUFFIXES: .pm .pod .txt .html .man .1 .3 .5 .7
-diff -urNad smokeping-2.1.1~/bin/smokeping.dist smokeping-2.1.1/bin/smokeping.dist
---- smokeping-2.1.1~/bin/smokeping.dist	2007-05-06 23:36:18.000000000 +0300
-+++ smokeping-2.1.1/bin/smokeping.dist	2007-05-06 23:37:18.000000000 +0300
+diff -urNad smokeping-2.2.4~/bin/smokeping.dist smokeping-2.2.4/bin/smokeping.dist
+--- smokeping-2.2.4~/bin/smokeping.dist	2007-09-17 11:04:25.000000000 +0300
++++ smokeping-2.2.4/bin/smokeping.dist	2007-09-17 11:04:29.000000000 +0300
 @@ -1,12 +1,12 @@
 -#!/usr/sepp/bin/perl-5.8.4 -w
 +#!/usr/bin/perl -w
  # -*-perl-*-
  
--use lib qw(/usr/pack/rrdtool-1.0.49-to/lib/perl);
+-use lib qw(/usr/pack/rrdtool-1.2.23-mo/lib/perl);
 -use lib qw(lib);
 +use lib qw(/usr/share/perl5/smokeping);
 +use lib qw(/usr/share/perl5);
  
- use Smokeping 2.001001;
+ use Smokeping 2.002004 ;
   
 -Smokeping::main("etc/config.dist");
 +Smokeping::main("/etc/smokeping/config");
  
  =head1 NAME
  
-diff -urNad smokeping-2.1.1~/bin/tSmoke.dist smokeping-2.1.1/bin/tSmoke.dist
---- smokeping-2.1.1~/bin/tSmoke.dist	2007-05-06 23:36:18.000000000 +0300
-+++ smokeping-2.1.1/bin/tSmoke.dist	2007-05-06 23:37:18.000000000 +0300
+diff -urNad smokeping-2.2.4~/bin/tSmoke.dist smokeping-2.2.4/bin/tSmoke.dist
+--- smokeping-2.2.4~/bin/tSmoke.dist	2007-09-17 11:04:25.000000000 +0300
++++ smokeping-2.2.4/bin/tSmoke.dist	2007-09-17 11:04:29.000000000 +0300
 @@ -50,8 +50,7 @@
  # -- Getopt::Long
  #
@@ -48,7 +48,7 @@ diff -urNad smokeping-2.1.1~/bin/tSmoke.dist smokeping-2.1.1/bin/tSmoke.dist
 -use lib "/usr/local/rrdtool-1.0.39/lib/perl";
 +use lib qw(/usr/share/perl5/smokeping);
  
- use Smokeping 2.001001;
+ use Smokeping 2.002004 ;
  use Net::SMTP;
 @@ -60,7 +59,7 @@
  use RRDs;
@@ -97,9 +97,27 @@ diff -urNad smokeping-2.1.1~/bin/tSmoke.dist smokeping-2.1.1/bin/tSmoke.dist
  
  =head1 COPYRIGHT
  
-diff -urNad smokeping-2.1.1~/htdocs/smokeping.cgi.dist smokeping-2.1.1/htdocs/smokeping.cgi.dist
---- smokeping-2.1.1~/htdocs/smokeping.cgi.dist	2007-05-06 23:36:18.000000000 +0300
-+++ smokeping-2.1.1/htdocs/smokeping.cgi.dist	2007-05-06 23:37:18.000000000 +0300
+diff -urNad smokeping-2.2.4~/etc/basepage.html.dist smokeping-2.2.4/etc/basepage.html.dist
+--- smokeping-2.2.4~/etc/basepage.html.dist	2007-09-17 11:04:25.000000000 +0300
++++ smokeping-2.2.4/etc/basepage.html.dist	2007-09-17 11:04:29.000000000 +0300
+@@ -43,10 +43,10 @@
+ -->
+ </STYLE>
+ 
+-<script src="cropper/lib/prototype.js" type="text/javascript"></script>      
+-<script src="cropper/lib/scriptaculous.js?load=builder,dragdrop" type="text/javascript"></script>
+-<script src="cropper/cropper.js" type="text/javascript"></script>
+-<script src="cropper/smokeping-zoom.js" type="text/javascript"></script>
++<script src="/smokeping/cropper/lib/prototype.js" type="text/javascript"></script>      
++<script src="/smokeping/cropper/lib/scriptaculous.js?load=builder,dragdrop" type="text/javascript"></script>
++<script src="/smokeping/cropper/cropper.js" type="text/javascript"></script>
++<script src="/smokeping/cropper/smokeping-zoom.js" type="text/javascript"></script>
+ 
+ 
+ 
+diff -urNad smokeping-2.2.4~/htdocs/smokeping.cgi.dist smokeping-2.2.4/htdocs/smokeping.cgi.dist
+--- smokeping-2.2.4~/htdocs/smokeping.cgi.dist	2007-09-17 11:04:25.000000000 +0300
++++ smokeping-2.2.4/htdocs/smokeping.cgi.dist	2007-09-17 11:04:29.000000000 +0300
 @@ -1,13 +1,12 @@
 -#!/usr/sepp/bin/speedy -w
 +#!/usr/bin/speedy -w
@@ -110,7 +128,7 @@ diff -urNad smokeping-2.1.1~/htdocs/smokeping.cgi.dist smokeping-2.1.1/htdocs/sm
 +use lib qw(/usr/share/perl5/smokeping);
  use CGI::Carp qw(fatalsToBrowser);
  
- use Smokeping 2.001001;
+ use Smokeping 2.002004 ;
  
 -Smokeping::cgi("/home/oetiker/data/projects/AADJ-smokeping/dist/etc/config");
 +Smokeping::cgi("/etc/smokeping/config");

@@ -1,7 +1,9 @@
+<?xml version="1.0" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>Smokeping/probes/FTPtransfer</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <link rev="made" href="mailto:root@localhost" />
 </head>
 
@@ -109,21 +111,21 @@ transfers of limit the graph size.</p>
 <h1><a name="variables">VARIABLES</a></h1>
 <p>Supported probe-specific variables:</p>
 <dl>
-<dt><strong><a name="item_destfile">destfile</a></strong><br />
+<dt><strong><a name="item_destfile">destfile</a></strong>
 
-</dt><dd>
-Normally the destination filename is the same as the source filename
+<dd>
+<p>Normally the destination filename is the same as the source filename
 (without the path). If you want keep files in different directories this may not
-work, and you have to specify destfile as well.
+work, and you have to specify destfile as well.</p>
 
 </dd><dd>
 <p>Example value: path/to/destinationfile.xxx</p>
 
-<p></p>
-</dd><dt><strong><a name="item_forks">forks</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_forks">forks</a></strong>
 
-</dt><dd>
-Run this many concurrent processes at maximum
+<dd>
+<p>Run this many concurrent processes at maximum</p>
 
 </dd><dd>
 <p>Example value: 5</p>
@@ -131,21 +133,21 @@ Run this many concurrent processes at maximum
 </dd><dd>
 <p>Default value: 5</p>
 
-<p></p>
-</dd><dt><strong><a name="item_min_interval">min_interval</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_min_interval">min_interval</a></strong>
 
-</dt><dd>
-The minimum interval between each starting ftp sessions in seconds.
+<dd>
+<p>The minimum interval between each starting ftp sessions in seconds.</p>
 
 </dd><dd>
 <p>Default value: 1</p>
 
-<p></p>
-</dd><dt><strong><a name="item_mode">mode</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_mode">mode</a></strong>
 
-</dt><dd>
-The ftp probe can be in either put or get mode. If it is in put mode then it will send a file to the ftp server. In get mode it will retrieve a file
-from the ftp server.
+<dd>
+<p>The ftp probe can be in either put or get mode. If it is in put mode then it will send a file to the ftp server. In get mode it will retrieve a file
+from the ftp server.</p>
 
 </dd><dd>
 <p>Example value: get</p>
@@ -153,11 +155,11 @@ from the ftp server.
 </dd><dd>
 <p>This setting is mandatory.</p>
 
-<p></p>
-</dd><dt><strong><a name="item_offset">offset</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_offset">offset</a></strong>
 
-</dt><dd>
-If you run many probes concurrently you may want to prevent them from
+<dd>
+<p>If you run many probes concurrently you may want to prevent them from
 hitting your network all at the same time. Using the probe-specific
 offset parameter you can change the point in time when each probe will
 be run. Offset is specified in % of total interval, or alternatively as
@@ -165,27 +167,27 @@ be run. Offset is specified in % of total interval, or alternatively as
 is specified here. Note that this does NOT influence the rrds itself,
 it is just a matter of when data acqusition is initiated.
 (This variable is only applicable if the variable 'concurrentprobes' is set
-in the 'General' section.)
+in the 'General' section.)</p>
 
 </dd><dd>
 <p>Example value: 50%</p>
 
-<p></p>
-</dd><dt><strong><a name="item_passwordfile">passwordfile</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_passwordfile">passwordfile</a></strong>
 
-</dt><dd>
-Location of the file containing usernames and passwords.
+<dd>
+<p>Location of the file containing usernames and passwords.</p>
 
 </dd><dd>
 <p>Example value: /some/place/secret</p>
 
-<p></p>
-</dd><dt><strong><a name="item_srcfile">srcfile</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_srcfile">srcfile</a></strong>
 
-</dt><dd>
-The name of the source file. If the probe is in <strong>put</strong> mode, this file
+<dd>
+<p>The name of the source file. If the probe is in <strong>put</strong> mode, this file
 has to be on the local machine, if the probe is in <strong>get</strong> mode then this
-file should sit in the remote ftp account.
+file should sit in the remote ftp account.</p>
 
 </dd><dd>
 <p>Example value: src/path/mybig.pdf</p>
@@ -193,27 +195,27 @@ file should sit in the remote ftp account.
 </dd><dd>
 <p>This setting is mandatory.</p>
 
-<p></p>
-</dd><dt><strong><a name="item_step">step</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_step">step</a></strong>
 
-</dt><dd>
-Duration of the base interval that this probe should use, if different
+<dd>
+<p>Duration of the base interval that this probe should use, if different
 from the one specified in the 'Database' section. Note that the step in
 the RRD files is fixed when they are originally generated, and if you
 change the step parameter afterwards, you'll have to delete the old RRD
 files or somehow convert them. (This variable is only applicable if
-the variable 'concurrentprobes' is set in the 'General' section.)
+the variable 'concurrentprobes' is set in the 'General' section.)</p>
 
 </dd><dd>
 <p>Example value: 300</p>
 
-<p></p>
-</dd><dt><strong><a name="item_timeout">timeout</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_timeout">timeout</a></strong>
 
-</dt><dd>
-The timeout is the maximum amount of time you will allow the probe to
+<dd>
+<p>The timeout is the maximum amount of time you will allow the probe to
 transfer the file. If the probe does not succeed to transfer in the time specified,
-it will get killed and a 'loss' will be loged.
+it will get killed and a 'loss' will be loged.</p>
 
 </dd><dd>
 <p>Since FTPtransfer is an invasive probe you should make sure you do not load
@@ -226,76 +228,78 @@ limit of 180 seconds for any RTT.</p>
 </dd><dd>
 <p>This setting is mandatory.</p>
 
-<p></p></dd></dl>
+</li>
+</dd></dl>
 <p>Supported target-specific variables:</p>
 <dl>
-<dt><strong><a name="item_localaddr">localaddr</a></strong><br />
+<dt><strong><a name="item_localaddr">localaddr</a></strong>
 
-</dt><dd>
-The local address to be used when making connections
+<dd>
+<p>The local address to be used when making connections</p>
 
 </dd><dd>
 <p>Example value: myhost-nat-if</p>
 
-<p></p>
-</dd><dt><strong><a name="item_passive">passive</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_passive">passive</a></strong>
 
-</dt><dd>
-Use passive FTP protocol
+<dd>
+<p>Use passive FTP protocol</p>
 
 </dd><dd>
 <p>Example value: yes</p>
 
-<p></p>
-</dd><dt><strong><a name="item_password">password</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_password">password</a></strong>
 
-</dt><dd>
-The password for the user, if not present in the password file.
+<dd>
+<p>The password for the user, if not present in the password file.</p>
 
 </dd><dd>
 <p>Example value: test-password</p>
 
-<p></p>
-</dd><dt><strong><a name="item_pings">pings</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_pings">pings</a></strong>
 
-</dt><dd>
-How many pings should be sent to each target, if different from the global
+<dd>
+<p>How many pings should be sent to each target, if different from the global
 value specified in the Database section. Note that the number of pings in
 the RRD files is fixed when they are originally generated, and if you
 change this parameter afterwards, you'll have to delete the old RRD
-files or somehow convert them.
+files or somehow convert them.</p>
 
 </dd><dd>
 <p>Example value: 5</p>
 
-<p></p>
-</dd><dt><strong><a name="item_port">port</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_port">port</a></strong>
 
-</dt><dd>
-A non-standard FTP port to be used
+<dd>
+<p>A non-standard FTP port to be used</p>
 
 </dd><dd>
 <p>Example value: 3255</p>
 
-<p></p>
-</dd><dt><strong>timeout</strong><br />
+</li>
+</dd><dt><strong>timeout</strong>
 
-</dt><dd>
-Timeout in seconds for the FTP transfer to complete.
+<dd>
+<p>Timeout in seconds for the FTP transfer to complete.</p>
 
 </dd><dd>
 <p>Example value: 10</p>
 
-<p></p>
-</dd><dt><strong><a name="item_username">username</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_username">username</a></strong>
 
-</dt><dd>
-The username to be tested.
+<dd>
+<p>The username to be tested.</p>
 
 </dd><dd>
 <p>Example value: test-user</p>
 
-<p></p></dd></dl>
+</li>
+</dd></dl>
 <p>
 </p>
 <hr />

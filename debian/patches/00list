@@ -1,4 +1,3 @@
 10_path_changes.dpatch
 15_clean_makefile.dpatch
 20_conffile.dpatch
-30_missing_smoke.dpatch

@@ -1,10 +1,10 @@
 #!/usr/sepp/bin/perl-5.8.4 -w
 # -*-perl-*-
 
-use lib qw(/usr/pack/rrdtool-1.0.49-to/lib/perl);
+use lib qw(/usr/pack/rrdtool-1.2.23-mo/lib/perl);
 use lib qw(lib);
 
-use Smokeping 2.001001;
+use Smokeping 2.002004 ;
  
 Smokeping::main("etc/config.dist");
 
@@ -55,6 +55,12 @@ B<smokeping> [ B<--email> | B<--makepod> | B<--version> | B<--restart> ]
  --gen-examples Generate the smokeping_examples document and example config files
                 (to be used while building inside the smokeping distribution)
 		With --check : check the syntax of the generated examples.
+
+ --master-url=s Run smokeping in slave mode. Attach to master for config.
+
+ --shared-secret=s File containing the shared secret for talking to the server.
+
+ --cache-dir=s Directory for temporary data storage when running in slave mode.
 
 =head1 DESCRIPTION
 

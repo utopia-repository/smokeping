@@ -1,7 +1,9 @@
+<?xml version="1.0" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>Grammar</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <link rev="made" href="mailto:root@localhost" />
 </head>
 
@@ -99,86 +101,86 @@ starting hash given as parameter to 'new' contains the ``root section''.</p>
 </p>
 <h3><a name="special_section_keys">Special Section Keys</a></h3>
 <dl>
-<dt><strong><a name="item__sections">_sections</a></strong><br />
+<dt><strong><a name="item__sections">_sections</a></strong>
 
-</dt><dd>
-Array containing the list of sub-sections of this section. Each sub-section
+<dd>
+<p>Array containing the list of sub-sections of this section. Each sub-section
 must then be represented by a sub-hash in this hash with the same name of the
-sub-section.
+sub-section.</p>
 
 </dd><dd>
 <p>The sub-section can also be a regular expression denoted by the syntax '/re/',
 where re is the regular-expression. In case a regular expression is used, a
 sub-hash named with the same '/re/' must be included in this hash.</p>
 
-<p></p>
-</dd><dt><strong><a name="item__recursive">_recursive</a></strong><br />
+</li>
+</dd><dt><strong><a name="item__recursive">_recursive</a></strong>
 
-</dt><dd>
-Array containing the list of those sub-sections that are <em>recursive</em>, ie.
-that can contain a new sub-section with the same syntax as themselves.
+<dd>
+<p>Array containing the list of those sub-sections that are <em>recursive</em>, ie.
+that can contain a new sub-section with the same syntax as themselves.</p>
 
 </dd><dd>
 <p>The same effect can be accomplished with circular references in the
 grammar tree or a suitable <strong>_dyn</strong> section subroutine (see below},
 so this facility is included just for convenience.</p>
 
-<p></p>
-</dd><dt><strong><a name="item__vars">_vars</a></strong><br />
+</li>
+</dd><dt><strong><a name="item__vars">_vars</a></strong>
 
-</dt><dd>
-Array containing the list of variables (assignments) in this section.
-Analogous to sections, regular expressions can be used.
+<dd>
+<p>Array containing the list of variables (assignments) in this section.
+Analogous to sections, regular expressions can be used.</p>
 
-<p></p>
-</dd><dt><strong><a name="item__mandatory">_mandatory</a></strong><br />
+</li>
+</dd><dt><strong><a name="item__mandatory">_mandatory</a></strong>
 
-</dt><dd>
-Array containing the list of mandatory sections and variables.
+<dd>
+<p>Array containing the list of mandatory sections and variables.</p>
 
-<p></p>
-</dd><dt><strong><a name="item__inherited">_inherited</a></strong><br />
+</li>
+</dd><dt><strong><a name="item__inherited">_inherited</a></strong>
 
-</dt><dd>
-Array containing the list of the variables that should be assigned the
-same value as in the parent section if nothing is specified here.
+<dd>
+<p>Array containing the list of the variables that should be assigned the
+same value as in the parent section if nothing is specified here.</p>
 
-<p></p>
-</dd><dt><strong><a name="item__table">_table</a></strong><br />
+</li>
+</dd><dt><strong><a name="item__table">_table</a></strong>
 
-</dt><dd>
-Hash containing the table grammar (see Special Table Keys). If not specified,
+<dd>
+<p>Hash containing the table grammar (see Special Table Keys). If not specified,
 no table is allowed in this section. The grammar of the columns if specified
-by sub-hashes named with the column number.
+by sub-hashes named with the column number.</p>
 
-<p></p>
-</dd><dt><strong><a name="item__text">_text</a></strong><br />
+</li>
+</dd><dt><strong><a name="item__text">_text</a></strong>
 
-</dt><dd>
-Section contains free-form text. Only sections and @includes statements will
+<dd>
+<p>Section contains free-form text. Only sections and @includes statements will
 be interpreted, the rest will be added in the returned hash under '_text' as
-string.
+string.</p>
 
 </dd><dd>
 <p><strong>_text</strong> is a hash reference which can contain a <strong>_re</strong> and a <strong>_re_error</strong> key
 which will be used to scrutanize the text ... if the hash is empty, all text
 will be accepted.</p>
 
-<p></p>
-</dd><dt><strong><a name="item__order">_order</a></strong><br />
+</li>
+</dd><dt><strong><a name="item__order">_order</a></strong>
 
-</dt><dd>
-If defined, a '_order' element will be put in every hash containing the
+<dd>
+<p>If defined, a '_order' element will be put in every hash containing the
 sections with a number that determines the order in which the sections were
-defined.
+defined.</p>
 
-<p></p>
-</dd><dt><strong><a name="item__varlist">_varlist</a></strong><br />
+</li>
+</dd><dt><strong><a name="item__varlist">_varlist</a></strong>
 
-</dt><dd>
-If defined, a '_varlist' element will be put in the config hash of this
+<dd>
+<p>If defined, a '_varlist' element will be put in the config hash of this
 section with a list of the variables defined in the section. This can
-be used to find out the order of the variable assignments.
+be used to find out the order of the variable assignments.</p>
 
 </dd><dd>
 <p>The '_sub' function (see below) of any variables defined in this section
@@ -186,38 +188,38 @@ will also receive a list of those variables already defined in the
 same section. This can be used to enforce the order of the variables
 during parsing.</p>
 
-<p></p>
-</dd><dt><strong><a name="item__doc">_doc</a></strong><br />
+</li>
+</dd><dt><strong><a name="item__doc">_doc</a></strong>
 
-</dt><dd>
-Describes what this section is about
+<dd>
+<p>Describes what this section is about</p>
 
-<p></p>
-</dd><dt><strong><a name="item__sub">_sub</a></strong><br />
+</li>
+</dd><dt><strong><a name="item__sub">_sub</a></strong>
 
-</dt><dd>
-A function pointer. It is called for every instance of this section,
+<dd>
+<p>A function pointer. It is called for every instance of this section,
 with the real name of the section passed as its first argument. This is
 probably only useful for the regexp sections. If the function returns
 a defined value it is assumed that the test was not successful and an
-error is generated with the returned string as content.
+error is generated with the returned string as content.</p>
 
-<p></p>
-</dd><dt><strong><a name="item__dyn">_dyn</a></strong><br />
+</li>
+</dd><dt><strong><a name="item__dyn">_dyn</a></strong>
 
-</dt><dd>
-A subroutine reference (function pointer) that will be called when
+<dd>
+<p>A subroutine reference (function pointer) that will be called when
 a new section of this syntax is encountered. The subroutine will get
 three arguments: the syntax of the section name (string or regexp), the
 actual name encountered (this will be the same as the first argument for
 non-regexp sections) and a reference to the grammar tree of the section.
-This subroutine can then modify the grammar tree dynamically.
+This subroutine can then modify the grammar tree dynamically.</p>
 
-<p></p>
-</dd><dt><strong><a name="item__dyndoc">_dyndoc</a></strong><br />
+</li>
+</dd><dt><strong><a name="item__dyndoc">_dyndoc</a></strong>
 
-</dt><dd>
-A hash reference that lists interesting names for the section that
+<dd>
+<p>A hash reference that lists interesting names for the section that
 should be documented. The keys of the hash are the names and the
 values in the hash are strings that can contain an explanation
 for the name. The <a href="#item__dyn"><code>_dyn()</code></a> subroutine is then called for each of 
@@ -225,33 +227,34 @@ these names and the differences of the resulting grammar and
 the original one are documented. This module can currently document
 differences in the _vars list, listing new variables and removed
 ones, and differences in the _sections list, listing the
-new and removed sections.
+new and removed sections.</p>
 
-<p></p></dd></dl>
+</li>
+</dd></dl>
 <p>
 </p>
 <h3><a name="special_variable_keys">Special Variable Keys</a></h3>
 <dl>
-<dt><strong><a name="item__re">_re</a></strong><br />
+<dt><strong><a name="item__re">_re</a></strong>
 
-</dt><dd>
-Regular expression upon which the value will be checked.
+<dd>
+<p>Regular expression upon which the value will be checked.</p>
 
-<p></p>
-</dd><dt><strong><a name="item__re_error">_re_error</a></strong><br />
+</li>
+</dd><dt><strong><a name="item__re_error">_re_error</a></strong>
 
-</dt><dd>
-String containing the returned error in case the regular expression doesn't
-match (if not specified, a generic 'syntax error' message will be returned).
+<dd>
+<p>String containing the returned error in case the regular expression doesn't
+match (if not specified, a generic 'syntax error' message will be returned).</p>
 
-<p></p>
-</dd><dt><strong>_sub</strong><br />
+</li>
+</dd><dt><strong>_sub</strong>
 
-</dt><dd>
-A function pointer. It called for every value, with the value passed as its
+<dd>
+<p>A function pointer. It called for every value, with the value passed as its
 first argument. If the function returns a defined value it is assumed that
 the test was not successful and an error is generated with the returned
-string as content.
+string as content.</p>
 
 </dd><dd>
 <p>If the '_varlist' key (see above) is defined in this section, the '_sub'
@@ -259,43 +262,43 @@ function will also receive an array reference as the second argument. The
 array contains a list of those variables already defined in the same
 section. This can be used to enforce the order of the variables.</p>
 
-<p></p>
-</dd><dt><strong><a name="item__default">_default</a></strong><br />
+</li>
+</dd><dt><strong><a name="item__default">_default</a></strong>
 
-</dt><dd>
-A default value that will be assigned to the variable if none is specified or inherited.
+<dd>
+<p>A default value that will be assigned to the variable if none is specified or inherited.</p>
 
-<p></p>
-</dd><dt><strong>_doc</strong><br />
+</li>
+</dd><dt><strong>_doc</strong>
 
-</dt><dd>
-Description of the variable.
+<dd>
+<p>Description of the variable.</p>
 
-<p></p>
-</dd><dt><strong><a name="item__example">_example</a></strong><br />
+</li>
+</dd><dt><strong><a name="item__example">_example</a></strong>
 
-</dt><dd>
-A one line example for the content of this variable.
+<dd>
+<p>A one line example for the content of this variable.</p>
 
-<p></p>
-</dd><dt><strong>_dyn</strong><br />
+</li>
+</dd><dt><strong>_dyn</strong>
 
-</dt><dd>
-A subroutine reference (function pointer) that will be called when the
+<dd>
+<p>A subroutine reference (function pointer) that will be called when the
 variable is assigned some value in the config file. The subroutine will
 get three arguments: the name of the variable, the value assigned and
 a reference to the grammar tree of this section.  This subroutine can
-then modify the grammar tree dynamically.
+then modify the grammar tree dynamically.</p>
 
 </dd><dd>
 <p>Note that no <a href="#item__dyn"><code>_dyn()</code></a> call is made for default and inherited values of
 the variable.</p>
 
-<p></p>
-</dd><dt><strong>_dyndoc</strong><br />
+</li>
+</dd><dt><strong>_dyndoc</strong>
 
-</dt><dd>
-A hash reference that lists interesting values for the variable that
+<dd>
+<p>A hash reference that lists interesting values for the variable that
 should be documented. The keys of the hash are the values and the
 values in the hash are strings that can contain an explanation
 for the value. The <a href="#item__dyn"><code>_dyn()</code></a> subroutine is then called for each of 
@@ -303,82 +306,85 @@ these values and the differences of the resulting grammar and
 the original one are documented. This module can currently document
 differences in the _vars list, listing new variables and removed
 ones, and differences in the _sections list, listing the
-new and removed sections.
+new and removed sections.</p>
 
-<p></p></dd></dl>
+</li>
+</dd></dl>
 <p>
 </p>
 <h3><a name="special_table_keys">Special Table Keys</a></h3>
 <dl>
-<dt><strong><a name="item__columns">_columns</a></strong><br />
+<dt><strong><a name="item__columns">_columns</a></strong>
 
-</dt><dd>
-Number of columns. If not specified, it will not be enforced.
+<dd>
+<p>Number of columns. If not specified, it will not be enforced.</p>
 
-<p></p>
-</dd><dt><strong><a name="item__key">_key</a></strong><br />
+</li>
+</dd><dt><strong><a name="item__key">_key</a></strong>
 
-</dt><dd>
-If defined, the specified column number will be used as key in a hash in the
+<dd>
+<p>If defined, the specified column number will be used as key in a hash in the
 returned hash. If not defined, the returned hash will contain a '_table'
 element with the contents of the table as array. The rows of the tables are
-stored as arrays.
+stored as arrays.</p>
 
-<p></p>
-</dd><dt><strong>_sub</strong><br />
+</li>
+</dd><dt><strong>_sub</strong>
 
-</dt><dd>
-they work analog to the description in the previous section.
+<dd>
+<p>they work analog to the description in the previous section.</p>
 
-<p></p>
-</dd><dt><strong>_doc</strong><br />
+</li>
+</dd><dt><strong>_doc</strong>
 
-</dt><dd>
-describes the content of the column.
+<dd>
+<p>describes the content of the column.</p>
 
-<p></p>
-</dd><dt><strong>_example</strong><br />
+</li>
+</dd><dt><strong>_example</strong>
 
-</dt><dd>
-example for the content of this column
+<dd>
+<p>example for the content of this column</p>
 
-<p></p></dd></dl>
+</li>
+</dd></dl>
 <p>
 </p>
 <h3><a name="special_text_keys">Special Text Keys</a></h3>
 <dl>
-<dt><strong>_re</strong><br />
+<dt><strong>_re</strong>
 
-</dt><dd>
-Regular expression upon which the text will be checked (everything as a single
-line).
+<dd>
+<p>Regular expression upon which the text will be checked (everything as a single
+line).</p>
 
-<p></p>
-</dd><dt><strong>_re_error</strong><br />
+</li>
+</dd><dt><strong>_re_error</strong>
 
-</dt><dd>
-String containing the returned error in case the regular expression doesn't
-match (if not specified, a generic 'syntax error' message will be returned).
+<dd>
+<p>String containing the returned error in case the regular expression doesn't
+match (if not specified, a generic 'syntax error' message will be returned).</p>
 
-<p></p>
-</dd><dt><strong>_sub</strong><br />
+</li>
+</dd><dt><strong>_sub</strong>
 
-</dt><dd>
-they work analog to the description in the previous section.
+<dd>
+<p>they work analog to the description in the previous section.</p>
 
-<p></p>
-</dd><dt><strong>_doc</strong><br />
+</li>
+</dd><dt><strong>_doc</strong>
 
-</dt><dd>
-Ditto.
+<dd>
+<p>Ditto.</p>
 
-<p></p>
-</dd><dt><strong>_example</strong><br />
+</li>
+</dd><dt><strong>_example</strong>
 
-</dt><dd>
-Potential multi line example for the content of this text section
+<dd>
+<p>Potential multi line example for the content of this text section</p>
 
-<p></p></dd></dl>
+</li>
+</dd></dl>
 <p>
 </p>
 <h2><a name="configuration_syntax">Configuration Syntax</a></h2>
@@ -401,30 +407,31 @@ be escaped with a backslash as well.</p>
 <p>Config::Grammar supports hierarchical configurations through sections, whose
 syntax is as follows:</p>
 <dl>
-<dt><strong><a name="item_level_1">Level 1</a></strong><br />
+<dt><strong><a name="item_level_1">Level 1</a></strong>
 
-</dt><dd>
-*** section name ***
+<dd>
+<p>*** section name ***</p>
 
-<p></p>
-</dd><dt><strong><a name="item_level_2">Level 2</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_level_2">Level 2</a></strong>
 
-</dt><dd>
-+ section name
+<dd>
+<p>+ section name</p>
 
-<p></p>
-</dd><dt><strong><a name="item_level_3">Level 3</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_level_3">Level 3</a></strong>
 
-</dt><dd>
-++ section name
+<dd>
+<p>++ section name</p>
 
-<p></p>
-</dd><dt><strong><a name="item_level_n_2c_n_3e1">Level n, n&gt;1</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_level_n_2c_n_3e1">Level n, n&gt;1</a></strong>
 
-</dt><dd>
-+..+ section name (number of '+' determines level)
+<dd>
+<p>+..+ section name (number of '+' determines level)</p>
 
-<p></p></dd></dl>
+</li>
+</dd></dl>
 <p>
 </p>
 <h3><a name="assignments">Assignments</a></h3>

@@ -1,3 +1,20 @@
+smokeping (2.2.4-1) unstable; urgency=low
+
+  * New upstream release
+    + includes graph zooming code that is installed in /var/www/smokeping
+    + new master/slave functionality needs a dependency on libwww-perl
+    + requires librrds-perl >= 1.2; update the dependency
+  * debian/patches:
+    + 30_missing_smoke.dpatch: removed, now included upstream.
+  * Update debian/copyright for the included javascript libraries.
+  * Wrap overlong dependency lines in debian/control.
+  * debian/rules: fix the build-stamp dependency so it will not skip
+    the patch step
+  * Include an example secret file for the master/slave functionality
+  * Upgrade apache recommendation to apache2.
+
+ -- Niko Tyni <ntyni@iki.fi>  Mon, 17 Sep 2007 10:57:29 +0300
+
 smokeping (2.1.1-1) unstable; urgency=low
 
   * New upstream release.

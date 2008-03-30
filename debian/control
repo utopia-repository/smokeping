@@ -4,14 +4,19 @@ Priority: extra
 Maintainer: Jose Carlos Garcia Sogo <jsogo@debian.org>
 Uploaders: Niko Tyni <ntyni@iki.fi>
 Build-Depends: debhelper (>= 5), dpatch (>= 2.0.9)
-Build-Depends-Indep: librrds-perl, groff-base, libhtml-parser-perl
+Build-Depends-Indep: librrds-perl, groff-base, libhtml-parser-perl, libwww-perl
 Standards-Version: 3.7.2
 
 Package: smokeping
 Architecture: all
-Depends: ${perl:Depends}, ${misc:Depends}, libnet-perl, libsnmp-session-perl (>= 0.86), librrds-perl (>= 1.0.33-9), fping (>= 2.4b2-to-ipv6-2), speedy-cgi-perl (>= 2.21-1), exim4 | mail-transport-agent, debianutils (>= 1.7), adduser, lsb-base (>= 3.0-6)
-Recommends: apache | httpd, libsocket6-perl, dnsutils, echoping
-Suggests: curl, libauthen-radius-perl, libnet-ldap-perl, libnet-dns-perl, openssh-client, libio-socket-ssl-perl, libnet-telnet-perl
+Depends: ${perl:Depends}, ${misc:Depends}, libnet-perl, libwww-perl,
+ libsnmp-session-perl (>= 0.86), librrds-perl (>= 1.2),
+ fping (>= 2.4b2-to-ipv6-2), speedy-cgi-perl (>= 2.21-1), 
+ exim4 | mail-transport-agent, debianutils (>= 1.7), adduser, 
+ lsb-base (>= 3.0-6)
+Recommends: apache2 | httpd, libsocket6-perl, dnsutils, echoping
+Suggests: curl, libauthen-radius-perl, libnet-ldap-perl, libnet-dns-perl, 
+ openssh-client, libio-socket-ssl-perl, libnet-telnet-perl
 Description: latency logging and graphing system
  SmokePing consists of a daemon process which organizes the 
  latency measurements and a CGI which presents the graphs. 
