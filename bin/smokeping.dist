@@ -4,7 +4,7 @@
 use lib qw(/usr/pack/rrdtool-1.2.23-mo/lib/perl);
 use lib qw(lib);
 
-use Smokeping 2.002004 ;
+use Smokeping 2.002006;
  
 Smokeping::main("etc/config.dist");
 
@@ -57,6 +57,11 @@ B<smokeping> [ B<--email> | B<--makepod> | B<--version> | B<--restart> ]
 		With --check : check the syntax of the generated examples.
 
  --master-url=s Run smokeping in slave mode. Attach to master for config.
+
+ --slave-name=s By default the slave will use whatever it thinks its name
+                is, when talking to its master. In some cases you may
+                probably want to override this.
+
 
  --shared-secret=s File containing the shared secret for talking to the server.
 

@@ -592,10 +592,11 @@ URL.</p>
  binary = /usr/sbin/fping
  
  *** Slaves ***
- secrets=/scratch/oetiker/smoke-master/etc/smokeping_secrets.dist
+ secrets=/home/oetiker/checkouts/smokeping/trunk/software/etc/smokeping_secrets.dist
  +boomer
  display_name=boomer
- color=0000ff</pre>
+ color=0000ff
+ +slave2</pre>
 
 </dd><dt><strong>Probe explanation</strong>
 
@@ -625,7 +626,7 @@ It is included in the examples as well for the sake of completeness.</p>
  menu = James
  title =James
  alerts = someloss
- slaves = boomer
+ slaves = boomer slave2
  host = james.address
  
  ++ MultiHost

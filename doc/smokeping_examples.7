@@ -129,7 +129,7 @@
 .\" ========================================================================
 .\"
 .IX Title "SMOKEPING_EXAMPLES 7"
-.TH SMOKEPING_EXAMPLES 7 "2007-09-16" "2.2.4" "SmokePing"
+.TH SMOKEPING_EXAMPLES 7 "2007-10-28" "2.2.6" "SmokePing"
 .SH "NAME"
 smokeping_examples \- Examples of Smokeping configuration
 .SH "OVERVIEW"
@@ -719,12 +719,13 @@ is probed with both \s-1HTTP\s0 requests and \s-1ICP\s0 requests for the same
 \& binary = /usr/sbin/fping
 .Ve
 .Sp
-.Vb 5
+.Vb 6
 \& *** Slaves ***
-\& secrets=/scratch/oetiker/smoke\-master/etc/smokeping_secrets.dist
+\& secrets=/home/oetiker/checkouts/smokeping/trunk/software/etc/smokeping_secrets.dist
 \& +boomer
 \& display_name=boomer
 \& color=0000ff
+\& +slave2
 .Ve
 .IP "Probe explanation" 4
 .IX Item "Probe explanation"
@@ -760,7 +761,7 @@ It is included in the examples as well for the sake of completeness.
 \& menu = James
 \& title =James
 \& alerts = someloss
-\& slaves = boomer
+\& slaves = boomer slave2
 \& host = james.address
 .Ve
 .Sp

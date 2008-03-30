@@ -96,4 +96,4 @@ SSEEEE AALLSSOO
 
 
 
-2.2.4                             2007-09-16doc::Smokeping::probes::basevars(3)
+2.2.6                             2007-10-28doc::Smokeping::probes::basevars(3)

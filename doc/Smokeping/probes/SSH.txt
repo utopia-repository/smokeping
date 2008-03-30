@@ -19,6 +19,7 @@ SSYYNNOOPPSSIISS
         # The following variables can be overridden in each target section
         keytype = dsa
         pings = 5
+        port = 5000
 
         # [...]
 
@@ -33,6 +34,7 @@ SSYYNNOOPPSSIISS
         host = my.host
         keytype = dsa
         pings = 5
+        port = 5000
 
 DDEESSCCRRIIPPTTIIOONN
        Integrates ssh-keyscan as a probe into smokeping. The variable bbiinnaarryy
@@ -97,7 +99,7 @@ VVAARRIIAABBLLEESS
        Supported target-specific variables:
 
        keytype
-           Type of key, used in ssh-keyscan -t <keytype>
+           Type of key, used in ssh-keyscan -t _k_e_y_t_y_p_e
 
            Example value: dsa
 
@@ -112,9 +114,16 @@ VVAARRIIAABBLLEESS
 
            Example value: 5
 
+       port
+           Port to use when testing the ssh connection -p _p_o_r_t
+
+           Example value: 5000
+
+           Default value: 22
+
 AAUUTTHHOORRSS
        Christian Recktenwald <smokeping-contact@citecs.de>
 
 
 
-2.2.4                             2007-09-16    doc::Smokeping::probes::SSH(3)
+2.2.6                             2007-10-28    doc::Smokeping::probes::SSH(3)

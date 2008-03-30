@@ -129,7 +129,7 @@
 .\" ========================================================================
 .\"
 .IX Title "Config::Grammar 3"
-.TH Config::Grammar 3 "2005-12-18" "2.2.4" "SmokePing"
+.TH Config::Grammar 3 "2007-10-28" "2.2.6" "SmokePing"
 .SH "NAME"
 Config::Grammar \- A grammar\-based, user\-friendly config parser
 .SH "SYNOPSIS"
@@ -138,11 +138,12 @@ Config::Grammar \- A grammar\-based, user\-friendly config parser
 \& use Config::Grammar;
 .Ve
 .PP
-.Vb 4
+.Vb 5
 \& my $parser = Config::Grammar\->new(\e%grammar);
 \& my $cfg = $parser\->parse('app.cfg') or die "ERROR: $parser\->{err}\en";
 \& my $pod = $parser\->makepod();
 \& my $ex = $parser\->maketmpl('TOP','SubNode');
+\& my $minex = $parser\->maketmplmin('TOP','SubNode');
 .Ve
 .SH "DESCRIPTION"
 .IX Header "DESCRIPTION"
@@ -158,7 +159,10 @@ documentation of the configuration file format.
 The \fBmaketmpl\fR method can generate a template configuration file.  If
 your grammar contains regexp matches, the template will not be all
 that helpful as Config::Grammar is not smart enough to give you sensible
-template data based in regular expressions.
+template data based in regular expressions. The related function 
+\&\fBmaketmplmin\fR generates a minimal configuration template without 
+examples, regexps or comments and thus allows an experienced user to
+fill in the configuration data more efficiently.
 .Sh "Grammar Definition"
 .IX Subsection "Grammar Definition"
 The grammar is a multiple-level hash of hashes, which follows the structure of
@@ -180,14 +184,6 @@ sub\-section.
 The sub-section can also be a regular expression denoted by the syntax '/re/',
 where re is the regular\-expression. In case a regular expression is used, a
 sub-hash named with the same '/re/' must be included in this hash.
-.IP "_recursive" 12
-.IX Item "_recursive"
-Array containing the list of those sub-sections that are \fIrecursive\fR, ie.
-that can contain a new sub-section with the same syntax as themselves.
-.Sp
-The same effect can be accomplished with circular references in the
-grammar tree or a suitable \fB_dyn\fR section subroutine (see below},
-so this facility is included just for convenience.
 .IP "_vars" 12
 .IX Item "_vars"
 Array containing the list of variables (assignments) in this section.
@@ -218,16 +214,6 @@ will be accepted.
 If defined, a '_order' element will be put in every hash containing the
 sections with a number that determines the order in which the sections were
 defined.
-.IP "_varlist" 12
-.IX Item "_varlist"
-If defined, a '_varlist' element will be put in the config hash of this
-section with a list of the variables defined in the section. This can
-be used to find out the order of the variable assignments.
-.Sp
-The '_sub' function (see below) of any variables defined in this section
-will also receive a list of those variables already defined in the
-same section. This can be used to enforce the order of the variables
-during parsing.
 .IP "_doc" 12
 .IX Item "_doc"
 Describes what this section is about
@@ -238,25 +224,6 @@ with the real name of the section passed as its first argument. This is
 probably only useful for the regexp sections. If the function returns
 a defined value it is assumed that the test was not successful and an
 error is generated with the returned string as content.
-.IP "_dyn" 12
-.IX Item "_dyn"
-A subroutine reference (function pointer) that will be called when
-a new section of this syntax is encountered. The subroutine will get
-three arguments: the syntax of the section name (string or regexp), the
-actual name encountered (this will be the same as the first argument for
-non-regexp sections) and a reference to the grammar tree of the section.
-This subroutine can then modify the grammar tree dynamically.
-.IP "_dyndoc" 12
-.IX Item "_dyndoc"
-A hash reference that lists interesting names for the section that
-should be documented. The keys of the hash are the names and the
-values in the hash are strings that can contain an explanation
-for the name. The \fI_dyn()\fR subroutine is then called for each of 
-these names and the differences of the resulting grammar and
-the original one are documented. This module can currently document
-differences in the _vars list, listing new variables and removed
-ones, and differences in the _sections list, listing the
-new and removed sections.
 .PP
 \fISpecial Variable Keys\fR
 .IX Subsection "Special Variable Keys"
@@ -287,27 +254,6 @@ Description of the variable.
 .IP "_example" 12
 .IX Item "_example"
 A one line example for the content of this variable.
-.IP "_dyn" 12
-.IX Item "_dyn"
-A subroutine reference (function pointer) that will be called when the
-variable is assigned some value in the config file. The subroutine will
-get three arguments: the name of the variable, the value assigned and
-a reference to the grammar tree of this section.  This subroutine can
-then modify the grammar tree dynamically.
-.Sp
-Note that no \fI_dyn()\fR call is made for default and inherited values of
-the variable.
-.IP "_dyndoc" 12
-.IX Item "_dyndoc"
-A hash reference that lists interesting values for the variable that
-should be documented. The keys of the hash are the values and the
-values in the hash are strings that can contain an explanation
-for the value. The \fI_dyn()\fR subroutine is then called for each of 
-these values and the differences of the resulting grammar and
-the original one are documented. This module can currently document
-differences in the _vars list, listing new variables and removed
-ones, and differences in the _sections list, listing the
-new and removed sections.
 .PP
 \fISpecial Table Keys\fR
 .IX Subsection "Special Table Keys"
@@ -360,7 +306,8 @@ at the beginning and end of lines is trimmed.
 \&'\e' at the end of the line marks a continued line on the next line. A single
 space will be inserted between the concatenated lines.
 .PP
-\&'@include filename' is used to include another file.
+\&'@include filename' is used to include another file. Include works relative to the
+directory where the parent file is in.
 .PP
 \&'@define a some value' will replace all occurences of 'a' in the following text
 with 'some value'.
@@ -402,6 +349,17 @@ The data is interpreted as one or more columns separated by spaces.
 .IX Subsection "Example"
 \fICode\fR
 .IX Subsection "Code"
+.PP
+.Vb 2
+\& use Data::Dumper;
+\& use Config::Grammar;
+.Ve
+.PP
+.Vb 3
+\& my $RE_IP       = '\ed+\e.\ed+\e.\ed+\e.\ed+';
+\& my $RE_MAC      = '[0\-9a\-f]{2}(?::[0\-9a\-f]{2}){5}';
+\& my $RE_HOST     = '\eS+';
+.Ve
 .PP
 .Vb 58
 \& my $parser = Config::Grammar\->new({
@@ -468,7 +426,7 @@ The data is interpreted as one or more columns separated by spaces.
 \& my $cfg = $parser\->parse('test.cfg') or
 \&   die "ERROR: $parser\->{err}\en";
 \& print Dumper($cfg);
-\& print $praser\->makepod;
+\& print $parser\->makepod;
 .Ve
 .PP
 \fIConfiguration\fR
@@ -532,21 +490,19 @@ The data is interpreted as one or more columns separated by spaces.
 \&                }
 \& };
 .Ve
+.SH "SEE ALSO"
+.IX Header "SEE ALSO"
+Config::Grammar::Dynamic
 .SH "COPYRIGHT"
 .IX Header "COPYRIGHT"
 Copyright (c) 2000\-2005 by \s-1ETH\s0 Zurich. All rights reserved.
+Copyright (c) 2007 by David Schweikert. All rights reserved.
 .SH "LICENSE"
 .IX Header "LICENSE"
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
-.SH "AUTHOR"
-.IX Header "AUTHOR"
-David Schweikert <dws_at_ee.ethz.ch>,
-Tobias Oetiker <oetiker_at_ee.ethz.ch>,
-Niko Tyni  <ntyni_at_iki.fi>
-.SH "HISTORY"
-.IX Header "HISTORY"
-.Vb 2
-\& 2001\-05\-11 ds      Initial Version of ISG::ParseConfig
-\& 2005\-03\-08 ds 1.00 Renamed from ISG::ParseConfig to Config::Grammar
-.Ve
+.SH "AUTHORS"
+.IX Header "AUTHORS"
+David Schweikert,
+Tobias Oetiker,
+Niko Tyni

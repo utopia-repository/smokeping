@@ -204,4 +204,4 @@ AAUUTTHHOORR
 
 
 
-2.2.4                             2007-09-06              SMOKEPING_INSTALL(7)
+2.2.6                             2007-10-28              SMOKEPING_INSTALL(7)

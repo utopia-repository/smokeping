@@ -45,7 +45,8 @@
 <pre>
  # The following variables can be overridden in each target section
  keytype = dsa
- pings = 5</pre>
+ pings = 5
+ port = 5000</pre>
 <pre>
  # [...]</pre>
 <pre>
@@ -59,7 +60,8 @@
  # probe = SSH # if the default probe is something else
  host = my.host
  keytype = dsa
- pings = 5</pre>
+ pings = 5
+ port = 5000</pre>
 <p>
 </p>
 <hr />
@@ -151,7 +153,7 @@ the variable 'concurrentprobes' is set in the 'General' section.)</p>
 <dt><strong><a name="item_keytype">keytype</a></strong>
 
 <dd>
-<p>Type of key, used in ssh-keyscan -t &lt;keytype&gt;</p>
+<p>Type of key, used in ssh-keyscan -t <em>keytype</em></p>
 
 </dd><dd>
 <p>Example value: dsa</p>
@@ -171,6 +173,18 @@ files or somehow convert them.</p>
 
 </dd><dd>
 <p>Example value: 5</p>
+
+</li>
+</dd><dt><strong><a name="item_port">port</a></strong>
+
+<dd>
+<p>Port to use when testing the ssh connection -p <em>port</em></p>
+
+</dd><dd>
+<p>Example value: 5000</p>
+
+</dd><dd>
+<p>Default value: 22</p>
 
 </li>
 </dd></dl>

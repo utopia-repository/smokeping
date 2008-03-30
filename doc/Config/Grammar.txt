@@ -12,6 +12,7 @@ SSYYNNOOPPSSIISS
         my $cfg = $parser->parse('app.cfg') or die "ERROR: $parser->{err}\n";
         my $pod = $parser->makepod();
         my $ex = $parser->maketmpl('TOP','SubNode');
+        my $minex = $parser->maketmplmin('TOP','SubNode');
 
 DDEESSCCRRIIPPTTIIOONN
        Config::Grammar is a module to parse configuration files. The configu-
@@ -26,7 +27,10 @@ DDEESSCCRRIIPPTTIIOONN
        The mmaakkeettmmppll method can generate a template configuration file.  If
        your grammar contains regexp matches, the template will not be all that
        helpful as Config::Grammar is not smart enough to give you sensible
-       template data based in regular expressions.
+       template data based in regular expressions. The related function
+       mmaakkeettmmppllmmiinn generates a minimal configuration template without exam-
+       ples, regexps or comments and thus allows an experienced user to fill
+       in the configuration data more efficiently.
 
        GGrraammmmaarr DDeeffiinniittiioonn
 
@@ -49,15 +53,6 @@ DDEESSCCRRIIPPTTIIOONN
                    the syntax '/re/', where re is the regular-expression. In
                    case a regular expression is used, a sub-hash named with
                    the same '/re/' must be included in this hash.
-
-       _recursive  Array containing the list of those sub-sections that are
-                   _r_e_c_u_r_s_i_v_e, ie.  that can contain a new sub-section with the
-                   same syntax as themselves.
-
-                   The same effect can be accomplished with circular refer-
-                   ences in the grammar tree or a suitable __ddyynn section sub-
-                   routine (see below}, so this facility is included just for
-                   convenience.
 
        _vars       Array containing the list of variables (assignments) in
                    this section.  Analogous to sections, regular expressions
@@ -87,16 +82,6 @@ DDEESSCCRRIIPPTTIIOONN
                    containing the sections with a number that determines the
                    order in which the sections were defined.
 
-       _varlist    If defined, a '_varlist' element will be put in the config
-                   hash of this section with a list of the variables defined
-                   in the section. This can be used to find out the order of
-                   the variable assignments.
-
-                   The '_sub' function (see below) of any variables defined in
-                   this section will also receive a list of those variables
-                   already defined in the same section. This can be used to
-                   enforce the order of the variables during parsing.
-
        _doc        Describes what this section is about
 
        _sub        A function pointer. It is called for every instance of this
@@ -106,33 +91,13 @@ DDEESSCCRRIIPPTTIIOONN
                    assumed that the test was not successful and an error is
                    generated with the returned string as content.
 
-       _dyn        A subroutine reference (function pointer) that will be
-                   called when a new section of this syntax is encountered.
-                   The subroutine will get three arguments: the syntax of the
-                   section name (string or regexp), the actual name encoun-
-                   tered (this will be the same as the first argument for non-
-                   regexp sections) and a reference to the grammar tree of the
-                   section.  This subroutine can then modify the grammar tree
-                   dynamically.
-
-       _dyndoc     A hash reference that lists interesting names for the sec-
-                   tion that should be documented. The keys of the hash are
-                   the names and the values in the hash are strings that can
-                   contain an explanation for the name. The ___d_y_n_(_) subroutine
-                   is then called for each of these names and the differences
-                   of the resulting grammar and the original one are docu-
-                   mented. This module can currently document differences in
-                   the _vars list, listing new variables and removed ones, and
-                   differences in the _sections list, listing the new and
-                   removed sections.
-
        _S_p_e_c_i_a_l _V_a_r_i_a_b_l_e _K_e_y_s
 
        _re         Regular expression upon which the value will be checked.
 
        _re_error   String containing the returned error in case the regular
-                   expression doesn't match (if not specified, a generic
-                   'syntax error' message will be returned).
+                   expression doesn't match (if not specified, a generic 'syn-
+                   tax error' message will be returned).
 
        _sub        A function pointer. It called for every value, with the
                    value passed as its first argument. If the function returns
@@ -152,27 +117,6 @@ DDEESSCCRRIIPPTTIIOONN
        _doc        Description of the variable.
 
        _example    A one line example for the content of this variable.
-
-       _dyn        A subroutine reference (function pointer) that will be
-                   called when the variable is assigned some value in the con-
-                   fig file. The subroutine will get three arguments: the name
-                   of the variable, the value assigned and a reference to the
-                   grammar tree of this section.  This subroutine can then
-                   modify the grammar tree dynamically.
-
-                   Note that no ___d_y_n_(_) call is made for default and inherited
-                   values of the variable.
-
-       _dyndoc     A hash reference that lists interesting values for the
-                   variable that should be documented. The keys of the hash
-                   are the values and the values in the hash are strings that
-                   can contain an explanation for the value. The ___d_y_n_(_) sub-
-                   routine is then called for each of these values and the
-                   differences of the resulting grammar and the original one
-                   are documented. This module can currently document differ-
-                   ences in the _vars list, listing new variables and removed
-                   ones, and differences in the _sections list, listing the
-                   new and removed sections.
 
        _S_p_e_c_i_a_l _T_a_b_l_e _K_e_y_s
 
@@ -198,8 +142,8 @@ DDEESSCCRRIIPPTTIIOONN
                    (everything as a single line).
 
        _re_error   String containing the returned error in case the regular
-                   expression doesn't match (if not specified, a generic
-                   'syntax error' message will be returned).
+                   expression doesn't match (if not specified, a generic 'syn-
+                   tax error' message will be returned).
 
        _sub        they work analog to the description in the previous sec-
                    tion.
@@ -219,7 +163,8 @@ DDEESSCCRRIIPPTTIIOONN
        '\' at the end of the line marks a continued line on the next line. A
        single space will be inserted between the concatenated lines.
 
-       '@include filename' is used to include another file.
+       '@include filename' is used to include another file. Include works rel-
+       ative to the directory where the parent file is in.
 
        '@define a some value' will replace all occurences of 'a' in the fol-
        lowing text with 'some value'.
@@ -254,6 +199,13 @@ DDEESSCCRRIIPPTTIIOONN
        EExxaammppllee
 
        _C_o_d_e
+
+        use Data::Dumper;
+        use Config::Grammar;
+
+        my $RE_IP       = '\d+\.\d+\.\d+\.\d+';
+        my $RE_MAC      = '[0-9a-f]{2}(?::[0-9a-f]{2}){5}';
+        my $RE_HOST     = '\S+';
 
         my $parser = Config::Grammar->new({
           _sections => [ 'network', 'hosts' ],
@@ -317,7 +269,7 @@ DDEESSCCRRIIPPTTIIOONN
         my $cfg = $parser->parse('test.cfg') or
           die "ERROR: $parser->{err}\n";
         print Dumper($cfg);
-        print $praser->makepod;
+        print $parser->makepod;
 
        _C_o_n_f_i_g_u_r_a_t_i_o_n
 
@@ -365,21 +317,20 @@ DDEESSCCRRIIPPTTIIOONN
                        }
         };
 
+SSEEEE AALLSSOO
+       Config::Grammar::Dynamic
+
 CCOOPPYYRRIIGGHHTT
-       Copyright (c) 2000-2005 by ETH Zurich. All rights reserved.
+       Copyright (c) 2000-2005 by ETH Zurich. All rights reserved.  Copyright
+       (c) 2007 by David Schweikert. All rights reserved.
 
 LLIICCEENNSSEE
        This program is free software; you can redistribute it and/or modify it
        under the same terms as Perl itself.
 
-AAUUTTHHOORR
-       David Schweikert <dws_at_ee.ethz.ch>, Tobias Oetiker
-       <oetiker_at_ee.ethz.ch>, Niko Tyni  <ntyni_at_iki.fi>
-
-HHIISSTTOORRYY
-        2001-05-11 ds      Initial Version of ISG::ParseConfig
-        2005-03-08 ds 1.00 Renamed from ISG::ParseConfig to Config::Grammar
+AAUUTTHHOORRSS
+       David Schweikert, Tobias Oetiker, Niko Tyni
 
 
 
-2.2.4                             2005-12-18                Config::Grammar(3)
+2.2.6                             2007-10-28                Config::Grammar(3)

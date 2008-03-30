@@ -202,16 +202,14 @@ sub test_usage {
 
 	my $arghashref = $self->features;
 	my %arghash = %$arghashref;
-
+        my $curl_man = `$bin --manual`;
 	for my $feature (keys %arghash) {
-		system("$bin $arghash{$feature} 1 0.0.0.1 >/dev/null 2>&1");
-		if ($? == 2) {
-			push @unsupported, $feature;
-			$self->do_log("Note: your curl doesn't support the $feature feature (option $arghash{$feature}), disabling it");
-		}
+		next if $curl_man =~ /\Q$arghash{$feature}/;
+        	push @unsupported, $feature;
+		$self->do_log("Note: your curl doesn't support the $feature feature (option $arghash{$feature}), disabling it");
 	}
 	map { delete $arghashref->{$_} } @unsupported;
-	if (`$bin -o /dev/null -w '<%{time_redirect}>\n' 0.0.0.1 2>&1` =~ /^<>/m) {
+	if ($curl_man !~ /\stime_redirect\s/) {
 		$self->do_log("Note: your curl doesn't support the 'time_redirect' output variable; 'include_redirects' will not function.");
 	}
 	return;
@@ -305,7 +303,20 @@ sub pingone {
 				$self->do_debug("curl output: '$_', result: $val");
 			};
 		}
-		close P and defined $val and push @times, $val;
+		close P;
+		if ($?) {
+			my $status = $? >> 8;
+			my $signal = $? & 127;
+			my $why = "with status $status";
+			$why .= " [signal $signal]" if $signal;
+
+			# only log warnings on the first ping of the first ping round
+			my $function = ($self->rounds_count == 1 and $i == 0) ? 
+				"do_log" : "do_debug";
+
+			$self->$function(qq(WARNING: curl exited $why on $t->{addr}));
+		}
+		push @times, $val if defined $val;
 	}
 	
 	# carp("Got @times") if $self->debug;

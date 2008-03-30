@@ -1,11 +1,12 @@
 SHELL = /bin/sh
-VERSION = 2.2.4
+VERSION := 2.2.6
+SVNREPO = svn://svn.oetiker.ch/smokeping
 ############ A is for features
 ############ B is for bugfixes
 ############ V.AAABBB
 ############ 2.000001
 ############ 2.000002
-NUMVERSION = 2.002004 
+NUMVERSION = 2.002006
 IGNORE = ~|CVS|var/|smokeping-$(VERSION)/smokeping-$(VERSION)|cvsignore|rej|orig|DEAD|pod2htm[di]\.tmp|\.svn|tar\.gz|DEADJOE|svn-commit\.tmp
 GROFF = groff
 PERL = perl-5.8.8
@@ -141,10 +142,6 @@ doc/smokeping_config.pod: lib/Smokeping.pm
 	$(MAKEPOD) > $@
 doc/smokeping_examples.pod: lib/Smokeping/Examples.pm etc/config.dist
 	$(GENEX)
-patch:
-	$(PERL) -i~ -p -e 's/VERSION="\d.*?"/VERSION="$(NUMVERSION)"/' lib/Smokeping.pm 
-	$(PERL) -i~ -p -e 's/Smokeping \d.*?;/Smokeping $(NUMVERSION);/' bin/smokeping.dist htdocs/smokeping.cgi.dist bin/tSmoke.dist
-	$(PERL) -i~ -p -e 'do { my @d = localtime; my $$d = (1900+$$d[5])."/".(1+$$d[4])."/".$$d[3]; print "$$d -- released version $(VERSION)\n\n" } unless $$done++ || /version $(VERSION)/' CHANGES
 
 killdoc:
 	-rm doc/*.[1357] doc/*.txt doc/*.html doc/Smokeping/* doc/Smokeping/probes/* doc/Smokeping/matchers/* doc/Smokeping/sorters/* doc/Config/* doc/examples/* doc/smokeping_examples.pod doc/smokeping_config.pod doc/smokeping.pod doc/smokeping.cgi.pod
@@ -152,17 +149,19 @@ killdoc:
 doc:    killdoc ref examples man html txt rename-man
 
 # patch first so Smokeping.pm is older than smokeping_config.pod in the tarball
-tar:	patch doc
-	-ln -s . smokeping-$(VERSION)
-	find smokeping-$(VERSION)/* -type f -follow -o -type l | egrep -v '$(IGNORE)' | tar -T - -czvf smokeping-$(VERSION).tar.gz
-	rm smokeping-$(VERSION)
-
-commit:
+smokeping-$(VERSION).tar.gz:
+	$(PERL) -i~ -p -e 's/VERSION="\d.*?"/VERSION="$(NUMVERSION)"/' lib/Smokeping.pm 
+	$(PERL) -i~ -p -e 's/Smokeping \d.*?;/Smokeping $(NUMVERSION);/' bin/smokeping.dist htdocs/smokeping.cgi.dist bin/tSmoke.dist
+	$(PERL) -i~ -p -e 'do { my @d = localtime; my $$d = (1900+$$d[5])."/".(1+$$d[4])."/".$$d[3]; print "$$d -- released version $(VERSION)\n\n" } unless $$done++ || /version $(VERSION)/' CHANGES
 	svn commit -m "prepare for the release of smokeping-$(VERSION)"
-	
-dist:   tar commit
+	svn checkout $(SVNREPO)/trunk/software smokeping-$(VERSION)
+	(cd smokeping-$(VERSION) && make doc)
+	tar czvf smokeping-$(VERSION).tar.gz --exclude .svn smokeping-$(VERSION)
+	rm -rf smokeping-$(VERSION)
+
+dist:   smokeping-$(VERSION).tar.gz
 	scp CHANGES smokeping-$(VERSION).tar.gz oposs@oss.oetiker.ch:public_html/smokeping/pub/
 
 tag:    dist
-	svn ls svn://svn.ee.ethz.ch/smokeping/tags/$(VERSION) || \
-	svn copy -m "tagging version $(VERSION)" svn://svn.ee.ethz.ch/smokeping/branches/2.0 svn://svn.ee.ethz.ch/smokeping/tags/$(VERSION)
+	svn ls $(SVNREPO)/tags/$(VERSION) || \
+	svn copy -m "tagging version $(VERSION)" $(SVNREPO)/trunk/software $(SVNREPO)/tags/$(VERSION)

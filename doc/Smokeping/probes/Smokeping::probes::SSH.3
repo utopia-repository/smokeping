@@ -129,7 +129,7 @@
 .\" ========================================================================
 .\"
 .IX Title "doc::Smokeping::probes::SSH 3"
-.TH doc::Smokeping::probes::SSH 3 "2007-09-16" "2.2.4" "SmokePing"
+.TH doc::Smokeping::probes::SSH 3 "2007-10-28" "2.2.6" "SmokePing"
 .SH "NAME"
 Smokeping::probes::SSH \- Secure Shell Probe for SmokePing
 .SH "SYNOPSIS"
@@ -150,10 +150,11 @@ Smokeping::probes::SSH \- Secure Shell Probe for SmokePing
 \& timeout = 15
 .Ve
 .PP
-.Vb 3
+.Vb 4
 \& # The following variables can be overridden in each target section
 \& keytype = dsa
 \& pings = 5
+\& port = 5000
 .Ve
 .PP
 .Vb 1
@@ -172,12 +173,13 @@ Smokeping::probes::SSH \- Secure Shell Probe for SmokePing
 \& # [...]
 .Ve
 .PP
-.Vb 5
+.Vb 6
 \& + mytarget
 \& # probe = SSH # if the default probe is something else
 \& host = my.host
 \& keytype = dsa
 \& pings = 5
+\& port = 5000
 .Ve
 .SH "DESCRIPTION"
 .IX Header "DESCRIPTION"
@@ -242,7 +244,7 @@ Default value: 5
 Supported target-specific variables:
 .IP "keytype" 4
 .IX Item "keytype"
-Type of key, used in ssh-keyscan \-t <keytype>
+Type of key, used in ssh-keyscan \-t \fIkeytype\fR
 .Sp
 Example value: dsa
 .Sp
@@ -256,6 +258,13 @@ change this parameter afterwards, you'll have to delete the old \s-1RRD\s0
 files or somehow convert them.
 .Sp
 Example value: 5
+.IP "port" 4
+.IX Item "port"
+Port to use when testing the ssh connection \-p \fIport\fR
+.Sp
+Example value: 5000
+.Sp
+Default value: 22
 .SH "AUTHORS"
 .IX Header "AUTHORS"
 Christian Recktenwald <smokeping\-contact@citecs.de>

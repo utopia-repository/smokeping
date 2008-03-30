@@ -129,7 +129,7 @@
 .\" ========================================================================
 .\"
 .IX Title "SMOKEPING.DIST 1"
-.TH SMOKEPING.DIST 1 "2007-09-16" "2.2.4" "SmokePing"
+.TH SMOKEPING.DIST 1 "2007-10-28" "2.2.6" "SmokePing"
 .SH "NAME"
 smokeping \- Commandline tool for SmokePing
 .SH "SYNOPSIS"
@@ -214,6 +214,12 @@ smokeping \- Commandline tool for SmokePing
 .PP
 .Vb 1
 \& \-\-master\-url=s Run smokeping in slave mode. Attach to master for config.
+.Ve
+.PP
+.Vb 3
+\& \-\-slave\-name=s By default the slave will use whatever it thinks its name
+\&                is, when talking to its master. In some cases you may
+\&                probably want to override this.
 .Ve
 .PP
 .Vb 1

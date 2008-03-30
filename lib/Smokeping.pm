@@ -9,7 +9,7 @@ use Digest::MD5 qw(md5_base64);
 use SNMP_util;
 use SNMP_Session;
 use POSIX;
-use Config::Grammar;
+use Smokeping::Config;
 use RRDs;
 use Sys::Syslog qw(:DEFAULT setlogsock);
 use Sys::Hostname;
@@ -37,7 +37,7 @@ use Smokeping::RRDtools;
 
 # globale persistent variables for speedy
 use vars qw($cfg $probes $VERSION $havegetaddrinfo $cgimode);
-$VERSION="2.002004 ";
+$VERSION="2.002006";
 
 # we want opts everywhere
 my %opt;
@@ -1956,8 +1956,8 @@ DOC
 If you want to have alerts for this target and all targets below it go to a particular address
 on top of the address already specified in the alert, you can add it here. This can be a comma separated list of items.
 DOC
-           slaves => { _re => '[-a-z0-9]+(?:\s+[-a-z0-9]+)*',
-                        _re_error => 'slave1 [slave2]',
+           slaves => {  _re => "${KEYD_RE}(?:\\s+${KEYD_RE})*",
+                        _re_error => 'Use the format: slaves='.${KEYD_RE}.' [slave2]',
                         _doc => <<DOC },
 The slave names must match the slaves you have setup in the slaves section.
 DOC
@@ -2175,7 +2175,7 @@ DOC
         },
     }; # $PROBES
 
-    my $parser = Config::Grammar->new 
+    my $parser = Smokeping::Config->new 
       (
        {
         _sections  => [ qw(General Database Presentation Probes Targets Alerts Slaves) ],
@@ -3712,7 +3712,7 @@ sub main (;$) {
     GetOptions(\%opt, 'version', 'email', 'man:s','help','logfile=s','static-pages:s', 'debug-daemon',
                       'nosleep', 'makepod:s','debug','restart', 'filter=s', 'nodaemon|nodemon',
                       'config=s', 'check', 'gen-examples', 'reload', 
-                      'master-url=s','cache-dir=s','shared-secret=s') or pod2usage(2);
+                      'master-url=s','cache-dir=s','shared-secret=s','slave-name=s') or pod2usage(2);
     if($opt{version})  { print "$VERSION\n"; exit(0) };
     if(exists $opt{man}) {
         if ($opt{man}) {
@@ -3753,7 +3753,7 @@ sub main (;$) {
             master_url => $opt{'master-url'},
             cache_dir => $opt{'cache-dir'},
             shared_secret => $secret,
-            slave_name => hostname,
+            slave_name => $opt{'slave-name'} || hostname(),
         };
         # this should get us a config set from the server
         my $new_conf = Smokeping::Slave::submit_results($slave_cfg,$cfg);
@@ -4021,6 +4021,8 @@ sub reload_cfg ($) {
         my $cfgfile = shift;
         my ($oldcfg, $oldprobes) = ($cfg, $probes);
         do_log("Reloading configuration.");
+        $cfg = undef;
+        $probes = undef;
         eval { load_cfg($cfgfile) };
         if ($@) {
                 do_log("Reloading configuration from $cfgfile failed: $@");
