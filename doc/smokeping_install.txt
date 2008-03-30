@@ -56,8 +56,14 @@ DDEESSCCRRIIPPTTIIOONN
 
            You need this for the SSH probe.
 
-       Various Perl modules (Optional)
+       Various Perl modules (Most of these are optional)
            You can get these from <http://www.cpan.org/>.
+
+           libwww-perl
+               The master/slave functionality introduced a dependency
+               LWP::UserAgent from the libwww-perl (also known as LWP)
+               library. Currently the module is needed even if the mas-
+               ter/slave mode is not enabled.
 
            Socket6 0.11-1
                Optionally installing the Socket6 module for perl enables
@@ -204,4 +210,4 @@ AAUUTTHHOORR
 
 
 
-2.2.7                             2007-09-06              SMOKEPING_INSTALL(7)
+2.3.0                             2007-12-01              SMOKEPING_INSTALL(7)

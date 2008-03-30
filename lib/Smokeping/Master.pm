@@ -1,8 +1,7 @@
 # -*- perl -*-
 package Smokeping::Master;
-use HTTP::Request;
 use Data::Dumper;
-use Storable qw(nstore_fd dclone fd_retrieve);
+use Storable qw(nstore dclone retrieve);
 use strict;
 use warnings;
 use Fcntl qw(:flock);
@@ -47,7 +46,8 @@ sub get_targets {
             $ok = 1 if $key eq 'host';
             $return{$key} = $trg->{$key};
         }
-    }    
+    }           
+    $trg->{nomasterpoll} = 'no'; # slaves poll always
     return ($ok ? \%return : undef);
 }
     
@@ -100,32 +100,35 @@ sub save_updates {
     for my $update (split /\n/, $updates){
         my ($name, $time, $updatestring) = split /\t/, $update;
         my $file = $cfg->{General}{datadir}."/${name}.slave_cache";
-        if ( ! -f $cfg->{General}{datadir}."/${name}.rrd" ){
-            warn "Skipping update for ${name}.slave_cache since $cfg->{General}{datadir}/${name}.rrd  does not exist in the local data structure. Make sure you run the smokeping daemon. ($cfg->{General}{datadir})\n";
-        } elsif ( open (my $hand, '+>>', $file) ) {
-            if ( flock $hand, LOCK_EX ){
-                my $existing = [];
-                if ( tell $hand > 0 ){
-                   seek $hand, 0,0;
-                   eval { $existing = fd_retrieve $hand };
-                   if ($@) { #error
-                        warn "Loading $file: $@";
-                        $existing = [];
-                   }
-                };
-                push @{$existing}, [ $slave, $time, $updatestring];
-                seek $hand, 0,0;
-                truncate $hand, 0;
-                nstore_fd ($existing, $hand);
-                flock $hand, LOCK_UN;
-            } else {
-                warn "Could not lock $file. Can't store data.\n";
+        if ( ${name} =~ m{(^|/)\.\.($|/)} ){
+            warn "Skipping update for ${name}.slave_cache since ".
+                 "you seem to try todo some directory magic here. Don't!";
+        } 
+        elsif ( open (my $lock, '>>' , "$file.lock") ) {
+            for (my $i = 10; $i > 0; $i--){
+                if ( flock $lock, LOCK_EX ){
+                    my $existing = [];
+	            if ( -r $file ){
+                        my $in = eval { retrieve $file };
+                        if ($@) { #error
+                            warn "Loading $file: $@";
+                        } else {
+		            $existing = $in;
+			};
+                    };
+                    push @{$existing}, [ $slave, $time, $updatestring];
+                    nstore($existing, $file);		    
+                    last;
+                } else {
+                    warn "Could not lock $file. Trying again for $i rounds.\n";
+                    sleep rand(3);
+                }
             }
-            close $hand;
+            close $lock;
         } else {
             warn "Could not update $file: $!";
         }
-    }            
+    }         
 };
 
 =head3 get_slaveupdates
@@ -138,20 +141,18 @@ sub get_slaveupdates {
     my $name = shift;
     my $file = $name.".slave_cache";
     my $data;
-    if ( open (my $hand, '<', $file) ) {
-        if ( flock $hand, LOCK_EX ){
-            rename $file,$file.$$;
-            eval { $data = fd_retrieve $hand };
-            unlink $file.$$;
-            flock $hand, LOCK_UN;            
+    if ( -r $file and open (my $lock, '>>', "$file.lock") ) {
+        if ( flock $lock, LOCK_EX ){
+            eval { $data = retrieve $file };
+            unlink $file;
             if ($@) { #error
                 warn "Loading $file: $@";  
-                return;
+                return undef;
             }
         } else {
-            warn "Could not lock $file. Can't load data.\n";
+            warn "Could not lock $file. Will skip and try again in the next round. No harm done!\n";
         }
-        close $hand;        
+        close $lock;        
         return $data;
     }
     return;

@@ -48,6 +48,7 @@ function changeRRDImage(coords,dimensions){
     var DivEpoch = EndEpoch - StartEpoch; 
 
     var Target = $F('target');
+    var Hierarchy = $F('hierarchy');
 
     // construct Image URL
     var myURLObj = new urlObj(document.URL); 
@@ -69,7 +70,7 @@ function changeRRDImage(coords,dimensions){
     EndEpoch  =  Math.ceil(EndEpoch + (SelectRight - (RRDImgWidth - RRDRight) ) * DivEpoch / RRDImgUsable * RightFactor);
 
 
-    $('zoom').src = myURL + '?displaymode=a;start=' + StartEpoch + ';end=' + EndEpoch + ';target=' + Target;
+    $('zoom').src = myURL + '?displaymode=a;start=' + StartEpoch + ';end=' + EndEpoch + ';target=' + Target + ';hierarchy=' + Hierarchy;    
 
     myCropper.setParams();
 
@@ -79,8 +80,9 @@ Event.observe(
            window, 
            'load', 
            function() { 
-               myCropper = new Cropper.Img( 
-                               'zoom', 
+               if ( $('zoom') != null ){
+                 myCropper = new Cropper.Img( 
+                                'zoom', 
                                         { 
                                                 minHeight: $('zoom').getDimensions().height,
                                                 maxHeight: $('zoom').getDimensions().height,
@@ -88,5 +90,6 @@ Event.observe(
                                         } 
                                 ) 
                    }
+                }
            );
 

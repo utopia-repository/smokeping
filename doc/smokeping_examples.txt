@@ -496,6 +496,7 @@ DDEESSCCRRIIPPTTIIOONN
 
             + Test
             menu= Targets
+            #parents = owner:/Test/James location:/
 
             ++ James
 
@@ -542,4 +543,4 @@ SSEEEE AALLSSOO
 
 
 
-2.2.7                             2007-11-05             SMOKEPING_EXAMPLES(7)
+2.3.0                             2008-01-23             SMOKEPING_EXAMPLES(7)

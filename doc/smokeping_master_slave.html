@@ -101,10 +101,13 @@ the master its 'hostname'. This together with the shared secret is used to
 authenticate and identify who is who.</p>
 <pre>
  *** slaves ****
- secrets=/etc/smokeping/slavesecrets.conf 
+ secrets=/etc/smokeping/slavesecrets.conf</pre>
+<pre>
  +slave1
  display_name=erul22
  location=India
+ color=ff0000</pre>
+<pre>
  ++override
  Probes.FPing.binary = /usr/bin/fping
  ...</pre>
@@ -144,7 +147,7 @@ optimal protection. By default the persistent data cache will be located in
 <em>/tmp/smokeping.$USER.cache</em>.</p>
 <pre>
  ./smokeping --master-url=<a href="http://smokeping/smokeping.cgi">http://smokeping/smokeping.cgi</a> \
-             --cache-dir=/var/smokeping/cache.file \
+             --cache-dir=/var/smokeping/ \
              --shared-secret=/var/smokeping/secret.txt</pre>
 <p>
 </p>

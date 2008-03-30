@@ -8,7 +8,7 @@
 diff -urNad smokeping-2.2.4~/etc/config.dist smokeping-2.2.4/etc/config.dist
 --- smokeping-2.2.4~/etc/config.dist	2007-09-17 11:07:53.000000000 +0300
 +++ smokeping-2.2.4/etc/config.dist	2007-09-17 11:08:33.000000000 +0300
-@@ -1,16 +1,30 @@
+@@ -1,19 +1,30 @@
 +# Note that all IP addresses in this file are false, to prevent some
 +# machine falling under a deadly DOS storm because all users keep
 +# the same addresses in their config.
@@ -19,6 +19,9 @@ diff -urNad smokeping-2.2.4~/etc/config.dist smokeping-2.2.4/etc/config.dist
 -contact  = some@address.nowhere
 -mailhost = my.mail.host
 -sendmail = /usr/lib/sendmail
+-# NOTE: do not put the Image Cache below cgi-bin
+-# since all files under cgi-bin will be executed ... this is not
+-# good for images.
 -imgcache = /home/oetiker/public_html/smokeping-ms/cache
 -imgurl   = cache
 -datadir  = /tmp/smokeping-ms/data
@@ -90,7 +93,7 @@ diff -urNad smokeping-2.2.4~/etc/config.dist smokeping-2.2.4/etc/config.dist
  
  + charts
  
-@@ -96,38 +128,104 @@
+@@ -96,39 +128,104 @@
  
  + FPing
  
@@ -121,6 +124,7 @@ diff -urNad smokeping-2.2.4~/etc/config.dist smokeping-2.2.4/etc/config.dist
  
 -+ Test
 -menu= Targets
+-#parents = owner:/Test/James location:/
 ++ Local
  
 -++ James

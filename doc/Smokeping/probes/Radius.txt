@@ -186,4 +186,4 @@ BBUUGGSS
 
 
 
-2.2.7                             2007-11-05 doc::Smokeping::probes::Radius(3)
+2.3.0                             2008-01-23 doc::Smokeping::probes::Radius(3)

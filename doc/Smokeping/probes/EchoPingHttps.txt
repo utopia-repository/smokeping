@@ -20,6 +20,7 @@ SSYYNNOOPPSSIISS
         step = 300
 
         # The following variables can be overridden in each target section
+        accept_redirects = yes
         extraopts = -some-letter-the-author-did-not-think-of
         ignore_cache = yes
         ipversion = 4
@@ -43,6 +44,7 @@ SSYYNNOOPPSSIISS
         + mytarget
         # probe = EchoPingHttps # if the default probe is something else
         host = my.host
+        accept_redirects = yes
         extraopts = -some-letter-the-author-did-not-think-of
         ignore_cache = yes
         ipversion = 4
@@ -98,6 +100,16 @@ VVAARRIIAABBLLEESS
            Example value: 300
 
        Supported target-specific variables:
+
+       accept_redirects
+           The _e_c_h_o_p_i_n_g(1) "-R" option: Accept  HTTP  status  codes  3xx
+           (redirections) as normal responses instead of treating them as
+           errors. Note that this option is only available starting with
+           Echoping 6.
+
+           Enabled if the value is anything other than 'no' or '0'.
+
+           Example value: yes
 
        extraopts
            Any extra options specified here will be passed unmodified to
@@ -178,4 +190,4 @@ SSEEEE AALLSSOO
 
 
 
-2.2.7                             2007-d1o1c-:0:5Smokeping::probes::EchoPingHttps(3)
+2.3.0                             2008-d0o1c-:2:3Smokeping::probes::EchoPingHttps(3)

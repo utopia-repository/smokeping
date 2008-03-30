@@ -1,3 +1,38 @@
+2008/1/23 -- released version 2.3.0
+
+* Integrated TCPPing Probe -- Norman Rasmussen
+
+* Added new properties to target configuration
+  hide for hiding the target on the webinterface
+  nomasterpoll to exclude this target from polling on the master
+  -- tobi
+
+* Added filter/search  function to web interface. --tobi
+
+* Added support for alternate presentation hierarchies
+  check Presentation->hierarchies and Target->parents --tobi
+
+* fix javascript error about non existing zoom div -- tobi
+
+* Switch to curl --help since some distros seem to compile without --manual
+  -- tobi
+
+* made Smokeping.pm more portable by using %.1f in perl sprintf -- tobi
+
+* fix file locking for solaris in master/slave setups. work in progress. -- tobi
+
+* EchoPingHttp: add the 'accept_redirects' option, suggested by 
+  Kelly Shutt <kelly *websitesource.com> --niko
+
+* remove a leftover 'use HTTP::Request' from Smokeping::Master -- niko
+
+* document the LWP dependency of the Smokeping::Slave module -- niko
+
+* fix restart behaviour of clients in multiprocess mode. now we just send
+  ourself a SIGHUP and let 'it' happen -- tobi
+
+* make sure tsmoke sends mime conformant mails -- tobi
+
 2007/10/29 -- released version 2.2.7
 
 * Make slaves with FQDN work properly -- tobi

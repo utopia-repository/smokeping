@@ -18,6 +18,7 @@ use Smokeping::Master;
 use Smokeping::Slave;
 use Smokeping::RRDhelpers;
 use Smokeping::Graphs;
+use URI::Escape;
 
 setlogsock('unix')
    if grep /^ $^O $/xo, ("linux", "openbsd", "freebsd", "netbsd");
@@ -37,7 +38,7 @@ use Smokeping::RRDtools;
 
 # globale persistent variables for speedy
 use vars qw($cfg $probes $VERSION $havegetaddrinfo $cgimode);
-$VERSION="2.002007";
+$VERSION="2.003000";
 
 # we want opts everywhere
 my %opt;
@@ -130,12 +131,20 @@ sub cgiurl {
     return $url_of{$linkstyle};
 }
 
+sub hierarchy ($){
+    my $q = shift;
+    my $hierarchy = '';
+    if ($q->param('hierarchy')){
+       $hierarchy = 'hierarchy='.$q->param('hierarchy').';';
+    }; 
+    return $hierarchy;
+}        
 sub lnk ($$) {
     my ($q, $path) = @_;
     if ($q->isa('dummyCGI')) {
         return $path . ".html";
     } else {
-        return cgiurl($q, $cfg) . "?target=" . $path;
+        return cgiurl($q, $cfg) . "?".hierarchy($q)."target=" . $path;
     }
 }
 
@@ -392,7 +401,7 @@ sub add_targets ($$$$){
         if (ref $tree->{$prop} eq 'HASH'){
             add_targets $cfg, $probes, $tree->{$prop}, "$name/$prop";
         }
-        if ($prop eq 'host' and check_filter($cfg,$name) and $tree->{$prop} !~ m|^/| ) {           
+        if ($prop eq 'host' and $tree->{nomasterpoll} eq 'no' and check_filter($cfg,$name) and $tree->{$prop} !~ m|^/| ) {           
             if($tree->{host} =~ /^DYNAMIC/) {
                 $probeobj->add($tree,$name);
             } else {
@@ -409,6 +418,7 @@ sub init_target_tree ($$$$) {
     my $probes = shift;
     my $tree = shift;
     my $name = shift;
+    my $hierarchies = $cfg->{__hierarchies};
     die "Error: Invalid Probe: $tree->{probe}" unless defined $probes->{$tree->{probe}};
     my $probeobj = $probes->{$tree->{probe}};
 
@@ -427,12 +437,38 @@ sub init_target_tree ($$$$) {
     # fill in menu and title if missing
     $tree->{menu} ||=  $tree->{host} || "unknown";
     $tree->{title} ||=  $tree->{host} || "unknown";
+    my $real_path = $name;
+    my $dataroot = $cfg->{General}{datadir};
+    $real_path =~ s/^$dataroot\/*//;
+    my @real_path = split /\//, $real_path;
 
     foreach my $prop (keys %{$tree}) {
         if (ref $tree->{$prop} eq 'HASH'){
             if (not -d $name and not $cgimode) {
                 mkdir $name, 0755 or die "ERROR: mkdir $name: $!\n";
             };
+
+            if (defined $tree->{$prop}{parents}){
+                for my $parent (split /\s/, $tree->{$prop}{parents}){
+                    my($hierarchy,$path)=split /:/,$parent,2;
+                    die "ERROR: unknown hierarchy $hierarchy in $name. Make sure it is listed in Presentation->hierarchies.\n"
+                        unless $cfg->{Presentation}{hierarchies} and $cfg->{Presentation}{hierarchies}{$hierarchy};
+                    my @path = split /\/+/, $path;
+                    shift @path; # drop empty root element;
+                    if ( not exists $hierarchies->{$hierarchy} ){
+                        $hierarchies->{$hierarchy} = {};
+                    };
+                    my $point = $hierarchies->{$hierarchy};
+                    for my $item (@path){
+                        if (not exists $point->{$item}){
+                            $point->{$item} = {};
+                        }
+                        $point = $point->{$item};
+                    };
+                    $point->{$prop}{__tree_link} = $tree->{$prop};
+	            $point->{$prop}{__real_path} = [ @real_path,$prop ];
+                }
+            }               
             init_target_tree $cfg, $probes, $tree->{$prop}, "$name/$prop";
         }
         if ($prop eq 'host' and check_filter($cfg,$name) and $tree->{$prop} !~ m|^/|) {           
@@ -553,46 +589,87 @@ sub get_tree($$){
     return $tree;
 }
 
-sub target_menu($$$;$);
-sub target_menu($$$;$){
+sub target_menu($$$$;$);
+sub target_menu($$$$;$){
     my $tree = shift;
     my $open = shift;
+    $open = [@$open]; # make a copy 
     my $path = shift;
+    my $filter = shift;
     my $suffix = shift || '';
     my $print;
     my $current =  shift @{$open} || "";
-     
     my @hashes;
-    foreach my $prop (sort { $tree->{$a}{_order} <=> $tree->{$b}{_order}}
-                      grep { ref $tree->{$_} eq 'HASH' }
-                      keys %{$tree}) {
-        push @hashes, $prop;
-    }
-    return "" unless @hashes;
-    $print .= "<table width=\"100%\" class=\"menu\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n";
-    for (@hashes) {
-        my $class;
-        if ($_ eq $current ){
-             if ( @$open ) {
-                 $class = 'menuopen';
-             } else {
-                 $class = 'menuactive';
-             }
-        } else {
-            $class = 'menuitem';
-        };
-        my $menu = $tree->{$_}{menu};
-        $menu =~ s/ /&nbsp;/g;
-        my $menuadd ="";
-        $menuadd = "&nbsp;" x (20 - length($menu)) if length($menu) < 20;
-        $print .= "<tr><td class=\"$class\" colspan=\"2\">&nbsp;-&nbsp;<a class=\"menulink\" HREF=\"$path$_$suffix\">$menu</a>$menuadd</td></tr>\n";
-        if ($_ eq $current){
-            my $prline = target_menu $tree->{$_}, $open, "$path$_.", $suffix;
-            $print .= "<tr><td class=\"$class\">&nbsp;&nbsp;</td><td align=\"left\">$prline</td></tr>"
-              if $prline;
+    if (not defined $tree->{_order}){
+        foreach my $prop ( sort grep { ref $tree->{$_} eq 'HASH' and  not /^__/} keys %{$tree}) {
+            push @hashes, $prop;
+        }
+    } else {
+        foreach my $prop (sort { $tree->{$a}{_order} <=> $tree->{$b}{_order}}
+                           grep { ref $tree->{$_} eq 'HASH' } keys %{$tree}) {
+            push @hashes, $prop;
         }
     }
-    $print .= "</table>\n";
+    return wantarray ? () : "" unless @hashes;
+
+	$print .= qq{<table width="100%" class="menu" border="0" cellpadding="0" cellspacing="0">\n}
+		unless $filter;
+
+	my @matches;
+    for my $key (@hashes) {
+
+		my $menu = $key;
+        my $title = $key;
+        my $hide;
+        if ($tree->{$key}{__tree_link} and $tree->{$key}{__tree_link}{menu}){
+    		$menu = $tree->{$key}{__tree_link}{menu};
+    		$title = $tree->{$key}{__tree_link}{title};
+                next if $tree->{$key}{__tree_link}{hide} eq 'yes';
+		} elsif ($tree->{$key}{menu}) {	
+	        $menu = $tree->{$key}{menu};
+	        $title = $tree->{$key}{title};
+                next if $tree->{$key}{hide} eq 'yes';
+        };
+
+		my $class = 'menuitem';
+   	    if ($key eq $current ){
+			if ( @$open ) {
+         		$class = 'menuopen';
+    		} else {
+   	            $class = 'menuactive';
+            }
+   	    };
+
+		if ($filter){
+			if (($menu and $menu =~ /$filter/i) or ($title and $title =~ /$filter/i)){
+				push @matches, ["$path$key$suffix",$menu,$class];
+			};
+			push @matches, target_menu($tree->{$key}, $open, "$path$key.",$filter, $suffix);
+		}
+		else {
+    	    $menu =~ s/ /&nbsp;/g;
+        	my $menuadd ="";
+		    $menuadd = "&nbsp;" x (20 - length($menu)) if length($menu) < 20;
+	        $print .= qq{<tr><td class="$class" colspan="2">&nbsp;-&nbsp;<a class="menulink" HREF="$path$key$suffix">$menu</a>$menuadd</td></tr>\n};
+    	    if ($key eq $current){
+        	    my $prline = target_menu $tree->{$key}, $open, "$path$key.",$filter, $suffix;
+	            $print .= qq{<tr><td class="$class">&nbsp;&nbsp;</td><td align="left">$prline</td></tr>}
+   		           if $prline;
+        	}
+		}
+    }
+    $print .= "</table>\n" unless $filter;
+	if ($filter){
+		if (wantarray()){
+			return @matches;
+		}
+		else {
+			for my $entry (sort {$a->[1] cmp $b->[1] } grep {ref $_ eq 'ARRAY'} @matches) {
+				my ($href,$menu,$class) = @{$entry};
+				$print .= qq{<div class="$class">-&nbsp;<a class="menulink" href="$href">$menu</a></div>\n};
+			}			
+		}
+	}
     return $print;
 };
 
@@ -610,7 +687,8 @@ sub fill_template ($$;$){
         $/ = $line;
     }
     foreach my $tag (keys %{$subst}) {
-        $data =~ s/<##${tag}##>/$subst->{$tag}/g;
+	my $replace = $subst->{$tag} || '';
+        $data =~ s/<##${tag}##>/$replace/g;
     }
     return $data;
 }
@@ -650,17 +728,8 @@ sub get_overview ($$$$){
     my $q = shift;
     my $tree = shift;
     my $open = shift;
-    my $dir = "";
 
     my $page ="";
-
-    for (@$open) {
-        $dir .= "/$_";
-        mkdir $cfg->{General}{imgcache}.$dir, 0755 
-            unless -d  $cfg->{General}{imgcache}.$dir;
-        die "ERROR: creating  $cfg->{General}{imgcache}$dir: $!\n"
-                unless -d  $cfg->{General}{imgcache}.$dir;
-    }
 
     my $date = $cfg->{Presentation}{overview}{strftime} ? 
         POSIX::strftime($cfg->{Presentation}{overview}{strftime},
@@ -669,22 +738,48 @@ sub get_overview ($$$$){
     if ( $RRDs::VERSION >= 1.199908 ){
             $date =~ s|:|\\:|g;
     }
-    foreach my $prop (sort {$tree->{$a}{_order} <=> $tree->{$b}{_order}} 
-                      grep {  ref $tree->{$_} eq 'HASH' and defined $tree->{$_}{host}}
+    foreach my $prop (sort {$tree->{$a}{_order} ? ($tree->{$a}{_order} <=> $tree->{$b}{_order}) : ($a cmp $b)} 
+                      grep {  ref $tree->{$_} eq 'HASH' and not /^__/ }
                       keys %$tree) {
-        my @slaves = ("");
+        my @slaves;
 
-	if ($tree->{$prop}{host} =~ m|^/|){            # multi host syntax
-            @slaves = split /\s+/, $tree->{$prop}{host};
+        my $phys_tree = $tree->{$prop};
+	my $phys_open = $open;
+	my $dir = "";
+	if ($tree->{$prop}{__tree_link}){
+            $phys_tree = $tree->{$prop}{__tree_link};
+	    $phys_open = [ @{$tree->{$prop}{__real_path}} ];
+	    pop @$phys_open;
+	}
+
+	next unless $phys_tree->{host};
+	next if $phys_tree->{hide} and $phys_tree->{hide} eq 'yes';
+
+        if ($phys_tree->{nomasterpoll} eq 'no'){
+            @slaves  = ("");
+        };
+
+	if ($phys_tree->{host} =~ m|^/|){            # multi host syntax
+            @slaves = split /\s+/, $phys_tree->{host};
         }
-        elsif ($tree->{$prop}{slaves}){
-            push @slaves, split /\s+/,$tree->{$prop}{slaves};       
+        elsif ($phys_tree->{slaves}){
+            push @slaves, split /\s+/,$phys_tree->{slaves};       
         } 
+
+        next if 0 == @slaves;
+
+        for (@$phys_open) {
+            $dir .= "/$_";
+            mkdir $cfg->{General}{imgcache}.$dir, 0755 
+                unless -d  $cfg->{General}{imgcache}.$dir;
+            die "ERROR: creating  $cfg->{General}{imgcache}$dir: $!\n"
+                unless -d  $cfg->{General}{imgcache}.$dir;
+        }
 
         my @G; #Graph 'script'
         my $max =  $cfg->{Presentation}{overview}{max_rtt} || "100000";
-        my $probe = $probes->{$tree->{$prop}{probe}};
-        my $pings = $probe->_pings($tree->{$prop});
+        my $probe = $probes->{$phys_tree->{probe}};
+        my $pings = $probe->_pings($phys_tree);
         my $i = 0;
         my @colors = split /\s+/, $cfg->{Presentation}{multihost}{colors};
         my $ProbeUnit = $probe->ProbeUnit();
@@ -757,7 +852,7 @@ sub get_overview ($$$$){
           ($cfg->{General}{imgcache}.$dir."/${prop}_mini.png",
     #       '--lazy',
            '--start','-'.exp2seconds($cfg->{Presentation}{overview}{range}),
-           '--title',$tree->{$prop}{title},
+           '--title',$phys_tree->{title},
            '--height',$cfg->{Presentation}{overview}{height},
            '--width',$cfg->{Presentation}{overview}{width},
            '--vertical-label', $ProbeUnit,
@@ -867,19 +962,35 @@ sub get_detail ($$$$;$){
     my $tree = shift;
     my $open = shift;
     my $mode = shift || $q->param('displaymode') || 's';
-    if ($tree->{host} and $tree->{host} =~ m|^/|){
+
+    my $phys_tree = $tree;
+    my $phys_open = $open;    
+    if ($tree->{__tree_link}){
+	$phys_tree=$tree->{__tree_link};
+	$phys_open = $tree->{__real_path};
+    }
+
+    if ($phys_tree->{host} and $phys_tree->{host} =~ m|^/|){
         return Smokeping::Graphs::get_multi_detail($cfg,$q,$tree,$open,$mode);
     }
 
-    my @slaves = ("");
+    # don't distinguish anymore ... tree is now phys_tree
+    $tree = $phys_tree;
+
+    my @slaves;
+    if ($tree->{nomasterpoll} eq 'no'){
+        @slaves  = ("");
+    };
+
     if ($tree->{slaves} and $mode eq 's'){
         push @slaves, split /\s+/,$tree->{slaves};       
     };
  
-    return "" unless $tree->{host};
-    
-    my @dirs = @{$open};
-    my $file = $mode eq 'c' ? (split(/~/, pop @dirs))[0] : pop @dirs;
+    return "" if not defined $tree->{host} or 0 == @slaves;
+
+    my $file = $mode eq 'c' ? (split(/~/, $open->[-1]))[0] : $open->[-1];
+    my @dirs = @{$phys_open};
+    pop @dirs;
     my $dir = "";
 
     return "<div>ERROR: ".(join ".", @dirs)." has no probe defined</div>"
@@ -1091,7 +1202,7 @@ sub get_detail ($$$$;$){
                           'GPRINT:median:MAX:%.1lf %ss max',
                           'GPRINT:median:MIN:%.1lf %ss min',
                           'GPRINT:median:LAST:%.1lf %ss now',
-                          sprintf('COMMENT:%.1lf ms sd',$stddev*1000.0),
+                          sprintf('COMMENT:%.1f ms sd',$stddev*1000.0),
                           'GPRINT:mesd:AVERAGE:%.1lf %s am/s\l',
                           "LINE1:median#202020"
                   );
@@ -1235,6 +1346,7 @@ sub get_detail ($$$$;$){
            $page .= $q->start_form(-method=>'GET', -id=>'range_form')
               . "<p>Time range: "
               . $q->hidden(-name=>'epoch_start',-id=>'epoch_start',-default=>$start)
+              . $q->hidden(-name=>'hierarchy',-id=>'hierarchy')
               . $q->hidden(-name=>'epoch_end',-id=>'epoch_end',-default=>time())
               . $q->hidden(-name=>'target',-id=>'target' )
               . $q->hidden(-name=>'displaymode',-default=>$mode )
@@ -1253,7 +1365,7 @@ sub get_detail ($$$$;$){
 #           $page .= (time-$timer_start)."<br/>";
 #           $page .= join " ",map {"'$_'"} @task;
                 $page .= "<br/>";
-                $page .= ( qq{<a href="?displaymode=n;start=$startstr;end=now;}."target=".$q->param('target').$s.'">'
+                $page .= ( qq{<a href="?}.hierarchy($q).qq{displaymode=n;start=$startstr;end=now;}."target=".$q->param('target').$s.'">'
                       . qq{<IMG BORDER="0" SRC="${imghref}${s}_${end}_${start}.png">}."</a>" ); #"
                 $page .= "</div>";
             }
@@ -1352,20 +1464,58 @@ sub load_sortercache($){
     return ( $found ? \%cache : undef )
 }
 
+sub hierarchy_switcher($$){
+    my $q = shift;
+    my $cfg = shift;
+    my $print =$q->start_form(-name=>'hswitch',-method=>'get',-action=>$q->url(-relative=>1));    
+    if ($cfg->{Presentation}{hierarchies}){
+            $print .= "<div id='hierarchy_title'><small>Hierarchy:</small></div>";
+	    $print .= "<div id='hierarchy_popup'>";
+	    $print .= $q->popup_menu(-name=>'hierarchy',
+			             -onChange=>'hswitch.submit()',
+            		             -values=>['', sort map {ref $cfg->{Presentation}{hierarchies}{$_} eq 'HASH' 
+                                                 ? $_ : () } keys %{$cfg->{Presentation}{hierarchies}}],
+            		             -labels=>{''=>'Default Hierarchy',
+					       map {ref $cfg->{Presentation}{hierarchies}{$_} eq 'HASH' 
+                                                    ? ($_ => $cfg->{Presentation}{hierarchies}{$_}{title} )
+                                                    : () } keys %{$cfg->{Presentation}{hierarchies}}
+					      }
+				    );
+             $print .= "</div>";
+     }
+     $print .= "<div><small>Filter:</small></div>";
+     $print .= $q->textfield (-name=>'filter',
+		             -onChange=>'hswitch.submit()',
+		             -size=>15,
+			    );
+     $print .= $q->end_form();
+     $print .= "</div><br/><br/>";
+     return $print;
+}
+
 sub display_webpage($$){
     my $cfg = shift;
     my $q = shift;
     my ($path,$slave) = split(/~/,$q->param('target') || '');
-    my $open = [ (split /\./,$path) ];
+    my $hierarchy = $q->param('hierarchy');
+    die "ERROR: unknown hierarchy $hierarchy\n" 
+	if not $cfg->{Presentation}{hierarchies} and $cfg->{Presentation}{hierarchies}{$hierarchy};
+    my $open = [ (split /\./,$path||'') ];
     my $open_orig = [@$open];
     $open_orig->[-1] .= '~'.$slave if $slave;
 
+    my($filter) = ($q->param('filter') and $q->param('filter') =~ m{([- _0-9a-zA-Z\+\*\(\)\|\^\[\]\.\$]+)});
+
     my $tree = $cfg->{Targets};
+    if ($hierarchy){
+        $tree = $cfg->{__hierarchies}{$hierarchy};
+    };
+    my $menu_root = $tree;
     my $targets = $cfg->{Targets};
     my $step = $cfg->{__probes}{$targets->{probe}}->step();
     # lets see if the charts are opened
     my $charts = 0;
-    $charts = 1 if defined $cfg->{Presentation}{charts} and $open->[0] and $open->[0] eq '__charts';
+    $charts = 1 if defined $cfg->{Presentation}{charts} and $open->[0] and $open->[0] eq '_charts';
     if ($charts and ( not defined $cfg->{__sortercache} 
                       or $cfg->{__sortercachekeeptime} < time )){
        # die "ERROR: Chart $open->[1] does not exit.\n"
@@ -1385,10 +1535,12 @@ sub display_webpage($$){
     my $readversion = "?";
     $VERSION =~ /(\d+)\.(\d{3})(\d{3})/ and $readversion = sprintf("%d.%d.%d",$1,$2,$3);
     my $menu = $targets;
-    if (defined $cfg->{Presentation}{charts}){
+
+        
+    if (defined $cfg->{Presentation}{charts} and not $hierarchy){
         my $order = 1;
-        $targets = { %{$targets},
-                    __charts => {
+        $menu_root = { %{$menu_root},
+                       _charts => {
                         _order => -99,
                         menu => $cfg->{Presentation}{charts}{menu},
                         map { $_ => { menu => $cfg->{Presentation}{charts}{$_}{menu}, _order => $order++ } } 
@@ -1397,18 +1549,35 @@ sub display_webpage($$){
                    }
                  };
     }                    
+
+    my $hierarchy_arg = '';
+    if ($hierarchy){
+        $hierarchy_arg = 'hierarchy='.uri_escape($hierarchy).';';
+
+    };
+    my $filter_arg ='';
+    if ($filter){
+        $filter_arg = 'filter='.uri_escape($filter).';';
+
+    };
+    # if we are in a hierarchy, recover the original path
+
+    my $display_tree = $tree->{__tree_link} ? $tree->{__tree_link} : $tree;
+
     my $page = fill_template
       ($cfg->{Presentation}{template},
        {
-        menu => target_menu( $targets,
+        menu => hierarchy_switcher($q,$cfg).
+		target_menu( $menu_root,
                              [@$open], #copy this because it gets changed
-                             cgiurl($q, $cfg) ."?target="),
-
-        title => $charts ? "" : $tree->{title},
-        remark => $charts ? "" : ($tree->{remark} || ''),
+                             cgiurl($q, $cfg) ."?${hierarchy_arg}${filter_arg}target=",
+		             $filter
+			   ),
+        title => $charts ? "" : $display_tree->{title},
+        remark => $charts ? "" : ($display_tree->{remark} || ''),
         overview => $charts ? get_charts($cfg,$q,$open) : get_overview( $cfg,$q,$tree,$open),
         body => $charts ? "" : get_detail( $cfg,$q,$tree,$open_orig ),
-        target_ip => $charts ? "" : ($tree->{host} || ''),
+        target_ip => $charts ? "" : ($display_tree->{host} || ''),
         owner => $cfg->{General}{owner},
         contact => $cfg->{General}{contact},
 
@@ -1426,7 +1595,6 @@ sub display_webpage($$){
                      -charset=> ( $cfg->{Presentation}{charset} || 'iso-8859-15'),
                      -Content_length => length($page),
                      );
-
     print $page || "<HTML><BODY>ERROR: Reading page template".$cfg->{Presentation}{template}."</BODY></HTML>";
 
 }
@@ -1821,11 +1989,11 @@ sub get_parser () {
     # the part of target section syntax that doesn't depend on the selected probe
     my $TARGETCOMMON; # predeclare self-referencing structures
     # the common variables
-    my $TARGETCOMMONVARS = [ qw (probe menu title alerts note email host remark rawlog alertee slaves) ];
+    my $TARGETCOMMONVARS = [ qw (probe menu title alerts note email host remark rawlog alertee slaves parents hide nomasterpoll) ];
     $TARGETCOMMON = 
       {
        _vars     => $TARGETCOMMONVARS,
-       _inherited=> [ qw (probe alerts alertee slaves) ],
+       _inherited=> [ qw (probe alerts alertee slaves nomasterpoll) ],
        _sections => [ "/$KEYD_RE/" ],
        _recursive=> [ "/$KEYD_RE/" ],
        _sub => sub {
@@ -1848,6 +2016,38 @@ DOC
                      _re => '([^\s,]+(,[^\s,]+)*)?',
                      _re_error => 'Comma separated list of alert names',
                     },
+       hide      => {
+                     _doc => <<DOC,
+Set the hide property to 'yes' to hide this host from the navigation menu
+and from search results. Note that if you set the hide property on a non
+leaf entry all subordinate entries will also disapear in the menu structure.
+If you know a direct link to a page it is still accessible. Pages which are
+hidden from the menu due to a parent being hidden will still show up in
+search results and in alternate hierarchies where they are below a non
+hidden parent.
+DOC
+                     _re => '(yes|no)',
+                     _default => 'no',
+                    },
+
+       nomasterpoll=> {
+                     _doc => <<DOC,
+Use this in a master/slave setup where the master must not poll a particular
+target. The master will now skip this entry in its polling cycle.  and from
+search results. Note that if you set the hide property on a non leaf entry
+all subordinate entries will also disapear in the menu structure. You can
+still access them via direct link or via an alternate hierarchy.
+
+If you have no master/slave setup this will have a similar effect to the
+hide property, except that the menu entry will still show up, but will not
+contain any graphs.
+
+DOC
+                     _re => '(yes|no)',
+                     _re_error => 'Only set this if you want to hide',
+                     _default => 'no',
+                    },
+
        host      => 
        {
         _doc => <<DOC,
@@ -1950,13 +2150,32 @@ DOC
                         return undef;
                   }, 
            },
+           parents => {
+                        _re => "${KEYD_RE}:/(?:${KEYD_RE}(?:/${KEYD_RE})*)?(?: ${KEYD_RE}:/(?:${KEYD_RE}(?:/${KEYD_RE})*)?)*",
+                        _re_error => "Use hierarcy:/parent/path syntax",
+                        _doc => <<DOC
+After setting up a hierarchy in the Presentation section of the
+configuration file you can use this property to assign an entry to alternate
+hierarchies. The format for parent entries is.
+
+ hierarchyA:/Node1/Node2 hierarchyB:/Node3
+      
+The entries from all parent properties together will build a new tree for
+each hierarchy. With this method it is possible to make a single target show
+up multiple times in a tree. If you think this is a good thing, go ahead,
+nothing is stopping you. Since you do not only define the parent but the full path
+of the parent node, circular dependencies are not possible.
+
+DOC
+           },
+
            alertee => { _re => '(\|.+|.+@\S+|snpp:)',
                         _re_error => 'the alertee must be an email address here',
                         _doc => <<DOC },
 If you want to have alerts for this target and all targets below it go to a particular address
 on top of the address already specified in the alert, you can add it here. This can be a comma separated list of items.
 DOC
-           slaves => {  _re => "${KEYD_RE}(?:\\s+${KEYD_RE})*",
+           slaves => {  _re => "(${KEYD_RE}(?:\\s+${KEYD_RE})*)?",
                         _re_error => 'Use the format: slaves='.${KEYD_RE}.' [slave2]',
                         _doc => <<DOC },
 The slave names must match the slaves you have setup in the slaves section.
@@ -2523,7 +2742,7 @@ DOC
          _doc => <<DOC,
 Defines how the SmokePing data should be presented.
 DOC
-          _sections => [ qw(overview detail charts multihost) ],
+          _sections => [ qw(overview detail charts multihost hierarchies) ],
           _mandatory => [ qw(overview template detail) ],
           _vars      => [ qw (template charset) ],
           template   => 
@@ -2835,6 +3054,22 @@ DOC
                 
               }
            }, #multi host
+           hierarchies => {
+              _doc => <<DOC,
+Provide an alternative presentation hierarchy for your smokeping data. After setting up a hierarchy in this
+section. You can use it in each tagets parent property. A drop-down menu in the smokeping website lets
+the user switch presentation hierarchy.
+DOC
+              _sections => [ "/$KEYD_RE/" ],
+              "/$KEYD_RE/" => {
+                  _doc => "Identifier of the hierarchie. Use this as prefix in the targets parent property",
+                  _vars => [ qw(title) ],
+                  _mandatory => [ qw(title) ],
+                  title => {
+                     _doc => "Title for this hierarchy",
+                  }
+              }
+           }, #hierarchies
         }, #present
         Probes => { _sections => [ "/$KEYD_RE/" ],
                     _doc => <<DOC,
@@ -3134,7 +3369,7 @@ connections the system should monitor. Each section can contain one host as
 well as other sections. By adding slaves you can measure the connectivity of
 an endpoint looking from several sources.
 DOC
-                   _vars       => [ qw(probe menu title remark alerts slaves) ],
+                   _vars       => [ qw(probe menu title remark alerts slaves parents) ],
                    _mandatory  => [ qw(probe menu title) ],
                    _order => 1,
                    _sections   => [ "/$KEYD_RE/" ],
@@ -3206,7 +3441,7 @@ DOC
 An optional remark on the current section. It gets displayed on the webpage.
 DOC
 
-                  }
+           }
 
       }
     );
@@ -3218,7 +3453,7 @@ sub get_config ($$){
     my $cfgfile = shift;
 
     my $cfg = $parser->parse( $cfgfile ) or die "ERROR: $parser->{err}\n";
-    # lets do some checking
+    # lets have defaults for multihost colors
     if (not $cfg->{Presentation}{multihost} or not $cfg->{Presentation}{multihost}{colors}){
        $cfg->{Presentation}{multihost}{colors} = "004586 ff420e ffde20 579d1c 7e0021 83caff 314004 aecf00 4b1f6f ff950e c5000b 0084d1";
     }
@@ -3402,10 +3637,13 @@ sub load_cfg ($;$) {
         $probes = undef;
         $probes = load_probes $cfg;
         $cfg->{__probes} = $probes;
+        $cfg->{__hierarchies} = {};
         return if $noinit;
         init_alerts $cfg if $cfg->{Alerts};
         add_targets $cfg, $probes, $cfg->{Targets}, $cfg->{General}{datadir};   
         init_target_tree $cfg, $probes, $cfg->{Targets}, $cfg->{General}{datadir};
+        #use Data::Dumper;
+        #die Dumper $cfg->{__hierarchies};
     } else {
         do_log("Config file unmodified, skipping reload") unless $cgimode;
     }
@@ -3545,7 +3783,7 @@ sub gen_page  ($$$) {
          {
           menu => target_menu($cfg->{Targets},
                               [@$open], #copy this because it gets changed
-                              "", ".html"),
+                              "", '',".html"),
           title => $tree->{title},
           remark => ($tree->{remark} || ''),
           overview => get_overview( $cfg,$q,$tree,$open ),
@@ -3755,7 +3993,7 @@ sub main (;$) {
             shared_secret => $secret,
             slave_name => $opt{'slave-name'} || hostname(),
         };
-        # this should get us a config set from the server
+        # this should get us an initial  config set from the server
         my $new_conf = Smokeping::Slave::submit_results($slave_cfg,$cfg);
         if ($new_conf){
             $cfg=$new_conf;
@@ -3844,7 +4082,7 @@ RESTART:
                 $gothup = 1;
         };
         while (1) { # just wait for the signals
-                sleep;
+                sleep; #sleep until we get a signal
                 next unless $gothup;
                 $reloading = 1;
                 $gothup = 0;
@@ -3964,13 +4202,15 @@ KID:
         if ($opt{'master-url'}){            
             my $new_conf = Smokeping::Slave::submit_results $slave_cfg,$cfg,$myprobe,$probes;
             if ($new_conf){
+                do_log('server has new config for me ... HUPing myself');                
+                $gothup = 1;
                 $cfg=$new_conf;
                 $probes = undef;
                 $probes = load_probes $cfg;
                 $cfg->{__probes} = $probes;
                 add_targets($cfg, $probes, $cfg->{Targets}, $cfg->{General}{datadir});
-                goto RESTART;
-            }
+                last;
+             }
         } else {
             update_rrds $cfg, $probes, $cfg->{Targets}, $cfg->{General}{datadir}, $myprobe, \%sortercache;
             save_sortercache($cfg,\%sortercache,$myprobe);
@@ -4019,6 +4259,7 @@ sub checkhup ($$) {
 
 sub reload_cfg ($) {
         my $cfgfile = shift;
+        return 1 if exists $opt{'master-url'};
         my ($oldcfg, $oldprobes) = ($cfg, $probes);
         do_log("Reloading configuration.");
         $cfg = undef;

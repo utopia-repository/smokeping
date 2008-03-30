@@ -50,6 +50,7 @@
  step = 300</pre>
 <pre>
  # The following variables can be overridden in each target section
+ accept_redirects = yes
  extraopts = -some-letter-the-author-did-not-think-of
  ignore_cache = yes
  ipversion = 4
@@ -73,6 +74,7 @@
  + mytarget
  # probe = EchoPingHttp # if the default probe is something else
  host = my.host
+ accept_redirects = yes
  extraopts = -some-letter-the-author-did-not-think-of
  ignore_cache = yes
  ipversion = 4
@@ -145,7 +147,21 @@ the variable 'concurrentprobes' is set in the 'General' section.)</p>
 </dd></dl>
 <p>Supported target-specific variables:</p>
 <dl>
-<dt><strong><a name="item_extraopts">extraopts</a></strong>
+<dt><strong><a name="item_accept_redirects">accept_redirects</a></strong>
+
+<dd>
+<p>The <code>echoping(1)</code> ``-R'' option: Accept  HTTP  status  codes  3xx (redirections) 
+as normal responses instead of treating them as errors. Note that this option
+is only available starting with Echoping 6.</p>
+
+</dd><dd>
+<p>Enabled if the value is anything other than 'no' or '0'.</p>
+
+</dd><dd>
+<p>Example value: yes</p>
+
+</li>
+</dd><dt><strong><a name="item_extraopts">extraopts</a></strong>
 
 <dd>
 <p>Any extra options specified here will be passed unmodified to echoping(1).</p>

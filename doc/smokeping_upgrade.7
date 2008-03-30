@@ -129,7 +129,7 @@
 .\" ========================================================================
 .\"
 .IX Title "SMOKEPING_UPGRADE 7"
-.TH SMOKEPING_UPGRADE 7 "2007-09-05" "2.2.7" "SmokePing"
+.TH SMOKEPING_UPGRADE 7 "2007-12-01" "2.3.0" "SmokePing"
 .SH "NAME"
 smokeping_upgrade \- Notes on upgrading Smokeping
 .SH "OVERVIEW"
@@ -152,6 +152,13 @@ to it from the previous release.
 An official list of changes with each release can be found in the \s-1CHANGES\s0
 file in the Smokeping distribution. This document tries to complement
 that with upgrading instructions etc.
+.SH "2.1.x to 2.2.0"
+.IX Header "2.1.x to 2.2.0"
+.Sh "\s-1LWP\s0 Dependency"
+.IX Subsection "LWP Dependency"
+The new master/slave functionality needs the LWP::UserAgent module from
+\&\s-1CPAN\s0. Currently the dependency is not optional; you'll need the module
+even if you are only running one Smokeping instance.
 .SH "2.0.9 to 2.1.0"
 .IX Header "2.0.9 to 2.1.0"
 .Sh "Echoping 6 support"

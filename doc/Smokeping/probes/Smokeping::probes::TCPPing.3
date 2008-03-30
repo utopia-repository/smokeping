@@ -128,10 +128,10 @@
 .rm #[ #] #H #V #F C
 .\" ========================================================================
 .\"
-.IX Title "doc::Smokeping::probes::CiscoRTTMonDNS 3"
-.TH doc::Smokeping::probes::CiscoRTTMonDNS 3 "2008-01-23" "2.3.0" "SmokePing"
+.IX Title "doc::Smokeping::probes::TCPPing 3"
+.TH doc::Smokeping::probes::TCPPing 3 "2008-01-23" "2.3.0" "SmokePing"
 .SH "NAME"
-Smokeping::probes::CiscoRTTMonDNS.pm \- Probe for SmokePing
+Smokeping::probes::TCPPing \- TCPPing Probe for SmokePing
 .SH "SYNOPSIS"
 .IX Header "SYNOPSIS"
 .Vb 1
@@ -139,22 +139,21 @@ Smokeping::probes::CiscoRTTMonDNS.pm \- Probe for SmokePing
 .Ve
 .PP
 .Vb 1
-\& +CiscoRTTMonDNS
+\& +TCPPing
 .Ve
 .PP
-.Vb 4
+.Vb 5
+\& binary = /usr/bin/tcpping # mandatory
 \& forks = 5
 \& offset = 50%
 \& step = 300
 \& timeout = 15
 .Ve
 .PP
-.Vb 5
+.Vb 3
 \& # The following variables can be overridden in each target section
-\& ioshost = RTTcommunity@Myrouter.foobar.com.au # mandatory
-\& iosint = 10.33.22.11
-\& name = www.foobar.com.au # mandatory
 \& pings = 5
+\& port = 80
 .Ve
 .PP
 .Vb 1
@@ -166,28 +165,55 @@ Smokeping::probes::CiscoRTTMonDNS.pm \- Probe for SmokePing
 .Ve
 .PP
 .Vb 1
-\& probe = CiscoRTTMonDNS # if this should be the default probe
+\& probe = TCPPing # if this should be the default probe
 .Ve
 .PP
 .Vb 1
 \& # [...]
 .Ve
 .PP
-.Vb 7
+.Vb 5
 \& + mytarget
-\& # probe = CiscoRTTMonDNS # if the default probe is something else
+\& # probe = TCPPing # if the default probe is something else
 \& host = my.host
-\& ioshost = RTTcommunity@Myrouter.foobar.com.au # mandatory
-\& iosint = 10.33.22.11
-\& name = www.foobar.com.au # mandatory
 \& pings = 5
+\& port = 80
 .Ve
 .SH "DESCRIPTION"
 .IX Header "DESCRIPTION"
-A probe for smokeping, which uses the ciscoRttMon \s-1MIB\s0 functionality (\*(L"Service Assurance Agent\*(R", \*(L"\s-1SAA\s0\*(R") of Cisco \s-1IOS\s0 to time ( recursive, type A) \s-1DNS\s0 queries to a \s-1DNS\s0 server.
+Integrates TCPPing as a probe into smokeping. The variable \fBbinary\fR must
+point to your copy of the TCPPing program. If it is not installed on
+your system yet, you can get it from http://www.vdberg.org/~richard/tcpping.
+You can also get it from http://www.darkskies.za.net/~norman/scripts/tcpping.
+.PP
+The (optional) port option lets you configure the port for the pings sent.
+The TCPPing manpage has the following to say on this topic:
+.PP
+The problem is that with the widespread use of firewalls on the modern Internet,
+many of the packets that \fItraceroute\fR\|(8) sends out end up being filtered, 
+making it impossible to completely trace the path to the destination. 
+However, in many cases, these firewalls will permit inbound \s-1TCP\s0 packets to specific 
+ports that hosts sitting behind the firewall are listening for connections on. 
+By sending out \s-1TCP\s0 \s-1SYN\s0 packets instead of \s-1UDP\s0 or \s-1ICMP\s0 \s-1ECHO\s0 packets, 
+tcptraceroute is able to bypass the most common firewall filters.
+.PP
+It is worth noting that tcptraceroute never completely establishes a \s-1TCP\s0 connection 
+with the destination host. If the host is not listening for incoming connections, 
+it will respond with an \s-1RST\s0 indicating that the port is closed. If the host instead 
+responds with a SYN|ACK, the port is known to be open, and an \s-1RST\s0 is sent by 
+the kernel tcptraceroute is running on to tear down the connection without completing 
+three-way handshake. This is the same half-open scanning technique that \fInmap\fR\|(1) uses 
+when passed the \-sS flag.
 .SH "VARIABLES"
 .IX Header "VARIABLES"
 Supported probe-specific variables:
+.IP "binary" 4
+.IX Item "binary"
+The location of your TCPPing script.
+.Sp
+Example value: /usr/bin/tcpping
+.Sp
+This setting is mandatory.
 .IP "forks" 4
 .IX Item "forks"
 Run this many concurrent processes at maximum
@@ -227,31 +253,6 @@ Example value: 15
 Default value: 5
 .PP
 Supported target-specific variables:
-.IP "ioshost" 4
-.IX Item "ioshost"
-The (mandatory) ioshost parameter specifies the Cisco router, which will send the \s-1DNS\s0 requests, 
-as well as the \s-1SNMP\s0 community string on the router.
-.Sp
-Example value: RTTcommunity@Myrouter.foobar.com.au
-.Sp
-This setting is mandatory.
-.IP "iosint" 4
-.IX Item "iosint"
-The (optional) iosint parameter is the source address for the \s-1DNS\s0 packets.
-This should be one of the active (!) \s-1IP\s0 addresses of the router to get
-results. \s-1IOS\s0 looks up the target host address in the forwarding table
-and then uses the interface(s) listed there to send the \s-1DNS\s0 packets. By
-default \s-1IOS\s0 uses the (primary) \s-1IP\s0 address on the sending interface as
-source address for packets originated by the router.
-.Sp
-Example value: 10.33.22.11
-.IP "name" 4
-.IX Item "name"
-The (mandatory) name parameter is the \s-1DNS\s0 name to resolve.
-.Sp
-Example value: www.foobar.com.au
-.Sp
-This setting is mandatory.
 .IP "pings" 4
 .IX Item "pings"
 How many pings should be sent to each target, if different from the global
@@ -261,45 +262,12 @@ change this parameter afterwards, you'll have to delete the old \s-1RRD\s0
 files or somehow convert them.
 .Sp
 Example value: 5
+.IP "port" 4
+.IX Item "port"
+The \s-1TCP\s0 port the probe should measure.
+.Sp
+Example value: 80
 .SH "AUTHORS"
 .IX Header "AUTHORS"
-Joerg.Kummer at Roche.com 
-.SH "NOTES"
-.IX Header "NOTES"
-.Sh "host parameter"
-.IX Subsection "host parameter"
-The host parameter specifies the \s-1DNS\s0 server, which the router will use.
-.Sh "\s-1IOS\s0 \s-1VERSIONS\s0"
-.IX Subsection "IOS VERSIONS"
-This probe only works with \s-1IOS\s0 12.0(3)T or higher.  It is recommended to test it on less critical routers first. 
-.Sh "\s-1INSTALLATION\s0"
-.IX Subsection "INSTALLATION"
-To install this probe copy ciscoRttMonMIB.pm to ($SMOKEPINGINSTALLDIR)/lib/Smokeping and CiscoRTTMonDNS.pm to ($SMOKEPINGINSTALLDIR)/lib/Smokeping/probes.
-.PP
-The router(s) must be configured to allow read/write \s-1SNMP\s0 access. Sufficient is:
-.PP
-.Vb 1
-\&        snmp\-server community RTTCommunity RW
-.Ve
-.PP
-If you want to be a bit more restrictive with \s-1SNMP\s0 write access to the router, then consider configuring something like this 
-.PP
-.Vb 3
-\&        access\-list 2 permit 10.37.3.5
-\&        snmp\-server view RttMon ciscoRttMonMIB included
-\&        snmp\-server community RTTCommunity view RttMon RW 2
-.Ve
-.PP
-The above configuration grants \s-1SNMP\s0 read-write only to 10.37.3.5 (the smokeping host) and only to the ciscoRttMon \s-1MIB\s0 tree. The probe does not need access to \s-1SNMP\s0 variables outside the RttMon tree.
-.SH "BUGS"
-.IX Header "BUGS"
-The probe does unnecessary \s-1DNS\s0 queries, i.e. more than configured in the \*(L"pings\*(R" variable, because the RTTMon \s-1MIB\s0 only allows to set a total time for all queries in one measurement run (one \*(L"life\*(R"). Currently the probe sets the life duration to \*(L"pings\*(R"*2+3 seconds (2 secs is the timeout value hardcoded into this probe). 
-.SH "SEE ALSO"
-.IX Header "SEE ALSO"
-<http://oss.oetiker.ch/smokeping/>
-.PP
-<http://www.switch.ch/misc/leinen/snmp/perl/>
-.PP
-The best source for background info on \s-1SAA\s0 is Cisco's documentation on <http://www.cisco.com> and the CISCO-RTTMON-MIB documentation, which is available at: 
-.PP
-<ftp://ftp.cisco.com/pub/mibs/v2/CISCO\-RTTMON\-MIB.my>
+Norman Rasmussen <norman@rasmussen.org>
+Patched for Smokeping 2.x compatibility by Anton Chernev <maznio@doom.bg>

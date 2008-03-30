@@ -4,13 +4,14 @@ Priority: extra
 Maintainer: Jose Carlos Garcia Sogo <jsogo@debian.org>
 Uploaders: Niko Tyni <ntyni@debian.org>
 Build-Depends: debhelper (>= 5), dpatch (>= 2.0.9)
-Build-Depends-Indep: librrds-perl, groff-base, libhtml-parser-perl, libwww-perl
+Build-Depends-Indep: librrds-perl, groff-base, libhtml-parser-perl,
+ libwww-perl, liburi-perl
 Standards-Version: 3.7.3
 
 Package: smokeping
 Architecture: all
 Depends: ${perl:Depends}, ${misc:Depends}, libnet-perl, libwww-perl,
- libsnmp-session-perl (>= 0.86), librrds-perl (>= 1.2),
+ libsnmp-session-perl (>= 0.86), librrds-perl (>= 1.2), liburi-perl,
  fping (>= 2.4b2-to-ipv6-2), speedy-cgi-perl (>= 2.21-1), 
  exim4 | mail-transport-agent, debianutils (>= 1.7), adduser, 
  lsb-base (>= 3.0-6)
