@@ -129,7 +129,7 @@
 .\" ========================================================================
 .\"
 .IX Title "SMOKEPING_MASTER_SLAVE 7"
-.TH SMOKEPING_MASTER_SLAVE 7 "2007-09-05" "2.2.4" "SmokePing"
+.TH SMOKEPING_MASTER_SLAVE 7 "2007-10-28" "2.2.6" "SmokePing"
 .SH "NAME"
 smokeping_master_slave \- How run multiple distributed instances of SmokePing
 .SH "OVERVIEW"
@@ -191,6 +191,12 @@ configuration file. Each slave has a section in the slaves part of the
 master configuration file. The section name must match the hostname of the
 slave. If some configuration parameter must be set to a special value for
 the slave, use an override section to configure this.
+.PP
+The slave names must be the names the hosts think they have not their
+outside hostnames or ip addresses or anything like that. When the slave
+calls the master to get its config or report its measurements it will tell
+the master its 'hostname'. This together with the shared secret is used to
+authenticate and identify who is who.
 .PP
 .Vb 8
 \& *** slaves ****

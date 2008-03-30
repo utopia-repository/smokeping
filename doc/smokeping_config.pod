@@ -4317,6 +4317,12 @@ Default value: keytype = rsa
 
 (This variable can be overridden target-specifically in the Targets section.)
 
+=item B<port>
+
+(This variable can be overridden target-specifically in the Targets section.)
+
+Default value: port = 22
+
 =back
 
 Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
@@ -4370,6 +4376,12 @@ Default value: keytype = rsa
 =item B<pings>
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<port>
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+Default value: port = 22
 
 =back
 
@@ -7465,6 +7477,10 @@ see above
 
 see above
 
+=item B<port>
+
+see above
+
 =back
 
 Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
@@ -7482,6 +7498,12 @@ see above
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
 =item B<pings>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<port>
 
 see above
 

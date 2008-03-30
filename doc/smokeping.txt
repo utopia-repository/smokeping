@@ -50,6 +50,10 @@ SSYYNNOOPPSSIISS
 
         --master-url=s Run smokeping in slave mode. Attach to master for config.
 
+        --slave-name=s By default the slave will use whatever it thinks its name
+                       is, when talking to its master. In some cases you may
+                       probably want to override this.
+
         --shared-secret=s File containing the shared secret for talking to the server.
 
         --cache-dir=s Directory for temporary data storage when running in slave mode.
@@ -152,4 +156,4 @@ AAUUTTHHOORR
 
 
 
-2.2.4                             2007-09-16                 SMOKEPING.DIST(1)
+2.2.6                             2007-10-28                 SMOKEPING.DIST(1)

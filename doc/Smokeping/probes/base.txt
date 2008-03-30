@@ -71,4 +71,4 @@ AAUUTTHHOORRSS
 
 
 
-2.2.4                             2007-09-16   doc::Smokeping::probes::base(3)
+2.2.6                             2007-10-28   doc::Smokeping::probes::base(3)

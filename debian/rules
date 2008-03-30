@@ -51,8 +51,9 @@ install: build-stamp
 	install -d $(TMP)/usr/share/perl5/smokeping/Smokeping/sorters
 	install -m 644 lib/Smokeping/sorters/*pm $(TMP)/usr/share/perl5/smokeping/Smokeping/sorters
 
-	install -d $(TMP)/usr/share/perl5/smokeping/Config
+	install -d $(TMP)/usr/share/perl5/smokeping/Config/Grammar
 	install -m 644 lib/Config/*pm $(TMP)/usr/share/perl5/smokeping/Config/
+	install -m 644 lib/Config/Grammar/*pm $(TMP)/usr/share/perl5/smokeping/Config/Grammar
 
 	install -d $(TMP)/usr/sbin/
 	install -m 755 bin/smokeping.dist $(TMP)/usr/sbin/smokeping

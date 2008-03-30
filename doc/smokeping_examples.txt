@@ -473,10 +473,11 @@ DDEESSCCRRIIPPTTIIOONN
             binary = /usr/sbin/fping
 
             *** Slaves ***
-            secrets=/scratch/oetiker/smoke-master/etc/smokeping_secrets.dist
+            secrets=/home/oetiker/checkouts/smokeping/trunk/software/etc/smokeping_secrets.dist
             +boomer
             display_name=boomer
             color=0000ff
+            +slave2
 
        Probe explanation
            This is the template configuration file distributed with Smokeping.
@@ -501,7 +502,7 @@ DDEESSCCRRIIPPTTIIOONN
             menu = James
             title =James
             alerts = someloss
-            slaves = boomer
+            slaves = boomer slave2
             host = james.address
 
             ++ MultiHost
@@ -525,9 +526,9 @@ LLIICCEENNSSEE
        option) any later version.
 
        This program is distributed in the hope that it will be useful, but
-       WITHOUT ANY WARRANTY; without even the implied warranty of
-       MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Gen-
-       eral Public License for more details.
+       WITHOUT ANY WARRANTY; without even the implied warranty of MER-
+       CHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General
+       Public License for more details.
 
        You should have received a copy of the GNU General Public License along
        with this program; if not, write to the Free Software Foundation, Inc.,
@@ -541,4 +542,4 @@ SSEEEE AALLSSOO
 
 
 
-2.2.4                             2007-09-16             SMOKEPING_EXAMPLES(7)
+2.2.6                             2007-10-28             SMOKEPING_EXAMPLES(7)

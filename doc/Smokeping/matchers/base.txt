@@ -82,4 +82,4 @@ AAUUTTHHOORR
 
 
 
-2.2.4                             2006-08-15      Smokeping::matchers::base(3)
+2.2.6                             2007-10-28      Smokeping::matchers::base(3)

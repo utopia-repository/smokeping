@@ -42,15 +42,6 @@ sub proto_args {
 	return ("-c");
 }
 
-sub test_usage {
-	my $self = shift;
-	my $bin = $self->{properties}{binary};
-	croak("Your echoping binary doesn't support CHARGEN")
-		if `$bin -c 2>&1 0.0.0.1` =~ /(usage|not compiled|invalid option)/i;
-	$self->SUPER::test_usage;
-	return;
-}
-
 sub ProbeDesc($) {
         return "TCP Chargen pings using echoping(1)";
 }

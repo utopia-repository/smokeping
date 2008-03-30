@@ -24,8 +24,8 @@ diff -urNad smokeping-2.2.4~/etc/config.dist smokeping-2.2.4/etc/config.dist
 -datadir  = /tmp/smokeping-ms/data
 -piddir  = /tmp/smokeping-ms/var
 -cgiurl   = http://some.url/smokeping.cgi
--smokemail = /scratch/oetiker/smoke-master/etc/smokemail.dist
--tmail = /scratch/oetiker/smoke-master/etc/tmail.dist
+-smokemail = /home/oetiker/checkouts/smokeping/trunk/software/etc/smokemail.dist
+-tmail = /home/oetiker/checkouts/smokeping/trunk/software/etc/tmail.dist
 +################################################
 +# DON'T TOUCH UNLESS YOU KNOW WHAT YOU'RE DOING
 +# BETWEEN THESE MARKS!
@@ -85,22 +85,23 @@ diff -urNad smokeping-2.2.4~/etc/config.dist smokeping-2.2.4/etc/config.dist
  
  *** Presentation ***
  
--template = /scratch/oetiker/smoke-master/etc/basepage.html.dist
+-template = /home/oetiker/checkouts/smokeping/trunk/software/etc/basepage.html.dist
 +template = /etc/smokeping/basepage.html
  
  + charts
  
-@@ -96,37 +128,104 @@
+@@ -96,38 +128,104 @@
  
  + FPing
  
 -binary = /usr/sbin/fping
 -
 -*** Slaves ***
--secrets=/scratch/oetiker/smoke-master/etc/smokeping_secrets.dist
+-secrets=/home/oetiker/checkouts/smokeping/trunk/software/etc/smokeping_secrets.dist
 -+boomer
 -display_name=boomer
 -color=0000ff
+-+slave2
 +binary = /usr/bin/fping
  
  *** Targets ***
@@ -129,7 +130,7 @@ diff -urNad smokeping-2.2.4~/etc/config.dist smokeping-2.2.4/etc/config.dist
 -menu = James
 -title =James
 -alerts = someloss
--slaves = boomer
+-slaves = boomer slave2
 -host = james.address
 +++ LocalMachine
  

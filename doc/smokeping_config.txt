@@ -3714,6 +3714,12 @@ RREEFFEERREENNCCEE
                    (This variable can be overridden target-specifically in the
                    Targets section.)
 
+               ppoorrtt
+                   (This variable can be overridden target-specifically in the
+                   Targets section.)
+
+                   Default value: port = 22
+
                Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ..]]++//
 
                    The following new variables are valid:
@@ -3761,6 +3767,12 @@ RREEFFEERREENNCCEE
                    ppiinnggss
                        This variable _i_n_h_e_r_i_t_s its value from the parent sec-
                        tion if nothing is specified here.
+
+                   ppoorrtt
+                       This variable _i_n_h_e_r_i_t_s its value from the parent sec-
+                       tion if nothing is specified here.
+
+                       Default value: port = 22
 
                (End of dynamical grammar changes for example instance "SSH".)
 
@@ -3990,8 +4002,8 @@ RREEFFEERREENNCCEE
                    sstteepp
                        see above
 
-                       This variable _i_n_h_e_r_i_t_s its value from the parent
-                       section if nothing is specified here.
+                       This variable _i_n_h_e_r_i_t_s its value from the parent sec-
+                       tion if nothing is specified here.
 
                    ttiimmeeoouutt
                        see above
@@ -6287,6 +6299,9 @@ RREEFFEERREENNCCEE
            ppiinnggss
                see above
 
+           ppoorrtt
+               see above
+
            Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ..]]++//
 
                The following new variables are valid:
@@ -6298,6 +6313,12 @@ RREEFFEERREENNCCEE
                    nothing is specified here.
 
                ppiinnggss
+                   see above
+
+                   This variable _i_n_h_e_r_i_t_s its value from the parent section if
+                   nothing is specified here.
+
+               ppoorrtt
                    see above
 
                    This variable _i_n_h_e_r_i_t_s its value from the parent section if
@@ -6800,4 +6821,4 @@ AAUUTTHHOORR
 
 
 
-2.2.4                             2007-09-16               SMOKEPING_CONFIG(5)
+2.2.6                             2007-10-28               SMOKEPING_CONFIG(5)

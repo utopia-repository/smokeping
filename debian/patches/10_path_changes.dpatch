@@ -9,7 +9,7 @@ diff -urNad smokeping-2.2.4~/Makefile smokeping-2.2.4/Makefile
 --- smokeping-2.2.4~/Makefile	2007-09-17 11:04:25.000000000 +0300
 +++ smokeping-2.2.4/Makefile	2007-09-17 11:04:29.000000000 +0300
 @@ -8,7 +8,7 @@
- NUMVERSION = 2.002004 
+ NUMVERSION = 2.002006 
  IGNORE = ~|CVS|var/|smokeping-$(VERSION)/smokeping-$(VERSION)|cvsignore|rej|orig|DEAD|pod2htm[di]\.tmp|\.svn|tar\.gz|DEADJOE|svn-commit\.tmp
  GROFF = groff
 -PERL = perl-5.8.8
@@ -30,7 +30,7 @@ diff -urNad smokeping-2.2.4~/bin/smokeping.dist smokeping-2.2.4/bin/smokeping.di
 +use lib qw(/usr/share/perl5/smokeping);
 +use lib qw(/usr/share/perl5);
  
- use Smokeping 2.002004 ;
+ use Smokeping 2.002006;
   
 -Smokeping::main("etc/config.dist");
 +Smokeping::main("/etc/smokeping/config");
@@ -48,7 +48,7 @@ diff -urNad smokeping-2.2.4~/bin/tSmoke.dist smokeping-2.2.4/bin/tSmoke.dist
 -use lib "/usr/local/rrdtool-1.0.39/lib/perl";
 +use lib qw(/usr/share/perl5/smokeping);
  
- use Smokeping 2.002004 ;
+ use Smokeping 2.002006 ;
  use Net::SMTP;
 @@ -60,7 +59,7 @@
  use RRDs;
@@ -128,7 +128,7 @@ diff -urNad smokeping-2.2.4~/htdocs/smokeping.cgi.dist smokeping-2.2.4/htdocs/sm
 +use lib qw(/usr/share/perl5/smokeping);
  use CGI::Carp qw(fatalsToBrowser);
  
- use Smokeping 2.002004 ;
+ use Smokeping 2.002006;
  
 -Smokeping::cgi("/home/oetiker/data/projects/AADJ-smokeping/dist/etc/config");
 +Smokeping::cgi("/etc/smokeping/config");

@@ -48,10 +48,10 @@
 
 	</ul>
 
+	<li><a href="#see_also">SEE ALSO</a></li>
 	<li><a href="#copyright">COPYRIGHT</a></li>
 	<li><a href="#license">LICENSE</a></li>
-	<li><a href="#author">AUTHOR</a></li>
-	<li><a href="#history">HISTORY</a></li>
+	<li><a href="#authors">AUTHORS</a></li>
 </ul>
 -->
 <!-- INDEX END -->
@@ -70,7 +70,8 @@
  my $parser = Config::Grammar-&gt;new(\%grammar);
  my $cfg = $parser-&gt;parse('app.cfg') or die &quot;ERROR: $parser-&gt;{err}\n&quot;;
  my $pod = $parser-&gt;makepod();
- my $ex = $parser-&gt;maketmpl('TOP','SubNode');</pre>
+ my $ex = $parser-&gt;maketmpl('TOP','SubNode');
+ my $minex = $parser-&gt;maketmplmin('TOP','SubNode');</pre>
 <p>
 </p>
 <hr />
@@ -86,7 +87,10 @@ documentation of the configuration file format.</p>
 <p>The <strong>maketmpl</strong> method can generate a template configuration file.  If
 your grammar contains regexp matches, the template will not be all
 that helpful as Config::Grammar is not smart enough to give you sensible
-template data based in regular expressions.</p>
+template data based in regular expressions. The related function 
+<strong>maketmplmin</strong> generates a minimal configuration template without 
+examples, regexps or comments and thus allows an experienced user to
+fill in the configuration data more efficiently.</p>
 <p>
 </p>
 <h2><a name="grammar_definition">Grammar Definition</a></h2>
@@ -112,18 +116,6 @@ sub-section.</p>
 <p>The sub-section can also be a regular expression denoted by the syntax '/re/',
 where re is the regular-expression. In case a regular expression is used, a
 sub-hash named with the same '/re/' must be included in this hash.</p>
-
-</li>
-</dd><dt><strong><a name="item__recursive">_recursive</a></strong>
-
-<dd>
-<p>Array containing the list of those sub-sections that are <em>recursive</em>, ie.
-that can contain a new sub-section with the same syntax as themselves.</p>
-
-</dd><dd>
-<p>The same effect can be accomplished with circular references in the
-grammar tree or a suitable <strong>_dyn</strong> section subroutine (see below},
-so this facility is included just for convenience.</p>
 
 </li>
 </dd><dt><strong><a name="item__vars">_vars</a></strong>
@@ -175,20 +167,6 @@ sections with a number that determines the order in which the sections were
 defined.</p>
 
 </li>
-</dd><dt><strong><a name="item__varlist">_varlist</a></strong>
-
-<dd>
-<p>If defined, a '_varlist' element will be put in the config hash of this
-section with a list of the variables defined in the section. This can
-be used to find out the order of the variable assignments.</p>
-
-</dd><dd>
-<p>The '_sub' function (see below) of any variables defined in this section
-will also receive a list of those variables already defined in the
-same section. This can be used to enforce the order of the variables
-during parsing.</p>
-
-</li>
 </dd><dt><strong><a name="item__doc">_doc</a></strong>
 
 <dd>
@@ -203,31 +181,6 @@ with the real name of the section passed as its first argument. This is
 probably only useful for the regexp sections. If the function returns
 a defined value it is assumed that the test was not successful and an
 error is generated with the returned string as content.</p>
-
-</li>
-</dd><dt><strong><a name="item__dyn">_dyn</a></strong>
-
-<dd>
-<p>A subroutine reference (function pointer) that will be called when
-a new section of this syntax is encountered. The subroutine will get
-three arguments: the syntax of the section name (string or regexp), the
-actual name encountered (this will be the same as the first argument for
-non-regexp sections) and a reference to the grammar tree of the section.
-This subroutine can then modify the grammar tree dynamically.</p>
-
-</li>
-</dd><dt><strong><a name="item__dyndoc">_dyndoc</a></strong>
-
-<dd>
-<p>A hash reference that lists interesting names for the section that
-should be documented. The keys of the hash are the names and the
-values in the hash are strings that can contain an explanation
-for the name. The <a href="#item__dyn"><code>_dyn()</code></a> subroutine is then called for each of 
-these names and the differences of the resulting grammar and
-the original one are documented. This module can currently document
-differences in the _vars list, listing new variables and removed
-ones, and differences in the _sections list, listing the
-new and removed sections.</p>
 
 </li>
 </dd></dl>
@@ -279,34 +232,6 @@ section. This can be used to enforce the order of the variables.</p>
 
 <dd>
 <p>A one line example for the content of this variable.</p>
-
-</li>
-</dd><dt><strong>_dyn</strong>
-
-<dd>
-<p>A subroutine reference (function pointer) that will be called when the
-variable is assigned some value in the config file. The subroutine will
-get three arguments: the name of the variable, the value assigned and
-a reference to the grammar tree of this section.  This subroutine can
-then modify the grammar tree dynamically.</p>
-
-</dd><dd>
-<p>Note that no <a href="#item__dyn"><code>_dyn()</code></a> call is made for default and inherited values of
-the variable.</p>
-
-</li>
-</dd><dt><strong>_dyndoc</strong>
-
-<dd>
-<p>A hash reference that lists interesting values for the variable that
-should be documented. The keys of the hash are the values and the
-values in the hash are strings that can contain an explanation
-for the value. The <a href="#item__dyn"><code>_dyn()</code></a> subroutine is then called for each of 
-these values and the differences of the resulting grammar and
-the original one are documented. This module can currently document
-differences in the _vars list, listing new variables and removed
-ones, and differences in the _sections list, listing the
-new and removed sections.</p>
 
 </li>
 </dd></dl>
@@ -395,7 +320,8 @@ match (if not specified, a generic 'syntax error' message will be returned).</p>
 at the beginning and end of lines is trimmed.</p>
 <p>'\' at the end of the line marks a continued line on the next line. A single
 space will be inserted between the concatenated lines.</p>
-<p>'@include filename' is used to include another file.</p>
+<p>'@include filename' is used to include another file. Include works relative to the
+directory where the parent file is in.</p>
 <p>'@define a some value' will replace all occurences of 'a' in the following text
 with 'some value'.</p>
 <p>Fields in tables that contain white space can be enclosed in either <code>'</code> or <code>&quot;</code>.
@@ -448,6 +374,13 @@ the equal sign are optional.</p>
 <p>
 </p>
 <h3><a name="code">Code</a></h3>
+<pre>
+ use Data::Dumper;
+ use Config::Grammar;</pre>
+<pre>
+ my $RE_IP       = '\d+\.\d+\.\d+\.\d+';
+ my $RE_MAC      = '[0-9a-f]{2}(?::[0-9a-f]{2}){5}';
+ my $RE_HOST     = '\S+';</pre>
 <pre>
  my $parser = Config::Grammar-&gt;new({
    _sections =&gt; [ 'network', 'hosts' ],
@@ -511,7 +444,7 @@ the equal sign are optional.</p>
  my $cfg = $parser-&gt;parse('test.cfg') or
    die &quot;ERROR: $parser-&gt;{err}\n&quot;;
  print Dumper($cfg);
- print $praser-&gt;makepod;</pre>
+ print $parser-&gt;makepod;</pre>
 <p>
 </p>
 <h3><a name="configuration">Configuration</a></h3>
@@ -563,8 +496,14 @@ the equal sign are optional.</p>
 <p>
 </p>
 <hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="./Config/Grammar/Dynamic.html">the Config::Grammar::Dynamic manpage</a></p>
+<p>
+</p>
+<hr />
 <h1><a name="copyright">COPYRIGHT</a></h1>
-<p>Copyright (c) 2000-2005 by ETH Zurich. All rights reserved.</p>
+<p>Copyright (c) 2000-2005 by ETH Zurich. All rights reserved.
+Copyright (c) 2007 by David Schweikert. All rights reserved.</p>
 <p>
 </p>
 <hr />
@@ -574,17 +513,10 @@ under the same terms as Perl itself.</p>
 <p>
 </p>
 <hr />
-<h1><a name="author">AUTHOR</a></h1>
-<p>David Schweikert &lt;dws_at_ee.ethz.ch&gt;,
-Tobias Oetiker &lt;oetiker_at_ee.ethz.ch&gt;,
-Niko Tyni  &lt;ntyni_at_iki.fi&gt;</p>
-<p>
-</p>
-<hr />
-<h1><a name="history">HISTORY</a></h1>
-<pre>
- 2001-05-11 ds      Initial Version of ISG::ParseConfig
- 2005-03-08 ds 1.00 Renamed from ISG::ParseConfig to Config::Grammar</pre>
+<h1><a name="authors">AUTHORS</a></h1>
+<p>David Schweikert,
+Tobias Oetiker,
+Niko Tyni</p>
 
 </body>
 

@@ -1,3 +1,10 @@
+smokeping (2.2.6-1) unstable; urgency=low
+
+  * New upstream release.
+  * Update debian/copyright, including a typo fix. (Closes: #445877)
+
+ -- Niko Tyni <ntyni@iki.fi>  Sun, 28 Oct 2007 15:51:36 +0200
+
 smokeping (2.2.4-1) unstable; urgency=low
 
   * New upstream release

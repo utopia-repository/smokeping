@@ -129,7 +129,7 @@
 .\" ========================================================================
 .\"
 .IX Title "SMOKEPING_CONFIG 5"
-.TH SMOKEPING_CONFIG 5 "2007-09-16" "2.2.4" "SmokePing"
+.TH SMOKEPING_CONFIG 5 "2007-10-28" "2.2.6" "SmokePing"
 .SH "NAME"
 smokeping_config \- Reference for the SmokePing Config File
 .SH "OVERVIEW"
@@ -3592,6 +3592,11 @@ Default value: keytype = rsa
 .IP "\fBpings\fR" 4
 .IX Item "pings"
 (This variable can be overridden target-specifically in the Targets section.)
+.IP "\fBport\fR" 4
+.IX Item "port"
+(This variable can be overridden target-specifically in the Targets section.)
+.Sp
+Default value: port = 22
 .RE
 .RS 4
 .Sp
@@ -3636,6 +3641,11 @@ Default value: keytype = rsa
 .IP "\fBpings\fR" 4
 .IX Item "pings"
 This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBport\fR" 4
+.IX Item "port"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.Sp
+Default value: port = 22
 .RE
 .RS 4
 .RE
@@ -6159,6 +6169,9 @@ see above
 .IP "\fBpings\fR" 4
 .IX Item "pings"
 see above
+.IP "\fBport\fR" 4
+.IX Item "port"
+see above
 .RE
 .RS 4
 .Sp
@@ -6173,6 +6186,11 @@ see above
 This variable \fIinherits\fR its value from the parent section if nothing is specified here.
 .IP "\fBpings\fR" 4
 .IX Item "pings"
+see above
+.Sp
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBport\fR" 4
+.IX Item "port"
 see above
 .Sp
 This variable \fIinherits\fR its value from the parent section if nothing is specified here.

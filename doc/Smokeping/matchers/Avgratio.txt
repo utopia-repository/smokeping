@@ -74,4 +74,4 @@ AAUUTTHHOORR
 
 
 
-2.2.4                             2005-09-05  Smokeping::matchers::Avgratio(3)
+2.2.6                             2007-10-28  Smokeping::matchers::Avgratio(3)

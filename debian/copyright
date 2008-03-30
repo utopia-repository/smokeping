@@ -18,8 +18,6 @@ have the following copyright:
 
   Copyright 2005 by Niko Tyni.
 
-The files lib/Smokeping/matchers/Avgratio.pm
-
 The files Avgratio.pm, Median.pm and base.pm in lib/Smokeping/matchers/
 have the following copyright:
 
@@ -50,9 +48,11 @@ All files expect those mentioned below share the GPL license:
 	      
 You can find a copy of GPL license at /usr/share/common-licenses/GPL
 
-The file lib/Config/Grammar.pm has the following copyright and license:
+The files in the lib/Config directory belong the bundled Config::Grammar
+Perl module and share the following copyright and license:
 
   Copyright (c) 2000-2005 by ETH Zurich. All rights reserved.
+  Copyright (c) 2007 by David Schweikert. All rights reserved.
 
   This program is free software; you can redistribute it and/or modify it
   under the same terms as Perl itself.

@@ -236,4 +236,4 @@ SSEEEE AALLSSOO
 
 
 
-2.2.4                             2005-09-18               SMOKEPING_EXTEND(7)
+2.2.6                             2007-10-28               SMOKEPING_EXTEND(7)
