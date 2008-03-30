@@ -79,6 +79,17 @@ has the following copyright and license:
 
 You can find a copy of the Artistic license at /usr/share/common-licenses/Artistic
 
+The files HMAC.pm, HMAC_MD5.pm and HMAC_SHA1.pm in lib/Digest are
+copies from the Digest::HMAC module and are not used in the Debian
+package.  They share the following copyright and license, included as
+lib/Digest/HMAC.LICENSE:
+
+  Copyright 1998-2001 Gisle Aas.
+  Copyright 1998 Graham Barr.
+
+  This library is free software; you can redistribute it and/or
+  modify it under the same terms as Perl itself.
+
 The files htdocs/cropper/cropper.js and htdocs/cropper/cropper.uncompressed.js 
 have the following copyright and license:
 

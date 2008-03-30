@@ -29,13 +29,35 @@ case "$1" in
     getent passwd smokeping > /dev/null || \
       adduser --system --group --home /var/lib/smokeping --no-create-home --gecos "SmokePing daemon" smokeping
 
+    if [ -n "$2" ] && dpkg --compare-versions "$2" lt "2.3.5-1"
+    then
+        echo "migrating CGI files into /var/lib/smokeping/__cgi..." 1>&2
+        # move any old .adr files under __cgi
+
+        (cd /var/lib/smokeping; find . -name __cgi -prune -o -name '*.adr' -print0 | \
+         cpio --quiet -pdm0 /var/lib/smokeping/__cgi)
+        (cd /var/lib/smokeping; find . -name __cgi -prune -o -name '*.adr' -print0 | \
+         xargs -0 --no-run-if-empty rm)
+
+        # make sure the permissions are right
+        find /var/lib/smokeping/__cgi -name '*.adr' -print0 | \
+         xargs -0 --no-run-if-empty chown www-data
+        find /var/lib/smokeping/__cgi -type d -print0 | \
+         xargs -0 --no-run-if-empty chown smokeping:www-data
+        find /var/lib/smokeping/__cgi -type d -print0 | \
+         xargs -0 --no-run-if-empty chmod 2775
+
+    fi
+
     # Smokeping.cgi is run as user www-data, so we need it to be able
-    # to write in /var/www/smokeping and in /var/lib/smokeping
-    chown -R www-data.www-data /var/www/smokeping
-    chown -R smokeping.www-data /var/lib/smokeping
-    chown -R smokeping.root /var/run/smokeping
-    chmod 775 /var/lib/smokeping
-    
+    # to write in /var/www/smokeping and in /var/lib/smokeping/__cgi
+
+    chown smokeping:smokeping /var/lib/smokeping
+    chown www-data /var/www/smokeping
+    chown smokeping /var/run/smokeping
+    chown smokeping:www-data /var/lib/smokeping/__cgi
+    chmod 2775 /var/lib/smokeping/__cgi
+
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)

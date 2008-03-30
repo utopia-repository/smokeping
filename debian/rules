@@ -12,6 +12,15 @@ include /usr/share/dpatch/dpatch.make
 
 build: build-stamp
 build-stamp: patch-stamp
+
+	# recreate the docdirs just in case something (like "git-clean -d -f")
+	# removed the empty directories
+	# this will be cleaner with the next upstream version
+	for d in doc/Config doc/examples doc/Smokeping/probes \
+	         doc/Smokeping/sorters doc/Smokeping/matchers; do \
+		[ -d $$d ] || mkdir -p $$d; \
+	done
+
 	$(MAKE) man html txt rename-man
 	touch build-stamp
 
@@ -61,7 +70,11 @@ install: build-stamp
 
 	install -d $(TMP)/etc/smokeping
 	install -m 644 etc/basepage.html.dist $(TMP)/etc/smokeping/basepage.html
-	install -m 644 etc/config.dist $(TMP)/etc/smokeping/config
+
+	install -m 644 debian/config $(TMP)/etc/smokeping/config
+	install -d $(TMP)/etc/smokeping/config.d
+	install -m 644 debian/config.d/* $(TMP)/etc/smokeping/config.d
+
 	install -m 644 etc/smokemail.dist $(TMP)/etc/smokeping/smokemail
 	install -m 644 etc/tmail.dist $(TMP)/etc/smokeping/tmail
 
@@ -106,7 +119,7 @@ binary-indep: build install
 	dh_testdir
 	dh_testroot
 	dh_installdocs
-	dh_installexamples -Xtemplate
+	dh_installexamples
 
 	# We should start later than ssh (20), so the SSH probe can test against localhost.
 	# Just in case, delay initialization even after apache (91).

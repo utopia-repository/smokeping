@@ -14,7 +14,7 @@ Depends: ${perl:Depends}, ${misc:Depends}, libnet-perl, libwww-perl,
  libsnmp-session-perl (>= 0.86), librrds-perl (>= 1.2), liburi-perl,
  fping (>= 2.4b2-to-ipv6-2), speedy-cgi-perl (>= 2.21-1), 
  exim4 | mail-transport-agent, debianutils (>= 1.7), adduser, 
- lsb-base (>= 3.0-6)
+ lsb-base (>= 3.0-6), libdigest-hmac-perl
 Recommends: apache2 | httpd, libsocket6-perl, dnsutils, echoping
 Suggests: curl, libauthen-radius-perl, libnet-ldap-perl, libnet-dns-perl, 
  openssh-client, libio-socket-ssl-perl, libnet-telnet-perl

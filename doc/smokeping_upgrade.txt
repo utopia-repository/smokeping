@@ -26,6 +26,11 @@ OOVVEERRVVIIEEWW
        CHANGES file in the Smokeping distribution. This document tries to com-
        plement that with upgrading instructions etc.
 
+22..33..33 ttoo 22..33..44
+       The communication protocol between master and slave has been made more
+       secure. This requires that BOTH master and slave are upgraded to con-
+       tinue working.
+
 22..22..xx ttoo 22..33..xx
        2.3.0 is mainly about new features. Check out the reference documenta-
        tion on _h_i_e_r_a_r_c_h_i_e_s and the target properties _p_a_r_e_n_t_s, _h_i_d_d_e_n and
@@ -354,4 +359,4 @@ SSEEEE AALLSSOO
 
 
 
-2.3.2                             2008-01-23              SMOKEPING_UPGRADE(7)
+2.3.5                             2008-03-18              SMOKEPING_UPGRADE(7)

@@ -129,7 +129,7 @@
 .\" ========================================================================
 .\"
 .IX Title "SMOKEPING_MASTER_SLAVE 7"
-.TH SMOKEPING_MASTER_SLAVE 7 "2008-02-22" "2.3.2" "SmokePing"
+.TH SMOKEPING_MASTER_SLAVE 7 "2008-03-18" "2.3.5" "SmokePing"
 .SH "NAME"
 smokeping_master_slave \- How run multiple distributed instances of SmokePing
 .SH "OVERVIEW"
@@ -162,9 +162,9 @@ of probing it connects to the master again to deliver the results.
 If the assignment for a slave changes, the master will tell the slave after
 the slave has delivered its results.
 .PP
-The master and the slaves sign their messages by supplying an md5 hash of the
-message appended with a shared secret. Optionally the whole communication
-can run over ssl.
+The master and the slaves sign their messages by supplying an \s-1HMAC\-MD5\s0
+code (\s-1RFC\s0 2104) of the message and a shared secret. Optionally the whole
+communication can run over ssl.
 .PP
 .Vb 8
 \&    [slave 1]     [slave 2]      [slave 3]
@@ -259,6 +259,18 @@ optimal protection. By default the persistent data cache will be located in
 \&             \-\-cache\-dir=/var/smokeping/ \e
 \&             \-\-shared\-secret=/var/smokeping/secret.txt
 .Ve
+.SH "SECURITY CONSIDERATIONS"
+.IX Header "SECURITY CONSIDERATIONS"
+The master effectively has full access to slave hosts as the user the
+slave smokeping instance is run as. The configuration is transferred as
+Perl code that is evaluated on the slave. While this is done inside a
+restricted \f(CW\*(C`Safe\*(C'\fR compartment, there are various ways that a malicious
+master could use to embed arbitrary commands in the configuration and
+get them to run when the slave probes its targets.
+.PP
+The strength of the shared secret is thus of paramount importance. Brute
+forcing the secret would enable a man-in-the-middle to inject a malicious
+new configuration and compromise the slave.
 .SH "COPYRIGHT"
 .IX Header "COPYRIGHT"
 Copyright (c) 2007 by Tobias Oetiker, \s-1OETIKER+PARTNER\s0 \s-1AG\s0. All right reserved.

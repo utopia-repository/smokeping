@@ -65,7 +65,7 @@ check_slave() {
         log_end_msg 6 # program is not configured
         exit 6
     fi
-    DAEMON_ARGS="--master-url $MASTER_URL --shared-secret $SHARED_SECRET"
+    DAEMON_ARGS="$DAEMON_ARGS --master-url $MASTER_URL --shared-secret $SHARED_SECRET"
     if [ -n "$SLAVE_NAME" ]
     then
         DAEMON_ARGS="$DAEMON_ARGS --slave-name $SLAVE_NAME"

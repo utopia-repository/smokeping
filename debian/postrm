@@ -22,7 +22,6 @@ case "$1" in
 
        purge)
 	
-	rm -rf /etc/smokeping
 	rm -rf /var/run/smokeping
 	rm -rf /var/www/smokeping
 	rm -rf /var/lib/smokeping

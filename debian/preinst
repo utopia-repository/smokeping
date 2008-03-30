@@ -1,0 +1,17 @@
+#!/bin/sh
+set -e
+
+if [ "$1" = "upgrade" ] && dpkg --compare-versions "$2" lt "2.3.5-1"
+then
+    echo "splitting the old monolithic config into separate sections..." 1>&2
+    DIR=/etc/smokeping/config.d
+    [ -d $DIR ] || mkdir -p $DIR
+    for sec in General Alerts Database Presentation Probes Targets
+    do
+        [ -f ${DIR}/$sec ] || \
+        sed -n "1,/^\*\*\* $sec \*\*\*/{h;d}; \${g;p;q}; /^\*\*\*/{g;p;q}; H" \
+        < /etc/smokeping/config > ${DIR}/$sec
+    done
+fi
+
+#DEBHELPER#

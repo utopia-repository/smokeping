@@ -1,11 +1,14 @@
 # -*- perl -*-
 package Smokeping::Master;
 use Data::Dumper;
-use Storable qw(nstore dclone retrieve);
+use Storable qw(nstore_fd dclone fd_retrieve);
 use strict;
 use warnings;
 use Fcntl qw(:flock);
-use Digest::MD5 qw(md5_base64);
+use Digest::HMAC_MD5 qw(hmac_md5_hex);
+# keep this in sync with the Slave.pm part
+# only update if you have to force a parallel upgrade
+my $PROTOCOL = "2";
 
 =head1 NAME
 
@@ -47,7 +50,7 @@ sub get_targets {
             $return{$key} = $trg->{$key};
         }
     }           
-    $trg->{nomasterpoll} = 'no'; # slaves poll always
+    $return{nomasterpoll} = 'no'; # slaves poll always
     return ($ok ? \%return : undef);
 }
     
@@ -89,7 +92,17 @@ database by the rrd daemon as the next round of updates is processed. This
 two stage process is chosen so that all results flow through the same code
 path in the daemon.
 
+The updates are stored in the directory configured as 'dyndir' in the 'General'
+configuration section, defaulting to the value of 'datadir' from the same section
+if 'dyndir' is not present.
+
 =cut
+
+sub slavedatadir ($) {
+    my $cfg = shift;
+    return $cfg->{General}{dyndir}  ||
+           $cfg->{General}{datadir};
+}
 
 sub save_updates {
     my $cfg = shift;
@@ -97,65 +110,88 @@ sub save_updates {
     my $updates = shift;
     # name\ttime\tupdatestring
     # name\ttime\tupdatestring
+
     for my $update (split /\n/, $updates){
         my ($name, $time, $updatestring) = split /\t/, $update;
-        my $file = $cfg->{General}{datadir}."/${name}.slave_cache";
+        my $file = slavedatadir($cfg) ."/${name}.${slave}.slave_cache";
         if ( ${name} =~ m{(^|/)\.\.($|/)} ){
-            warn "Skipping update for ${name}.slave_cache since ".
+            warn "Skipping update for ${name}.${slave}.slave_cache since ".
                  "you seem to try todo some directory magic here. Don't!";
         } 
-        elsif ( open (my $lock, '>>' , "$file.lock") ) {
-            for (my $i = 10; $i > 0; $i--){
-                if ( flock $lock, LOCK_EX ){
+        else {
+
+            for (my $i = 2; $i >= 0; $i--){
+                my $fh;
+                if ( open ($fh, '+>>' , $file) and flock($fh, LOCK_EX) ){
                     my $existing = [];
-	            if ( -r $file ){
-                        my $in = eval { retrieve $file };
+                    if (! -e $file) { # the reader unlinked it from under us
+                        flock($fh, LOCK_UN);
+                        close $fh;
+                        next;
+                    }
+                    seek $fh, 0, 0;
+                    if ( -s _ ){
+                        my $in = eval { fd_retrieve $fh };
                         if ($@) { #error
                             warn "Loading $file: $@";
                         } else {
 		            $existing = $in;
 			};
                     };
-                    push @{$existing}, [ $slave, $time, $updatestring];
-                    nstore($existing, $file);		    
+                    push @{$existing}, [ $slave, $time, $updatestring ];
+                    nstore_fd($existing, $fh);		    
+                    flock($fh, LOCK_UN);
+                    close $fh;
                     last;
-                } else {
-                    warn "Could not lock $file. Trying again for $i rounds.\n";
-                    sleep rand(3);
+                } elsif ($i > 0) {
+                    warn "Could not lock $file ($!). Trying again $i more times.\n";
+                    close $fh;
+                    sleep rand(2);
+                    next;
                 }
+                warn "Could not update $file, giving up for now.";
+                close $fh;
             }
-            close $lock;
-        } else {
-            warn "Could not update $file: $!";
         }
     }         
 };
 
 =head3 get_slaveupdates
 
-Read in all updates provided by slaves and return an array reference.
+Read in all updates provided by the selected slave and return an array reference.
 
 =cut
 
 sub get_slaveupdates {
+    my $cfg = shift;
     my $name = shift;
-    my $file = $name.".slave_cache";
+    my $slave = shift;
+    my $file = $name . "." . $slave. ".slave_cache";
+    my $empty = [];
     my $data;
-    if ( -r $file and open (my $lock, '>>', "$file.lock") ) {
-        if ( flock $lock, LOCK_EX ){
-            eval { $data = retrieve $file };
+
+    my $datadir = $cfg->{General}{datadir};
+    my $dir = slavedatadir($cfg);
+    $file =~ s/^\Q$datadir\E/$dir/;
+
+    my $fh;
+    if ( open ($fh, '<', $file) ) {
+        if ( flock $fh, LOCK_SH ){
+            eval { $data = fd_retrieve $fh };
             unlink $file;
+            flock $fh, LOCK_UN;
             if ($@) { #error
                 warn "Loading $file: $@";  
-                return undef;
+                close $fh;
+                return $empty;
             }
         } else {
             warn "Could not lock $file. Will skip and try again in the next round. No harm done!\n";
         }
-        close $lock;        
+        close $fh;        
         return $data;
     }
-    return;
+    return $empty;
 }
 
 
@@ -196,6 +232,13 @@ sub answer_slave {
         print "WARNING: No secret found for slave ${slave}\n";       
         return;
     }
+    my $protocol = $q->param('protocol') || '?';
+    if (not $protocol eq $PROTOCOL){
+        print "Content-Type: text/plain\n\n";
+        print "WARNING: I expected protocol $PROTOCOL and got $protocol from slave ${slave}. I will skip this.\n";
+        return;
+    }
+        
     my $key = $q->param('key');
     my $data = $q->param('data');
     my $config_time = $q->param('config_time');
@@ -205,7 +248,7 @@ sub answer_slave {
         return;
     }
     # lets make sure the we share a secret
-    if (md5_base64($secret.$data) eq $key){
+    if (hmac_md5_hex($data,$secret) eq $key){
         save_updates $cfg, $slave, $data;
     } else {
         print "Content-Type: text/plain\n\n";
@@ -217,7 +260,8 @@ sub answer_slave {
         my $config = extract_config $cfg, $slave;    
         if ($config){
             print "Content-Type: application/smokeping-config\n";
-            print "Key: ".md5_base64($secret.$config)."\n\n";
+            print "Protocol: $PROTOCOL\n";
+            print "Key: ".hmac_md5_hex($config,$secret)."\n\n";
             print $config;
         } else {
             print "Content-Type: text/plain\n\n";

@@ -2,3 +2,4 @@ usr/sbin
 var/www/smokeping
 var/run/smokeping
 var/lib/smokeping
+var/lib/smokeping/__cgi

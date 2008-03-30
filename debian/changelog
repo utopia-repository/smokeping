@@ -1,3 +1,31 @@
+smokeping (2.3.5-1) UNRELEASED; urgency=low
+
+  * New upstream release. (Closes: #470295)
+    + debian/patches/30_slave_piddir.dpatch: removed, included upstream.
+    + new dependency on libdigest-hmac-perl
+  * Revisit the directory permissions of various directories under /var.
+    See also NEWS.Debian.
+    + use /var/lib/smokeping/__cgi as a storage place for the CGI.
+      (Closes: #470382)
+    + debian/postinst: 
+      * set the right permissions on install
+      * move *.adr files under __cgi on upgrade
+  * honour DAEMON_ARGS from /etc/default/smokeping even in slave mode.
+  * Don't remove the whole /etc/smokeping on purge: dpkg will remove
+    the files it knows about, and others are not our business.
+  * Remove the example target hierarchy 'World' from the default configuration
+    file, so that no unnecessary directories are created in the CGI directory.
+  * debian/rules: recreate empty documentation directories if needed to ease 
+    working with a git repository.
+  * Split the monolithic configuration file into configuration snippets
+    in /etc/smokeping/config.d. See NEWS.Debian. (Closes: #473223)
+    + debian/patches/20_conffile.dpatch: removed
+  * Install the upstream config template in /usr/share/doc too, because
+    smokeping_examples(7) says so and it doesn't hurt.
+  * Update debian/copyright.
+
+ -- Niko Tyni <ntyni@debian.org>  Tue, 11 Mar 2008 22:30:04 +0200
+
 smokeping (2.3.2-1) unstable; urgency=low
 
   * New upstream release. (Closes: #468928)

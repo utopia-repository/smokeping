@@ -4,11 +4,13 @@ use warnings;
 use strict;
 use Data::Dumper;
 use Storable qw(nstore retrieve);
-use Digest::MD5 qw(md5_base64);
+use Digest::HMAC_MD5 qw(hmac_md5_hex);
 use LWP::UserAgent;
 use Safe;
 use Smokeping;
-
+# keep this in sync with the Slave.pm part
+# only update if you have to force a parallel upgrade
+my $PROTOCOL = "2";
 
 =head1 NAME
 
@@ -72,7 +74,7 @@ sub submit_results {
     my $data_dump = join("\n",@{$restore}) || "";
     my $ua = LWP::UserAgent->new(
         agent => 'smokeping-slave/1.0',
-        timeout => 10,
+        timeout => 60,
         env_proxy => 1 );
 
     my $response = $ua->post(
@@ -80,7 +82,8 @@ sub submit_results {
         Content_Type => 'form-data',
         Content => [
             slave => $slave_cfg->{slave_name},
-            key  => md5_base64($slave_cfg->{shared_secret}.$data_dump),
+            key  => hmac_md5_hex($data_dump,$slave_cfg->{shared_secret}),
+            protocol => $PROTOCOL,
             data => $data_dump,
             config_time => $cfg->{__last} || 0,
         ],
@@ -88,12 +91,19 @@ sub submit_results {
     if ($response->is_success){
         my $data = $response->content;
         my $key = $response->header('Key');
+        my $protocol = $response->header('Protocol') || '?';
+
         if ($response->header('Content-Type') ne 'application/smokeping-config'){
             warn "$data\n" unless $data =~ /OK/;
             Smokeping::do_debuglog("Sent data to Server. Server said $data");
             return undef;
         };
-        if (md5_base64($slave_cfg->{shared_secret}.$data) ne $key){
+
+        if ($protocol ne $PROTOCOL){
+            warn "WARNING $slave_cfg->{master_url} sent data with protocol $protocol. Expected $PROTOCOL.";
+            return undef;
+        }
+        if (hmac_md5_hex($data,$slave_cfg->{shared_secret}) ne $key){
             warn "WARNING $slave_cfg->{master_url} sent data with wrong key";
             return undef;
         }
@@ -103,7 +113,7 @@ sub submit_results {
         if ($@){
             warn "WARNING evaluating new config from server failed: $@ --\n$data";
         } elsif (defined $config and ref $config eq 'HASH'){
-            $config->{General}{piddir} = $slave_cfg->{cache_dir};
+            $config->{General}{piddir} = $slave_cfg->{pid_dir};
             Smokeping::do_log("Sent data to Server and got new config in response.");
             return $config;
         }                       
