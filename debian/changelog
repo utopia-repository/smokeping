@@ -1,3 +1,13 @@
+smokeping (2.0.8-3) unstable; urgency=low
+
+  * remove all configuration file modifications from postinst, as per policy.
+  * no need for debconf anymore; remove all translations as well.
+  * add a NEWS.Debian entry about configuration file incompatibilities
+    between versions 1.x and 2.x.
+  * Upgraded to Standards-Version 3.7.2. No changes needed.
+
+ -- Niko Tyni <ntyni@iki.fi>  Sun, 28 May 2006 23:02:09 +0300
+
 smokeping (2.0.8-2) unstable; urgency=low
 
   * debian/patches/10_path_changes.dpatch: fix the library path.

@@ -103,8 +103,6 @@ binary-indep: build install
 	dh_testroot
 	dh_installdocs
 
-	dh_installdebconf
-
 	# We should start later than ssh (20), so the SSH probe can test against localhost.
 	# Just in case, delay initialization even after apache (91).
 	dh_installinit -- defaults 92 20

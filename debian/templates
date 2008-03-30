@@ -1,6 +1,0 @@
-Template: smokeping/upgrade-2.x-failed
-Type: note
-_Description: Smokeping upgrade failed
- Your Smokeping configuration file /etc/smokeping/config is incompatible
- with this Smokeping version and could not be upgraded automatically. The
- Smokeping daemon could not be started. Please read smokeping_upgrade(7).

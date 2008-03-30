@@ -4,7 +4,6 @@
 # see: dh_installdeb(1)
 
 set -e
-. /usr/share/debconf/confmodule
 
 # summary of how this script can be called:
 #        * <postinst> `configure' <most-recently-configured-version>
@@ -27,55 +26,6 @@ set -e
 case "$1" in
     configure|reconfigure)
 
-    if [ ! -z "$2" ]
-    then
-      if dpkg --compare-versions $2 lt 1.12-2 ;
-      then
-        # Move rrd data files
-	find /var/www/smokeping -type f -name '*.rrd' |
-	 while read F
-	 do
-	  G="${F#/var/www/smokeping/}"
-	  mkdir -p "/var/lib/smokeping/${G%/*}"
-	  mv "$F" "/var/lib/smokeping/$G"
-	 done
-	cp -f /etc/smokeping/config /etc/smokeping/config.old
-	sed -e"s%datadir  = /var/www/smokeping%datadir  = /var/lib/smokeping%" \
-		/etc/smokeping/config.old > /etc/smokeping/config
-      fi
-     
-	
-      if grep -q /usr/sbin/fping /etc/smokeping/config
-      then
-        TMPFILE=`mktemp`
-
-        cp -f /etc/smokeping/config $TMPFILE
-            
-        sed -e"s%/usr/sbin/fping%/usr/bin/fping%" \
-		$TMPFILE > /etc/smokeping/config
-
-        rm -f $TMPFILE
-      fi
-
-      if dpkg --compare-versions $2 lt 2.0rc5
-      then
-	if grep -q PROBE_CONF /etc/smokeping/config
-	then
-	  # Upgrade the configuration file
-	  TMPFILE=/etc/smokeping/config.dpkg-save
-	  cp -f /etc/smokeping/config /etc/smokeping/config.dpkg-save
-	  grep -E -v '^[[:space:]]*\++[[:space:]]*PROBE_CONF' /etc/smokeping/config.dpkg-save > /etc/smokeping/config
-	fi
-	# Test the configuration file
-	if ! smokeping --check 2>/dev/null # the user will get the same output later with start--stop--daemon
-	then
-	  db_input high smokeping/upgrade-2.x-failed || true
-	  db_go || true
-	fi
-      fi
-    fi
-    db_stop
-    
     getent passwd smokeping > /dev/null || \
       adduser --system --group --home /var/lib/smokeping --no-create-home --gecos "SmokePing daemon" smokeping
 

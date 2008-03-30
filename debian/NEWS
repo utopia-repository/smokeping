@@ -1,0 +1,17 @@
+smokeping (2.0.8-3) unstable; urgency=low
+
+  When upgrading from Smokeping versions 1.x to 2.x, you may have to edit
+  the configuration file /etc/smokeping/config. The most common incompatibility
+  is that the 'PROBE_CONF' lines are neither needed nor accepted anymore. Simply
+  deleting these lines is sufficient.
+ 
+  There are some other small incompatibilities; a list of those can be found
+  in the smokeping_upgrade(7) document. As the Smokeping configuration file
+  parser is now much more strict than in 1.x, the daemon complains about
+  these at startup and refuses to start.
+
+  (This entry applies to all Smokeping 2.x versions, but was only added in
+  version 2.0.8-3.)
+
+ -- Niko Tyni <ntyni@iki.fi>  Sun, 28 May 2006 22:30:53 +0300
+
