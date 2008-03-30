@@ -1,7 +1,9 @@
+<?xml version="1.0" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>Smokeping/probes/EchoPingDNS</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <link rev="made" href="mailto:root@localhost" />
 </head>
 
@@ -90,19 +92,19 @@
 <h1><a name="variables">VARIABLES</a></h1>
 <p>Supported probe-specific variables:</p>
 <dl>
-<dt><strong><a name="item_binary">binary</a></strong><br />
+<dt><strong><a name="item_binary">binary</a></strong>
 
-</dt><dd>
-The location of your echoping binary.
+<dd>
+<p>The location of your echoping binary.</p>
 
 </dd><dd>
 <p>Default value: /usr/bin/echoping</p>
 
-<p></p>
-</dd><dt><strong><a name="item_forks">forks</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_forks">forks</a></strong>
 
-</dt><dd>
-Run this many concurrent processes at maximum
+<dd>
+<p>Run this many concurrent processes at maximum</p>
 
 </dd><dd>
 <p>Example value: 5</p>
@@ -110,11 +112,11 @@ Run this many concurrent processes at maximum
 </dd><dd>
 <p>Default value: 5</p>
 
-<p></p>
-</dd><dt><strong><a name="item_offset">offset</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_offset">offset</a></strong>
 
-</dt><dd>
-If you run many probes concurrently you may want to prevent them from
+<dd>
+<p>If you run many probes concurrently you may want to prevent them from
 hitting your network all at the same time. Using the probe-specific
 offset parameter you can change the point in time when each probe will
 be run. Offset is specified in % of total interval, or alternatively as
@@ -122,32 +124,33 @@ be run. Offset is specified in % of total interval, or alternatively as
 is specified here. Note that this does NOT influence the rrds itself,
 it is just a matter of when data acqusition is initiated.
 (This variable is only applicable if the variable 'concurrentprobes' is set
-in the 'General' section.)
+in the 'General' section.)</p>
 
 </dd><dd>
 <p>Example value: 50%</p>
 
-<p></p>
-</dd><dt><strong><a name="item_step">step</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_step">step</a></strong>
 
-</dt><dd>
-Duration of the base interval that this probe should use, if different
+<dd>
+<p>Duration of the base interval that this probe should use, if different
 from the one specified in the 'Database' section. Note that the step in
 the RRD files is fixed when they are originally generated, and if you
 change the step parameter afterwards, you'll have to delete the old RRD
 files or somehow convert them. (This variable is only applicable if
-the variable 'concurrentprobes' is set in the 'General' section.)
+the variable 'concurrentprobes' is set in the 'General' section.)</p>
 
 </dd><dd>
 <p>Example value: 300</p>
 
-<p></p></dd></dl>
+</li>
+</dd></dl>
 <p>Supported target-specific variables:</p>
 <dl>
-<dt><strong><a name="item_dns_request">dns_request</a></strong><br />
+<dt><strong><a name="item_dns_request">dns_request</a></strong>
 
-</dt><dd>
-The DNS request (domain name) to be queried.
+<dd>
+<p>The DNS request (domain name) to be queried.</p>
 
 </dd><dd>
 <p>Example value: example.org</p>
@@ -155,21 +158,21 @@ The DNS request (domain name) to be queried.
 </dd><dd>
 <p>This setting is mandatory.</p>
 
-<p></p>
-</dd><dt><strong><a name="item_dns_tcp">dns_tcp</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_dns_tcp">dns_tcp</a></strong>
 
-</dt><dd>
-The echoping_dns '--tcp' option: use only TCP ('virtual circuit').
-Enabled if specified with a value other than 'no' or '0'.
+<dd>
+<p>The echoping_dns '--tcp' option: use only TCP ('virtual circuit').
+Enabled if specified with a value other than 'no' or '0'.</p>
 
 </dd><dd>
 <p>Example value: yes</p>
 
-<p></p>
-</dd><dt><strong><a name="item_dns_type">dns_type</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_dns_type">dns_type</a></strong>
 
-</dt><dd>
-The echoping_dns '-t' option: type of data requested (NS, A, SOA etc.)
+<dd>
+<p>The echoping_dns '-t' option: type of data requested (NS, A, SOA etc.)</p>
 
 </dd><dd>
 <p>Example value: AAAA</p>
@@ -177,45 +180,45 @@ The echoping_dns '-t' option: type of data requested (NS, A, SOA etc.)
 </dd><dd>
 <p>Default value: A</p>
 
-<p></p>
-</dd><dt><strong><a name="item_extraopts">extraopts</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_extraopts">extraopts</a></strong>
 
-</dt><dd>
-Any extra options specified here will be passed unmodified to echoping(1).
+<dd>
+<p>Any extra options specified here will be passed unmodified to echoping(1).</p>
 
 </dd><dd>
 <p>Example value: -some-letter-the-author-did-not-think-of</p>
 
-<p></p>
-</dd><dt><strong><a name="item_ipversion">ipversion</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_ipversion">ipversion</a></strong>
 
-</dt><dd>
-The IP protocol used. Possible values are ``4'' and ``6''. 
-Passed to <code>echoping(1)</code> as the ``-4'' or ``-6'' options.
+<dd>
+<p>The IP protocol used. Possible values are ``4'' and ``6''. 
+Passed to <code>echoping(1)</code> as the ``-4'' or ``-6'' options.</p>
 
 </dd><dd>
 <p>Example value: 4</p>
 
-<p></p>
-</dd><dt><strong><a name="item_pings">pings</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_pings">pings</a></strong>
 
-</dt><dd>
-How many pings should be sent to each target, if different from the global
+<dd>
+<p>How many pings should be sent to each target, if different from the global
 value specified in the Database section. Note that the number of pings in
 the RRD files is fixed when they are originally generated, and if you
 change this parameter afterwards, you'll have to delete the old RRD
-files or somehow convert them.
+files or somehow convert them.</p>
 
 </dd><dd>
 <p>Example value: 5</p>
 
-<p></p>
-</dd><dt><strong><a name="item_plugin">plugin</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_plugin">plugin</a></strong>
 
-</dt><dd>
-The echoping plugin that will be used. See <code>echoping(1)</code> for details.
+<dd>
+<p>The echoping plugin that will be used. See <code>echoping(1)</code> for details.
 This can either be the name of the plugin or a full path to the
-plugin shared object.
+plugin shared object.</p>
 
 </dd><dd>
 <p>Example value: /path/to/dns.so</p>
@@ -223,30 +226,30 @@ plugin shared object.
 </dd><dd>
 <p>Default value: dns</p>
 
-<p></p>
-</dd><dt><strong><a name="item_pluginargs">pluginargs</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_pluginargs">pluginargs</a></strong>
 
-</dt><dd>
-Any extra arguments needed by the echoping plugin specified with the 
-<em>pluginname</em> variable. These are generally provided by the subclass probe.
+<dd>
+<p>Any extra arguments needed by the echoping plugin specified with the 
+<em>pluginname</em> variable. These are generally provided by the subclass probe.</p>
 
 </dd><dd>
 <p>Example value: -p plugin_specific_arg</p>
 
-<p></p>
-</dd><dt><strong><a name="item_priority">priority</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_priority">priority</a></strong>
 
-</dt><dd>
-The ``-p'' <code>echoping(1)</code> option.
+<dd>
+<p>The ``-p'' <code>echoping(1)</code> option.</p>
 
 </dd><dd>
 <p>Example value: 6</p>
 
-<p></p>
-</dd><dt><strong><a name="item_timeout">timeout</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_timeout">timeout</a></strong>
 
-</dt><dd>
-The ``-t'' <code>echoping(1)</code> option.
+<dd>
+<p>The ``-t'' <code>echoping(1)</code> option.</p>
 
 </dd><dd>
 <p>Example value: 1</p>
@@ -254,25 +257,26 @@ The ``-t'' <code>echoping(1)</code> option.
 </dd><dd>
 <p>Default value: 5</p>
 
-<p></p>
-</dd><dt><strong><a name="item_tos">tos</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_tos">tos</a></strong>
 
-</dt><dd>
-The ``-P'' <code>echoping(1)</code> option.
+<dd>
+<p>The ``-P'' <code>echoping(1)</code> option.</p>
 
 </dd><dd>
 <p>Example value: 0xa0</p>
 
-<p></p>
-</dd><dt><strong><a name="item_waittime">waittime</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_waittime">waittime</a></strong>
 
-</dt><dd>
-The ``-w'' <code>echoping(1)</code> option.
+<dd>
+<p>The ``-w'' <code>echoping(1)</code> option.</p>
 
 </dd><dd>
 <p>Example value: 1</p>
 
-<p></p></dd></dl>
+</li>
+</dd></dl>
 <p>
 </p>
 <hr />

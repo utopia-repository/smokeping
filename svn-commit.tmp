@@ -1,4 +1,0 @@
-if max_rtt is set, use it! http://bugs.debian.org/412826
---This line, and those below, will be ignored--
-
-M    lib/Smokeping.pm

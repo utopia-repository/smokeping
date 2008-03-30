@@ -1,7 +1,9 @@
+<?xml version="1.0" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>smokeping_examples</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <link rev="made" href="mailto:root@localhost" />
 </head>
 
@@ -66,28 +68,28 @@ the proposed changes to the smokeping-users mailing list.</p>
 </p>
 <h2><a name="example_1__config_simple">Example 1: config.simple</a></h2>
 <dl>
-<dt><strong><a name="item_probe_configuration">Probe configuration</a></strong><br />
+<dt><strong><a name="item_probe_configuration">Probe configuration</a></strong>
 
-</dt><dd>
+<dd>
 <pre>
  *** Probes ***
  +FPing
  binary = /usr/bin/fping</pre>
 
-</dd><dt><strong><a name="item_probe_explanation">Probe explanation</a></strong><br />
+</dd><dt><strong><a name="item_probe_explanation">Probe explanation</a></strong>
 
-</dt><dd>
-Here we have just one probe, fping, pinging four hosts.
+<dd>
+<p>Here we have just one probe, fping, pinging four hosts.</p>
 
 </dd><dd>
 <p>The fping probe is using the default parameters, some of them supplied
 from the Database section (``step'' and ``pings''), and some of them by
 the probe module.</p>
 
-<p></p>
-</dd><dt><strong><a name="item_target_configuration">Target configuration</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_target_configuration">Target configuration</a></strong>
 
-</dt><dd>
+<dd>
 <pre>
  *** Targets ***
  probe = FPing
@@ -114,21 +116,22 @@ the probe module.</p>
  ++ myhost4
  host = myhost4.mysite2.example</pre>
 
-</dd><dt><strong><a name="item_target_explanation">Target explanation</a></strong><br />
+</dd><dt><strong><a name="item_target_explanation">Target explanation</a></strong>
 
-</dt><dd>
-The hosts are located in two sites of two hosts each, and the
+<dd>
+<p>The hosts are located in two sites of two hosts each, and the
 configuration has been divided to site sections ('+') and host subsections
-('++') accordingly.
+('++') accordingly.</p>
 
-<p></p></dd></dl>
+</li>
+</dd></dl>
 <p>
 </p>
 <h2><a name="example_2__config_multipleprobes">Example 2: config.multiple-probes</a></h2>
 <dl>
-<dt><strong>Probe configuration</strong><br />
+<dt><strong>Probe configuration</strong>
 
-</dt><dd>
+<dd>
 <pre>
  *** Probes ***
  + FPing
@@ -145,12 +148,12 @@ configuration has been divided to site sections ('+') and host subsections
  pings = 5
  url = /test-url</pre>
 
-</dd><dt><strong>Probe explanation</strong><br />
+</dd><dt><strong>Probe explanation</strong>
 
-</dt><dd>
-Here we have three probes: FPing for the regular ICMP pings,
+<dd>
+<p>Here we have three probes: FPing for the regular ICMP pings,
 DNS for name server latency measurement and EchoPingHttp
-for web servers.
+for web servers.</p>
 
 </dd><dd>
 <p>The FPing probe runs with the default parameters, except that the ICMP
@@ -163,10 +166,10 @@ default 20 (or whatever is specified in the Database section). However,
 DNS queries are made more often: 5 queries every 3 minutes instead of
 every 5 minutes.</p>
 
-<p></p>
-</dd><dt><strong>Target configuration</strong><br />
+</li>
+</dd><dt><strong>Target configuration</strong>
 
-</dt><dd>
+<dd>
 <pre>
  *** Targets ***
  probe = FPing
@@ -208,21 +211,22 @@ every 5 minutes.</p>
  +++ www2
  host = www2.example</pre>
 
-</dd><dt><strong>Target explanation</strong><br />
+</dd><dt><strong>Target explanation</strong>
 
-</dt><dd>
-The target tree has been divided by the probe used. This does not have
+<dd>
+<p>The target tree has been divided by the probe used. This does not have
 to be the case: every target (sub)section can use a different probe,
-and the same probe can be used in different parts of the config tree.
+and the same probe can be used in different parts of the config tree.</p>
 
-<p></p></dd></dl>
+</li>
+</dd></dl>
 <p>
 </p>
 <h2><a name="example_3__config_fpinginstances">Example 3: config.fping-instances</a></h2>
 <dl>
-<dt><strong>Probe configuration</strong><br />
+<dt><strong>Probe configuration</strong>
 
-</dt><dd>
+<dd>
 <pre>
  *** Probes ***
  + FPing
@@ -235,14 +239,14 @@ and the same probe can be used in different parts of the config tree.
  packetsize = 5000
  offset = 50%</pre>
 
-</dd><dt><strong>Probe explanation</strong><br />
+</dd><dt><strong>Probe explanation</strong>
 
-</dt><dd>
-This example demonstrates the concept of probe instances. The FPingLarge
+<dd>
+<p>This example demonstrates the concept of probe instances. The FPingLarge
 and FPingNormal probes are independent of each other, they just use
 the same module, FPing. FPingNormal uses the default parameters, and
 so does FPingLarge except for the 5 kilobyte packetsize. Both use the
-same fping binary, and its path is configured FPing top section.
+same fping binary, and its path is configured FPing top section.</p>
 
 </dd><dd>
 <p>The 'offset' parameters make sure the probes don't run at the same time -
@@ -255,10 +259,10 @@ in wallclock time) while FPingLarge is run halfway through these intervals
 has subsections. If we really wanted to have one probe named ``FPing'',
 we could do so by making a subsection by that name.</p>
 
-<p></p>
-</dd><dt><strong>Target configuration</strong><br />
+</li>
+</dd><dt><strong>Target configuration</strong>
 
-</dt><dd>
+<dd>
 <pre>
  *** Targets ***
  probe = FPingNormal
@@ -298,21 +302,22 @@ we could do so by making a subsection by that name.</p>
  probe = FPingLarge
  host = myhost2.example</pre>
 
-</dd><dt><strong>Target explanation</strong><br />
+</dd><dt><strong>Target explanation</strong>
 
-</dt><dd>
-The target section shows two host, myhost1.example and myhost2.example,
+<dd>
+<p>The target section shows two host, myhost1.example and myhost2.example,
 being pinged with two differently sized ICMP packets. This time the tree
-is divided by the target host rather than the probe.
+is divided by the target host rather than the probe.</p>
 
-<p></p></dd></dl>
+</li>
+</dd></dl>
 <p>
 </p>
 <h2><a name="example_4__config_targetvarswithcurl">Example 4: config.targetvars-with-Curl</a></h2>
 <dl>
-<dt><strong>Probe configuration</strong><br />
+<dt><strong>Probe configuration</strong>
 
-</dt><dd>
+<dd>
 <pre>
  *** Probes ***
  + Curl
@@ -323,11 +328,11 @@ is divided by the target host rather than the probe.
  # a default for this target-specific variable
  urlformat = <a href="http://%host/">http://%host/</a></pre>
 
-</dd><dt><strong>Probe explanation</strong><br />
+</dd><dt><strong>Probe explanation</strong>
 
-</dt><dd>
-This example explains the difference between probe- and target-specific
-variables. We use the Curl probe for this.
+<dd>
+<p>This example explains the difference between probe- and target-specific
+variables. We use the Curl probe for this.</p>
 
 </dd><dd>
 <p>Every probe supports at least some probe-specific variables. The values
@@ -359,10 +364,10 @@ is simply the fact that the fping program measures all its targets in one
 go, so they all have the same parameters. The other probes ping their targets
 one at a time.)</p>
 
-<p></p>
-</dd><dt><strong>Target configuration</strong><br />
+</li>
+</dd><dt><strong>Target configuration</strong>
 
-</dt><dd>
+<dd>
 <pre>
  *** Targets ***
  probe = Curl
@@ -405,13 +410,13 @@ one at a time.)</p>
  title = FTP latency for myhost2
  host = myhost2.example</pre>
 
-</dd><dt><strong>Target explanation</strong><br />
+</dd><dt><strong>Target explanation</strong>
 
-</dt><dd>
-The target tree is divided into an HTTP branch and an FTP one.
+<dd>
+<p>The target tree is divided into an HTTP branch and an FTP one.
 The servers ``myhost1.example'' and ``myhost2.example'' are probed
 in both. The third server, ``myhost3.example'', only has an HTTP
-server, and it's in a non-standard port (8080).
+server, and it's in a non-standard port (8080).</p>
 
 </dd><dd>
 <p>The ``urlformat'' variable is specified for the whole FTP branch
@@ -425,14 +430,15 @@ verbatim (ie. urlformat = <a href="http://myhost3.example:8080/)">http://myhost3
 using the %host% placeholder, but the host variable would still have
 been required (even though it wouldn't have been used for anything).</p>
 
-<p></p></dd></dl>
+</li>
+</dd></dl>
 <p>
 </p>
 <h2><a name="example_5__config_echoping">Example 5: config.echoping</a></h2>
 <dl>
-<dt><strong>Probe configuration</strong><br />
+<dt><strong>Probe configuration</strong>
 
-</dt><dd>
+<dd>
 <pre>
  *** Probes ***
  + FPing
@@ -452,15 +458,15 @@ been required (even though it wouldn't have been used for anything).</p>
  + EchoPingLDAP       # LDAP (389/tcp) servers
  + EchoPingWhois      # Whois (43/tcp) servers</pre>
 
-</dd><dt><strong>Probe explanation</strong><br />
+</dd><dt><strong>Probe explanation</strong>
 
-</dt><dd>
-This example shows most of the echoping-derived probes in action.
+<dd>
+<p>This example shows most of the echoping-derived probes in action.</p>
 
-<p></p>
-</dd><dt><strong>Target configuration</strong><br />
+</li>
+</dd><dt><strong>Target configuration</strong>
 
-</dt><dd>
+<dd>
 <pre>
  *** Targets ***
  # default probe
@@ -561,39 +567,46 @@ This example shows most of the echoping-derived probes in action.
  whois_request = domain.example
  host = whois-server.example</pre>
 
-</dd><dt><strong>Target explanation</strong><br />
+</dd><dt><strong>Target explanation</strong>
 
-</dt><dd>
-All the servers are pinged both with ICMP (the FPing probe)
+<dd>
+<p>All the servers are pinged both with ICMP (the FPing probe)
 and their respective echoping probe. The proxy server, www-cache,
 is probed with both HTTP requests and ICP requests for the same
-URL.
+URL.</p>
 
-<p></p></dd></dl>
+</li>
+</dd></dl>
 <p>
 </p>
 <h2><a name="example_6__config_template">Example 6: config.template</a></h2>
 <dl>
-<dt><strong>Probe configuration</strong><br />
+<dt><strong>Probe configuration</strong>
 
-</dt><dd>
+<dd>
 <pre>
  *** Probes ***
  
  + FPing
  
- binary = /usr/sepp/bin/fping</pre>
+ binary = /usr/sbin/fping
+ 
+ *** Slaves ***
+ secrets=/scratch/oetiker/smoke-master/etc/smokeping_secrets.dist
+ +boomer
+ display_name=boomer
+ color=0000ff</pre>
 
-</dd><dt><strong>Probe explanation</strong><br />
+</dd><dt><strong>Probe explanation</strong>
 
-</dt><dd>
-This is the template configuration file distributed with Smokeping.
-It is included in the examples as well for the sake of completeness.
+<dd>
+<p>This is the template configuration file distributed with Smokeping.
+It is included in the examples as well for the sake of completeness.</p>
 
-<p></p>
-</dd><dt><strong>Target configuration</strong><br />
+</li>
+</dd><dt><strong>Target configuration</strong>
 
-</dt><dd>
+<dd>
 <pre>
  *** Targets ***
  
@@ -604,88 +617,31 @@ It is included in the examples as well for the sake of completeness.
  remark = Welcome to the SmokePing website of xxx Company. \
           Here you will learn all about the latency of our network.
  
- + World
+ + Test
+ menu= Targets
  
- menu = World
- title = Worldwide Connectivity
+ ++ James
  
- ++ Europe
+ menu = James
+ title =James
+ alerts = someloss
+ slaves = boomer
+ host = james.address
  
- menu = Europe
- title =European Connectivity
+ ++ MultiHost
  
- +++ Switzerland
- 
- menu = Switzerland
- title =Swiss Connectivity
- alerts = bigloss,someloss,startloss
- 
- ++++ SBB
- 
- menu = SBB/CFF/FFS
- title =Swiss Federal Railways Webserver
- host = www.railway-server.abc
- 
- 
- ++++ Tiscali
- 
- menu = Tiscali Web
- title = Tiscali Webserver www.tiscali.abc
- host = www.tiscali-web.abc
- 
- +++ UK
- 
- menu = United Kingdom
- title = United Kingdom
- 
- ++++ UCL
- 
- menu = UCL
- title = UCL
- host = www.ucl-abc.acc.uk
- 
- ++ USA
- 
- menu = North America
- title =North American Connectivity
- 
- +++ MIT
- 
- menu = MIT
- title = Massachusetts Institute of Technology Webserver
- host = www.gurkoman.ybc
- 
- +++ IU
- 
- menu = IU
- title = Indiana University
- host = www.iu.ali
- 
- +++ UCB
- 
- menu = U. C. Berkeley
- title = U. C. Berkeley Webserver
- host = www.berkly.udi
- 
- +++ UCSD
- 
- menu = U. C. San Diego
- title = U. C. San Diego Webserver
- host = www.ucsdddar.art
- 
- +++ Sun
- 
- menu = Sun Microsystems
- title = Sun Microsystems Webserver
- host = www.sun-web.com</pre>
+ menu = Multihost
+ title = James and James as seen from Boomer
+ host = /Test/James /Test/James~boomer</pre>
 
-</dd><dt><strong>Target explanation</strong><br />
+</dd><dt><strong>Target explanation</strong>
 
-</dt><dd>
-This is the template configuration file distributed with Smokeping.
-It is included in the examples as well for the sake of completeness.
+<dd>
+<p>This is the template configuration file distributed with Smokeping.
+It is included in the examples as well for the sake of completeness.</p>
 
-<p></p></dd></dl>
+</li>
+</dd></dl>
 <p>
 </p>
 <hr />

@@ -519,7 +519,13 @@ URL.
  
  + FPing
  
- binary = /usr/sepp/bin/fping
+ binary = /usr/sbin/fping
+ 
+ *** Slaves ***
+ secrets=/scratch/oetiker/smoke-master/etc/smokeping_secrets.dist
+ +boomer
+ display_name=boomer
+ color=0000ff
 
 =item Probe explanation
 
@@ -538,80 +544,22 @@ It is included in the examples as well for the sake of completeness.
  remark = Welcome to the SmokePing website of xxx Company. \
           Here you will learn all about the latency of our network.
  
- + World
+ + Test
+ menu= Targets
  
- menu = World
- title = Worldwide Connectivity
+ ++ James
  
- ++ Europe
+ menu = James
+ title =James
+ alerts = someloss
+ slaves = boomer
+ host = james.address
  
- menu = Europe
- title =European Connectivity
+ ++ MultiHost
  
- +++ Switzerland
- 
- menu = Switzerland
- title =Swiss Connectivity
- alerts = bigloss,someloss,startloss
- 
- ++++ SBB
- 
- menu = SBB/CFF/FFS
- title =Swiss Federal Railways Webserver
- host = www.railway-server.abc
- 
- 
- ++++ Tiscali
- 
- menu = Tiscali Web
- title = Tiscali Webserver www.tiscali.abc
- host = www.tiscali-web.abc
- 
- +++ UK
- 
- menu = United Kingdom
- title = United Kingdom
- 
- ++++ UCL
- 
- menu = UCL
- title = UCL
- host = www.ucl-abc.acc.uk
- 
- ++ USA
- 
- menu = North America
- title =North American Connectivity
- 
- +++ MIT
- 
- menu = MIT
- title = Massachusetts Institute of Technology Webserver
- host = www.gurkoman.ybc
- 
- +++ IU
- 
- menu = IU
- title = Indiana University
- host = www.iu.ali
- 
- +++ UCB
- 
- menu = U. C. Berkeley
- title = U. C. Berkeley Webserver
- host = www.berkly.udi
- 
- +++ UCSD
- 
- menu = U. C. San Diego
- title = U. C. San Diego Webserver
- host = www.ucsdddar.art
- 
- +++ Sun
- 
- menu = Sun Microsystems
- title = Sun Microsystems Webserver
- host = www.sun-web.com
+ menu = Multihost
+ title = James and James as seen from Boomer
+ host = /Test/James /Test/James~boomer
 
 =item Target explanation
 

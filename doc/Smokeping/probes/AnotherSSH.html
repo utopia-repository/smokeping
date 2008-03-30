@@ -1,7 +1,9 @@
+<?xml version="1.0" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>Smokeping/probes/AnotherSSH</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <link rev="made" href="mailto:root@localhost" />
 </head>
 
@@ -76,10 +78,10 @@ Host, so get permission from the owner first!</p>
 <h1><a name="variables">VARIABLES</a></h1>
 <p>Supported probe-specific variables:</p>
 <dl>
-<dt><strong><a name="item_forks">forks</a></strong><br />
+<dt><strong><a name="item_forks">forks</a></strong>
 
-</dt><dd>
-Run this many concurrent processes at maximum
+<dd>
+<p>Run this many concurrent processes at maximum</p>
 
 </dd><dd>
 <p>Example value: 5</p>
@@ -87,11 +89,11 @@ Run this many concurrent processes at maximum
 </dd><dd>
 <p>Default value: 5</p>
 
-<p></p>
-</dd><dt><strong><a name="item_offset">offset</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_offset">offset</a></strong>
 
-</dt><dd>
-If you run many probes concurrently you may want to prevent them from
+<dd>
+<p>If you run many probes concurrently you may want to prevent them from
 hitting your network all at the same time. Using the probe-specific
 offset parameter you can change the point in time when each probe will
 be run. Offset is specified in % of total interval, or alternatively as
@@ -99,33 +101,34 @@ be run. Offset is specified in % of total interval, or alternatively as
 is specified here. Note that this does NOT influence the rrds itself,
 it is just a matter of when data acqusition is initiated.
 (This variable is only applicable if the variable 'concurrentprobes' is set
-in the 'General' section.)
+in the 'General' section.)</p>
 
 </dd><dd>
 <p>Example value: 50%</p>
 
-<p></p>
-</dd><dt><strong><a name="item_step">step</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_step">step</a></strong>
 
-</dt><dd>
-Duration of the base interval that this probe should use, if different
+<dd>
+<p>Duration of the base interval that this probe should use, if different
 from the one specified in the 'Database' section. Note that the step in
 the RRD files is fixed when they are originally generated, and if you
 change the step parameter afterwards, you'll have to delete the old RRD
 files or somehow convert them. (This variable is only applicable if
-the variable 'concurrentprobes' is set in the 'General' section.)
+the variable 'concurrentprobes' is set in the 'General' section.)</p>
 
 </dd><dd>
 <p>Example value: 300</p>
 
-<p></p></dd></dl>
+</li>
+</dd></dl>
 <p>Supported target-specific variables:</p>
 <dl>
-<dt><strong><a name="item_greeting">greeting</a></strong><br />
+<dt><strong><a name="item_greeting">greeting</a></strong>
 
-</dt><dd>
-Greeting string to send to the SSH Server. This will appear in the Logfile. 
-Use this to make clear, who you are and what you are doing to avoid confusion.
+<dd>
+<p>Greeting string to send to the SSH Server. This will appear in the Logfile. 
+Use this to make clear, who you are and what you are doing to avoid confusion.</p>
 
 </dd><dd>
 <p>Also, don't use something that is a valid version string. This probe assumes
@@ -134,73 +137,75 @@ that the connection gets terminated because of protocol mismatch.</p>
 </dd><dd>
 <p>Default value: SSH-Latency-Measurement-Sorry-for-this-logmessage</p>
 
-<p></p>
-</dd><dt><strong><a name="item_interval">interval</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_interval">interval</a></strong>
 
-</dt><dd>
-The interval to be measured. One of:
+<dd>
+<p>The interval to be measured. One of:</p>
 
 <dl>
-<dt><strong><a name="item_connect">connect</a></strong><br />
+<dt><strong><a name="item_connect">connect</a></strong>
 
-</dt><dd>
-Interval between <a href="#item_connect"><code>connect()</code></a> and the greeting string from the host.
+<dd>
+<p>Interval between <a href="#item_connect"><code>connect()</code></a> and the greeting string from the host.</p>
 
-<p></p>
-</dd><dt><strong><a name="item_established">established</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_established">established</a></strong>
 
-</dt><dd>
-Interval between our greeting message and the end of the connection 
-because of Protocol mismatch. This is the default.
+<dd>
+<p>Interval between our greeting message and the end of the connection 
+because of Protocol mismatch. This is the default.</p>
 
-<p></p>
-</dd><dt><strong><a name="item_complete">complete</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_complete">complete</a></strong>
 
-</dt><dd>
-From <a href="#item_connect"><code>connect()</code></a> to the end of the connection.
+<dd>
+<p>From <a href="#item_connect"><code>connect()</code></a> to the end of the connection.</p>
 
-<p></p></dd></dl>
+</li>
+</dd></dl>
 <p>Default value: established</p>
-</dd><dt><strong><a name="item_mininterval">mininterval</a></strong><br />
+</dd><dt><strong><a name="item_mininterval">mininterval</a></strong>
 
-</dt><dd>
-Minimum interval between the start of two connection attempts in (possibly fractional) seconds.
+<dd>
+<p>Minimum interval between the start of two connection attempts in (possibly fractional) seconds.</p>
 
 </dd><dd>
 <p>Default value: 0.5</p>
 
-<p></p>
-</dd><dt><strong><a name="item_pings">pings</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_pings">pings</a></strong>
 
-</dt><dd>
-How many pings should be sent to each target, if different from the global
+<dd>
+<p>How many pings should be sent to each target, if different from the global
 value specified in the Database section. Note that the number of pings in
 the RRD files is fixed when they are originally generated, and if you
 change this parameter afterwards, you'll have to delete the old RRD
-files or somehow convert them.
+files or somehow convert them.</p>
 
 </dd><dd>
 <p>Example value: 5</p>
 
-<p></p>
-</dd><dt><strong><a name="item_port">port</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_port">port</a></strong>
 
-</dt><dd>
-Connect to this port.
+<dd>
+<p>Connect to this port.</p>
 
 </dd><dd>
 <p>Default value: 22</p>
 
-<p></p>
-</dd><dt><strong><a name="item_timeout">timeout</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_timeout">timeout</a></strong>
 
-</dt><dd>
-Timeout for the connection.
+<dd>
+<p>Timeout for the connection.</p>
 
 </dd><dd>
 <p>Default value: 5</p>
 
-<p></p></dd></dl>
+</li>
+</dd></dl>
 <p>
 </p>
 <hr />

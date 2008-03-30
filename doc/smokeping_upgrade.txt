@@ -37,9 +37,11 @@ OOVVEERRVVIIEEWW
        This version also introduces three new probes using the new echoping
        plugin interface introduced in version 6:
 
-       EchoPingDNS
-       EchoPingLDAP
-       EchoPingWhois
+       +o   EchoPingDNS
+
+       +o   EchoPingLDAP
+
+       +o   EchoPingWhois
 
        See the smokeping_examples document for simple examples of using these
        probes.
@@ -129,8 +131,8 @@ OOVVEERRVVIIEEWW
            The existence of a PROBE_CONF section makes smokeping exit with an
            error message at parse time.
 
-           Note for distributors: these lines could easily be removed
-           automatically during upgrade.
+           Note for distributors: these lines could easily be removed automat-
+           ically during upgrade.
 
        Variable order
            The "probe" variable must now be set before any variables that
@@ -336,4 +338,4 @@ SSEEEE AALLSSOO
 
 
 
-2.1.1                             2007-04-29              SMOKEPING_UPGRADE(7)
+2.2.4                             2007-08-30              SMOKEPING_UPGRADE(7)

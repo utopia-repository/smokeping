@@ -470,7 +470,13 @@ DDEESSCCRRIIPPTTIIOONN
 
             + FPing
 
-            binary = /usr/sepp/bin/fping
+            binary = /usr/sbin/fping
+
+            *** Slaves ***
+            secrets=/scratch/oetiker/smoke-master/etc/smokeping_secrets.dist
+            +boomer
+            display_name=boomer
+            color=0000ff
 
        Probe explanation
            This is the template configuration file distributed with Smokeping.
@@ -487,79 +493,22 @@ DDEESSCCRRIIPPTTIIOONN
             remark = Welcome to the SmokePing website of xxx Company. \
                      Here you will learn all about the latency of our network.
 
-            + World
+            + Test
+            menu= Targets
 
-            menu = World
-            title = Worldwide Connectivity
+            ++ James
 
-            ++ Europe
+            menu = James
+            title =James
+            alerts = someloss
+            slaves = boomer
+            host = james.address
 
-            menu = Europe
-            title =European Connectivity
+            ++ MultiHost
 
-            +++ Switzerland
-
-            menu = Switzerland
-            title =Swiss Connectivity
-            alerts = bigloss,someloss,startloss
-
-            ++++ SBB
-
-            menu = SBB/CFF/FFS
-            title =Swiss Federal Railways Webserver
-            host = www.railway-server.abc
-
-            ++++ Tiscali
-
-            menu = Tiscali Web
-            title = Tiscali Webserver www.tiscali.abc
-            host = www.tiscali-web.abc
-
-            +++ UK
-
-            menu = United Kingdom
-            title = United Kingdom
-
-            ++++ UCL
-
-            menu = UCL
-            title = UCL
-            host = www.ucl-abc.acc.uk
-
-            ++ USA
-
-            menu = North America
-            title =North American Connectivity
-
-            +++ MIT
-
-            menu = MIT
-            title = Massachusetts Institute of Technology Webserver
-            host = www.gurkoman.ybc
-
-            +++ IU
-
-            menu = IU
-            title = Indiana University
-            host = www.iu.ali
-
-            +++ UCB
-
-            menu = U. C. Berkeley
-            title = U. C. Berkeley Webserver
-            host = www.berkly.udi
-
-            +++ UCSD
-
-            menu = U. C. San Diego
-            title = U. C. San Diego Webserver
-            host = www.ucsdddar.art
-
-            +++ Sun
-
-            menu = Sun Microsystems
-            title = Sun Microsystems Webserver
-            host = www.sun-web.com
+            menu = Multihost
+            title = James and James as seen from Boomer
+            host = /Test/James /Test/James~boomer
 
        Target explanation
            This is the template configuration file distributed with Smokeping.
@@ -576,9 +525,9 @@ LLIICCEENNSSEE
        option) any later version.
 
        This program is distributed in the hope that it will be useful, but
-       WITHOUT ANY WARRANTY; without even the implied warranty of MER-
-       CHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General
-       Public License for more details.
+       WITHOUT ANY WARRANTY; without even the implied warranty of
+       MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Gen-
+       eral Public License for more details.
 
        You should have received a copy of the GNU General Public License along
        with this program; if not, write to the Free Software Foundation, Inc.,
@@ -592,4 +541,4 @@ SSEEEE AALLSSOO
 
 
 
-2.1.1                             2007-05-02             SMOKEPING_EXAMPLES(7)
+2.2.4                             2007-09-16             SMOKEPING_EXAMPLES(7)

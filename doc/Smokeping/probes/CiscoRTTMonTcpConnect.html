@@ -1,7 +1,9 @@
+<?xml version="1.0" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>Smokeping/probes/CiscoRTTMonTcpConnect</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <link rev="made" href="mailto:root@localhost" />
 </head>
 
@@ -83,10 +85,10 @@
 <h1><a name="variables">VARIABLES</a></h1>
 <p>Supported probe-specific variables:</p>
 <dl>
-<dt><strong><a name="item_forks">forks</a></strong><br />
+<dt><strong><a name="item_forks">forks</a></strong>
 
-</dt><dd>
-Run this many concurrent processes at maximum
+<dd>
+<p>Run this many concurrent processes at maximum</p>
 
 </dd><dd>
 <p>Example value: 5</p>
@@ -94,11 +96,11 @@ Run this many concurrent processes at maximum
 </dd><dd>
 <p>Default value: 5</p>
 
-<p></p>
-</dd><dt><strong><a name="item_offset">offset</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_offset">offset</a></strong>
 
-</dt><dd>
-If you run many probes concurrently you may want to prevent them from
+<dd>
+<p>If you run many probes concurrently you may want to prevent them from
 hitting your network all at the same time. Using the probe-specific
 offset parameter you can change the point in time when each probe will
 be run. Offset is specified in % of total interval, or alternatively as
@@ -106,30 +108,30 @@ be run. Offset is specified in % of total interval, or alternatively as
 is specified here. Note that this does NOT influence the rrds itself,
 it is just a matter of when data acqusition is initiated.
 (This variable is only applicable if the variable 'concurrentprobes' is set
-in the 'General' section.)
+in the 'General' section.)</p>
 
 </dd><dd>
 <p>Example value: 50%</p>
 
-<p></p>
-</dd><dt><strong><a name="item_step">step</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_step">step</a></strong>
 
-</dt><dd>
-Duration of the base interval that this probe should use, if different
+<dd>
+<p>Duration of the base interval that this probe should use, if different
 from the one specified in the 'Database' section. Note that the step in
 the RRD files is fixed when they are originally generated, and if you
 change the step parameter afterwards, you'll have to delete the old RRD
 files or somehow convert them. (This variable is only applicable if
-the variable 'concurrentprobes' is set in the 'General' section.)
+the variable 'concurrentprobes' is set in the 'General' section.)</p>
 
 </dd><dd>
 <p>Example value: 300</p>
 
-<p></p>
-</dd><dt><strong><a name="item_timeout">timeout</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_timeout">timeout</a></strong>
 
-</dt><dd>
-How long a single 'ping' takes at maximum
+<dd>
+<p>How long a single 'ping' takes at maximum</p>
 
 </dd><dd>
 <p>Example value: 15</p>
@@ -137,15 +139,16 @@ How long a single 'ping' takes at maximum
 </dd><dd>
 <p>Default value: 5</p>
 
-<p></p></dd></dl>
+</li>
+</dd></dl>
 <p>Supported target-specific variables:</p>
 <dl>
-<dt><strong><a name="item_ioshost">ioshost</a></strong><br />
+<dt><strong><a name="item_ioshost">ioshost</a></strong>
 
-</dt><dd>
-The (mandatory) ioshost parameter specifies the Cisco router, which will
+<dd>
+<p>The (mandatory) ioshost parameter specifies the Cisco router, which will
 establish the TCP connections as well as the SNMP community string on
-the router.
+the router.</p>
 
 </dd><dd>
 <p>Example value: <a href="mailto:RTTcommunity@Myrouter.foobar.com.au">RTTcommunity@Myrouter.foobar.com.au</a></p>
@@ -153,53 +156,53 @@ the router.
 </dd><dd>
 <p>This setting is mandatory.</p>
 
-<p></p>
-</dd><dt><strong><a name="item_iosint">iosint</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_iosint">iosint</a></strong>
 
-</dt><dd>
-The (optional) iosint parameter is the source address for the TCP
+<dd>
+<p>The (optional) iosint parameter is the source address for the TCP
 connections. This should be one of the active (!) IP addresses of the
 router to get results. IOS looks up the target host address in the
 forwarding table and then uses the <code>interface(s)</code> listed there to send
 the TCP packets. By default IOS uses the (primary) IP address on the
-sending interface as source address for a connection.
+sending interface as source address for a connection.</p>
 
 </dd><dd>
 <p>Example value: 10.33.22.11</p>
 
-<p></p>
-</dd><dt><strong><a name="item_pings">pings</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_pings">pings</a></strong>
 
-</dt><dd>
-How many pings should be sent to each target, if different from the global
+<dd>
+<p>How many pings should be sent to each target, if different from the global
 value specified in the Database section. Note that the number of pings in
 the RRD files is fixed when they are originally generated, and if you
 change this parameter afterwards, you'll have to delete the old RRD
-files or somehow convert them.
+files or somehow convert them.</p>
 
 </dd><dd>
 <p>Example value: 5</p>
 
-<p></p>
-</dd><dt><strong><a name="item_port">port</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_port">port</a></strong>
 
-</dt><dd>
-The (optional) port parameter lets you configure the destination TCP
-port on the host. The default is the http port 80.
+<dd>
+<p>The (optional) port parameter lets you configure the destination TCP
+port on the host. The default is the http port 80.</p>
 
 </dd><dd>
 <p>Default value: 80</p>
 
-<p></p>
-</dd><dt><strong><a name="item_tos">tos</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_tos">tos</a></strong>
 
-</dt><dd>
-The (optional) tos parameter specifies the value of the ToS byte in the
+<dd>
+<p>The (optional) tos parameter specifies the value of the ToS byte in the
 IP header of the packets from the router. Multiply DSCP values times 4
 and Precedence values times 32 to calculate the ToS values to configure,
 e.g. ToS 160 corresponds to a DSCP value 40 and a Precedence value of
 5. Please note that this will not influence the ToS value in the packets
-sent by the the host.
+sent by the the host.</p>
 
 </dd><dd>
 <p>Example value: 160</p>
@@ -207,7 +210,8 @@ sent by the the host.
 </dd><dd>
 <p>Default value: 0</p>
 
-<p></p></dd></dl>
+</li>
+</dd></dl>
 <p>
 </p>
 <hr />

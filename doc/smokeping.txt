@@ -48,6 +48,12 @@ SSYYNNOOPPSSIISS
                        (to be used while building inside the smokeping distribution)
                        With --check : check the syntax of the generated examples.
 
+        --master-url=s Run smokeping in slave mode. Attach to master for config.
+
+        --shared-secret=s File containing the shared secret for talking to the server.
+
+        --cache-dir=s Directory for temporary data storage when running in slave mode.
+
 DDEESSCCRRIIPPTTIIOONN
        The ssmmookkeeppiinngg tool is the commandline part of the SmokePing system. Its
        main function is to run as a daemon and send Pings to all the Targets
@@ -146,4 +152,4 @@ AAUUTTHHOORR
 
 
 
-2.1.1                             2007-05-02                 SMOKEPING.DIST(1)
+2.2.4                             2007-09-16                 SMOKEPING.DIST(1)

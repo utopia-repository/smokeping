@@ -1,7 +1,9 @@
+<?xml version="1.0" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>Smokeping/probes/Curl</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <link rev="made" href="mailto:root@localhost" />
 </head>
 
@@ -94,19 +96,19 @@
 <h1><a name="variables">VARIABLES</a></h1>
 <p>Supported probe-specific variables:</p>
 <dl>
-<dt><strong><a name="item_binary">binary</a></strong><br />
+<dt><strong><a name="item_binary">binary</a></strong>
 
-</dt><dd>
-The location of your curl binary.
+<dd>
+<p>The location of your curl binary.</p>
 
 </dd><dd>
 <p>Default value: /usr/bin/curl</p>
 
-<p></p>
-</dd><dt><strong><a name="item_forks">forks</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_forks">forks</a></strong>
 
-</dt><dd>
-Run this many concurrent processes at maximum
+<dd>
+<p>Run this many concurrent processes at maximum</p>
 
 </dd><dd>
 <p>Example value: 5</p>
@@ -114,11 +116,11 @@ Run this many concurrent processes at maximum
 </dd><dd>
 <p>Default value: 5</p>
 
-<p></p>
-</dd><dt><strong><a name="item_offset">offset</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_offset">offset</a></strong>
 
-</dt><dd>
-If you run many probes concurrently you may want to prevent them from
+<dd>
+<p>If you run many probes concurrently you may want to prevent them from
 hitting your network all at the same time. Using the probe-specific
 offset parameter you can change the point in time when each probe will
 be run. Offset is specified in % of total interval, or alternatively as
@@ -126,44 +128,45 @@ be run. Offset is specified in % of total interval, or alternatively as
 is specified here. Note that this does NOT influence the rrds itself,
 it is just a matter of when data acqusition is initiated.
 (This variable is only applicable if the variable 'concurrentprobes' is set
-in the 'General' section.)
+in the 'General' section.)</p>
 
 </dd><dd>
 <p>Example value: 50%</p>
 
-<p></p>
-</dd><dt><strong><a name="item_step">step</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_step">step</a></strong>
 
-</dt><dd>
-Duration of the base interval that this probe should use, if different
+<dd>
+<p>Duration of the base interval that this probe should use, if different
 from the one specified in the 'Database' section. Note that the step in
 the RRD files is fixed when they are originally generated, and if you
 change the step parameter afterwards, you'll have to delete the old RRD
 files or somehow convert them. (This variable is only applicable if
-the variable 'concurrentprobes' is set in the 'General' section.)
+the variable 'concurrentprobes' is set in the 'General' section.)</p>
 
 </dd><dd>
 <p>Example value: 300</p>
 
-<p></p></dd></dl>
+</li>
+</dd></dl>
 <p>Supported target-specific variables:</p>
 <dl>
-<dt><strong><a name="item_agent">agent</a></strong><br />
+<dt><strong><a name="item_agent">agent</a></strong>
 
-</dt><dd>
-The ``-A'' <code>curl(1)</code> option.  This is a full HTTP User-Agent header including
-the words ``User-Agent:''. Note that it does not need any quotes around it.
+<dd>
+<p>The ``-A'' <code>curl(1)</code> option.  This is a full HTTP User-Agent header including
+the words ``User-Agent:''. Note that it does not need any quotes around it.</p>
 
 </dd><dd>
 <p>Example value: User-Agent: Lynx/2.8.4rel.1 libwww-FM/2.14 SSL-MM/1.4.1 OpenSSL/0.9.6c</p>
 
-<p></p>
-</dd><dt><strong><a name="item_extraargs">extraargs</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_extraargs">extraargs</a></strong>
 
-</dt><dd>
-Any extra arguments you might want to hand to curl(1). The arguments
+<dd>
+<p>Any extra arguments you might want to hand to curl(1). The arguments
 should be separated by the regexp specified in ``extrare'', which
-contains just the space character (`` '') by default.
+contains just the space character (`` '') by default.</p>
 
 </dd><dd>
 <p>Note that curl will be called with the resulting list of arguments
@@ -178,14 +181,14 @@ and then specify <code>extraargs = --header;Host: www.example.com</code>.</p>
 </dd><dd>
 <p>Example value: -6 --head --user user:password</p>
 
-<p></p>
-</dd><dt><strong><a name="item_extrare">extrare</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_extrare">extrare</a></strong>
 
-</dt><dd>
-The regexp used to split the extraargs string into an argument list,
+<dd>
+<p>The regexp used to split the extraargs string into an argument list,
 in the ``/regexp/'' notation.  This contains just the space character 
 (`` '') by default, but if you need to specify any arguments containing spaces,
-you can set this variable to a different value.
+you can set this variable to a different value.</p>
 
 </dd><dd>
 <p>Example value: / /</p>
@@ -193,12 +196,12 @@ you can set this variable to a different value.
 </dd><dd>
 <p>Default value: / /</p>
 
-<p></p>
-</dd><dt><strong><a name="item_follow_redirects">follow_redirects</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_follow_redirects">follow_redirects</a></strong>
 
-</dt><dd>
-If this variable is set to 'yes', curl will follow any HTTP redirection steps (the '-L' option).
-If set to 'no', HTTP Location: headers will not be followed. See also 'include_redirects'.
+<dd>
+<p>If this variable is set to 'yes', curl will follow any HTTP redirection steps (the '-L' option).
+If set to 'no', HTTP Location: headers will not be followed. See also 'include_redirects'.</p>
 
 </dd><dd>
 <p>Example value: yes</p>
@@ -206,13 +209,13 @@ If set to 'no', HTTP Location: headers will not be followed. See also 'include_r
 </dd><dd>
 <p>Default value: no</p>
 
-<p></p>
-</dd><dt><strong><a name="item_include_redirects">include_redirects</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_include_redirects">include_redirects</a></strong>
 
-</dt><dd>
-If this variable is set to 'yes', the measurement result will include the time
+<dd>
+<p>If this variable is set to 'yes', the measurement result will include the time
 spent on following any HTTP redirection steps. If set to 'no', only the last
-step is measured. See also 'follow_redirects'.
+step is measured. See also 'follow_redirects'.</p>
 
 </dd><dd>
 <p>Example value: yes</p>
@@ -220,56 +223,56 @@ step is measured. See also 'follow_redirects'.
 </dd><dd>
 <p>Default value: no</p>
 
-<p></p>
-</dd><dt><strong><a name="item_insecure_ssl">insecure_ssl</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_insecure_ssl">insecure_ssl</a></strong>
 
-</dt><dd>
-The ``-k'' <code>curl(1)</code> option. Accept SSL connections that don't have a secure
+<dd>
+<p>The ``-k'' <code>curl(1)</code> option. Accept SSL connections that don't have a secure
 certificate chain to a trusted CA. Note that if you are going to monitor
 https targets, you'll probably have to either enable this option or specify
 the CA path to curl through extraargs below. For more info, see the
-<code>curl(1)</code> manual page.
+<code>curl(1)</code> manual page.</p>
 
 </dd><dd>
 <p>Example value: 1</p>
 
-<p></p>
-</dd><dt><strong><a name="item_interface">interface</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_interface">interface</a></strong>
 
-</dt><dd>
-The ``--interface'' <code>curl(1)</code> option.  Bind to a specific interface, IP address or
-host name.
+<dd>
+<p>The ``--interface'' <code>curl(1)</code> option.  Bind to a specific interface, IP address or
+host name.</p>
 
 </dd><dd>
 <p>Example value: eth0</p>
 
-<p></p>
-</dd><dt><strong><a name="item_pings">pings</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_pings">pings</a></strong>
 
-</dt><dd>
-How many pings should be sent to each target, if different from the global
+<dd>
+<p>How many pings should be sent to each target, if different from the global
 value specified in the Database section. Note that the number of pings in
 the RRD files is fixed when they are originally generated, and if you
 change this parameter afterwards, you'll have to delete the old RRD
-files or somehow convert them.
+files or somehow convert them.</p>
 
 </dd><dd>
 <p>Example value: 5</p>
 
-<p></p>
-</dd><dt><strong><a name="item_ssl2">ssl2</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_ssl2">ssl2</a></strong>
 
-</dt><dd>
-The ``-2'' <code>curl(1)</code> option.  Force SSL2.
+<dd>
+<p>The ``-2'' <code>curl(1)</code> option.  Force SSL2.</p>
 
 </dd><dd>
 <p>Example value: 1</p>
 
-<p></p>
-</dd><dt><strong><a name="item_timeout">timeout</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_timeout">timeout</a></strong>
 
-</dt><dd>
-The ``-m'' <code>curl(1)</code> option.  Maximum timeout in seconds.
+<dd>
+<p>The ``-m'' <code>curl(1)</code> option.  Maximum timeout in seconds.</p>
 
 </dd><dd>
 <p>Example value: 20</p>
@@ -277,13 +280,13 @@ The ``-m'' <code>curl(1)</code> option.  Maximum timeout in seconds.
 </dd><dd>
 <p>Default value: 10</p>
 
-<p></p>
-</dd><dt><strong><a name="item_urlformat">urlformat</a></strong><br />
+</li>
+</dd><dt><strong><a name="item_urlformat">urlformat</a></strong>
 
-</dt><dd>
-The template of the URL to fetch.  Can be any one that curl supports.
+<dd>
+<p>The template of the URL to fetch.  Can be any one that curl supports.
 Any occurrence of the string '%host%' will be replaced with the
-host to be probed.
+host to be probed.</p>
 
 </dd><dd>
 <p>Example value: http://%host%/</p>
@@ -291,7 +294,8 @@ host to be probed.
 </dd><dd>
 <p>This setting is mandatory.</p>
 
-<p></p></dd></dl>
+</li>
+</dd></dl>
 <p>
 </p>
 <hr />
