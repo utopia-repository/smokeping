@@ -118,9 +118,9 @@ remark = Welcome to the SmokePing website of 'A poorly \
 menu = Local
 title = Local Network
 
-++ Local Machine
+++ LocalMachine
 
-menu = Local Machine
+menu = LocalMachine
 title = This own machine
 host = localhost
 

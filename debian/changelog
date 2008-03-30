@@ -1,3 +1,11 @@
+smokeping (1.42-2) unstable; urgency=low
+
+  * Fix problem in default config file not allowing white space
+  which was added in previous version for local fping target. (Closes: #324846)
+  * debian/control: have to depend on adduser as it is being used in postinst.
+
+ -- Jose Carlos Garcia Sogo <jsogo@debian.org>  Sun, 28 Aug 2005 20:36:32 +0200
+
 smokeping (1.42-1) unstable; urgency=low
 
   * New upstream version
@@ -6,7 +14,7 @@ smokeping (1.42-1) unstable; urgency=low
     + Added an 'include' directive in config parser (Closes: #307955)
 
   * Changed default location of sendmail to /usr/sbin (Closes: #302164)
-  * Added localhost as default fping target (Closes: #307854)
+  * Added localhost as default fping target (Closes: #307954)
   * Standars-version bumped to 3.6.2. No changes needed.
   * README.Debian: document enabled localhost fping probe. 
 

@@ -7,7 +7,7 @@ Standards-Version: 3.6.2
 
 Package: smokeping
 Architecture: all
-Depends: ${perl:Depends}, libnet-perl, libsnmp-session-perl (>= 0.86), librrds-perl (>= 1.0.33-9), fping (>= 2.4b2-to-ipv6-2) | echoping (>= 4.2.0-1.1), speedy-cgi-perl (>= 2.21-1), exim4 | mail-transport-agent, debianutils (>= 1.7)
+Depends: ${perl:Depends}, libnet-perl, libsnmp-session-perl (>= 0.86), librrds-perl (>= 1.0.33-9), fping (>= 2.4b2-to-ipv6-2) | echoping (>= 4.2.0-1.1), speedy-cgi-perl (>= 2.21-1), exim4 | mail-transport-agent, debianutils (>= 1.7), adduser
 Recommends: apache | httpd, libsocket6-perl, dnsutils
 Suggests: curl, libauthen-radius-perl, libnet-ldap-perl, libnet-dns-perl, ssh, libio-socket-ssl-perl, libnet-telnet-perl
 Description: latency logging and graphing system
