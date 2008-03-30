@@ -38,7 +38,7 @@ use Smokeping::RRDtools;
 
 # globale persistent variables for speedy
 use vars qw($cfg $probes $VERSION $havegetaddrinfo $cgimode);
-$VERSION="2.003000";
+$VERSION="2.003002";
 
 # we want opts everywhere
 my %opt;
@@ -401,7 +401,7 @@ sub add_targets ($$$$){
         if (ref $tree->{$prop} eq 'HASH'){
             add_targets $cfg, $probes, $tree->{$prop}, "$name/$prop";
         }
-        if ($prop eq 'host' and $tree->{nomasterpoll} eq 'no' and check_filter($cfg,$name) and $tree->{$prop} !~ m|^/| ) {           
+        if ($prop eq 'host' and ( not $tree->{nomasterpoll} or $tree->{nomasterpoll} eq 'no') and check_filter($cfg,$name) and $tree->{$prop} !~ m|^/| ) {           
             if($tree->{host} =~ /^DYNAMIC/) {
                 $probeobj->add($tree,$name);
             } else {
@@ -600,15 +600,10 @@ sub target_menu($$$$;$){
     my $print;
     my $current =  shift @{$open} || "";
     my @hashes;
-    if (not defined $tree->{_order}){
-        foreach my $prop ( sort grep { ref $tree->{$_} eq 'HASH' and  not /^__/} keys %{$tree}) {
+    foreach my $prop (sort {$tree->{$a}{_order} ? ($tree->{$a}{_order} <=> $tree->{$b}{_order}) : ($a cmp $b)} 
+                      grep {  ref $tree->{$_} eq 'HASH' and not /^__/ }
+                      keys %$tree) {
             push @hashes, $prop;
-        }
-    } else {
-        foreach my $prop (sort { $tree->{$a}{_order} <=> $tree->{$b}{_order}}
-                           grep { ref $tree->{$_} eq 'HASH' } keys %{$tree}) {
-            push @hashes, $prop;
-        }
     }
     return wantarray ? () : "" unless @hashes;
 
@@ -624,11 +619,11 @@ sub target_menu($$$$;$){
         if ($tree->{$key}{__tree_link} and $tree->{$key}{__tree_link}{menu}){
     		$menu = $tree->{$key}{__tree_link}{menu};
     		$title = $tree->{$key}{__tree_link}{title};
-                next if $tree->{$key}{__tree_link}{hide} eq 'yes';
+                next if $tree->{$key}{__tree_link}{hide} and $tree->{$key}{__tree_link}{hide} eq 'yes';
 		} elsif ($tree->{$key}{menu}) {	
 	        $menu = $tree->{$key}{menu};
 	        $title = $tree->{$key}{title};
-                next if $tree->{$key}{hide} eq 'yes';
+                next if $tree->{$key}{hide} and $tree->{$key}{hide} eq 'yes';
         };
 
 		my $class = 'menuitem';
@@ -755,7 +750,7 @@ sub get_overview ($$$$){
 	next unless $phys_tree->{host};
 	next if $phys_tree->{hide} and $phys_tree->{hide} eq 'yes';
 
-        if ($phys_tree->{nomasterpoll} eq 'no'){
+        if (not $phys_tree->{nomasterpoll} or $phys_tree->{nomasterpoll} eq 'no'){
             @slaves  = ("");
         };
 
@@ -978,7 +973,7 @@ sub get_detail ($$$$;$){
     $tree = $phys_tree;
 
     my @slaves;
-    if ($tree->{nomasterpoll} eq 'no'){
+    if (not $tree->{nomasterpoll} or $tree->{nomasterpoll} eq 'no' or $mode eq 'a' or $mode eq 'n'){
         @slaves  = ("");
     };
 
@@ -1473,9 +1468,9 @@ sub hierarchy_switcher($$){
 	    $print .= "<div id='hierarchy_popup'>";
 	    $print .= $q->popup_menu(-name=>'hierarchy',
 			             -onChange=>'hswitch.submit()',
-            		             -values=>['', sort map {ref $cfg->{Presentation}{hierarchies}{$_} eq 'HASH' 
+            		             -values=>[0, sort map {ref $cfg->{Presentation}{hierarchies}{$_} eq 'HASH' 
                                                  ? $_ : () } keys %{$cfg->{Presentation}{hierarchies}}],
-            		             -labels=>{''=>'Default Hierarchy',
+            		             -labels=>{0=>'Default Hierarchy',
 					       map {ref $cfg->{Presentation}{hierarchies}{$_} eq 'HASH' 
                                                     ? ($_ => $cfg->{Presentation}{hierarchies}{$_}{title} )
                                                     : () } keys %{$cfg->{Presentation}{hierarchies}}
@@ -1483,13 +1478,14 @@ sub hierarchy_switcher($$){
 				    );
              $print .= "</div>";
      }
-     $print .= "<div><small>Filter:</small></div>";
+     $print .= "<div id='filter_title'><small>Filter:</small></div>";
+     $print .= "<div id='filter_text'>";
      $print .= $q->textfield (-name=>'filter',
 		             -onChange=>'hswitch.submit()',
 		             -size=>15,
 			    );
-     $print .= $q->end_form();
-     $print .= "</div><br/><br/>";
+     $print .= '</div>'.$q->end_form();
+     $print .= "<br/><br/>";
      return $print;
 }
 
@@ -1499,7 +1495,7 @@ sub display_webpage($$){
     my ($path,$slave) = split(/~/,$q->param('target') || '');
     my $hierarchy = $q->param('hierarchy');
     die "ERROR: unknown hierarchy $hierarchy\n" 
-	if not $cfg->{Presentation}{hierarchies} and $cfg->{Presentation}{hierarchies}{$hierarchy};
+	if $hierarchy and not $cfg->{Presentation}{hierarchies}{$hierarchy};
     my $open = [ (split /\./,$path||'') ];
     my $open_orig = [@$open];
     $open_orig->[-1] .= '~'.$slave if $slave;
@@ -1525,7 +1521,7 @@ sub display_webpage($$){
     };
     if (not $charts){
        for (@$open) {
-         die "ERROR: Section '$_' does not exist (display webpage).\n" 
+         die "ERROR: Section '$_' does not exist (display webpage)."  # .(join "", map {"$_=$ENV{$_}"} keys %ENV)."\n"
                  unless exists $tree->{$_};
          last unless  ref $tree->{$_} eq 'HASH';
          $tree = $tree->{$_};
@@ -1855,7 +1851,10 @@ sub update_rrds($$$$$$) {
         if ($prop eq 'host' and check_filter($cfg,$name) and $tree->{$prop} !~ m|^/|) { # skip multihost
             my %slave_test;
             my $slaveupdates;
-            my @updates = ([ "", time, $probeobj->rrdupdate_string($tree) ]);
+            my @updates;
+            if (not $tree->{nomasterpoll} or $tree->{nomasterpoll} eq 'no'){
+                @updates = ([ "", time, $probeobj->rrdupdate_string($tree) ]);
+            }
             if ($tree->{slaves}){
                 %slave_test = ( map { $_,1 } split(/\s+/, $tree->{slaves}));
                 $slaveupdates = Smokeping::Master::get_slaveupdates($name);     
