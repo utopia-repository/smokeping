@@ -19,6 +19,7 @@ Smokeping::probes::CiscoRTTMonEchoICMP - Probe for SmokePing
  packetsize = 56
  pings = 5
  tos = 160
+ vrf = INTERNET
 
  # [...]
 
@@ -36,6 +37,7 @@ Smokeping::probes::CiscoRTTMonEchoICMP - Probe for SmokePing
  packetsize = 56
  pings = 5
  tos = 160
+ vrf = INTERNET
 
 =head1 DESCRIPTION
 
@@ -145,6 +147,15 @@ Example value: 160
 
 Default value: 0
 
+=item vrf
+
+The the VPN name in which the RTT operation will be used. For regular RTT
+operation this field should not be configured. The agent
+will use this field to identify the VPN routing Table for
+this operation.
+
+Example value: INTERNET
+
 =back
 
 
@@ -185,7 +196,7 @@ The probe sends unnecessary pings, i.e. more than configured in the "pings" vari
 
 =head1 SEE ALSO
 
-L<http://people.ee.ethz.ch/~oetiker/webtools/smokeping/>
+L<http://oss.oetiker.ch/smokeping/>
 
 L<http://www.switch.ch/misc/leinen/snmp/perl/>
 

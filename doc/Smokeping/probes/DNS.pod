@@ -17,6 +17,7 @@ Smokeping::probes::DNS - Name Service Probe for SmokePing
  # The following variables can be overridden in each target section
  lookup = www.example.org
  pings = 5
+ server = ns1.someisp.net
 
  # [...]
 
@@ -31,6 +32,7 @@ Smokeping::probes::DNS - Name Service Probe for SmokePing
  host = my.host
  lookup = www.example.org
  pings = 5
+ server = ns1.someisp.net
 
 =head1 DESCRIPTION
 
@@ -117,6 +119,12 @@ change this parameter afterwards, you'll have to delete the old RRD
 files or somehow convert them.
 
 Example value: 5
+
+=item server
+
+Name of the dns server to use.
+
+Example value: ns1.someisp.net
 
 =back
 

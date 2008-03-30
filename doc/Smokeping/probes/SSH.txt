@@ -17,6 +17,7 @@ SSYYNNOOPPSSIISS
         timeout = 15
 
         # The following variables can be overridden in each target section
+        keytype = dsa
         pings = 5
 
         # [...]
@@ -30,6 +31,7 @@ SSYYNNOOPPSSIISS
         + mytarget
         # probe = SSH # if the default probe is something else
         host = my.host
+        keytype = dsa
         pings = 5
 
 DDEESSCCRRIIPPTTIIOONN
@@ -38,8 +40,12 @@ DDEESSCCRRIIPPTTIIOONN
        program. If it is not installed on your system yet, you
        should install openssh >= 3.8p1
 
-       The Probe asks the given host n-times for it's public key.
-       Where n is the amount specified in the config File.
+       The Probe asks the given host n-times for it's public key,
+       where n is the amount specified in the config File.
+
+       As part of the initialization, the probe asks localhost
+       for it's public key and tries to parse the output. Make
+       sure you have SSH running on the localhost as well.
 
 VVAARRIIAABBLLEESS
        Supported probe-specific variables:
@@ -96,6 +102,13 @@ VVAARRIIAABBLLEESS
 
        Supported target-specific variables:
 
+       keytype
+           Type of key, used in ssh-keyscan -t <keytype>
+
+           Example value: dsa
+
+           Default value: rsa
+
        pings
            How many pings should be sent to each target, if dif-
            ferent from the global value specified in the Database
@@ -111,4 +124,4 @@ AAUUTTHHOORRSS
 
 
 
-2.0.5                       2005-11-d1o4c::Smokeping::probes::SSH(3)
+2.0.8                       2006-04-d1o4c::Smokeping::probes::SSH(3)

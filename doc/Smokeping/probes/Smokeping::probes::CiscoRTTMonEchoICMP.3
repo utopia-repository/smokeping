@@ -129,7 +129,7 @@
 .\" ========================================================================
 .\"
 .IX Title "doc::Smokeping::probes::CiscoRTTMonEchoICMP 3"
-.TH doc::Smokeping::probes::CiscoRTTMonEchoICMP 3 "2005-11-14" "2.0.5" "SmokePing"
+.TH doc::Smokeping::probes::CiscoRTTMonEchoICMP 3 "2006-04-14" "2.0.8" "SmokePing"
 .SH "NAME"
 Smokeping::probes::CiscoRTTMonEchoICMP \- Probe for SmokePing
 .SH "SYNOPSIS"
@@ -149,13 +149,14 @@ Smokeping::probes::CiscoRTTMonEchoICMP \- Probe for SmokePing
 \& timeout = 15
 .Ve
 .PP
-.Vb 6
+.Vb 7
 \& # The following variables can be overridden in each target section
 \& ioshost = RTTcommunity@Myrouter.foobar.com.au # mandatory
 \& iosint = 10.33.22.11
 \& packetsize = 56
 \& pings = 5
 \& tos = 160
+\& vrf = INTERNET
 .Ve
 .PP
 .Vb 1
@@ -174,7 +175,7 @@ Smokeping::probes::CiscoRTTMonEchoICMP \- Probe for SmokePing
 \& # [...]
 .Ve
 .PP
-.Vb 8
+.Vb 9
 \& + mytarget
 \& # probe = CiscoRTTMonEchoICMP # if the default probe is something else
 \& host = my.host
@@ -183,6 +184,7 @@ Smokeping::probes::CiscoRTTMonEchoICMP \- Probe for SmokePing
 \& packetsize = 56
 \& pings = 5
 \& tos = 160
+\& vrf = INTERNET
 .Ve
 .SH "DESCRIPTION"
 .IX Header "DESCRIPTION"
@@ -275,6 +277,14 @@ corresponds to a \s-1DSCP\s0 value 40 and a Precedence value of 5. The RTTMon
 Example value: 160
 .Sp
 Default value: 0
+.IP "vrf" 4
+.IX Item "vrf"
+The the \s-1VPN\s0 name in which the \s-1RTT\s0 operation will be used. For regular \s-1RTT\s0
+operation this field should not be configured. The agent
+will use this field to identify the \s-1VPN\s0 routing Table for
+this operation.
+.Sp
+Example value: \s-1INTERNET\s0
 .SH "AUTHORS"
 .IX Header "AUTHORS"
 Joerg.Kummer at Roche.com 
@@ -311,7 +321,7 @@ The above configuration grants \s-1SNMP\s0 read-write only to 10.37.3.5 (the smo
 The probe sends unnecessary pings, i.e. more than configured in the \*(L"pings\*(R" variable, because the RTTMon \s-1MIB\s0 only allows to set a total time for all pings in one measurement run (one \*(L"life\*(R"). Currently the probe sets the life duration to \*(L"pings\*(R"*2+3 seconds (2 secs is the ping timeout value hardcoded into this probe). 
 .SH "SEE ALSO"
 .IX Header "SEE ALSO"
-<http://people.ee.ethz.ch/~oetiker/webtools/smokeping/>
+<http://oss.oetiker.ch/smokeping/>
 .PP
 <http://www.switch.ch/misc/leinen/snmp/perl/>
 .PP

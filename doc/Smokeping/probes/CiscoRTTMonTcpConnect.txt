@@ -195,7 +195,7 @@ BBUUGGSS
        secs is the timeout value hardcoded into this probe).
 
 SSEEEE AALLSSOO
-       <http://people.ee.ethz.ch/~oetiker/webtools/smokeping/>
+       <http://oss.oetiker.ch/smokeping/>
 
        <http://www.switch.ch/misc/leinen/snmp/perl/>
 
@@ -206,4 +206,4 @@ SSEEEE AALLSSOO
 
 
 
-2.0.5            doc::Smokep2i0n0g5:-:1p1r-o1b4es::CiscoRTTMonTcpConnect(3)
+2.0.8            doc::Smokep2i0n0g6:-:0p4r-o1b4es::CiscoRTTMonTcpConnect(3)

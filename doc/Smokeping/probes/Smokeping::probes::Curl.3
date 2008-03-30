@@ -129,7 +129,7 @@
 .\" ========================================================================
 .\"
 .IX Title "doc::Smokeping::probes::Curl 3"
-.TH doc::Smokeping::probes::Curl 3 "2005-11-14" "2.0.5" "SmokePing"
+.TH doc::Smokeping::probes::Curl 3 "2006-04-14" "2.0.8" "SmokePing"
 .SH "NAME"
 Smokeping::probes::Curl \- a curl(1) probe for SmokePing
 .SH "OVERVIEW"
@@ -152,11 +152,13 @@ Fetches an \s-1HTTP\s0 or \s-1HTTPS\s0 \s-1URL\s0 using \fIcurl\fR\|(1).
 \& step = 300
 .Ve
 .PP
-.Vb 10
+.Vb 12
 \& # The following variables can be overridden in each target section
 \& agent = User-Agent: Lynx/2.8.4rel.1 libwww-FM/2.14 SSL-MM/1.4.1 OpenSSL/0.9.6c
 \& extraargs = -6 --head --user user:password
 \& extrare = / /
+\& follow_redirects = yes
+\& include_redirects = yes
 \& insecure_ssl = 1
 \& interface = eth0
 \& pings = 5
@@ -181,13 +183,15 @@ Fetches an \s-1HTTP\s0 or \s-1HTTPS\s0 \s-1URL\s0 using \fIcurl\fR\|(1).
 \& # [...]
 .Ve
 .PP
-.Vb 12
+.Vb 14
 \& + mytarget
 \& # probe = Curl # if the default probe is something else
 \& host = my.host
 \& agent = User-Agent: Lynx/2.8.4rel.1 libwww-FM/2.14 SSL-MM/1.4.1 OpenSSL/0.9.6c
 \& extraargs = -6 --head --user user:password
 \& extrare = / /
+\& follow_redirects = yes
+\& include_redirects = yes
 \& insecure_ssl = 1
 \& interface = eth0
 \& pings = 5
@@ -269,6 +273,23 @@ you can set this variable to a different value.
 Example value: / /
 .Sp
 Default value: / /
+.IP "follow_redirects" 4
+.IX Item "follow_redirects"
+If this variable is set to 'yes', curl will follow any \s-1HTTP\s0 redirection steps (the '\-L' option).
+If set to 'no', \s-1HTTP\s0 Location: headers will not be followed. See also 'include_redirects'.
+.Sp
+Example value: yes
+.Sp
+Default value: no
+.IP "include_redirects" 4
+.IX Item "include_redirects"
+If this variable is set to 'yes', the measurement result will include the time
+spent on following any \s-1HTTP\s0 redirection steps. If set to 'no', only the last
+step is measured. See also 'follow_redirects'.
+.Sp
+Example value: yes
+.Sp
+Default value: no
 .IP "insecure_ssl" 4
 .IX Item "insecure_ssl"
 The \*(L"\-k\*(R" \fIcurl\fR\|(1) option. Accept \s-1SSL\s0 connections that don't have a secure

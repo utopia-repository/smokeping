@@ -1,3 +1,43 @@
+2006/04/14 -- released version 2.0.8
+
+* adjusted links to new home on oss.oetiker.ch
+  -- tobi
+
+* let the name of the dns server be configured in DNS.pm
+  -- ark <yesv *ring.wtwf.com>
+* make buggy_perl_version test work again
+  -- niko, noticed by Fran Boon <flavour *partyvibe.com>
+
+2006/02/09 -- released version 2.0.7
+
+* fixed POD markup escaping in 'linkstyle' documentation that broke the Smokeping
+  module documentation --niko
+
+2006/02/08 -- released version 2.0.6
+
+* make the way CGI self-referring links are created configurable, and
+  change the default (once more) to 'linkstyle = relative' 
+  -- niko, for Dmitry Semyonov <linulin *gmail.com> (Debian bug #351783)
+* make buggy_perl_version test work on perl 5.8.7 too ... 
+  --tobi from Nathan Butcher <xqufa .yokohama.riken.jp>
+* include a Date field in alert emails, since all M[ST]As don't insert it. 
+  --niko
+* Set an --end time for graphs so that fetch does get its its
+  undies in a twist when selecting the RRA and goes for hires
+  due to coverage -- tobi
+* CiscoRTTMonEchoICMP.pm: new variable vrf
+  - Kevin Stewart <kevins *callplus.co.nz>
+* SSH.pm: new variable 'keytype' + bugfixes
+  - niko, from Igor Petrovski <pigor *mm.st>
+* fix a bug that broke target sections with the same name
+  in different branches  -- niko, reported by Igor Petrovski <pigor *mm.st>
+* really send a test email with 'tSmoke --testmail' -- niko
+* Curl.pm: handle measurement of multiple URLs by adding the results together
+  -- niko, requested by Rob de Jong <rob *dejongnet.net>
+* Curl.pm: new variables 'follow_redirects' and 'include_redirects'
+  -- niko, requested by Rob de Jong <rob *dejongnet.net>
+* fixed spelling for height -- tobi
+
 2005/11/14 -- released version 2.0.5
 
 * remove the FPing 'timeout' variable, since it never really did anything

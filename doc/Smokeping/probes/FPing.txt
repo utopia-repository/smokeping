@@ -132,4 +132,4 @@ AAUUTTHHOORRSS
 
 
 
-2.0.5                       2005-1d1o-c1:4:Smokeping::probes::FPing(3)
+2.0.8                       2006-0d4o-c1:4:Smokeping::probes::FPing(3)

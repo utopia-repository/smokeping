@@ -129,7 +129,7 @@
 .\" ========================================================================
 .\"
 .IX Title "doc::Smokeping::probes::CiscoRTTMonDNS 3"
-.TH doc::Smokeping::probes::CiscoRTTMonDNS 3 "2005-11-14" "2.0.5" "SmokePing"
+.TH doc::Smokeping::probes::CiscoRTTMonDNS 3 "2006-04-14" "2.0.8" "SmokePing"
 .SH "NAME"
 Smokeping::probes::CiscoRTTMonDNS.pm \- Probe for SmokePing
 .SH "SYNOPSIS"
@@ -296,7 +296,7 @@ The above configuration grants \s-1SNMP\s0 read-write only to 10.37.3.5 (the smo
 The probe does unnecessary \s-1DNS\s0 queries, i.e. more than configured in the \*(L"pings\*(R" variable, because the RTTMon \s-1MIB\s0 only allows to set a total time for all queries in one measurement run (one \*(L"life\*(R"). Currently the probe sets the life duration to \*(L"pings\*(R"*2+3 seconds (2 secs is the timeout value hardcoded into this probe). 
 .SH "SEE ALSO"
 .IX Header "SEE ALSO"
-<http://people.ee.ethz.ch/~oetiker/webtools/smokeping/>
+<http://oss.oetiker.ch/smokeping/>
 .PP
 <http://www.switch.ch/misc/leinen/snmp/perl/>
 .PP

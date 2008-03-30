@@ -233,7 +233,44 @@ version of the CGI::Carp module. See
 </dd><dd>
 <p>Default value: changecgiprogramname = yes</p>
 
+<p></p>
+</dd><dt><strong><a name="item_linkstyle"><strong>linkstyle</strong></a></strong><br />
+
+</dt><dd>
+How the CGI self-referring links are created. The possible values are
+
+<dl>
+<dt><strong><a name="item_absolute">absolute</a></strong><br />
+
+</dt><dd>
+Full hostname and path derived from the 'cgiurl' variable
+
+</dd><dd>
+<p>&lt;a&nbsp;href=``http://hostname/path/smokeping.cgi?foo=bar''&gt;</p>
+
+<p></p>
+</dd><dt><strong><a name="item_relative">relative</a></strong><br />
+
+</dt><dd>
+Only the parameter part is specified
+
+</dd><dd>
+<p>&lt;a&nbsp;href=``?foo=bar''&gt;</p>
+
+<p></p>
+</dd><dt><strong><a name="item_original">original</a></strong><br />
+
+</dt><dd>
+The way the links were generated before Smokeping version 2.0.4:
+no hostname, only the path
+
+</dd><dd>
+<p>&lt;a&nbsp;href=``/path/smokeping.cgi?foo=bar''&gt;</p>
+
 <p></p></dd></dl>
+<p>The default is ``relative'', which hopefully works for everybody.</p>
+<p>Default value: linkstyle = relative</p>
+</dd></dl>
 <p>
 </p>
 <h2><a name="____database______mandatory_section_">*** Database *** <em>(mandatory section)</em></a></h2>
@@ -1062,6 +1099,12 @@ Default value: timeout = 5
 <pre>
  (This variable can be overridden target-specifically in the Targets section.)</pre>
 
+</dd><dt><strong><a name="item_vrf"><strong>vrf</strong></a></strong><br />
+
+</dt><dd>
+<pre>
+ (This variable can be overridden target-specifically in the Targets section.)</pre>
+
 </dd></dl>
 <p>Syntax changes for subsection <strong>/[-_0-9a-zA-Z]+/</strong></p>
 <p>The following new variables are valid:</p>
@@ -1124,6 +1167,12 @@ This variable <em>inherits</em> its value from the parent section if nothing is 
 
 <p></p>
 </dd><dt><strong><strong>tos</strong></strong><br />
+
+</dt><dd>
+This variable <em>inherits</em> its value from the parent section if nothing is specified here.
+
+<p></p>
+</dd><dt><strong><strong>vrf</strong></strong><br />
 
 </dt><dd>
 This variable <em>inherits</em> its value from the parent section if nothing is specified here.
@@ -1299,6 +1348,24 @@ Default value: forks = 5
 </dd><dd>
 <p>Default value: extrare = / /</p>
 
+</dd><dt><strong><a name="item_follow_redirects"><strong>follow_redirects</strong></a></strong><br />
+
+</dt><dd>
+<pre>
+ (This variable can be overridden target-specifically in the Targets section.)</pre>
+
+</dd><dd>
+<p>Default value: follow_redirects = no</p>
+
+</dd><dt><strong><a name="item_include_redirects"><strong>include_redirects</strong></a></strong><br />
+
+</dt><dd>
+<pre>
+ (This variable can be overridden target-specifically in the Targets section.)</pre>
+
+</dd><dd>
+<p>Default value: include_redirects = no</p>
+
 </dd><dt><strong><a name="item_insecure_ssl"><strong>insecure_ssl</strong></a></strong><br />
 
 </dt><dd>
@@ -1396,6 +1463,24 @@ This variable <em>inherits</em> its value from the parent section if nothing is 
 <p>Default value: extrare = / /</p>
 
 <p></p>
+</dd><dt><strong><strong>follow_redirects</strong></strong><br />
+
+</dt><dd>
+This variable <em>inherits</em> its value from the parent section if nothing is specified here.
+
+</dd><dd>
+<p>Default value: follow_redirects = no</p>
+
+<p></p>
+</dd><dt><strong><strong>include_redirects</strong></strong><br />
+
+</dt><dd>
+This variable <em>inherits</em> its value from the parent section if nothing is specified here.
+
+</dd><dd>
+<p>Default value: include_redirects = no</p>
+
+<p></p>
 </dd><dt><strong><strong>insecure_ssl</strong></strong><br />
 
 </dt><dd>
@@ -1472,6 +1557,12 @@ Default value: timeout = 5
 <pre>
  (This variable can be overridden target-specifically in the Targets section.)</pre>
 
+</dd><dt><strong><a name="item_server"><strong>server</strong></a></strong><br />
+
+</dt><dd>
+<pre>
+ (This variable can be overridden target-specifically in the Targets section.)</pre>
+
 </dd></dl>
 <p>Syntax changes for subsection <strong>/[-_0-9a-zA-Z]+/</strong></p>
 <p>The following new variables are valid:</p>
@@ -1519,6 +1610,12 @@ This variable <em>inherits</em> its value from the parent section if nothing is 
 
 <p></p>
 </dd><dt><strong><strong>pings</strong></strong><br />
+
+</dt><dd>
+This variable <em>inherits</em> its value from the parent section if nothing is specified here.
+
+<p></p>
+</dd><dt><strong><strong>server</strong></strong><br />
 
 </dt><dd>
 This variable <em>inherits</em> its value from the parent section if nothing is specified here.
@@ -3558,6 +3655,15 @@ Default value: forks = 5
 Default value: timeout = 5
 
 <p></p>
+</dd><dt><strong><a name="item_keytype"><strong>keytype</strong></a></strong><br />
+
+</dt><dd>
+<pre>
+ (This variable can be overridden target-specifically in the Targets section.)</pre>
+
+</dd><dd>
+<p>Default value: keytype = rsa</p>
+
 </dd><dt><strong><strong>pings</strong></strong><br />
 
 </dt><dd>
@@ -3602,6 +3708,15 @@ This variable <em>inherits</em> its value from the parent section if nothing is 
 
 </dd><dd>
 <p>Default value: timeout = 5</p>
+
+<p></p>
+</dd><dt><strong><strong>keytype</strong></strong><br />
+
+</dt><dd>
+This variable <em>inherits</em> its value from the parent section if nothing is specified here.
+
+</dd><dd>
+<p>Default value: keytype = rsa</p>
 
 <p></p>
 </dd><dt><strong><strong>pings</strong></strong><br />
@@ -4262,6 +4377,8 @@ The following new variables are valid:
 
 </dt><dt><strong><strong>tos</strong></strong><br />
 
+</dt><dt><strong><strong>vrf</strong></strong><br />
+
 </dt></dl>
 <p>Syntax changes for subsection <strong>/[-_0-9a-zA-Z]+/</strong></p>
 <p>The following new variables are valid:</p>
@@ -4291,6 +4408,12 @@ This variable <em>inherits</em> its value from the parent section if nothing is 
 
 <p></p>
 </dd><dt><strong><strong>tos</strong></strong><br />
+
+</dt><dd>
+This variable <em>inherits</em> its value from the parent section if nothing is specified here.
+
+<p></p>
+</dd><dt><strong><strong>vrf</strong></strong><br />
 
 </dt><dd>
 This variable <em>inherits</em> its value from the parent section if nothing is specified here.
@@ -4360,6 +4483,10 @@ The following new variables are valid:
 
 </dt><dt><strong><strong>extrare</strong></strong><br />
 
+</dt><dt><strong><strong>follow_redirects</strong></strong><br />
+
+</dt><dt><strong><strong>include_redirects</strong></strong><br />
+
 </dt><dt><strong><strong>insecure_ssl</strong></strong><br />
 
 </dt><dt><strong><strong>interface</strong></strong><br />
@@ -4389,6 +4516,18 @@ This variable <em>inherits</em> its value from the parent section if nothing is 
 
 <p></p>
 </dd><dt><strong><strong>extrare</strong></strong><br />
+
+</dt><dd>
+This variable <em>inherits</em> its value from the parent section if nothing is specified here.
+
+<p></p>
+</dd><dt><strong><strong>follow_redirects</strong></strong><br />
+
+</dt><dd>
+This variable <em>inherits</em> its value from the parent section if nothing is specified here.
+
+<p></p>
+</dd><dt><strong><strong>include_redirects</strong></strong><br />
 
 </dt><dd>
 This variable <em>inherits</em> its value from the parent section if nothing is specified here.
@@ -4441,6 +4580,8 @@ The following new variables are valid:
 
 </dt><dt><strong><strong>pings</strong></strong><br />
 
+</dt><dt><strong><strong>server</strong></strong><br />
+
 </dt></dl>
 <p>Syntax changes for subsection <strong>/[-_0-9a-zA-Z]+/</strong></p>
 <p>The following new variables are valid:</p>
@@ -4452,6 +4593,12 @@ This variable <em>inherits</em> its value from the parent section if nothing is 
 
 <p></p>
 </dd><dt><strong><strong>pings</strong></strong><br />
+
+</dt><dd>
+This variable <em>inherits</em> its value from the parent section if nothing is specified here.
+
+<p></p>
+</dd><dt><strong><strong>server</strong></strong><br />
 
 </dt><dd>
 This variable <em>inherits</em> its value from the parent section if nothing is specified here.
@@ -5321,13 +5468,21 @@ No changes that can be automatically described.
 The following new variables are valid:
 
 <dl>
-<dt><strong><strong>pings</strong></strong><br />
+<dt><strong><strong>keytype</strong></strong><br />
+
+</dt><dt><strong><strong>pings</strong></strong><br />
 
 </dt></dl>
 <p>Syntax changes for subsection <strong>/[-_0-9a-zA-Z]+/</strong></p>
 <p>The following new variables are valid:</p>
 <dl>
-<dt><strong><strong>pings</strong></strong><br />
+<dt><strong><strong>keytype</strong></strong><br />
+
+</dt><dd>
+This variable <em>inherits</em> its value from the parent section if nothing is specified here.
+
+<p></p>
+</dd><dt><strong><strong>pings</strong></strong><br />
 
 </dt><dd>
 This variable <em>inherits</em> its value from the parent section if nothing is specified here.

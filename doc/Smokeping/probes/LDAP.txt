@@ -222,4 +222,4 @@ BBUUGGSS
 
 
 
-2.0.5                       2005-11d-o1c4::Smokeping::probes::LDAP(3)
+2.0.8                       2006-04d-o1c4::Smokeping::probes::LDAP(3)

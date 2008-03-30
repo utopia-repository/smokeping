@@ -27,7 +27,7 @@ use Smokeping::RRDtools;
 
 # globale persistent variables for speedy
 use vars qw($cfg $probes $VERSION $havegetaddrinfo $cgimode);
-$VERSION="2.000005";
+$VERSION="2.000008";
 
 # we want opts everywhere
 my %opt;
@@ -101,12 +101,26 @@ sub snmpget_ident ($) {
     return $answer;
 }
 
+sub cgiurl {
+    my ($q, $cfg) = @_;
+    my %url_of = (
+        absolute => $cfg->{General}{cgiurl},
+        relative => q{},
+        original => $q->script_name,
+    );
+    my $linkstyle = $cfg->{General}->{linkstyle};
+    die('unknown value for $cfg->{General}->{linkstyle}: '
+                         . $linkstyle
+    ) unless exists $url_of{$linkstyle};
+    return $url_of{$linkstyle};
+}
+
 sub lnk ($$) {
     my ($q, $path) = @_;
     if ($q->isa('dummyCGI')) {
 	return $path . ".html";
     } else {
-	return $cfg->{General}->{cgiurl} . "?target=" . $path;
+	return cgiurl($q, $cfg) . "?target=" . $path;
     }
 }
 
@@ -635,7 +649,8 @@ sub findmax ($$) {
 	my ($desc,$start) = @{$_};
 	$start = exp2seconds($start);
 	my ($graphret,$xs,$ys) = RRDs::graph
-	  ("dummy", '--start', -$start,
+	  ("dummy", '--start', -$start, 
+           '--end','-'.int($start / $cfg->{Presentation}{detail}{width}),
            "DEF:maxping=${rrd}:median:AVERAGE",
            'PRINT:maxping:MAX:%le' );
         my $ERROR = RRDs::error();
@@ -740,7 +755,7 @@ sub get_detail ($$$$){
     my $imghref;
     my $max;
     my @tasks;
-    my %lasthight;	
+    my %lastheight;	
 
     if ($mode eq 's'){
 	# in nave mode there is only one graph, so the height calculation
@@ -748,16 +763,16 @@ sub get_detail ($$$$){
 	$imgbase = $cfg->{General}{imgcache}."/".(join "/", @dirs)."/${file}";
 	$imghref = $cfg->{General}{imgurl}."/".(join "/", @dirs)."/${file}";	
 	@tasks = @{$cfg->{Presentation}{detail}{_table}};
-	if (open (HG,"<${imgbase}.maxhight")){
+	if (open (HG,"<${imgbase}.maxheight")){
 	    while (<HG>){
 		chomp;
 		my @l = split / /;
-		$lasthight{$l[0]} = $l[1];
+		$lastheight{$l[0]} = $l[1];
 	    }
 	    close HG;
 	}
 	$max = findmax $cfg, $rrd;
-	if (open (HG,">${imgbase}.maxhight")){
+	if (open (HG,">${imgbase}.maxheight")){
 	    foreach my $s (keys %{$max}){
 		print HG "$s $max->{$s}\n";        
 	    }
@@ -906,7 +921,7 @@ sub get_detail ($$$$){
 	  $cfg->{Presentation}{detail}{logarithmic} eq 'yes';
 	
         my @lazy =();
-        @lazy = ('--lazy') if $mode eq 's' and $lasthight{$start} and $lasthight{$start} == $max->{$start};
+        @lazy = ('--lazy') if $mode eq 's' and $lastheight{$start} and $lastheight{$start} == $max->{$start};
 	$desc = "Navigator Graph" if $mode eq 'n';
         my $timer_start = time();
         my @task =
@@ -999,7 +1014,7 @@ sub display_webpage($$){
        {
 	menu => target_menu($cfg->{Targets},
 			    [@$open], #copy this because it gets changed
-			    $cfg->{General}->{cgiurl}."?target="),
+			    cgiurl($q, $cfg) ."?target="),
 	title => $tree->{title},
 	remark => ($tree->{remark} || ''),
 	overview => get_overview( $cfg,$q,$tree,$open ),
@@ -1008,10 +1023,10 @@ sub display_webpage($$){
 	owner => $cfg->{General}{owner},
         contact => $cfg->{General}{contact},
         author => '<A HREF="http://tobi.oetiker.ch/">Tobi&nbsp;Oetiker</A> and Niko&nbsp;Tyni',
-        smokeping => '<A HREF="http://people.ee.ethz.ch/~oetiker/webtools/smokeping/counter.cgi/'.$VERSION.'">SmokePing-'.$readversion.'</A>',
+        smokeping => '<A HREF="http://oss.oetiker.ch/smokeping/counter.cgi/'.$VERSION.'">SmokePing-'.$readversion.'</A>',
         step => $step,
-        rrdlogo => '<A HREF="http://people.ee.ethz.ch/~oetiker/webtools/rrdtool/"><img border="0" src="'.$cfg->{General}{imgurl}.'/rrdtool.png"></a>',
-        smokelogo => '<A HREF="http://people.ee.ethz.ch/~oetiker/webtools/smokeping/counter.cgi/'.$VERSION.'"><img border="0" src="'.$cfg->{General}{imgurl}.'/smokeping.png"></a>',
+        rrdlogo => '<A HREF="http://oss.oetiker.ch/rrdtool/"><img border="0" src="'.$cfg->{General}{imgurl}.'/rrdtool.png"></a>',
+        smokelogo => '<A HREF="http://oss.oetiker.ch/smokeping/counter.cgi/'.$VERSION.'"><img border="0" src="'.$cfg->{General}{imgurl}.'/smokeping.png"></a>',
        }
        );
 }
@@ -1131,7 +1146,9 @@ sub update_rrds($$$$$) {
                         $urlline =  $cfg->{General}{cgiurl}."?target=".$line;
                         my $loss = "loss: ".join ", ",map {defined $_ ? (/^\d/ ? sprintf "%.0f%%", $_ :$_):"U" } @{$x->{loss}};
                         my $rtt = "rtt: ".join ", ",map {defined $_ ? (/^\d/ ? sprintf "%.0fms", $_*1000 :$_):"U" } @{$x->{rtt}}; 
-                        my $stamp = scalar localtime time;
+			my $time = time;
+                        my @stamp = localtime($time);
+			my $stamp = localtime($time);
 			my @to;
 			foreach my $addr (map {$_ ? (split /\s*,\s*/,$_) : ()} $cfg->{Alerts}{to},$tree->{alertee},$cfg->{Alerts}{$_}{to}){
 			     next unless $addr;
@@ -1153,10 +1170,12 @@ SNPPALERT
 			     }
 			};
 			if (@to){
+			    my $rfc2822stamp =  strftime("%a, %e %b %Y %H:%M:%S %z", @stamp);
 			    my $to = join ",",@to;
 			    sendmail $cfg->{Alerts}{from},$to, <<ALERT;
 To: $to
 From: $cfg->{Alerts}{from}
+Date: $rfc2822stamp
 Subject: [SmokeAlert] $_ $what on $line
 
 $stamp
@@ -1235,6 +1254,7 @@ sub get_parser () {
     my $KEY_RE = '[-_0-9a-zA-Z]+';
     my $KEYD_RE = '[-_0-9a-zA-Z.]+';
     my $PROBE_RE = '[A-Z][a-zA-Z]+';
+    my $e = "=";
     my %knownprobes; # the probes encountered so far
 
     # get a list of available probes for _dyndoc sections
@@ -1268,11 +1288,11 @@ sub get_parser () {
     my %storedtargetvars; 
 
     # the part of target section syntax that doesn't depend on the selected probe
-    my %TARGETCOMMON; # predeclare self-referencing structures
+    my $TARGETCOMMON; # predeclare self-referencing structures
     # the common variables
     my $TARGETCOMMONVARS = [ qw (probe menu title alerts note email host remark rawlog alertee) ];
-    %TARGETCOMMON = 
-      (
+    $TARGETCOMMON = 
+      {
        _vars     => $TARGETCOMMONVARS,
        _inherited=> [ qw (probe alerts alertee) ],
        _sections => [ "/$KEY_RE/" ],
@@ -1413,7 +1433,7 @@ DOC
 				delete $targetvars->{$_}{_default} for @targetvars;
 
 				# we replace the current grammar altogether
-				%$grammar = ( %TARGETCOMMON, %$targetvars ); 
+				%$grammar = ( %{_deepcopy($TARGETCOMMON)}, %$targetvars ); 
 				$grammar->{_vars} = [ @{$grammar->{_vars}}, @targetvars ];
 
 				# the subsections differ only in that they inherit their vars from here
@@ -1435,7 +1455,7 @@ DOC
 				$g->{host}{_dyn} = $mandatorysub;
 			},
 	   },
-    );
+    };
 
     my $INTEGER_SUB = {
         _sub => sub {
@@ -1612,7 +1632,7 @@ DOC
 	 [ qw(owner imgcache imgurl datadir dyndir pagedir piddir sendmail offset
               smokemail cgiurl mailhost contact netsnpp
 	      syslogfacility syslogpriority concurrentprobes changeprocessnames tmail
-	      changecgiprogramname) ],
+	      changecgiprogramname linkstyle) ],
 	 _mandatory =>
 	 [ qw(owner imgcache imgurl datadir piddir
               smokemail cgiurl contact) ],
@@ -1723,6 +1743,41 @@ Complete URL path of the SmokePing.cgi
 DOC
 	  
 	 },
+     linkstyle =>
+     {
+      _re => '(?:absolute|relative|original)',
+      _default => 'relative',
+      _re_error =>
+      'linkstyle must be one of "absolute", "relative" or "original"',
+      _doc => <<DOC,
+How the CGI self-referring links are created. The possible values are 
+
+${e}over
+
+${e}item absolute 
+
+Full hostname and path derived from the 'cgiurl' variable 
+
+S<\<a href="http://hostname/path/smokeping.cgi?foo=bar"\>>
+
+${e}item relative 
+
+Only the parameter part is specified 
+
+S<\<a href="?foo=bar"\>>
+
+${e}item original 
+
+The way the links were generated before Smokeping version 2.0.4:
+no hostname, only the path 
+
+S<\<a href="/path/smokeping.cgi?foo=bar"\>>
+
+${e}back
+
+The default is "relative", which hopefully works for everybody.
+DOC
+    },
 	 syslogfacility	=>
 	 {
 	  _re => '\w+',
@@ -2333,7 +2388,7 @@ DOC
                    _order => 1,
 		   _sections   => [ "/$KEY_RE/" ],
 		   _recursive  => [ "/$KEY_RE/" ],
-		   "/$KEY_RE/" => \%TARGETCOMMON, # this is just for documentation, _dyn() below replaces it
+		   "/$KEY_RE/" => $TARGETCOMMON, # this is just for documentation, _dyn() below replaces it
 		   probe => { 
 		   	_doc => <<DOC,
 The name of the probe module to be used for this host. The value of
@@ -2360,7 +2415,7 @@ DOC
 					$grammar->{$_} = $targetvars->{$_};
 				}
 				push @{$grammar->{_vars}}, @targetvars;
-				my $g = { %TARGETCOMMON, %{_deepcopy($targetvars)} };
+				my $g = { %{_deepcopy($TARGETCOMMON)}, %{_deepcopy($targetvars)} };
 				$grammar->{"/$KEY_RE/"} = $g;
 				$g->{_vars} = [ @{$g->{_vars}}, @targetvars ];
 				$g->{_inherited} = [ @{$g->{_inherited}}, @targetvars ];
@@ -2719,10 +2774,10 @@ sub gen_page  ($$$) {
 	  owner => $cfg->{General}{owner},
 	  contact => $cfg->{General}{contact},
           author => '<A HREF="http://tobi.oetiker.ch/">Tobi&nbsp;Oetiker</A> and Niko&nbsp;Tyni',
-	  smokeping => '<A HREF="http://people.ee.ethz.ch/~oetiker/webtools/smokeping/counter.cgi/'.$VERSION.'">SmokePing-'.$readversion.'</A>',
+	  smokeping => '<A HREF="http://oss.oetiker.ch/smokeping/counter.cgi/'.$VERSION.'">SmokePing-'.$readversion.'</A>',
 	  step => $step,
-	  rrdlogo => '<A HREF="http://people.ee.ethz.ch/~oetiker/webtools/rrdtool/"><img border="0" src="'.$cfg->{General}{imgurl}.'/rrdtool.png"></a>',
-	  smokelogo => '<A HREF="http://people.ee.ethz.ch/~oetiker/webtools/smokeping/counter.cgi/'.$VERSION.'"><img border="0" src="'.$cfg->{General}{imgurl}.'/smokeping.png"></a>',
+	  rrdlogo => '<A HREF="http://oss.oetiker.ch/rrdtool/"><img border="0" src="'.$cfg->{General}{imgurl}.'/rrdtool.png"></a>',
+	  smokelogo => '<A HREF="http://oss.oetiker.ch/smokeping/counter.cgi/'.$VERSION.'"><img border="0" src="'.$cfg->{General}{imgurl}.'/smokeping.png"></a>',
 	 });
 
     print PAGEFILE $page;

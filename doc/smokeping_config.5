@@ -129,7 +129,7 @@
 .\" ========================================================================
 .\"
 .IX Title "SMOKEPING_CONFIG 5"
-.TH SMOKEPING_CONFIG 5 "2005-11-14" "2.0.5" "SmokePing"
+.TH SMOKEPING_CONFIG 5 "2006-04-14" "2.0.8" "SmokePing"
 .SH "NAME"
 smokeping_config \- Reference for the SmokePing Config File
 .SH "OVERVIEW"
@@ -271,6 +271,33 @@ version of the CGI::Carp module. See
 the installation document for details.
 .Sp
 Default value: changecgiprogramname = yes
+.IP "\fBlinkstyle\fR" 4
+.IX Item "linkstyle"
+How the \s-1CGI\s0 self-referring links are created. The possible values are 
+.RS 4
+.IP "absolute" 4
+.IX Item "absolute"
+Full hostname and path derived from the 'cgiurl' variable 
+.Sp
+<a\ href=\*(L"http://hostname/path/smokeping.cgi?foo=bar\*(R">
+.IP "relative" 4
+.IX Item "relative"
+Only the parameter part is specified 
+.Sp
+<a\ href=\*(L"?foo=bar\*(R">
+.IP "original" 4
+.IX Item "original"
+The way the links were generated before Smokeping version 2.0.4:
+no hostname, only the path 
+.Sp
+<a\ href=\*(L"/path/smokeping.cgi?foo=bar\*(R">
+.RE
+.RS 4
+.Sp
+The default is \*(L"relative\*(R", which hopefully works for everybody.
+.Sp
+Default value: linkstyle = relative
+.RE
 .Sh "*** Database *** \fI(mandatory section)\fP"
 .IX Subsection "*** Database *** (mandatory section)"
 Describes the properties of the round robin database for storing the
@@ -891,6 +918,11 @@ Default value: packetsize = 56
 .Vb 1
 \& (This variable can be overridden target-specifically in the Targets section.)
 .Ve
+.IP "\fBvrf\fR" 4
+.IX Item "vrf"
+.Vb 1
+\& (This variable can be overridden target-specifically in the Targets section.)
+.Ve
 .RE
 .RS 4
 .Sp
@@ -930,6 +962,9 @@ Default value: packetsize = 56
 This variable \fIinherits\fR its value from the parent section if nothing is specified here.
 .IP "\fBtos\fR" 4
 .IX Item "tos"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBvrf\fR" 4
+.IX Item "vrf"
 This variable \fIinherits\fR its value from the parent section if nothing is specified here.
 .RE
 .RS 4
@@ -1065,6 +1100,20 @@ Default value: forks = 5
 .Ve
 .Sp
 Default value: extrare = / /
+.IP "\fBfollow_redirects\fR" 4
+.IX Item "follow_redirects"
+.Vb 1
+\& (This variable can be overridden target-specifically in the Targets section.)
+.Ve
+.Sp
+Default value: follow_redirects = no
+.IP "\fBinclude_redirects\fR" 4
+.IX Item "include_redirects"
+.Vb 1
+\& (This variable can be overridden target-specifically in the Targets section.)
+.Ve
+.Sp
+Default value: include_redirects = no
 .IP "\fBinsecure_ssl\fR" 4
 .IX Item "insecure_ssl"
 .Vb 1
@@ -1133,6 +1182,16 @@ This variable \fIinherits\fR its value from the parent section if nothing is spe
 This variable \fIinherits\fR its value from the parent section if nothing is specified here.
 .Sp
 Default value: extrare = / /
+.IP "\fBfollow_redirects\fR" 4
+.IX Item "follow_redirects"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.Sp
+Default value: follow_redirects = no
+.IP "\fBinclude_redirects\fR" 4
+.IX Item "include_redirects"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.Sp
+Default value: include_redirects = no
 .IP "\fBinsecure_ssl\fR" 4
 .IX Item "insecure_ssl"
 This variable \fIinherits\fR its value from the parent section if nothing is specified here.
@@ -1191,6 +1250,11 @@ Default value: timeout = 5
 .Vb 1
 \& (This variable can be overridden target-specifically in the Targets section.)
 .Ve
+.IP "\fBserver\fR" 4
+.IX Item "server"
+.Vb 1
+\& (This variable can be overridden target-specifically in the Targets section.)
+.Ve
 .RE
 .RS 4
 .Sp
@@ -1222,6 +1286,9 @@ Default value: timeout = 5
 This variable \fIinherits\fR its value from the parent section if nothing is specified here.
 .IP "\fBpings\fR" 4
 .IX Item "pings"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBserver\fR" 4
+.IX Item "server"
 This variable \fIinherits\fR its value from the parent section if nothing is specified here.
 .RE
 .RS 4
@@ -2719,6 +2786,13 @@ Default value: forks = 5
 .IX Item "timeout"
 .PD
 Default value: timeout = 5
+.IP "\fBkeytype\fR" 4
+.IX Item "keytype"
+.Vb 1
+\& (This variable can be overridden target-specifically in the Targets section.)
+.Ve
+.Sp
+Default value: keytype = rsa
 .IP "\fBpings\fR" 4
 .IX Item "pings"
 .Vb 1
@@ -2750,6 +2824,11 @@ This variable \fIinherits\fR its value from the parent section if nothing is spe
 This variable \fIinherits\fR its value from the parent section if nothing is specified here.
 .Sp
 Default value: timeout = 5
+.IP "\fBkeytype\fR" 4
+.IX Item "keytype"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.Sp
+Default value: keytype = rsa
 .IP "\fBpings\fR" 4
 .IX Item "pings"
 This variable \fIinherits\fR its value from the parent section if nothing is specified here.
@@ -3315,6 +3394,8 @@ The following new variables are valid:
 .IX Item "pings"
 .IP "\fBtos\fR" 4
 .IX Item "tos"
+.IP "\fBvrf\fR" 4
+.IX Item "vrf"
 .RE
 .RS 4
 .PD
@@ -3337,6 +3418,9 @@ This variable \fIinherits\fR its value from the parent section if nothing is spe
 This variable \fIinherits\fR its value from the parent section if nothing is specified here.
 .IP "\fBtos\fR" 4
 .IX Item "tos"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBvrf\fR" 4
+.IX Item "vrf"
 This variable \fIinherits\fR its value from the parent section if nothing is specified here.
 .RE
 .RS 4
@@ -3403,6 +3487,10 @@ The following new variables are valid:
 .IX Item "extraargs"
 .IP "\fBextrare\fR" 4
 .IX Item "extrare"
+.IP "\fBfollow_redirects\fR" 4
+.IX Item "follow_redirects"
+.IP "\fBinclude_redirects\fR" 4
+.IX Item "include_redirects"
 .IP "\fBinsecure_ssl\fR" 4
 .IX Item "insecure_ssl"
 .IP "\fBinterface\fR" 4
@@ -3431,6 +3519,12 @@ This variable \fIinherits\fR its value from the parent section if nothing is spe
 This variable \fIinherits\fR its value from the parent section if nothing is specified here.
 .IP "\fBextrare\fR" 4
 .IX Item "extrare"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBfollow_redirects\fR" 4
+.IX Item "follow_redirects"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBinclude_redirects\fR" 4
+.IX Item "include_redirects"
 This variable \fIinherits\fR its value from the parent section if nothing is specified here.
 .IP "\fBinsecure_ssl\fR" 4
 .IX Item "insecure_ssl"
@@ -3467,6 +3561,8 @@ The following new variables are valid:
 .PD 0
 .IP "\fBpings\fR" 4
 .IX Item "pings"
+.IP "\fBserver\fR" 4
+.IX Item "server"
 .RE
 .RS 4
 .PD
@@ -3480,6 +3576,9 @@ The following new variables are valid:
 This variable \fIinherits\fR its value from the parent section if nothing is specified here.
 .IP "\fBpings\fR" 4
 .IX Item "pings"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBserver\fR" 4
+.IX Item "server"
 This variable \fIinherits\fR its value from the parent section if nothing is specified here.
 .RE
 .RS 4
@@ -4168,15 +4267,22 @@ No changes that can be automatically described.
 .IX Item "SSH: (See the separate module documentation for details about each variable.)"
 The following new variables are valid:
 .RS 4
+.IP "\fBkeytype\fR" 4
+.IX Item "keytype"
+.PD 0
 .IP "\fBpings\fR" 4
 .IX Item "pings"
 .RE
 .RS 4
+.PD
 .Sp
 Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
+.IP "\fBkeytype\fR" 4
+.IX Item "keytype"
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
 .IP "\fBpings\fR" 4
 .IX Item "pings"
 This variable \fIinherits\fR its value from the parent section if nothing is specified here.

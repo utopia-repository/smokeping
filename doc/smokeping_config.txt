@@ -174,6 +174,33 @@ RREEFFEERREENNCCEE
 
            Default value: changecgiprogramname = yes
 
+       lliinnkkssttyyllee
+           How the CGI self-referring links are created. The pos-
+           sible values are
+
+           absolute
+               Full hostname and path derived from the 'cgiurl'
+               variable
+
+               <a href="http://host-
+               name/path/smokeping.cgi?foo=bar">
+
+           relative
+               Only the parameter part is specified
+
+               <a href="?foo=bar">
+
+           original
+               The way the links were generated before Smokeping
+               version 2.0.4: no hostname, only the path
+
+               <a href="/path/smokeping.cgi?foo=bar">
+
+           The default is "relative", which hopefully works for
+           everybody.
+
+           Default value: linkstyle = relative
+
        ****** DDaattaabbaassee ****** _(_m_a_n_d_a_t_o_r_y _s_e_c_t_i_o_n_)
 
        Describes the properties of the round robin database for
@@ -195,16 +222,15 @@ RREEFFEERREENNCCEE
            somehow convert them.
 
        ppiinnggss _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
-           How many pings should be sent to each target.
-           Suggested: 20 pings. Minimum value: 3 pings.  This can
-           be overridden by each probe. Some probes (those
-           derived from basefork.pm, ie. most except the FPing
-           variants) will even let this be overridden tar-
-           get-specifically. Note that the number of pings in the
-           RRD files is fixed when they are originally generated,
-           and if you change this parameter afterwards, you'll
-           have to delete the old RRD files or somehow convert
-           them.
+           How many pings should be sent to each target. Sug-
+           gested: 20 pings. Minimum value: 3 pings.  This can be
+           overridden by each probe. Some probes (those derived
+           from basefork.pm, ie. most except the FPing variants)
+           will even let this be overridden target-specifically.
+           Note that the number of pings in the RRD files is
+           fixed when they are originally generated, and if you
+           change this parameter afterwards, you'll have to
+           delete the old RRD files or somehow convert them.
 
        This section also contains a table describing the setup of
        the SmokePing database. Below are reasonable defaults.
@@ -232,6 +258,10 @@ RREEFFEERREENNCCEE
 
        column 3
            How many rroowwss this RRA should have.
+
+
+
+
 
        ****** PPrreesseennttaattiioonn ****** _(_m_a_n_d_a_t_o_r_y _s_e_c_t_i_o_n_)
 
@@ -326,7 +356,6 @@ RREEFFEERREENNCCEE
            the resolution of each graph.
 
            Example:
-
 
             "Last 3 Hours"    3h
             "Last 30 Hours"   30h
@@ -774,6 +803,9 @@ RREEFFEERREENNCCEE
                ttooss
                     (This variable can be overridden target-specifically in the Targets section.)
 
+               vvrrff
+                    (This variable can be overridden target-specifically in the Targets section.)
+
                Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
                    The following new variables are valid:
@@ -825,6 +857,10 @@ RREEFFEERREENNCCEE
                        here.
 
                    ttooss This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   vvrrff This variable _i_n_h_e_r_i_t_s its value from the
                        parent section if nothing is specified
                        here.
 
@@ -943,6 +979,16 @@ RREEFFEERREENNCCEE
 
                    Default value: extrare = / /
 
+               ffoollllooww__rreeddiirreeccttss
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+                   Default value: follow_redirects = no
+
+               iinncclluuddee__rreeddiirreeccttss
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+                   Default value: include_redirects = no
+
                iinnsseeccuurree__ssssll
                     (This variable can be overridden target-specifically in the Targets section.)
 
@@ -1011,6 +1057,20 @@ RREEFFEERREENNCCEE
 
                        Default value: extrare = / /
 
+                   ffoollllooww__rreeddiirreeccttss
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: follow_redirects = no
+
+                   iinncclluuddee__rreeddiirreeccttss
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: include_redirects = no
+
                    iinnsseeccuurree__ssssll
                        This variable _i_n_h_e_r_i_t_s its value from the
                        parent section if nothing is specified
@@ -1065,6 +1125,9 @@ RREEFFEERREENNCCEE
                ppiinnggss
                     (This variable can be overridden target-specifically in the Targets section.)
 
+               sseerrvveerr
+                    (This variable can be overridden target-specifically in the Targets section.)
+
                Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
                    The following new variables are valid:
@@ -1104,6 +1167,11 @@ RREEFFEERREENNCCEE
                        here.
 
                    ppiinnggss
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   sseerrvveerr
                        This variable _i_n_h_e_r_i_t_s its value from the
                        parent section if nothing is specified
                        here.
@@ -2536,6 +2604,11 @@ RREEFFEERREENNCCEE
                ttiimmeeoouutt
                    Default value: timeout = 5
 
+               kkeeyyttyyppee
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+                   Default value: keytype = rsa
+
                ppiinnggss
                     (This variable can be overridden target-specifically in the Targets section.)
 
@@ -2571,6 +2644,13 @@ RREEFFEERREENNCCEE
                        here.
 
                        Default value: timeout = 5
+
+                   kkeeyyttyyppee
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: keytype = rsa
 
                    ppiinnggss
                        This variable _i_n_h_e_r_i_t_s its value from the
@@ -2768,7 +2848,6 @@ RREEFFEERREENNCCEE
         # in milliseconds
         pattern = <10,<10,<10,<10,<10,<100,>100,>100,>100
         comment = routing messed up again ?
-
 
         +rttbadstart
         type = rtt
@@ -3102,6 +3181,7 @@ RREEFFEERREENNCCEE
            ppaacckkeettssiizzee
            ppiinnggss
            ttooss
+           vvrrff
 
            Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
@@ -3126,6 +3206,9 @@ RREEFFEERREENNCCEE
                ttooss This variable _i_n_h_e_r_i_t_s its value from the par-
                    ent section if nothing is specified here.
 
+               vvrrff This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
            (End of dynamical grammar changes for variable "probe"
            example value "CiscoRTTMonEchoICMP".)
 
@@ -3148,8 +3231,8 @@ RREEFFEERREENNCCEE
                    ent section if nothing is specified here.
 
                iioossiinntt
-                   This variable _i_n_h_e_r_i_t_s its value from the par-
-                   ent section if nothing is specified here.
+                   This variable _i_n_h_e_r_i_t_s its value from the
+                   parent section if nothing is specified here.
 
                ppiinnggss
                    This variable _i_n_h_e_r_i_t_s its value from the par-
@@ -3172,6 +3255,8 @@ RREEFFEERREENNCCEE
            aaggeenntt
            eexxttrraaaarrggss
            eexxttrraarree
+           ffoollllooww__rreeddiirreeccttss
+           iinncclluuddee__rreeddiirreeccttss
            iinnsseeccuurree__ssssll
            iinntteerrffaaccee
            ppiinnggss
@@ -3195,6 +3280,14 @@ RREEFFEERREENNCCEE
                    This variable _i_n_h_e_r_i_t_s its value from the par-
                    ent section if nothing is specified here.
 
+               ffoollllooww__rreeddiirreeccttss
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               iinncclluuddee__rreeddiirreeccttss
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
                iinnsseeccuurree__ssssll
                    This variable _i_n_h_e_r_i_t_s its value from the par-
                    ent section if nothing is specified here.
@@ -3204,8 +3297,8 @@ RREEFFEERREENNCCEE
                    ent section if nothing is specified here.
 
                ppiinnggss
-                   This variable _i_n_h_e_r_i_t_s its value from the par-
-                   ent section if nothing is specified here.
+                   This variable _i_n_h_e_r_i_t_s its value from the
+                   parent section if nothing is specified here.
 
                ssssll22
                    This variable _i_n_h_e_r_i_t_s its value from the par-
@@ -3228,6 +3321,7 @@ RREEFFEERREENNCCEE
 
            llooookkuupp
            ppiinnggss
+           sseerrvveerr
 
            Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
@@ -3238,6 +3332,10 @@ RREEFFEERREENNCCEE
                    ent section if nothing is specified here.
 
                ppiinnggss
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               sseerrvveerr
                    This variable _i_n_h_e_r_i_t_s its value from the par-
                    ent section if nothing is specified here.
 
@@ -3331,8 +3429,8 @@ RREEFFEERREENNCCEE
                    ent section if nothing is specified here.
 
                iippvveerrssiioonn
-                   This variable _i_n_h_e_r_i_t_s its value from the par-
-                   ent section if nothing is specified here.
+                   This variable _i_n_h_e_r_i_t_s its value from the
+                   parent section if nothing is specified here.
 
                ppiinnggss
                    This variable _i_n_h_e_r_i_t_s its value from the par-
@@ -3827,11 +3925,16 @@ RREEFFEERREENNCCEE
        about each variable.)
            The following new variables are valid:
 
+           kkeeyyttyyppee
            ppiinnggss
 
            Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
                The following new variables are valid:
+
+               kkeeyyttyyppee
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
 
                ppiinnggss
                    This variable _i_n_h_e_r_i_t_s its value from the par-
@@ -3907,4 +4010,4 @@ AAUUTTHHOORR
 
 
 
-2.0.5                       2005-11-14        SMOKEPING_CONFIG(5)
+2.0.8                       2006-04-14        SMOKEPING_CONFIG(5)

@@ -170,7 +170,7 @@ The probe does unnecessary DNS queries, i.e. more than configured in the "pings"
 
 =head1 SEE ALSO
 
-L<http://people.ee.ethz.ch/~oetiker/webtools/smokeping/>
+L<http://oss.oetiker.ch/smokeping/>
 
 L<http://www.switch.ch/misc/leinen/snmp/perl/>
 
