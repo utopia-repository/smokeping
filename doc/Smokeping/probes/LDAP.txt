@@ -208,4 +208,4 @@ BBUUGGSS
 
 
 
-2.2.6                             2007-10-28   doc::Smokeping::probes::LDAP(3)
+2.2.7                             2007-11-05   doc::Smokeping::probes::LDAP(3)

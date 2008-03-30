@@ -1,12 +1,12 @@
 SHELL = /bin/sh
-VERSION := 2.2.6
+VERSION := 2.2.7
 SVNREPO = svn://svn.oetiker.ch/smokeping
 ############ A is for features
 ############ B is for bugfixes
 ############ V.AAABBB
 ############ 2.000001
 ############ 2.000002
-NUMVERSION = 2.002006
+NUMVERSION = 2.002007
 IGNORE = ~|CVS|var/|smokeping-$(VERSION)/smokeping-$(VERSION)|cvsignore|rej|orig|DEAD|pod2htm[di]\.tmp|\.svn|tar\.gz|DEADJOE|svn-commit\.tmp
 GROFF = groff
 PERL = perl-5.8.8
@@ -154,9 +154,9 @@ smokeping-$(VERSION).tar.gz:
 	$(PERL) -i~ -p -e 's/Smokeping \d.*?;/Smokeping $(NUMVERSION);/' bin/smokeping.dist htdocs/smokeping.cgi.dist bin/tSmoke.dist
 	$(PERL) -i~ -p -e 'do { my @d = localtime; my $$d = (1900+$$d[5])."/".(1+$$d[4])."/".$$d[3]; print "$$d -- released version $(VERSION)\n\n" } unless $$done++ || /version $(VERSION)/' CHANGES
 	svn commit -m "prepare for the release of smokeping-$(VERSION)"
-	svn checkout $(SVNREPO)/trunk/software smokeping-$(VERSION)
-	(cd smokeping-$(VERSION) && make doc)
-	tar czvf smokeping-$(VERSION).tar.gz --exclude .svn smokeping-$(VERSION)
+	svn export $(SVNREPO)/trunk/software smokeping-$(VERSION)
+	(cd smokeping-$(VERSION) && $(MAKE) doc)
+	tar czvf smokeping-$(VERSION).tar.gz --exclude '*.tmp' smokeping-$(VERSION)
 	rm -rf smokeping-$(VERSION)
 
 dist:   smokeping-$(VERSION).tar.gz

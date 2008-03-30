@@ -156,4 +156,4 @@ AAUUTTHHOORR
 
 
 
-2.2.6                             2007-10-28                 SMOKEPING.DIST(1)
+2.2.7                             2007-11-05                 SMOKEPING.DIST(1)
