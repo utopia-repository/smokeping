@@ -37,9 +37,9 @@ case "$1" in
         for sec in General Alerts Database Presentation Probes Targets
         do
             if [ ! -f ${DIR}/$sec ]; then
-                if [ -e /usr/share/smokeping/oldconfigs/$sec/$2 ]; then
+                if [ -e /usr/share/smokeping/oldconfigs/$2/$sec ]; then
                     # install an unmodified version of the section so ucf knows what changed
-                    ucf --three-way /usr/share/smokeping/oldconfigs/$sec/$2 ${DIR}/$sec
+                    ucf --three-way /usr/share/smokeping/oldconfigs/$2/$sec ${DIR}/$sec
                 fi
                 sed -n "1,/^\*\*\* $sec \*\*\*/{h;d}; \${g;p;q}; /^\*\*\*/{g;p;q}; H" \
                 < /etc/smokeping/config > ${DIR}/$sec
