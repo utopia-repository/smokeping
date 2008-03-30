@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>smokeping_upgrade</title>
-<link rev="made" href="mailto:dws@ee.ethz.ch" />
+<link rev="made" href="mailto:root@localhost" />
 </head>
 
 <body style="background-color: white">
@@ -15,16 +15,23 @@
 
 	<li><a href="#name">NAME</a></li>
 	<li><a href="#overview">OVERVIEW</a></li>
-	<li><a href="#2_0_5_to_2_0_6">2.0.5 to 2.0.6</a></li>
+	<li><a href="#2_0_9_to_2_1_0">2.0.9 to 2.1.0</a></li>
 	<ul>
 
-		<li><a href="#cgi_selfreferring_links__again_">CGI self-referring links (again)</a></li>
+		<li><a href="#echoping_6_support">Echoping 6 support</a></li>
+		<li><a href="#new_method_in_base_pm__if_you_write_your_own_probes_">New method in base.pm (if you write your own probes)</a></li>
 	</ul>
 
 	<li><a href="#2_0_8_to_2_0_9">2.0.8 to 2.0.9</a></li>
 	<ul>
 
 		<li><a href="#fping_smokeping__probes__fping"><a href="./Smokeping/probes/FPing.html">FPing</a></a></li>
+	</ul>
+
+	<li><a href="#2_0_5_to_2_0_6">2.0.5 to 2.0.6</a></li>
+	<ul>
+
+		<li><a href="#cgi_selfreferring_links__again_">CGI self-referring links (again)</a></li>
 	</ul>
 
 	<li><a href="#2_0_4_to_2_0_5">2.0.4 to 2.0.5</a></li>
@@ -83,17 +90,30 @@ that with upgrading instructions etc.</p>
 <p>
 </p>
 <hr />
-<h1><a name="N2_0_5_to_2_0_6">2.0.5 to 2.0.6</a></h1>
+<h1><a name="N2_0_9_to_2_1_0">2.0.9 to 2.1.0</a></h1>
 <p>
 </p>
-<h2><a name="cgi_selfreferring_links__again_">CGI self-referring links (again)</a></h2>
-<p>The way Smokeping creates the self-referring links was changed once more.
-See the section under '2.0.4 to 2.0.5' for a description of the previous
-change.</p>
-<p>The behaviour is now customizable via the <code>linkstyle</code> variable in the
-<code>General</code> section of the configuration file. The default is now <code>relative</code>,
-creating links like &lt;a&nbsp;href=``?foo=bar''&gt;. I hope this works for everybody,
-but if it doesn't, see <a href="././smokeping_config.html">the smokeping_config manpage</a> for the alternatives.</p>
+<h2><a name="echoping_6_support">Echoping 6 support</a></h2>
+<p>This is the first Smokeping version that fully supports echoping 6. Earlier
+versions of the EchoPingHttp probes don't work with echoping 6 because
+of a command line incompatibility. (Echoping 5 is still supported, of course.)</p>
+<p>This version also introduces three new probes using the new echoping plugin
+interface introduced in version 6:</p>
+<dl>
+<dt><strong><a name="item_echopingdns_7csmokeping_3a_3aprobes_3a_3aechopingd"></a><a href="./Smokeping/probes/EchoPingDNS.html">EchoPingDNS</a></strong><br />
+
+</dt><dt><strong><a name="item_echopingldap_7csmokeping_3a_3aprobes_3a_3aechoping"></a><a href="./Smokeping/probes/EchoPingLDAP.html">EchoPingLDAP</a></strong><br />
+
+</dt><dt><strong><a name="item_echopingwhois_7csmokeping_3a_3aprobes_3a_3aechopin"></a><a href="./Smokeping/probes/EchoPingWhois.html">EchoPingWhois</a></strong><br />
+
+</dt></dl>
+<p>See the <a href="././smokeping_examples.html">the smokeping_examples manpage</a> document for simple examples of using
+these probes.</p>
+<p>
+</p>
+<h2><a name="new_method_in_base_pm__if_you_write_your_own_probes_">New method in base.pm (if you write your own probes)</a></h2>
+<p>The <em>base.pm</em> module defines the method ProbeUnit. Override this if your
+Probe does not return 'Seconds'. See the <em>FTPtransfer.pm</em> for inspiration.</p>
 <p>
 </p>
 <hr />
@@ -105,6 +125,20 @@ but if it doesn't, see <a href="././smokeping_config.html">the smokeping_config 
 It is used to give the <code>fping</code> command the <code>-t</code> parameter,
 which apparently affects the timeout of the last ping in the
 counting (<code>-C</code>) mode used by Smokeping.</p>
+<p>
+</p>
+<hr />
+<h1><a name="N2_0_5_to_2_0_6">2.0.5 to 2.0.6</a></h1>
+<p>
+</p>
+<h2><a name="cgi_selfreferring_links__again_">CGI self-referring links (again)</a></h2>
+<p>The way Smokeping creates the self-referring links was changed once more.
+See the section under '2.0.4 to 2.0.5' for a description of the previous
+change.</p>
+<p>The behaviour is now customizable via the <code>linkstyle</code> variable in the
+<code>General</code> section of the configuration file. The default is now <code>relative</code>,
+creating links like &lt;a&nbsp;href=``?foo=bar''&gt;. I hope this works for everybody,
+but if it doesn't, see <a href="././smokeping_config.html">the smokeping_config manpage</a> for the alternatives.</p>
 <p>
 </p>
 <hr />

@@ -129,7 +129,7 @@
 .\" ========================================================================
 .\"
 .IX Title "doc::Smokeping::probes::Curl 3"
-.TH doc::Smokeping::probes::Curl 3 "2006-07-14" "2.0.9" "SmokePing"
+.TH doc::Smokeping::probes::Curl 3 "2007-05-02" "2.1.1" "SmokePing"
 .SH "NAME"
 Smokeping::probes::Curl \- a curl(1) probe for SmokePing
 .SH "OVERVIEW"
@@ -154,8 +154,8 @@ Fetches an \s-1HTTP\s0 or \s-1HTTPS\s0 \s-1URL\s0 using \fIcurl\fR\|(1).
 .PP
 .Vb 12
 \& # The following variables can be overridden in each target section
-\& agent = User-Agent: Lynx/2.8.4rel.1 libwww-FM/2.14 SSL-MM/1.4.1 OpenSSL/0.9.6c
-\& extraargs = -6 --head --user user:password
+\& agent = User\-Agent: Lynx/2.8.4rel.1 libwww\-FM/2.14 SSL\-MM/1.4.1 OpenSSL/0.9.6c
+\& extraargs = \-6 \-\-head \-\-user user:password
 \& extrare = / /
 \& follow_redirects = yes
 \& include_redirects = yes
@@ -187,8 +187,8 @@ Fetches an \s-1HTTP\s0 or \s-1HTTPS\s0 \s-1URL\s0 using \fIcurl\fR\|(1).
 \& + mytarget
 \& # probe = Curl # if the default probe is something else
 \& host = my.host
-\& agent = User-Agent: Lynx/2.8.4rel.1 libwww-FM/2.14 SSL-MM/1.4.1 OpenSSL/0.9.6c
-\& extraargs = -6 --head --user user:password
+\& agent = User\-Agent: Lynx/2.8.4rel.1 libwww\-FM/2.14 SSL\-MM/1.4.1 OpenSSL/0.9.6c
+\& extraargs = \-6 \-\-head \-\-user user:password
 \& extrare = / /
 \& follow_redirects = yes
 \& include_redirects = yes

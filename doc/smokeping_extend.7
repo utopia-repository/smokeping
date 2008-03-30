@@ -129,7 +129,7 @@
 .\" ========================================================================
 .\"
 .IX Title "SMOKEPING_EXTEND 7"
-.TH SMOKEPING_EXTEND 7 "2005-09-18" "2.0.9" "SmokePing"
+.TH SMOKEPING_EXTEND 7 "2005-09-18" "2.1.1" "SmokePing"
 .SH "NAME"
 smokeping_extend \- Notes on extending Smokeping
 .SH "OVERVIEW"
@@ -216,7 +216,7 @@ convenience method called \f(CW\*(C`_makevars\*(C'\fR that does this, and the co
 .Vb 6
 \& sub probevars {
 \&        my $class = shift;
-\&        return $class->_makevars($class->SUPER::probevars, {
+\&        return $class\->_makevars($class\->SUPER::probevars, {
 \&                # your variables go here
 \&        }
 \& }
@@ -327,9 +327,9 @@ This would be done like this:
 .Vb 8
 \& sub probevars {
 \&        my $class = shift;
-\&        my $h = $class->SUPER::probevars;
-\&        $h->{timeout}{_default} = 10; # override the superclass default
-\&        return $class->_makevars($h, {
+\&        my $h = $class\->SUPER::probevars;
+\&        $h\->{timeout}{_default} = 10; # override the superclass default
+\&        return $class\->_makevars($h, {
 \&                # your variables go here
 \&        }
 \& }

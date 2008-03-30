@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>Smokeping/probes/FPing6</title>
-<link rev="made" href="mailto:dws@ee.ethz.ch" />
+<link rev="made" href="mailto:root@localhost" />
 </head>
 
 <body style="background-color: white">
@@ -42,6 +42,7 @@
  offset = 50%
  packetsize = 5000
  pings = 20
+ sourceaddress = ::1
  step = 300
  timeout = 1.5</pre>
 <pre>
@@ -148,6 +149,18 @@ files or somehow convert them.
 
 </dd><dd>
 <p>Example value: 20</p>
+
+<p></p>
+</dd><dt><strong><a name="item_sourceaddress">sourceaddress</a></strong><br />
+
+</dt><dd>
+The fping ``-S'' parameter . From fping(1):
+
+</dd><dd>
+<p>Set source address.</p>
+
+</dd><dd>
+<p>Example value: ::1</p>
 
 <p></p>
 </dd><dt><strong><a name="item_step">step</a></strong><br />

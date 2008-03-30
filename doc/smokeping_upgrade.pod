@@ -23,6 +23,44 @@ An official list of changes with each release can be found in the CHANGES
 file in the Smokeping distribution. This document tries to complement
 that with upgrading instructions etc.
 
+=head1 2.0.9 to 2.1.0
+
+=head2 Echoping 6 support
+
+This is the first Smokeping version that fully supports echoping 6. Earlier
+versions of the EchoPingHttp probes don't work with echoping 6 because
+of a command line incompatibility. (Echoping 5 is still supported, of course.)
+
+This version also introduces three new probes using the new echoping plugin
+interface introduced in version 6:
+
+=over
+
+=item L<EchoPingDNS|Smokeping::probes::EchoPingDNS>
+
+=item L<EchoPingLDAP|Smokeping::probes::EchoPingLDAP>
+
+=item L<EchoPingWhois|Smokeping::probes::EchoPingWhois>
+
+=back
+
+See the L<smokeping_examples> document for simple examples of using
+these probes.
+
+=head2 New method in base.pm (if you write your own probes)
+
+The F<base.pm> module defines the method ProbeUnit. Override this if your
+Probe does not return 'Seconds'. See the F<FTPtransfer.pm> for inspiration.
+
+=head1 2.0.8 to 2.0.9
+
+=head2 L<FPing|Smokeping::probes::FPing>
+
+The 'timeout' variable removed in 2.0.5 has been brought back.
+It is used to give the C<fping> command the C<-t> parameter,
+which apparently affects the timeout of the last ping in the
+counting (C<-C>) mode used by Smokeping.
+
 =head1 2.0.5 to 2.0.6
 
 =head2 CGI self-referring links (again)
@@ -35,15 +73,6 @@ The behaviour is now customizable via the C<linkstyle> variable in the
 C<General> section of the configuration file. The default is now C<relative>,
 creating links like S<<a href="?foo=bar">>. I hope this works for everybody,
 but if it doesn't, see L<smokeping_config> for the alternatives.
-
-=head1 2.0.8 to 2.0.9
-
-=head2 L<FPing|Smokeping::probes::FPing>
-
-The 'timeout' variable removed in 2.0.5 has been brought back.
-It is used to give the C<fping> command the C<-t> parameter,
-which apparently affects the timeout of the last ping in the
-counting (C<-C>) mode used by Smokeping.
 
 =head1 2.0.4 to 2.0.5
 

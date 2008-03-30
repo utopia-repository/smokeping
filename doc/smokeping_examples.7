@@ -129,7 +129,7 @@
 .\" ========================================================================
 .\"
 .IX Title "SMOKEPING_EXAMPLES 7"
-.TH SMOKEPING_EXAMPLES 7 "2006-07-14" "2.0.9" "SmokePing"
+.TH SMOKEPING_EXAMPLES 7 "2007-05-02" "2.1.1" "SmokePing"
 .SH "NAME"
 smokeping_examples \- Examples of Smokeping configuration
 .SH "OVERVIEW"
@@ -236,7 +236,7 @@ configuration has been divided to site sections ('+') and host subsections
 .Vb 3
 \& + EchoPingHttp
 \& pings = 5
-\& url = /test-url
+\& url = /test\-url
 .Ve
 .IP "Probe explanation" 4
 .IX Item "Probe explanation"
@@ -421,13 +421,13 @@ is divided by the target host rather than the probe.
 .Vb 5
 \& *** Probes ***
 \& + Curl
-\& # probe-specific variables
+\& # probe\-specific variables
 \& binary = /usr/bin/curl
 \& step = 60
 .Ve
 .Sp
 .Vb 2
-\& # a default for this target-specific variable
+\& # a default for this target\-specific variable
 \& urlformat = http://%host/
 .Ve
 .IP "Probe explanation" 4
@@ -543,7 +543,7 @@ been required (even though it wouldn't have been used for anything).
 \& binary = /usr/bin/fping
 .Ve
 .Sp
-.Vb 9
+.Vb 13
 \& # these expect to find echoping in /usr/bin
 \& # if not, you'll have to specify the location separately for each probe
 \& # + EchoPing         # uses TCP or UDP echo (port 7)
@@ -553,6 +553,10 @@ been required (even though it wouldn't have been used for anything).
 \& + EchoPingHttps      # HTTPS (443/tcp) for web servers
 \& + EchoPingHttp       # HTTP (80/tcp) for web servers and caches
 \& + EchoPingIcp        # ICP (3130/udp) for caches
+\& # these need at least echoping 6 with the corresponding plugins
+\& + EchoPingDNS        # DNS (53/udp or tcp) servers
+\& + EchoPingLDAP       # LDAP (389/tcp) servers
+\& + EchoPingWhois      # Whois (43/tcp) servers
 .Ve
 .IP "Probe explanation" 4
 .IX Item "Probe explanation"
@@ -581,43 +585,43 @@ This example shows most of the echoping-derived probes in action.
 .Ve
 .Sp
 .Vb 5
-\& ++ www-server
-\& menu = www-server
-\& title = Web Server (www-server) / ICMP
+\& ++ www\-server
+\& menu = www\-server
+\& title = Web Server (www\-server) / ICMP
 \& # probe = FPing propagated from top
-\& host = www-server.example
+\& host = www\-server.example
 .Ve
 .Sp
 .Vb 6
 \& +++ http
 \& menu = http
-\& title = Web Server (www-server) / HTTP
+\& title = Web Server (www\-server) / HTTP
 \& probe = EchoPingHttp
-\& host = www-server.example 
+\& host = www\-server.example 
 \& # default url is /
 .Ve
 .Sp
 .Vb 5
 \& +++ https
 \& menu = https
-\& title = Web Server (www-server) / HTTPS
+\& title = Web Server (www\-server) / HTTPS
 \& probe = EchoPingHttps
-\& host = www-server.example
+\& host = www\-server.example
 .Ve
 .Sp
 .Vb 4
 \& ++ cache
-\& menu = www-cache
-\& title = Web Cache (www-cache) / ICMP
-\& host = www-cache.example
+\& menu = www\-cache
+\& title = Web Cache (www\-cache) / ICMP
+\& host = www\-cache.example
 .Ve
 .Sp
 .Vb 7
 \& +++ http
 \& menu = http
-\& title = www-cache / HTTP
+\& title = www\-cache / HTTP
 \& probe = EchoPingHttp
-\& host = www-cache.example
+\& host = www\-cache.example
 \& port = 8080 # use the squid port
 \& url = http://www.somehost.example/
 .Ve
@@ -625,25 +629,73 @@ This example shows most of the echoping-derived probes in action.
 .Vb 6
 \& +++ icp
 \& menu = icp
-\& title = www-cache / ICP
+\& title = www\-cache / ICP
 \& probe = EchoPingIcp
-\& host = www-cache.example
+\& host = www\-cache.example
 \& url = http://www.somehost.example/
 .Ve
 .Sp
 .Vb 4
 \& ++ mail
-\& menu = mail-server
-\& title = Mail Server (mail-server) / ICMP
-\& host = mail-server.example
+\& menu = mail\-server
+\& title = Mail Server (mail\-server) / ICMP
+\& host = mail\-server.example
 .Ve
 .Sp
 .Vb 5
 \& +++ smtp
-\& menu = mail-server / SMTP
-\& title = Mail Server (mail-server) / SMTP
+\& menu = mail\-server / SMTP
+\& title = Mail Server (mail\-server) / SMTP
 \& probe = EchoPingSmtp
-\& host = mail-server.example
+\& host = mail\-server.example
+.Ve
+.Sp
+.Vb 4
+\& ++ ldap\-server
+\& menu = ldap\-server
+\& title = ldap\-server / ICMP
+\& host = ldap\-server.example
+.Ve
+.Sp
+.Vb 6
+\& +++ ldap
+\& menu = ldap\-server / LDAP
+\& title = LDAP Server (ldap\-server) / LDAP
+\& probe = EchoPingLDAP
+\& ldap_request = (objectclass=*)
+\& host = ldap\-server.example
+.Ve
+.Sp
+.Vb 4
+\& ++ name\-server
+\& menu = name\-server
+\& title = name\-server / ICMP
+\& host = name\-server.example
+.Ve
+.Sp
+.Vb 6
+\& +++ DNS
+\& menu = name\-server / DNS
+\& title = DNS Server (name\-server) / DNS
+\& probe = EchoPingDNS
+\& dns_request = name.example
+\& host = name\-server.example
+.Ve
+.Sp
+.Vb 4
+\& ++ whois\-server
+\& menu = whois\-server
+\& title = whois\-server / ICMP
+\& host = whois\-server.example
+.Ve
+.Sp
+.Vb 6
+\& +++ Whois
+\& menu = whois\-server / Whois
+\& title = Whois Server (whois\-server) / Whois
+\& probe = EchoPingWhois
+\& whois_request = domain.example
+\& host = whois\-server.example
 .Ve
 .IP "Target explanation" 4
 .IX Item "Target explanation"
@@ -722,7 +774,7 @@ It is included in the examples as well for the sake of completeness.
 .Vb 3
 \& menu = SBB/CFF/FFS
 \& title =Swiss Federal Railways Webserver
-\& host = www.railway-server.abc
+\& host = www.railway\-server.abc
 .Ve
 .Sp
 .Vb 1
@@ -732,7 +784,7 @@ It is included in the examples as well for the sake of completeness.
 .Vb 3
 \& menu = Tiscali Web
 \& title = Tiscali Webserver www.tiscali.abc
-\& host = www.tiscali-web.abc
+\& host = www.tiscali\-web.abc
 .Ve
 .Sp
 .Vb 1
@@ -751,7 +803,7 @@ It is included in the examples as well for the sake of completeness.
 .Vb 3
 \& menu = UCL
 \& title = UCL
-\& host = www.ucl-abc.acc.uk
+\& host = www.ucl\-abc.acc.uk
 .Ve
 .Sp
 .Vb 1
@@ -810,7 +862,7 @@ It is included in the examples as well for the sake of completeness.
 .Vb 3
 \& menu = Sun Microsystems
 \& title = Sun Microsystems Webserver
-\& host = www.sun-web.com
+\& host = www.sun\-web.com
 .Ve
 .IP "Target explanation" 4
 .IX Item "Target explanation"

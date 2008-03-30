@@ -129,7 +129,7 @@
 .\" ========================================================================
 .\"
 .IX Title "doc::Smokeping::probes::CiscoRTTMonDNS 3"
-.TH doc::Smokeping::probes::CiscoRTTMonDNS 3 "2006-07-14" "2.0.9" "SmokePing"
+.TH doc::Smokeping::probes::CiscoRTTMonDNS 3 "2007-05-02" "2.1.1" "SmokePing"
 .SH "NAME"
 Smokeping::probes::CiscoRTTMonDNS.pm \- Probe for SmokePing
 .SH "SYNOPSIS"
@@ -279,15 +279,15 @@ To install this probe copy ciscoRttMonMIB.pm to ($SMOKEPINGINSTALLDIR)/lib/Smoke
 The router(s) must be configured to allow read/write \s-1SNMP\s0 access. Sufficient is:
 .PP
 .Vb 1
-\&        snmp-server community RTTCommunity RW
+\&        snmp\-server community RTTCommunity RW
 .Ve
 .PP
 If you want to be a bit more restrictive with \s-1SNMP\s0 write access to the router, then consider configuring something like this 
 .PP
 .Vb 3
-\&        access-list 2 permit 10.37.3.5
-\&        snmp-server view RttMon ciscoRttMonMIB included
-\&        snmp-server community RTTCommunity view RttMon RW 2
+\&        access\-list 2 permit 10.37.3.5
+\&        snmp\-server view RttMon ciscoRttMonMIB included
+\&        snmp\-server community RTTCommunity view RttMon RW 2
 .Ve
 .PP
 The above configuration grants \s-1SNMP\s0 read-write only to 10.37.3.5 (the smokeping host) and only to the ciscoRttMon \s-1MIB\s0 tree. The probe does not need access to \s-1SNMP\s0 variables outside the RttMon tree.

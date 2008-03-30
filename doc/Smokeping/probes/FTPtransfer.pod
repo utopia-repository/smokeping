@@ -1,0 +1,242 @@
+=head1 NAME
+
+Smokeping::probes::FTPtransfer - intrusive bandwidth probe
+
+=head1 OVERVIEW
+
+This probe send and retrieve files to or from an ftp server. It will plot
+the bandwidth it could use.
+
+=head1 SYNOPSIS
+
+ *** Probes ***
+
+ +FTPtransfer
+
+ destfile = path/to/destinationfile.xxx
+ forks = 5
+ min_interval = 1
+ mode = get # mandatory
+ offset = 50%
+ passwordfile = /some/place/secret
+ srcfile = src/path/mybig.pdf # mandatory
+ step = 300
+ timeout = 15 # mandatory
+
+ # The following variables can be overridden in each target section
+ localaddr = myhost-nat-if
+ passive = yes
+ password = test-password
+ pings = 5
+ port = 3255
+ timeout = 10
+ username = test-user
+
+ # [...]
+
+ *** Targets ***
+
+ probe = FTPtransfer # if this should be the default probe
+
+ # [...]
+
+ + mytarget
+ # probe = FTPtransfer # if the default probe is something else
+ host = my.host
+ localaddr = myhost-nat-if
+ passive = yes
+ password = test-password
+ pings = 5
+ port = 3255
+ timeout = 10
+ username = test-user
+
+=head1 DESCRIPTION
+
+The probe uses the Net::FTP perl client to run performance tests using an
+FTP server as a target. This probe is B<intrusive> as it transfers real
+data. By using real data we get a fair shot at figuring out what a link is
+capable of when it comes to transfering actual files.
+
+The password can be specified either (in order of precedence, with
+the latter overriding the former) in the probe-specific variable
+`password', in an external file or in the target-specific variable
+`password'.  The location of this external file is given in the probe-specific
+variable `passwordfile'. See Smokeping::probes::passwordchecker(3pm) for the
+format of this file (summary: colon-separated triplets of the form
+`<host>:<username>:<password>')
+
+The probe tries to be nice to the server and waits at least X seconds
+between starting filetransfers, where X is the value of the probe 
+specific `min_interval' variable (1 by default).
+
+Many variables can be specified either in the probe or in the target definition,
+the target-specific variable will override the prove-specific variable.
+
+If your transfer takes a lot of time, you may want to make sure to set the
+B<timeout> and B<max_rtt> properly so that smokeping does not abort the
+transfers of limit the graph size.
+
+=head1 VARIABLES
+
+Supported probe-specific variables:
+
+=over
+
+=item destfile
+
+Normally the destination filename is the same as the source filename
+(without the path). If you want keep files in different directories this may not
+work, and you have to specify destfile as well.
+
+Example value: path/to/destinationfile.xxx
+
+=item forks
+
+Run this many concurrent processes at maximum
+
+Example value: 5
+
+Default value: 5
+
+=item min_interval
+
+The minimum interval between each starting ftp sessions in seconds.
+
+Default value: 1
+
+=item mode
+
+The ftp probe can be in either put or get mode. If it is in put mode then it will send a file to the ftp server. In get mode it will retrieve a file
+from the ftp server.
+
+Example value: get
+
+This setting is mandatory.
+
+=item offset
+
+If you run many probes concurrently you may want to prevent them from
+hitting your network all at the same time. Using the probe-specific
+offset parameter you can change the point in time when each probe will
+be run. Offset is specified in % of total interval, or alternatively as
+'random', and the offset from the 'General' section is used if nothing
+is specified here. Note that this does NOT influence the rrds itself,
+it is just a matter of when data acqusition is initiated.
+(This variable is only applicable if the variable 'concurrentprobes' is set
+in the 'General' section.)
+
+Example value: 50%
+
+=item passwordfile
+
+Location of the file containing usernames and passwords.
+
+Example value: /some/place/secret
+
+=item srcfile
+
+The name of the source file. If the probe is in B<put> mode, this file
+has to be on the local machine, if the probe is in B<get> mode then this
+file should sit in the remote ftp account.
+
+Example value: src/path/mybig.pdf
+
+This setting is mandatory.
+
+=item step
+
+Duration of the base interval that this probe should use, if different
+from the one specified in the 'Database' section. Note that the step in
+the RRD files is fixed when they are originally generated, and if you
+change the step parameter afterwards, you'll have to delete the old RRD
+files or somehow convert them. (This variable is only applicable if
+the variable 'concurrentprobes' is set in the 'General' section.)
+
+Example value: 300
+
+=item timeout
+
+The timeout is the maximum amount of time you will allow the probe to
+transfer the file. If the probe does not succeed to transfer in the time specified,
+it will get killed and a 'loss' will be loged.
+
+Since FTPtransfer is an invasive probe you should make sure you do not load
+the link for more than a few seconds anyway. Smokeping curently has a hard
+limit of 180 seconds for any RTT.
+
+Example value: 15
+
+This setting is mandatory.
+
+=back
+
+Supported target-specific variables:
+
+=over
+
+=item localaddr
+
+The local address to be used when making connections
+
+Example value: myhost-nat-if
+
+=item passive
+
+Use passive FTP protocol
+
+Example value: yes
+
+=item password
+
+The password for the user, if not present in the password file.
+
+Example value: test-password
+
+=item pings
+
+How many pings should be sent to each target, if different from the global
+value specified in the Database section. Note that the number of pings in
+the RRD files is fixed when they are originally generated, and if you
+change this parameter afterwards, you'll have to delete the old RRD
+files or somehow convert them.
+
+Example value: 5
+
+=item port
+
+A non-standard FTP port to be used
+
+Example value: 3255
+
+=item timeout
+
+Timeout in seconds for the FTP transfer to complete.
+
+Example value: 10
+
+=item username
+
+The username to be tested.
+
+Example value: test-user
+
+=back
+
+
+=head1 AUTHORS
+
+Tobias Oetiker <tobi@oetiker.ch> sponsored by Virtela
+
+=head1 BUGS
+
+This probe has the capability for saturating your links, so don't use it
+unless you know what you are doing.
+
+The FTPtransfer probe measures bandwidth, but we report the number of
+seconds it took to transfer the 'reference' file. This is because curently
+the notion of I<Round Trip Time> is at the core of the application. It would
+take some re-engineering to split this out in plugins and thus make it
+configurable ...
+
+=cut

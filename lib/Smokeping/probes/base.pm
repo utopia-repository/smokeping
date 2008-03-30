@@ -87,7 +87,11 @@ sub round ($) {
 }
 
 sub ProbeDesc ($) {
-    return "Probe which does not overrivd the ProbeDesc methode";
+    return "Probe which does not override the ProbeDesc method";
+}    
+
+sub ProbeUnit ($) {
+    return "Seconds";
 }    
 
 sub target2dynfile ($$) {
@@ -131,6 +135,7 @@ sub rrdupdate_string($$)
       $age = 'U';
     }
     if ( $entries == 0 ){
+      $self->do_log("Warning: got zero answers from $tree->{addr}($tree->{probe}) $self->{targets}{$tree}");
       $age = 'U';
       $loss = 'U';
       if ( -f $dynbase.".adr"

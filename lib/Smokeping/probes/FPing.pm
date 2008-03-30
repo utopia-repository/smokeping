@@ -59,13 +59,15 @@ sub new($$$)
     	my $binary = join(" ", $self->binary);
 	my $testhost = $self->testhost;
         my $return = `$binary -C 1 $testhost 2>&1`;
+        $self->{enable}{S} = (`$binary -h 2>&1` =~ /\s-S\s/);
+	warn  "NOTE: your fping binary doesn't support source address setting (-S), I will ignore any sourceaddress configurations - see  http://bugs.debian.org/198486.\n" if !$self->{enable}{S};
         croak "ERROR: fping ('$binary -C 1 $testhost') could not be run: $return"
             if $return =~ m/not found/;
         croak "ERROR: FPing must be installed setuid root or it will not work\n" 
             if $return =~ m/only.+root/;
 
         if ($return =~ m/bytes, ([0-9.]+)\sms\s+.*\n.*\n.*:\s+([0-9.]+)/ and $1 > 0){
-            $self->{pingfactor} = 1000 * $2/$1;
+            $self->{pingfactor} = 1000 * $1/$2;
             print "### fping seems to report in ", $1/$2, " milliseconds\n";
         } else {
             $self->{pingfactor} = 1000; # Gives us a good-guess default
@@ -103,10 +105,12 @@ sub ping ($){
     # pinging nothing is pointless
     return unless @{$self->addresses};
     my @params = () ;
-    push @params , "-b$self->{properties}{packetsize}" if $self->{properties}{packetsize};
+    push @params, "-b$self->{properties}{packetsize}" if $self->{properties}{packetsize};
     push @params, "-t" . int(1000 * $self->{properties}{timeout}) if $self->{properties}{timeout};
     push @params, "-i" . int(1000 * $self->{properties}{mininterval});
     push @params, "-p" . int(1000 * $self->{properties}{hostinterval}) if $self->{properties}{hostinterval};
+    push @params, "-S$self->{properties}{sourceaddress}" if $self->{properties}{sourceaddress} and $self->{enable}{S};
+            
     my @cmd = (
                     $self->binary,
                     '-C', $self->pings, '-q','-B1','-r1',
@@ -122,7 +126,7 @@ sub ping ($){
         my @times = split /\s+/;
         my $ip = shift @times;
         next unless ':' eq shift @times; #drop the colon
-
+        
         @times = map {sprintf "%.10e", $_ / $self->{pingfactor}} sort {$a <=> $b} grep /^\d/, @times;
         map { $self->{rtts}{$_} = [@times] } @{$self->{addrlookup}{$ip}} ;
     }
@@ -139,7 +143,8 @@ sub probevars {
 		binary => {
 			_sub => sub {
 				my ($val) = @_;
-        			return "ERROR: FPing 'binary' does not point to an executable"
+        			return undef if $ENV{SERVER_SOFTWARE}; # don't check for fping presence in cgi mode
+				return "ERROR: FPing 'binary' does not point to an executable"
             				unless -f $val and -x _;
 				return undef;
 			},
@@ -188,6 +193,15 @@ The fping "-i" parameter, but in (probably fractional) seconds rather than
 milliseconds, for consistency with other Smokeping probes. From fping(1):
 
 The minimum amount of time between sending a ping packet to any target.
+DOC
+		},
+		sourceaddress => {
+			_re => '\d+(\.\d+){3}',
+			_example => '192.168.0.1',
+			_doc => <<DOC,
+The fping "-S" parameter . From fping(1):
+
+Set source address.
 DOC
 		},
 	});

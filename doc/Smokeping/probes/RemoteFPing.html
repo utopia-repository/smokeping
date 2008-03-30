@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>Smokeping/probes/RemoteFPing</title>
-<link rev="made" href="mailto:dws@ee.ethz.ch" />
+<link rev="made" href="mailto:root@localhost" />
 </head>
 
 <body style="background-color: white">
@@ -46,6 +46,7 @@
  rbinary = /usr/bin/fping # mandatory
  rhost = my.pinger.host # mandatory
  ruser = foo
+ sourceaddress = 192.168.0.1
  step = 300
  timeout = 1.5</pre>
 <pre>
@@ -195,6 +196,18 @@ if different from the one running the smokeping daemon.
 
 </dd><dd>
 <p>Example value: foo</p>
+
+<p></p>
+</dd><dt><strong><a name="item_sourceaddress">sourceaddress</a></strong><br />
+
+</dt><dd>
+The fping ``-S'' parameter . From fping(1):
+
+</dd><dd>
+<p>Set source address.</p>
+
+</dd><dd>
+<p>Example value: 192.168.0.1</p>
 
 <p></p>
 </dd><dt><strong><a name="item_step">step</a></strong><br />

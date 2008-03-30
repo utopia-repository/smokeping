@@ -129,7 +129,7 @@
 .\" ========================================================================
 .\"
 .IX Title "doc::Smokeping::probes::FPing6 3"
-.TH doc::Smokeping::probes::FPing6 3 "2006-07-14" "2.0.9" "SmokePing"
+.TH doc::Smokeping::probes::FPing6 3 "2007-05-02" "2.1.1" "SmokePing"
 .SH "NAME"
 Smokeping::probes::FPing6 \- FPing6 Probe for SmokePing
 .SH "SYNOPSIS"
@@ -142,13 +142,14 @@ Smokeping::probes::FPing6 \- FPing6 Probe for SmokePing
 \& +FPing6
 .Ve
 .PP
-.Vb 8
+.Vb 9
 \& binary = /usr/bin/fping6 # mandatory
 \& hostinterval = 1.5
 \& mininterval = 0.001
 \& offset = 50%
 \& packetsize = 5000
 \& pings = 20
+\& sourceaddress = ::1
 \& step = 300
 \& timeout = 1.5
 .Ve
@@ -235,6 +236,13 @@ change this parameter afterwards, you'll have to delete the old \s-1RRD\s0
 files or somehow convert them.
 .Sp
 Example value: 20
+.IP "sourceaddress" 4
+.IX Item "sourceaddress"
+The fping \*(L"\-S\*(R" parameter . From \fIfping\fR\|(1):
+.Sp
+Set source address.
+.Sp
+Example value: ::1
 .IP "step" 4
 .IX Item "step"
 Duration of the base interval that this probe should use, if different
