@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>doc/Smokeping/RRDtools</title>
+<link rev="made" href="mailto:dws@ee.ethz.ch" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+<!--
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#bugs">BUGS</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+	<li><a href="#license">LICENSE</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+-->
+<!-- INDEX END -->
+
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Smokeping::RRDtools - Tools for RRD file handling</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ use Smokeping::RRDtools;
+ use RRDs;</pre>
+<pre>
+ my $file = '/path/to/file.rrd';</pre>
+<pre>
+ # get the create arguments that $file was created with
+ my $create = Smokeping::RRDtools::info2create($file);</pre>
+<pre>
+ # use them to create a new file
+ RRDs::create('/path/to/file2.rrd', @$create);</pre>
+<pre>
+ # or compare them against another create list
+ my @create = ('--step', 60, 'DS:ds0:GAUGE:120:0:U', 'RRA:AVERAGE:0.5:1:1008');
+ my $comparison = Smokeping::RRDtools::compare($file, \@create);
+ print &quot;Create arguments didn't match: $comparison\n&quot; if $comparison;</pre>
+<pre>
+ Smokeping::RRDtools::tuneds($file, \@create);
+ 
+=head1 DESCRIPTION</pre>
+<p>This module offers three functions, <code>info2create</code>, <code>compare</code> and
+<code>tuneds</code>. The first can be used to recreate the arguments that an RRD file
+was created with. The second checks if an RRD file was created with the
+given arguments. The thirds tunes the DS parameters according to the
+supplied create string.</p>
+<p>The function <code>info2create</code> must be called with one argument:
+the path to the interesting RRD file. It will return an array
+reference of the argument list that can be fed to <code>RRDs::create</code>.
+Note that this list will never contain the <code>start</code> parameter,
+but it <strong>will</strong> contain the <code>step</code> parameter.</p>
+<p>The function <code>compare</code> must be called with two arguments: the path to the
+interesting RRD file, and a reference to an argument list that could be fed
+to <code>RRDs::create</code>. The function will then simply compare the result of
+<code>info2create</code> with this argument list.  It will return <code>undef</code> if the
+arguments matched, and a string indicating the difference if a discrepancy
+was found. Note that if there is a <code>start</code> parameter in the argument list,
+<code>compare</code> disregards it. If <code>step</code> isn't specified, <code>compare</code> will use
+the <code>rrdtool</code> default of 300 seconds. <code>compare</code> ignores non-matching DS
+parameters since <code>tuneds</code> will fix them.</p>
+<p><code>tuneds</code> talks on stderr about the parameters it fixes.</p>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p>This module is not particularly specific to Smokeping, it is just
+distributed with it.</p>
+<p>
+</p>
+<hr />
+<h1><a name="bugs">BUGS</a></h1>
+<p>Probably.</p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright (c) 2005 by Niko Tyni.</p>
+<p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>Niko Tyni &lt;<a href="mailto:ntyni@iki.fi">ntyni@iki.fi</a>&gt;</p>
+<p>
+</p>
+<hr />
+<h1><a name="license">LICENSE</a></h1>
+<p>This program is free software; you can redistribute it
+and/or modify it under the terms of the GNU General Public
+License as published by the Free Software Foundation; either
+version 2 of the License, or (at your option) any later
+version.</p>
+<p>This program is distributed in the hope that it will be
+useful, but WITHOUT ANY WARRANTY; without even the implied
+warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+PURPOSE.  See the GNU General Public License for more
+details.</p>
+<p>You should have received a copy of the GNU General Public
+License along with this program; if not, write to the Free
+Software Foundation, Inc., 675 Mass Ave, Cambridge, MA
+02139, USA.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><code>RRDs(3)</code></p>
+
+</body>
+
+</html>

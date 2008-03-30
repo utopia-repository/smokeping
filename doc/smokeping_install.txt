@@ -1,4 +1,4 @@
-SMOKEPING_INSTALL(1)        SmokePing        SMOKEPING_INSTALL(1)
+SMOKEPING_INSTALL(7)        SmokePing        SMOKEPING_INSTALL(7)
 
 
 
@@ -19,23 +19,19 @@ DDEESSCCRRIIPPTTIIOONN
        version of the tool which I am using, and a link for down-
        loading the tool.
 
-       RRDtool 1.0.x
-           http://people.ee.ethz.ch/~oetiker/webtools/rrd-
-           tool/pub/rrdtool-1.0.33.tar.gz
+       RRDtool 1.0.x or 1.2.x
+           <http://people.ee.ethz.ch/oetiker/webtools/rrdtool/>
 
            Just follow the installation instructions. We need
            this package todo all the logging and graphing in
            SmokePing.
 
-       FPing 2.4b2
-           http://peo-
-           ple.ee.ethz.ch/~oetiker/webtools/smokeping/pub/fping-2.4b2_to.tar.gz
+       FPing
+           <http://www.fping.com/>
 
-           This is a special version of fping which actually
-           builds. I have not modified the code in any way, I
-           just fixed the autoconf setup. The original can be
-           found on http://www.fping.com/down-
-           load/fping-2.4b2.tar.gz
+           You should grab the newest version, 2.4b2_to-ipv6, as
+           it has IPv6 support and actually builds, unlike the
+           older ones.
 
            Note that fping must be installed setuid root. It
            seems that older versions of fping report round trip
@@ -44,29 +40,55 @@ DDEESSCCRRIIPPTTIIOONN
            tells you when it starts ... let me know it it gets it
            wrong.
 
-       FPing 2.4b2 IPV6 (Optional)
-           http://unfix.org/pro-
-           jects/ipv6/fping-2.4b2_to-ipv6.tar.gz
-
-           You need this if you want to use the FPing6 probe
-
-       Socket6 0.11-1 (Optional)
-           http://www.cpan.org/modules/by-module/Socket6/
-
-           Optionally installing the Socket6 module for perl
-           enables smokeping to check hostnames that only resolve
-           to an IPv6 address. If you probe such hosts using ie.
-           the FPing6 probe and get warnings that those hosts
-           don't resolve to an IP address, you need to install
-           it.
-
        EchoPing  (Optional)
-           http://echoping.sourceforge.net/
+           <http://echoping.sourceforge.net/>
 
            You need this to run the EchoPing probes
 
+       Curl (Optional)
+           <http://curl.haxx.se/>
+
+           You need this for the Curl probe.
+
+       dig (Optional)
+           <http://www.isc.org/sw/bind/>
+
+           You need this for the DNS probe.
+
+       SSH (Optional)
+           <http://www.openssh.org/>
+
+           You need this for the SSH probe.
+
+       Various Perl modules (Optional)
+           You can get these from <http://www.cpan.org/>.
+
+           Socket6 0.11-1
+               Optionally installing the Socket6 module for perl
+               enables smokeping to check hostnames that only
+               resolve to an IPv6 address. If you probe such
+               hosts using ie. the FPing6 probe and get warnings
+               that those hosts don't resolve to an IP address,
+               you need to install it.
+
+           Net::Telnet
+               You need this for the TelnetIOSPing probe.
+
+           Net::DNS
+               You need this for the AnotherDNS probe.
+
+           Net::LDAP
+               You need this for the LDAP probe.
+
+           IO::Socket::SSL
+               You need this if you want the LDAP probe to be
+               able to use the 'starttls' command.
+
+           Authen::Radius
+               You need this for the Radius probe.
+
        Webserver
-           http://httpd.apache.org/
+           <http://httpd.apache.org/>
 
            Well I wont get much into this. The important thing
            is, to have a webserver which allows you to run CGI
@@ -77,13 +99,13 @@ DDEESSCCRRIIPPTTIIOONN
            cgi scripts under proper user accounts.
 
        Perl 5.6.1
-           http://www.perl.com
+           <http://www.perl.com>
 
            I guess you will get away with older versions of perl.
            I am using 5.6.1 here and it works fine.
 
        SpeedyCGI
-           http://daemoninc.com/speedycgi/
+           <http://www.daemoninc.com/SpeedyCGI/>
 
            SpeedyCGI speeds up CGIs written in perl dramatically
            by making them memory resident and handing new request
@@ -92,7 +114,10 @@ DDEESSCCRRIIPPTTIIOONN
            do NOT need mod_speedy, just the plain and simple
            speedy executable, this is the beauty of this tool it
            works without touching your apache ...  Otherwise you
-           could as well be using FastCGI or mod_perl.
+           could as well be using FastCGI or mod_perl. There is a
+           bug in speedy with returning error messages to the
+           apache error log. You can find a patch in the
+           smokeping download area.
 
        IInnssttaallllaattiioonn
 
@@ -152,7 +177,8 @@ DDEESSCCRRIIPPTTIIOONN
        look at your data.
 
 CCOOPPYYRRIIGGHHTT
-       Copyright (c) 2001 by Tobias Oetiker. All right reserved.
+       Copyright (c) 2001, 2005 by Tobias Oetiker. All right
+       reserved.
 
 LLIICCEENNSSEE
        This program is free software; you can redistribute it
@@ -177,4 +203,4 @@ AAUUTTHHOORR
 
 
 
-1.42                        2002-07-31       SMOKEPING_INSTALL(1)
+2.0.2                       2005-09-20       SMOKEPING_INSTALL(7)

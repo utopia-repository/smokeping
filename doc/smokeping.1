@@ -128,8 +128,8 @@
 .rm #[ #] #H #V #F C
 .\" ========================================================================
 .\"
-.IX Title "SMOKEPING 1"
-.TH SMOKEPING 1 "2005-05-10" "1.42" "SmokePing"
+.IX Title "SMOKEPING.DIST 1"
+.TH SMOKEPING.DIST 1 "2005-09-20" "2.0.2" "SmokePing"
 .SH "NAME"
 smokeping \- Commandline tool for SmokePing
 .SH "SYNOPSIS"
@@ -141,7 +141,7 @@ smokeping \- Commandline tool for SmokePing
 .Ve
 .PP
 .Vb 1
-\& --man        Show the manpage
+\& --man[=x]    Show the manpage for the program (or for probe x, if specified)
 .Ve
 .PP
 .Vb 1
@@ -153,7 +153,15 @@ smokeping \- Commandline tool for SmokePing
 .Ve
 .PP
 .Vb 1
-\& --makepod    Create POD documentation on Config file
+\& --config=x   Use a config file different from the default
+.Ve
+.PP
+.Vb 1
+\& --check      Just check the config file syntax, don't start the daemon
+.Ve
+.PP
+.Vb 1
+\& --makepod[=x] Create POD documentation on Config file (or for probe x, if specified)
 .Ve
 .PP
 .Vb 1
@@ -172,6 +180,11 @@ smokeping \- Commandline tool for SmokePing
 \& --restart    Restart SmokePing
 .Ve
 .PP
+.Vb 2
+\& --reload     Reload configuration in the running process without interrupting 
+\&              any probes
+.Ve
+.PP
 .Vb 1
 \& --nodaemon    Do no daemonize the process (no fork)
 .Ve
@@ -181,7 +194,7 @@ smokeping \- Commandline tool for SmokePing
 .Ve
 .PP
 .Vb 1
-\& --logfile    Append warnings to this logfile
+\& --logfile=x    Append warnings to logfile x.
 .Ve
 .PP
 .Vb 2
@@ -191,6 +204,12 @@ smokeping \- Commandline tool for SmokePing
 .PP
 .Vb 1
 \& --nosleep    For debugging you may want to run SmokePing without sleep interval
+.Ve
+.PP
+.Vb 3
+\& --gen-examples Generate the smokeping_examples document and example config files
+\&                (to be used while building inside the smokeping distribution)
+\&                With --check : check the syntax of the generated examples.
 .Ve
 .SH "DESCRIPTION"
 .IX Header "DESCRIPTION"
@@ -253,8 +272,8 @@ would include all the targets
 .PP
 would include all but /B/C.
 .PP
-The \fB\-\-makepod\fR does get used internally to produce the documentation on
-the SmokePing configuration file.
+The \fB\-\-makepod\fR does get used internally to produce the 
+documentation on the SmokePing configuration file.
 .PP
 Please refer to the installation document for detailed setup instructions.
 .SH "SETUP"

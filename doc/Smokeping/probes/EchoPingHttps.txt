@@ -1,0 +1,190 @@
+doc::Smokeping::probes::EcdhoocPS:im:noSgkmHeotPktiepnpsgi(n3g)::probes::EchoPingHttps(3)
+
+
+
+NNAAMMEE
+       Smokeping::probes::EchoPingHttps - an echoping(1) probe
+       for SmokePing
+
+OOVVEERRVVIIEEWW
+       Measures HTTPS (HTTP over SSL) roundtrip times (web
+       servers and caches) for SmokePing.
+
+SSYYNNOOPPSSIISS
+        *** Probes ***
+
+        +EchoPingHttps
+
+        binary = /usr/bin/echoping
+        forks = 5
+        offset = 50%
+        step = 300
+
+        # The following variables can be overridden in each target section
+        extraopts = -some-letter-the-author-did-not-think-of
+        ignore_cache = yes
+        ipversion = 4
+        pings = 5
+        port = 80
+        priority = 6
+        revalidate_data = no
+        timeout = 1
+        tos = 0xa0
+        url = /
+        waittime = 1
+
+        # [...]
+
+        *** Targets ***
+
+        probe = EchoPingHttps # if this should be the default probe
+
+        # [...]
+
+        + mytarget
+        # probe = EchoPingHttps # if the default probe is something else
+        host = my.host
+        extraopts = -some-letter-the-author-did-not-think-of
+        ignore_cache = yes
+        ipversion = 4
+        pings = 5
+        port = 80
+        priority = 6
+        revalidate_data = no
+        timeout = 1
+        tos = 0xa0
+        url = /
+        waittime = 1
+
+DDEESSCCRRIIPPTTIIOONN
+       As _E_c_h_o_P_i_n_g_H_t_t_p(3pm), but SSL-enabled.
+
+VVAARRIIAABBLLEESS
+       Supported probe-specific variables:
+
+       binary
+           The location of your echoping binary.
+
+           Default value: /usr/bin/echoping
+
+       forks
+           Run this many concurrent processes at maximum
+
+           Example value: 5
+
+           Default value: 5
+
+       offset
+           If you run many probes concurrently you may want to
+           prevent them from hitting your network all at the same
+           time. Using the probe-specific offset parameter you
+           can change the point in time when each probe will be
+           run. Offset is specified in % of total interval, or
+           alternatively as 'random', and the offset from the
+           'General' section is used if nothing is specified
+           here. Note that this does NOT influence the rrds
+           itself, it is just a matter of when data acqusition is
+           initiated.  (This variable is only applicable if the
+           variable 'concurrentprobes' is set in the 'General'
+           section.)
+
+           Example value: 50%
+
+       step
+           Duration of the base interval that this probe should
+           use, if different from the one specified in the
+           'Database' section. Note that the step in the RRD
+           files is fixed when they are originally generated, and
+           if you change the step parameter afterwards, you'll
+           have to delete the old RRD files or somehow convert
+           them. (This variable is only applicable if the vari-
+           able 'concurrentprobes' is set in the 'General' sec-
+           tion.)
+
+           Example value: 300
+
+       Supported target-specific variables:
+
+       extraopts
+           Any extra options specified here will be passed unmod-
+           ified to _e_c_h_o_p_i_n_g(1).
+
+           Example value: -some-let-
+           ter-the-author-did-not-think-of
+
+       ignore_cache
+           The _e_c_h_o_p_i_n_g(1) "-A" option: force the proxy to ignore
+           the cache.  Enabled if the value is anything other
+           than 'no' or '0'.
+
+           Example value: yes
+
+       ipversion
+           The IP protocol used. Possible values are "4" and "6".
+           Passed to _e_c_h_o_p_i_n_g(1) as the "-4" or "-6" options.
+
+           Example value: 4
+
+       pings
+           How many pings should be sent to each target, if dif-
+           ferent from the global value specified in the Database
+           section. Note that the number of pings in the RRD
+           files is fixed when they are originally generated, and
+           if you change this parameter afterwards, you'll have
+           to delete the old RRD files or somehow convert them.
+
+           Example value: 5
+
+       port
+           The TCP port to use.
+
+           Example value: 80
+
+       priority
+           The "-p" _e_c_h_o_p_i_n_g(1) option.
+
+           Example value: 6
+
+       revalidate_data
+           The _e_c_h_o_p_i_n_g(1) "-a" option: force the proxy to reval-
+           idate data with original server. Enabled if the value
+           is anything other than 'no' or '0'.
+
+           Example value: no
+
+       timeout
+           The "-t" _e_c_h_o_p_i_n_g(1) option.
+
+           Example value: 1
+
+           Default value: 5
+
+       tos The "-P" _e_c_h_o_p_i_n_g(1) option.
+
+           Example value: 0xa0
+
+       url The URL to be requested from the web server or cache.
+           Can be either relative (/...) for web servers or abso-
+           lute (http://...) for caches.
+
+           Default value: /
+
+       waittime
+           The "-w" _e_c_h_o_p_i_n_g(1) option.
+
+           Example value: 1
+
+AAUUTTHHOORRSS
+       Niko Tyni <ntyni@iki.fi>
+
+NNOOTTEESS
+       You should consider setting a lower value for the "pings"
+       variable than the default 20, as repetitive URL fetching
+       may be quite heavy on the server.
+
+SSEEEE AALLSSOO
+       Smokeping::probes::EchoPingHttp
+
+
+
+2.0.2                    doc2:0:0S5m-o0k9e-p2i0ng::probes::EchoPingHttps(3)

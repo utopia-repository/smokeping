@@ -1,0 +1,143 @@
+=head1 NAME
+
+Smokeping::probes::FPing - FPing Probe for SmokePing
+
+=head1 SYNOPSIS
+
+ *** Probes ***
+
+ +FPing
+
+ binary = /usr/bin/fping # mandatory
+ hostinterval = 1.5
+ mininterval = 0.001
+ offset = 50%
+ packetsize = 5000
+ pings = 20
+ step = 300
+ timeout = 1.5
+
+ # [...]
+
+ *** Targets ***
+
+ probe = FPing # if this should be the default probe
+
+ # [...]
+
+ + mytarget
+ # probe = FPing # if the default probe is something else
+ host = my.host
+
+=head1 DESCRIPTION
+
+Integrates FPing as a probe into smokeping. The variable B<binary> must 
+point to your copy of the FPing program.  If it is not installed on 
+your system yet, you can get it from L<http://www.fping.com/>.
+  
+The (optional) B<packetsize> option lets you configure the packetsize for the pings sent.
+
+The FPing manpage has the following to say on this topic:
+
+Number of bytes of ping data to send.  The minimum size (normally 12) allows
+room for the data that fping needs to do its work (sequence number,
+timestamp).  The reported received data size includes the IP header
+(normally 20 bytes) and ICMP header (8 bytes), so the minimum total size is
+40 bytes.  Default is 56, as in ping. Maximum is the theoretical maximum IP
+datagram size (64K), though most systems limit this to a smaller,
+system-dependent number.
+
+=head1 VARIABLES
+
+Supported probe-specific variables:
+
+=over
+
+=item binary
+
+The location of your fping binary.
+
+Example value: /usr/bin/fping
+
+This setting is mandatory.
+
+=item hostinterval
+
+The fping "-p" parameter, but in (possibly fractional) seconds rather than
+milliseconds, for consistency with other Smokeping probes. From fping(1):
+
+This parameter sets the time that fping  waits between successive packets
+to an individual target.
+
+Example value: 1.5
+
+=item mininterval
+
+The fping "-i" parameter, but in (probably fractional) seconds rather than
+milliseconds, for consistency with other Smokeping probes. From fping(1):
+
+The minimum amount of time between sending a ping packet to any target.
+
+Example value: 0.001
+
+Default value: 0.01
+
+=item offset
+
+If you run many probes concurrently you may want to prevent them from
+hitting your network all at the same time. Using the probe-specific
+offset parameter you can change the point in time when each probe will
+be run. Offset is specified in % of total interval, or alternatively as
+'random', and the offset from the 'General' section is used if nothing
+is specified here. Note that this does NOT influence the rrds itself,
+it is just a matter of when data acqusition is initiated.
+(This variable is only applicable if the variable 'concurrentprobes' is set
+in the 'General' section.)
+
+Example value: 50%
+
+=item packetsize
+
+The ping packet size (in the range of 12-64000 bytes).
+
+Example value: 5000
+
+=item pings
+
+How many pings should be sent to each target, if different from the global
+value specified in the Database section. Note that the number of pings in
+the RRD files is fixed when they are originally generated, and if you
+change this parameter afterwards, you'll have to delete the old RRD
+files or somehow convert them.
+
+Example value: 20
+
+=item step
+
+Duration of the base interval that this probe should use, if different
+from the one specified in the 'Database' section. Note that the step in
+the RRD files is fixed when they are originally generated, and if you
+change the step parameter afterwards, you'll have to delete the old RRD
+files or somehow convert them. (This variable is only applicable if
+the variable 'concurrentprobes' is set in the 'General' section.)
+
+Example value: 300
+
+=item timeout
+
+The fping "-t" parameter, but in (possibly fractional) seconds rather than
+milliseconds, for consistency with other Smokeping probes. From fping(1):
+
+Initial target timeout. In the default mode, this is  the  amount  of  time  that
+ping waits for a response to its first request.  Successive timeouts are multiplied by the backoff factor.
+
+Example value: 1.5
+
+=back
+
+
+=head1 AUTHORS
+
+Tobias Oetiker <tobi@oetiker.ch>
+
+=cut

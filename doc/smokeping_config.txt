@@ -1,4 +1,4 @@
-SMOKEPING_CONFIG(1)         SmokePing         SMOKEPING_CONFIG(1)
+SMOKEPING_CONFIG(5)         SmokePing         SMOKEPING_CONFIG(5)
 
 
 
@@ -14,19 +14,22 @@ OOVVEERRVVIIEEWW
        configuration file parser.
 
        The Parser for the Configuration file is written using
-       David Schweikers ParseConfig module. Read all about it in
-       ISG::ParseConfig.
+       David Schweikers Config::Grammar module. Read all about it
+       in Config::Grammar.
 
        The Configuration file has a tree-like structure with sec-
        tion headings at various levels. It also contains variable
        assignments and tables.
 
+       Warning: this manual is rather long. See smokeping_exam-
+       ples for simple configuration examples.
+
 RREEFFEERREENNCCEE
        GGEENNEERRAALL SSYYNNTTAAXX
 
        The text below describes the general syntax of the
-       SmokePing configuration file.  It was copied from the
-       ISG::ParseConfig documentation.
+       SmokePing configuration file.  It was copied from the Con-
+       fig::Grammar documentation.
 
        '#' denotes a comment up to the end-of-line, empty lines
        are allowed and space at the beginning and end of lines is
@@ -73,6 +76,14 @@ RREEFFEERREENNCCEE
 
        ddaattaaddiirr _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
            The directory where SmokePing can keep its rrd files.
+
+       ddyynnddiirr
+           The base directory where SmokePing keeps the files
+           related to the DYNAMIC function.  This directory must
+           be writeable by the WWW server.
+
+           If this variable is not specified, the value of
+           "datadir" will be used instead.
 
        ppaaggeeddiirr
            Directory to store static representations of pages.
@@ -146,6 +157,12 @@ RREEFFEERREENNCCEE
            If 'concurrentprobes' is not set to 'yes', this vari-
            able has no effect.
 
+           Default value: changeprocessnames = yes
+
+       ttmmaaiill
+           Path to your tSmoke HTML mail template file. See the
+           tSmoke documentation for details.
+
        ****** DDaattaabbaassee ****** _(_m_a_n_d_a_t_o_r_y _s_e_c_t_i_o_n_)
 
        Describes the properties of the round robin database for
@@ -168,11 +185,10 @@ RREEFFEERREENNCCEE
 
        ppiinnggss _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
            How many pings should be sent to each target. Sug-
-           gested: 20 pings.  This can be overridden by each
-           probe. Some probes (those derived from basefork.pm,
-           ie. most except the FPing variants) will even let this
-           be overridden target-specifically in the PROBE_CONF
-           section (see the basefork documentation for details).
+           gested: 20 pings. Minimum value: 3 pings.  This can be
+           overridden by each probe. Some probes (those derived
+           from basefork.pm, ie. most except the FPing variants)
+           will even let this be overridden target-specifically.
            Note that the number of pings in the RRD files is
            fixed when they are originally generated, and if you
            change this parameter afterwards, you'll have to
@@ -371,60 +387,22 @@ RREEFFEERREENNCCEE
 
        The Probes Section configures Probe modules. Probe modules
        integrate an external ping command into SmokePing. Check
-       the documentation of the FPing module for configuration
-       details.
+       the documentation of each module for more information
+       about it.
 
        The following sections are valid on level 1:
 
        ++//[[--__00--99aa--zzAA--ZZ]]++//
-           Each module can take specific configuration informa-
-           tion from this area. The jumble of letters above is a
-           regular expression defining legal module names.
+           Each module can take specific configuration
+           information from this area. The jumble of letters
+           above is a regular expression defining legal module
+           names.
 
-           The following variables can be set in this section:
+           See the documentation of each module for details about
+           its variables.
 
-           sstteepp
-               Duration of the base interval that this probe
-               should use, if different from the one specified in
-               the 'Database' section. Note that the step in the
-               RRD files is fixed when they are originally gener-
-               ated, and if you change the step parameter after-
-               wards, you'll have to delete the old RRD files or
-               somehow convert them. (This variable is only
-               applicable if the variable 'concurrentprobes' is
-               set in the 'General' section.)
-
-           ooffffsseett
-               If you run many probes concurrently you may want
-               to prevent them from hitting your network all at
-               the same time. Using the probe-specific offset
-               parameter you can change the point in time when
-               each probe will be run. Offset is specified in %
-               of total interval, or alternatively as 'random',
-               and the offset from the 'General' section is used
-               if nothing is specified here. Note that this does
-               NOT influence the rrds itself, it is just a matter
-               of when data acqusition is initiated.  (This vari-
-               able is only applicable if the variable 'concur-
-               rentprobes' is set in the 'General' section.)
-
-           ppiinnggss
-               How many pings should be sent to each target, if
-               different from the global value specified in the
-               Database section.  Some probes (those derived from
-               basefork.pm, ie. most except the FPing variants)
-               will even let this be overridden target-specifi-
-               cally in the PROBE_CONF section (see the basefork
-               documentation for details).  Note that the number
-               of pings in the RRD files is fixed when they are
-               originally generated, and if you change this
-               parameter afterwards, you'll have to delete the
-               old RRD files or somehow convert them.
-
-           //[[--__00--99aa--zzAA--ZZ..]]++//
-               Each module defines which variables it wants to
-               accept. So this expression here just defines legal
-               variable names.
+           The grammar of this section is _d_y_n_a_m_i_c_a_l_l_y modified
+           based on its name.
 
            The following sections are valid on level 2:
 
@@ -433,8 +411,8 @@ RREEFFEERREENNCCEE
                probe with subsections.  These instances can have
                different values for their variables, so you can
                eg. have one instance of the FPing probe with
-               packet size 1000 and step 30 and another instance
-               with packet size 64 and step 300.  The name of the
+               packet size 1000 and step 300 and another instance
+               with packet size 64 and step 30.  The name of the
                subsection determines what the probe will be
                called, so you can write descriptive names for the
                probes.
@@ -444,16 +422,2262 @@ RREEFFEERREENNCCEE
                parameter values for the probe instances, ie.  it
                will not become a probe instance itself.
 
-               The following variables can be set in this sec-
-               tion:
+               The example above would be written like this:
+
+                *** Probes ***
+
+                + FPing
+                # this value is common for the two subprobes
+                binary = /usr/bin/fping
+
+                ++ FPingLarge
+                packetsize = 1000
+                step = 300
+
+                ++ FPingSmall
+                packetsize = 64
+                step = 30
+
+           Dynamical grammar changes for example instances of
+           this section:
+
+           AAnnootthheerrDDNNSS: (See the separate module documentation for
+           details about each variable.)
+               The following new variables are valid:
+
+               ffoorrkkss
+                   Default value: forks = 5
+
+               ooffffsseett
+               sstteepp
+               llooookkuupp
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               mmiinniinntteerrvvaall
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+                   Default value: mininterval = 0.5
+
+               ppiinnggss
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               ppoorrtt
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+                   Default value: port = 53
+
+               rreeccoorrddttyyppee
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+                   Default value: recordtype = A
+
+               rreeqquuiirree__nnooeerrrroorr
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               ttiimmeeoouutt
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+                   Default value: timeout = 5
+
+               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
+
+                   The following new variables are valid:
+
+                   ffoorrkkss
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: forks = 5
+
+                   ooffffsseett
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   sstteepp
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   llooookkuupp
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   mmiinniinntteerrvvaall
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: mininterval = 0.5
+
+                   ppiinnggss
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ppoorrtt
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: port = 53
+
+                   rreeccoorrddttyyppee
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: recordtype = A
+
+                   rreeqquuiirree__nnooeerrrroorr
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ttiimmeeoouutt
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: timeout = 5
+
+               (End of dynamical grammar changes for example
+               instance "AnotherDNS".)
+
+           AAnnootthheerrSSSSHH: (See the separate module documentation for
+           details about each variable.)
+               The following new variables are valid:
+
+               ffoorrkkss
+                   Default value: forks = 5
+
+               ooffffsseett
+               sstteepp
+               ggrreeeettiinngg
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+                   Default value: greeting = SSH-Latency-Measure-
+                   ment-Sorry-for-this-logmessage
+
+               iinntteerrvvaall
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+                   Default value: interval = established
+
+               mmiinniinntteerrvvaall
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+                   Default value: mininterval = 0.5
+
+               ppiinnggss
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               ppoorrtt
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+                   Default value: port = 22
+
+               ttiimmeeoouutt
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+                   Default value: timeout = 5
+
+               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
+
+                   The following new variables are valid:
+
+                   ffoorrkkss
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: forks = 5
+
+                   ooffffsseett
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   sstteepp
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ggrreeeettiinngg
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: greeting = SSH-Latency-Mea-
+                       surement-Sorry-for-this-logmessage
+
+                   iinntteerrvvaall
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: interval = established
+
+                   mmiinniinntteerrvvaall
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: mininterval = 0.5
+
+                   ppiinnggss
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ppoorrtt
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: port = 22
+
+                   ttiimmeeoouutt
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: timeout = 5
+
+               (End of dynamical grammar changes for example
+               instance "AnotherSSH".)
+
+           CCiissccooRRTTTTMMoonnDDNNSS: (See the separate module documentation
+           for details about each variable.)
+               The following new variables are valid:
+
+               ffoorrkkss
+                   Default value: forks = 5
+
+               ooffffsseett
+               sstteepp
+               ttiimmeeoouutt
+                   Default value: timeout = 5
+
+               iioosshhoosstt
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+                   This variable _d_y_n_a_m_i_c_a_l_l_y modifies the grammar
+                   based on its value.
+
+               iioossiinntt
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               nnaammee
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+                   This variable _d_y_n_a_m_i_c_a_l_l_y modifies the grammar
+                   based on its value.
+
+               ppiinnggss
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
+
+                   The following new variables are valid:
+
+                   ffoorrkkss
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: forks = 5
+
+                   ooffffsseett
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   sstteepp
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ttiimmeeoouutt
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: timeout = 5
+
+                   iioosshhoosstt
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   iioossiinntt
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   nnaammee
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ppiinnggss
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+               (End of dynamical grammar changes for example
+               instance "CiscoRTTMonDNS".)
+
+           CCiissccooRRTTTTMMoonnEEcchhooIICCMMPP: (See the separate module documen-
+           tation for details about each variable.)
+               The following new variables are valid:
+
+               ffoorrkkss
+                   Default value: forks = 5
+
+               ooffffsseett
+               sstteepp
+               ttiimmeeoouutt
+                   Default value: timeout = 5
+
+               iioosshhoosstt
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+                   This variable _d_y_n_a_m_i_c_a_l_l_y modifies the grammar
+                   based on its value.
+
+               iioossiinntt
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               ppaacckkeettssiizzee
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+                   Default value: packetsize = 56
+
+               ppiinnggss
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               ttooss
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
+
+                   The following new variables are valid:
+
+                   ffoorrkkss
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: forks = 5
+
+                   ooffffsseett
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   sstteepp
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ttiimmeeoouutt
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: timeout = 5
+
+                   iioosshhoosstt
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   iioossiinntt
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ppaacckkeettssiizzee
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: packetsize = 56
+
+                   ppiinnggss
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ttooss This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+               (End of dynamical grammar changes for example
+               instance "CiscoRTTMonEchoICMP".)
+
+           CCiissccooRRTTTTMMoonnTTccppCCoonnnneecctt: (See the separate module docu-
+           mentation for details about each variable.)
+               The following new variables are valid:
+
+               ffoorrkkss
+                   Default value: forks = 5
+
+               ooffffsseett
+               sstteepp
+               ttiimmeeoouutt
+                   Default value: timeout = 5
+
+               iioosshhoosstt
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+                   This variable _d_y_n_a_m_i_c_a_l_l_y modifies the grammar
+                   based on its value.
+
+               iioossiinntt
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               ppiinnggss
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               ppoorrtt
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+                   Default value: port = 80
+
+               ttooss
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
+
+                   The following new variables are valid:
+
+                   ffoorrkkss
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: forks = 5
+
+                   ooffffsseett
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   sstteepp
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ttiimmeeoouutt
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: timeout = 5
+
+                   iioosshhoosstt
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   iioossiinntt
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ppiinnggss
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ppoorrtt
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: port = 80
+
+                   ttooss This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+               (End of dynamical grammar changes for example
+               instance "CiscoRTTMonTcpConnect".)
+
+           CCuurrll: (See the separate module documentation for
+           details about each variable.)
+               The following new variables are valid:
+
+               bbiinnaarryy
+                   Default value: binary = /usr/bin/curl
+
+               ffoorrkkss
+                   Default value: forks = 5
+
+               ooffffsseett
+               sstteepp
+               aaggeenntt
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               eexxttrraaaarrggss
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               eexxttrraarree
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+                   Default value: extrare = / /
+
+               iinnsseeccuurree__ssssll
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               iinntteerrffaaccee
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               ppiinnggss
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               ssssll22
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               ttiimmeeoouutt
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+                   Default value: timeout = 10
+
+               uurrllffoorrmmaatt
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+                   This variable _d_y_n_a_m_i_c_a_l_l_y modifies the grammar
+                   based on its value.
+
+               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
+
+                   The following new variables are valid:
+
+                   bbiinnaarryy
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: binary = /usr/bin/curl
+
+                   ffoorrkkss
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: forks = 5
+
+                   ooffffsseett
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   sstteepp
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   aaggeenntt
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   eexxttrraaaarrggss
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   eexxttrraarree
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: extrare = / /
+
+                   iinnsseeccuurree__ssssll
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   iinntteerrffaaccee
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ppiinnggss
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ssssll22
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ttiimmeeoouutt
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: timeout = 10
+
+                   uurrllffoorrmmaatt
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+               (End of dynamical grammar changes for example
+               instance "Curl".)
+
+           DDNNSS: (See the separate module documentation for
+           details about each variable.)
+               The following new variables are valid:
+
+               bbiinnaarryy _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
+               ffoorrkkss
+                   Default value: forks = 5
+
+               ooffffsseett
+               sstteepp
+               ttiimmeeoouutt
+                   Default value: timeout = 5
+
+               llooookkuupp
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               ppiinnggss
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
+
+                   The following new variables are valid:
+
+                   bbiinnaarryy _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ffoorrkkss
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: forks = 5
+
+                   ooffffsseett
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   sstteepp
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ttiimmeeoouutt
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: timeout = 5
+
+                   llooookkuupp
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ppiinnggss
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+               (End of dynamical grammar changes for example
+               instance "DNS".)
+
+           EEcchhooPPiinngg: (See the separate module documentation for
+           details about each variable.)
+               The following new variables are valid:
+
+               bbiinnaarryy
+                   Default value: binary = /usr/bin/echoping
+
+               ffoorrkkss
+                   Default value: forks = 5
+
+               ooffffsseett
+               sstteepp
+               eexxttrraaooppttss
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               ffiillll
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               iippvveerrssiioonn
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               ppiinnggss
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               pprriioorriittyy
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               ssiizzee
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               ttiimmeeoouutt
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+                   Default value: timeout = 5
+
+               ttooss
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               uuddpp
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               wwaaiittttiimmee
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
+
+                   The following new variables are valid:
+
+                   bbiinnaarryy
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: binary = /usr/bin/echoping
+
+                   ffoorrkkss
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: forks = 5
+
+                   ooffffsseett
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   sstteepp
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   eexxttrraaooppttss
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ffiillll
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   iippvveerrssiioonn
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ppiinnggss
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   pprriioorriittyy
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ssiizzee
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ttiimmeeoouutt
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: timeout = 5
+
+                   ttooss This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   uuddpp This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   wwaaiittttiimmee
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+               (End of dynamical grammar changes for example
+               instance "EchoPing".)
+
+           EEcchhooPPiinnggCChhaarrggeenn: (See the separate module documenta-
+           tion for details about each variable.)
+               The following new variables are valid:
+
+               bbiinnaarryy
+                   Default value: binary = /usr/bin/echoping
+
+               ffoorrkkss
+                   Default value: forks = 5
+
+               ooffffsseett
+               sstteepp
+               eexxttrraaooppttss
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               ffiillll
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               iippvveerrssiioonn
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               ppiinnggss
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               pprriioorriittyy
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               ssiizzee
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               ttiimmeeoouutt
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+                   Default value: timeout = 5
+
+               ttooss
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               wwaaiittttiimmee
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
+
+                   The following new variables are valid:
+
+                   bbiinnaarryy
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: binary = /usr/bin/echoping
+
+                   ffoorrkkss
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: forks = 5
+
+                   ooffffsseett
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   sstteepp
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   eexxttrraaooppttss
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ffiillll
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   iippvveerrssiioonn
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ppiinnggss
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   pprriioorriittyy
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ssiizzee
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ttiimmeeoouutt
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: timeout = 5
+
+                   ttooss This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   wwaaiittttiimmee
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+               (End of dynamical grammar changes for example
+               instance "EchoPingChargen".)
+
+           EEcchhooPPiinnggDDiissccaarrdd: (See the separate module documenta-
+           tion for details about each variable.)
+               The following new variables are valid:
+
+               bbiinnaarryy
+                   Default value: binary = /usr/bin/echoping
+
+               ffoorrkkss
+                   Default value: forks = 5
+
+               ooffffsseett
+               sstteepp
+               eexxttrraaooppttss
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               ffiillll
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               iippvveerrssiioonn
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               ppiinnggss
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               pprriioorriittyy
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               ssiizzee
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               ttiimmeeoouutt
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+                   Default value: timeout = 5
+
+               ttooss
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               uuddpp
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               wwaaiittttiimmee
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
+
+                   The following new variables are valid:
+
+                   bbiinnaarryy
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: binary = /usr/bin/echoping
+
+                   ffoorrkkss
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: forks = 5
+
+                   ooffffsseett
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   sstteepp
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   eexxttrraaooppttss
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ffiillll
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   iippvveerrssiioonn
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ppiinnggss
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   pprriioorriittyy
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ssiizzee
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ttiimmeeoouutt
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: timeout = 5
+
+                   ttooss This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   uuddpp This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   wwaaiittttiimmee
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+               (End of dynamical grammar changes for example
+               instance "EchoPingDiscard".)
+
+           EEcchhooPPiinnggHHttttpp: (See the separate module documentation
+           for details about each variable.)
+               The following new variables are valid:
+
+               bbiinnaarryy
+                   Default value: binary = /usr/bin/echoping
+
+               ffoorrkkss
+                   Default value: forks = 5
+
+               ooffffsseett
+               sstteepp
+               eexxttrraaooppttss
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               iiggnnoorree__ccaacchhee
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               iippvveerrssiioonn
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               ppiinnggss
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               ppoorrtt
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               pprriioorriittyy
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               rreevvaalliiddaattee__ddaattaa
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               ttiimmeeoouutt
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+                   Default value: timeout = 5
+
+               ttooss
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               uurrll
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+                   Default value: url = /
+
+               wwaaiittttiimmee
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
+
+                   The following new variables are valid:
+
+                   bbiinnaarryy
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: binary = /usr/bin/echoping
+
+                   ffoorrkkss
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: forks = 5
+
+                   ooffffsseett
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   sstteepp
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   eexxttrraaooppttss
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   iiggnnoorree__ccaacchhee
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   iippvveerrssiioonn
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ppiinnggss
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ppoorrtt
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   pprriioorriittyy
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   rreevvaalliiddaattee__ddaattaa
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ttiimmeeoouutt
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: timeout = 5
+
+                   ttooss This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   uurrll This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: url = /
+
+                   wwaaiittttiimmee
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+               (End of dynamical grammar changes for example
+               instance "EchoPingHttp".)
+
+           EEcchhooPPiinnggHHttttppss: (See the separate module documentation
+           for details about each variable.)
+               The following new variables are valid:
+
+               bbiinnaarryy
+                   Default value: binary = /usr/bin/echoping
+
+               ffoorrkkss
+                   Default value: forks = 5
+
+               ooffffsseett
+               sstteepp
+               eexxttrraaooppttss
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               iiggnnoorree__ccaacchhee
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               iippvveerrssiioonn
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               ppiinnggss
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               ppoorrtt
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               pprriioorriittyy
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               rreevvaalliiddaattee__ddaattaa
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               ttiimmeeoouutt
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+                   Default value: timeout = 5
+
+               ttooss
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               uurrll
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+                   Default value: url = /
+
+               wwaaiittttiimmee
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
+
+                   The following new variables are valid:
+
+                   bbiinnaarryy
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: binary = /usr/bin/echoping
+
+                   ffoorrkkss
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: forks = 5
+
+                   ooffffsseett
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   sstteepp
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   eexxttrraaooppttss
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   iiggnnoorree__ccaacchhee
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   iippvveerrssiioonn
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ppiinnggss
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ppoorrtt
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   pprriioorriittyy
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   rreevvaalliiddaattee__ddaattaa
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ttiimmeeoouutt
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: timeout = 5
+
+                   ttooss This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   uurrll This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: url = /
+
+                   wwaaiittttiimmee
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+               (End of dynamical grammar changes for example
+               instance "EchoPingHttps".)
+
+           EEcchhooPPiinnggIIccpp: (See the separate module documentation
+           for details about each variable.)
+               The following new variables are valid:
+
+               bbiinnaarryy
+                   Default value: binary = /usr/bin/echoping
+
+               ffoorrkkss
+                   Default value: forks = 5
+
+               ooffffsseett
+               sstteepp
+               eexxttrraaooppttss
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               iippvveerrssiioonn
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               ppiinnggss
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               pprriioorriittyy
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               ttiimmeeoouutt
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+                   Default value: timeout = 5
+
+               ttooss
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               uurrll
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+                   This variable _d_y_n_a_m_i_c_a_l_l_y modifies the grammar
+                   based on its value.
+
+               wwaaiittttiimmee
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
+
+                   The following new variables are valid:
+
+                   bbiinnaarryy
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: binary = /usr/bin/echoping
+
+                   ffoorrkkss
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: forks = 5
+
+                   ooffffsseett
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   sstteepp
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   eexxttrraaooppttss
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   iippvveerrssiioonn
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ppiinnggss
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   pprriioorriittyy
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ttiimmeeoouutt
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: timeout = 5
+
+                   ttooss This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   uurrll This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   wwaaiittttiimmee
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+               (End of dynamical grammar changes for example
+               instance "EchoPingIcp".)
+
+           EEcchhooPPiinnggSSmmttpp: (See the separate module documentation
+           for details about each variable.)
+               The following new variables are valid:
+
+               bbiinnaarryy
+                   Default value: binary = /usr/bin/echoping
+
+               ffoorrkkss
+                   Default value: forks = 5
+
+               ooffffsseett
+               sstteepp
+               eexxttrraaooppttss
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               iippvveerrssiioonn
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               ppiinnggss
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               pprriioorriittyy
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               ttiimmeeoouutt
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+                   Default value: timeout = 5
+
+               ttooss
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               wwaaiittttiimmee
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
+
+                   The following new variables are valid:
+
+                   bbiinnaarryy
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: binary = /usr/bin/echoping
+
+                   ffoorrkkss
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: forks = 5
+
+                   ooffffsseett
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   sstteepp
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   eexxttrraaooppttss
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   iippvveerrssiioonn
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ppiinnggss
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   pprriioorriittyy
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ttiimmeeoouutt
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: timeout = 5
+
+                   ttooss This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   wwaaiittttiimmee
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+               (End of dynamical grammar changes for example
+               instance "EchoPingSmtp".)
+
+           FFPPiinngg: (See the separate module documentation for
+           details about each variable.)
+               The following new variables are valid:
+
+               bbiinnaarryy _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
+               hhoossttiinntteerrvvaall
+               mmiinniinntteerrvvaall
+                   Default value: mininterval = 0.01
+
+               ooffffsseett
+               ppaacckkeettssiizzee
+               ppiinnggss
+               sstteepp
+               ttiimmeeoouutt
+
+               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
+
+                   The following new variables are valid:
+
+                   bbiinnaarryy _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   hhoossttiinntteerrvvaall
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   mmiinniinntteerrvvaall
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: mininterval = 0.01
+
+                   ooffffsseett
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ppaacckkeettssiizzee
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ppiinnggss
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   sstteepp
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ttiimmeeoouutt
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+               (End of dynamical grammar changes for example
+               instance "FPing".)
+
+           FFPPiinngg66: (See the separate module documentation for
+           details about each variable.)
+               The following new variables are valid:
+
+               bbiinnaarryy _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
+               hhoossttiinntteerrvvaall
+               mmiinniinntteerrvvaall
+                   Default value: mininterval = 0.01
+
+               ooffffsseett
+               ppaacckkeettssiizzee
+               ppiinnggss
+               sstteepp
+               ttiimmeeoouutt
+
+               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
+
+                   The following new variables are valid:
+
+                   bbiinnaarryy _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   hhoossttiinntteerrvvaall
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   mmiinniinntteerrvvaall
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: mininterval = 0.01
+
+                   ooffffsseett
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ppaacckkeettssiizzee
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ppiinnggss
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   sstteepp
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ttiimmeeoouutt
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+               (End of dynamical grammar changes for example
+               instance "FPing6".)
+
+           IIOOSSPPiinngg: (See the separate module documentation for
+           details about each variable.)
+               The following new variables are valid:
+
+               bbiinnaarryy _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
+               ffoorrkkss
+                   Default value: forks = 5
+
+               ooffffsseett
+               ppaacckkeettssiizzee
+                   Default value: packetsize = 56
 
                sstteepp
-               ooffffsseett
+               ttiimmeeoouutt
+                   Default value: timeout = 5
+
+               iioosshhoosstt
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+                   This variable _d_y_n_a_m_i_c_a_l_l_y modifies the grammar
+                   based on its value.
+
+               iioossiinntt
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               iioossuusseerr
+                    (This variable can be overridden target-specifically in the Targets section.)
+
                ppiinnggss
-               //[[--__00--99aa--zzAA--ZZ..]]++//
-                   Each module defines which variables it wants
-                   to accept. So this expression here just
-                   defines legal variable names.
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
+
+                   The following new variables are valid:
+
+                   bbiinnaarryy _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ffoorrkkss
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: forks = 5
+
+                   ooffffsseett
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ppaacckkeettssiizzee
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: packetsize = 56
+
+                   sstteepp
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ttiimmeeoouutt
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: timeout = 5
+
+                   iioosshhoosstt
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   iioossiinntt
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   iioossuusseerr
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ppiinnggss
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+               (End of dynamical grammar changes for example
+               instance "IOSPing".)
+
+           LLDDAAPP: (See the separate module documentation for
+           details about each variable.)
+               The following new variables are valid:
+
+               ffoorrkkss
+                   Default value: forks = 5
+
+               ooffffsseett
+               ppaasssswwoorrddffiillee
+               sstteepp
+               aattttrrss
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               bbaassee
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               bbiinnddddnn
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               ffiilltteerr
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+                   This variable _d_y_n_a_m_i_c_a_l_l_y modifies the grammar
+                   based on its value.
+
+               mmiinniinntteerrvvaall
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+                   Default value: mininterval = 1
+
+               ppaasssswwoorrdd
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               ppiinnggss
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               ppoorrtt
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               ssttaarrtt__ttllss
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               ttiimmeeoouutt
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+                   Default value: timeout = 5
+
+               vveerrssiioonn
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
+
+                   The following new variables are valid:
+
+                   ffoorrkkss
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: forks = 5
+
+                   ooffffsseett
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ppaasssswwoorrddffiillee
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   sstteepp
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   aattttrrss
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   bbaassee
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   bbiinnddddnn
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ffiilltteerr
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   mmiinniinntteerrvvaall
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: mininterval = 1
+
+                   ppaasssswwoorrdd
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ppiinnggss
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ppoorrtt
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ssttaarrtt__ttllss
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ttiimmeeoouutt
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: timeout = 5
+
+                   vveerrssiioonn
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+               (End of dynamical grammar changes for example
+               instance "LDAP".)
+
+           RRaaddiiuuss: (See the separate module documentation for
+           details about each variable.)
+               The following new variables are valid:
+
+               ffoorrkkss
+                   Default value: forks = 5
+
+               ooffffsseett
+               ppaasssswwoorrddffiillee
+               sseeccrreettffiillee
+               sstteepp
+               mmiinniinntteerrvvaall
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+                   Default value: mininterval = 1
+
+               nnaass__iipp__aaddddrreessss
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               ppaasssswwoorrdd
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               ppiinnggss
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               ppoorrtt
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               sseeccrreett
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               ttiimmeeoouutt
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+                   Default value: timeout = 5
+
+               uusseerrnnaammee
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+                   This variable _d_y_n_a_m_i_c_a_l_l_y modifies the grammar
+                   based on its value.
+
+               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
+
+                   The following new variables are valid:
+
+                   ffoorrkkss
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: forks = 5
+
+                   ooffffsseett
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ppaasssswwoorrddffiillee
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   sseeccrreettffiillee
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   sstteepp
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   mmiinniinntteerrvvaall
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: mininterval = 1
+
+                   nnaass__iipp__aaddddrreessss
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ppaasssswwoorrdd
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ppiinnggss
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ppoorrtt
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   sseeccrreett
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ttiimmeeoouutt
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: timeout = 5
+
+                   uusseerrnnaammee
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+               (End of dynamical grammar changes for example
+               instance "Radius".)
+
+           RReemmootteeFFPPiinngg: (See the separate module documentation
+           for details about each variable.)
+               The following new variables are valid:
+
+               bbiinnaarryy _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
+               hhoossttiinntteerrvvaall
+               mmiinniinntteerrvvaall
+                   Default value: mininterval = 0.01
+
+               ooffffsseett
+               ppaacckkeettssiizzee
+               ppiinnggss
+               rrbbiinnaarryy _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
+               rrhhoosstt _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
+               rruusseerr
+               sstteepp
+               ttiimmeeoouutt
+
+               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
+
+                   The following new variables are valid:
+
+                   bbiinnaarryy _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   hhoossttiinntteerrvvaall
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   mmiinniinntteerrvvaall
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: mininterval = 0.01
+
+                   ooffffsseett
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ppaacckkeettssiizzee
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ppiinnggss
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   rrbbiinnaarryy _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   rrhhoosstt _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   rruusseerr
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   sstteepp
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ttiimmeeoouutt
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+               (End of dynamical grammar changes for example
+               instance "RemoteFPing".)
+
+           SSSSHH: (See the separate module documentation for
+           details about each variable.)
+               The following new variables are valid:
+
+               bbiinnaarryy _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
+               ffoorrkkss
+                   Default value: forks = 5
+
+               ooffffsseett
+               sstteepp
+               ttiimmeeoouutt
+                   Default value: timeout = 5
+
+               ppiinnggss
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
+
+                   The following new variables are valid:
+
+                   bbiinnaarryy _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ffoorrkkss
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: forks = 5
+
+                   ooffffsseett
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   sstteepp
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ttiimmeeoouutt
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: timeout = 5
+
+                   ppiinnggss
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+               (End of dynamical grammar changes for example
+               instance "SSH".)
+
+           TTeellnneettIIOOSSPPiinngg: (See the separate module documentation
+           for details about each variable.)
+               The following new variables are valid:
+
+               ffoorrkkss
+                   Default value: forks = 5
+
+               ooffffsseett
+               ppaacckkeettssiizzee
+                   Default value: packetsize = 56
+
+               sstteepp
+               ttiimmeeoouutt
+                   Default value: timeout = 5
+
+               iioossppaassss
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+                   This variable _d_y_n_a_m_i_c_a_l_l_y modifies the grammar
+                   based on its value.
+
+               iioossuusseerr
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+                   This variable _d_y_n_a_m_i_c_a_l_l_y modifies the grammar
+                   based on its value.
+
+               ppiinnggss
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               ppssoouurrccee
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+               ssoouurrccee
+                    (This variable can be overridden target-specifically in the Targets section.)
+
+                   This variable _d_y_n_a_m_i_c_a_l_l_y modifies the grammar
+                   based on its value.
+
+               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
+
+                   The following new variables are valid:
+
+                   ffoorrkkss
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: forks = 5
+
+                   ooffffsseett
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ppaacckkeettssiizzee
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: packetsize = 56
+
+                   sstteepp
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ttiimmeeoouutt
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                       Default value: timeout = 5
+
+                   iioossppaassss
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   iioossuusseerr
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ppiinnggss
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ppssoouurrccee
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+                   ssoouurrccee
+                       This variable _i_n_h_e_r_i_t_s its value from the
+                       parent section if nothing is specified
+                       here.
+
+               (End of dynamical grammar changes for example
+               instance "TelnetIOSPing".)
+
+           (End of dynamical grammar changes for example
+           instances of section "/[-_0-9a-zA-Z]+/".)
 
        ****** AAlleerrttss ******
 
@@ -512,8 +2736,8 @@ RREEFFEERREENNCCEE
 
          >10%,*10*,>10%
 
-       will fire if more than 10% of the packets have been losst
-       twice over the last 10 samples.
+       will fire if more than 10% of the packets have been lost
+       at least twice over the last 10 samples.
 
        A complete example
 
@@ -548,7 +2772,34 @@ RREEFFEERREENNCCEE
        The following variables can be set in this section:
 
        ttoo _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
+           Either an email address to send alerts to, or the name
+           of a program to execute when an alert matches. To call
+           a program, the first character of the ttoo value must be
+           a pipe symbol "|". The program will the be called
+           whenever an alert matches, using the following 5 argu-
+           ments (except if eeddggeettrriiggggeerr is 'yes'; see below):
+           nnaammee--ooff--aalleerrtt, ttaarrggeett, lloossss--ppaatttteerrnn, rrtttt--ppaatttteerrnn,
+           hhoossttnnaammee.  You can also provide a comma separated list
+           of addresses and programs.
+
        ffrroomm _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
+           who should alerts appear to be coming from ?
+
+       eeddggeettrriiggggeerr
+           The alert notifications and/or the programs executed
+           are normally triggered every time the alert matches.
+           If this variable is set to 'yes', they will be trig-
+           gered only when the alert's state is changed, ie. when
+           it's raised and when it's cleared.  Subsequent matches
+           of the same alert will thus not trigger a notifica-
+           tion.
+
+           When this variable is set to 'yes', a notification
+           program (see the ttoo variable documentation above) will
+           get a sixth argument, rraaiissee, which has the value 1 if
+           the alert was just raised and 0 if it was cleared.
+
+           Default value: edgetrigger = no
 
        The following sections are valid on level 1:
 
@@ -557,7 +2808,14 @@ RREEFFEERREENNCCEE
 
            ttyyppee _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
                Currently the pattern types rrtttt and lloossss and
-               mmaattcchheerr are known
+               mmaattcchheerr are known.
+
+               Matchers are plugin modules that extend the alert
+               conditions.  Known matchers are Avgratio, Median.
+
+               See the documentation of the corresponding matcher
+               module (eg. Smokeping::matchers::Avgratio) for
+               instructions on configuring it.
 
            ppaatttteerrnn _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
                a comma separated list of comparison operators and
@@ -565,7 +2823,19 @@ RREEFFEERREENNCCEE
                patterns are in percents
 
            ccoommmmeenntt _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
-           ttoo
+           ttoo  Similar to the "to" parameter on the top-level
+               except that  it will only be used IN ADDITION to
+               the value of the toplevel parameter. Same rules
+               apply.
+
+           eeddggeettrriiggggeerr
+               This variable _i_n_h_e_r_i_t_s its value from the parent
+               section if nothing is specified here.
+
+               Default value: edgetrigger = no
+
+
+
 
        ****** TTaarrggeettss ****** _(_m_a_n_d_a_t_o_r_y _s_e_c_t_i_o_n_)
 
@@ -580,6 +2850,9 @@ RREEFFEERREENNCCEE
        pprroobbee _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
            The name of the probe module to be used for this host.
            The value of this variable gets propagated
+
+           This variable _d_y_n_a_m_i_c_a_l_l_y modifies the grammar based
+           on its value.
 
        mmeennuu _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
            Menu entry for this section. If not set this will be
@@ -602,16 +2875,6 @@ RREEFFEERREENNCCEE
 
        The following sections are valid on level 1:
 
-       ++PPRROOBBEE__CCOONNFF
-           Probe specific variables.
-
-           The following variables can be set in this section:
-
-           //[[--__00--99aa--zzAA--ZZ..]]++//
-               Should be found in the documentation of the corre-
-               sponding probe. The values get propagated to those
-               child nodes using the same Probe.
-
        ++//[[--__00--99aa--zzAA--ZZ]]++//
            Each target section can contain information about a
            host to monitor as well as further target sections.
@@ -619,13 +2882,25 @@ RREEFFEERREENNCCEE
            expression above defines legal names for target sec-
            tions.
 
+           This section is _r_e_c_u_r_s_i_v_e: it can contain subsec-
+           tion(s) with the same syntax.
+
            The following variables can be set in this section:
 
            pprroobbee
+               This variable _i_n_h_e_r_i_t_s its value from the parent
+               section if nothing is specified here.
+
+               This variable _d_y_n_a_m_i_c_a_l_l_y modifies the grammar
+               based on its value.
+
            mmeennuu
            ttiittllee
            aalleerrttss
                Comma separated list of alert names
+
+               This variable _i_n_h_e_r_i_t_s its value from the parent
+               section if nothing is specified here.
 
            nnoottee
                Some information about this entry which does NOT
@@ -681,21 +2956,920 @@ RREEFFEERREENNCCEE
                can add it here. This can be a comma separated
                list of items.
 
+               This variable _i_n_h_e_r_i_t_s its value from the parent
+               section if nothing is specified here.
+
            The following sections are valid on level 2:
 
-           ++++PPRROOBBEE__CCOONNFF
-               Probe specific variables.
-
-               The following variables can be set in this sec-
-               tion:
-
-               //[[--__00--99aa--zzAA--ZZ..]]++//
-                   Should be found in the documentation of the
-                   corresponding probe. The values get propagated
-                   to those child nodes using the same Probe.
-
            ++++//[[--__00--99aa--zzAA--ZZ]]++//
-               This subsection has the same syntax as its parent.
+               This section is _r_e_c_u_r_s_i_v_e: it can contain subsec-
+               tion(s) with the same syntax.
+
+       Dynamical grammar changes for example values of variable
+       "probe":
+
+       AAnnootthheerrDDNNSS: (See the separate module documentation for
+       details about each variable.)
+           The following new variables are valid:
+
+           llooookkuupp
+           mmiinniinntteerrvvaall
+           ppiinnggss
+           ppoorrtt
+           rreeccoorrddttyyppee
+           rreeqquuiirree__nnooeerrrroorr
+           ttiimmeeoouutt
+
+           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
+
+               The following new variables are valid:
+
+               llooookkuupp
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               mmiinniinntteerrvvaall
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               ppiinnggss
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               ppoorrtt
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               rreeccoorrddttyyppee
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               rreeqquuiirree__nnooeerrrroorr
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               ttiimmeeoouutt
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+           (End of dynamical grammar changes for variable "probe"
+           example value "AnotherDNS".)
+
+       AAnnootthheerrSSSSHH: (See the separate module documentation for
+       details about each variable.)
+           The following new variables are valid:
+
+           ggrreeeettiinngg
+           iinntteerrvvaall
+           mmiinniinntteerrvvaall
+           ppiinnggss
+           ppoorrtt
+           ttiimmeeoouutt
+
+           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
+
+               The following new variables are valid:
+
+               ggrreeeettiinngg
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               iinntteerrvvaall
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               mmiinniinntteerrvvaall
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               ppiinnggss
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               ppoorrtt
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               ttiimmeeoouutt
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+           (End of dynamical grammar changes for variable "probe"
+           example value "AnotherSSH".)
+
+       CCiissccooRRTTTTMMoonnDDNNSS: (See the separate module documentation for
+       details about each variable.)
+           The following new variables are valid:
+
+           iioosshhoosstt
+           iioossiinntt
+           nnaammee
+           ppiinnggss
+
+           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
+
+               The following new variables are valid:
+
+               iioosshhoosstt
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               iioossiinntt
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               nnaammee
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               ppiinnggss
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+           (End of dynamical grammar changes for variable "probe"
+           example value "CiscoRTTMonDNS".)
+
+       CCiissccooRRTTTTMMoonnEEcchhooIICCMMPP: (See the separate module documenta-
+       tion for details about each variable.)
+           The following new variables are valid:
+
+           iioosshhoosstt
+           iioossiinntt
+           ppaacckkeettssiizzee
+           ppiinnggss
+           ttooss
+
+           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
+
+               The following new variables are valid:
+
+               iioosshhoosstt
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               iioossiinntt
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               ppaacckkeettssiizzee
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               ppiinnggss
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               ttooss This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+           (End of dynamical grammar changes for variable "probe"
+           example value "CiscoRTTMonEchoICMP".)
+
+       CCiissccooRRTTTTMMoonnTTccppCCoonnnneecctt: (See the separate module documenta-
+       tion for details about each variable.)
+           The following new variables are valid:
+
+           iioosshhoosstt
+           iioossiinntt
+           ppiinnggss
+           ppoorrtt
+           ttooss
+
+           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
+
+               The following new variables are valid:
+
+               iioosshhoosstt
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               iioossiinntt
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               ppiinnggss
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               ppoorrtt
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               ttooss This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+           (End of dynamical grammar changes for variable "probe"
+           example value "CiscoRTTMonTcpConnect".)
+
+       CCuurrll: (See the separate module documentation for details
+       about each variable.)
+           The following new variables are valid:
+
+           aaggeenntt
+           eexxttrraaaarrggss
+           eexxttrraarree
+           iinnsseeccuurree__ssssll
+           iinntteerrffaaccee
+           ppiinnggss
+           ssssll22
+           ttiimmeeoouutt
+           uurrllffoorrmmaatt
+
+           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
+
+               The following new variables are valid:
+
+               aaggeenntt
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               eexxttrraaaarrggss
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               eexxttrraarree
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               iinnsseeccuurree__ssssll
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               iinntteerrffaaccee
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               ppiinnggss
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               ssssll22
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               ttiimmeeoouutt
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               uurrllffoorrmmaatt
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+           (End of dynamical grammar changes for variable "probe"
+           example value "Curl".)
+
+       DDNNSS: (See the separate module documentation for details
+       about each variable.)
+           The following new variables are valid:
+
+           llooookkuupp
+           ppiinnggss
+
+           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
+
+               The following new variables are valid:
+
+               llooookkuupp
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               ppiinnggss
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+           (End of dynamical grammar changes for variable "probe"
+           example value "DNS".)
+
+       EEcchhooPPiinngg: (See the separate module documentation for
+       details about each variable.)
+           The following new variables are valid:
+
+           eexxttrraaooppttss
+           ffiillll
+           iippvveerrssiioonn
+           ppiinnggss
+           pprriioorriittyy
+           ssiizzee
+           ttiimmeeoouutt
+           ttooss
+           uuddpp
+           wwaaiittttiimmee
+
+           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
+
+               The following new variables are valid:
+
+               eexxttrraaooppttss
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               ffiillll
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               iippvveerrssiioonn
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               ppiinnggss
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               pprriioorriittyy
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               ssiizzee
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               ttiimmeeoouutt
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               ttooss This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               uuddpp This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               wwaaiittttiimmee
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+           (End of dynamical grammar changes for variable "probe"
+           example value "EchoPing".)
+
+       EEcchhooPPiinnggCChhaarrggeenn: (See the separate module documentation
+       for details about each variable.)
+           The following new variables are valid:
+
+           eexxttrraaooppttss
+           ffiillll
+           iippvveerrssiioonn
+           ppiinnggss
+           pprriioorriittyy
+           ssiizzee
+           ttiimmeeoouutt
+           ttooss
+           wwaaiittttiimmee
+
+           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
+
+               The following new variables are valid:
+
+               eexxttrraaooppttss
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               ffiillll
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               iippvveerrssiioonn
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               ppiinnggss
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               pprriioorriittyy
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               ssiizzee
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               ttiimmeeoouutt
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               ttooss This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               wwaaiittttiimmee
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+           (End of dynamical grammar changes for variable "probe"
+           example value "EchoPingChargen".)
+
+       EEcchhooPPiinnggDDiissccaarrdd: (See the separate module documentation
+       for details about each variable.)
+           The following new variables are valid:
+
+           eexxttrraaooppttss
+           ffiillll
+           iippvveerrssiioonn
+           ppiinnggss
+           pprriioorriittyy
+           ssiizzee
+           ttiimmeeoouutt
+           ttooss
+           uuddpp
+           wwaaiittttiimmee
+
+           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
+
+               The following new variables are valid:
+
+               eexxttrraaooppttss
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               ffiillll
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               iippvveerrssiioonn
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               ppiinnggss
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               pprriioorriittyy
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               ssiizzee
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               ttiimmeeoouutt
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               ttooss This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               uuddpp This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               wwaaiittttiimmee
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+           (End of dynamical grammar changes for variable "probe"
+           example value "EchoPingDiscard".)
+
+       EEcchhooPPiinnggHHttttpp: (See the separate module documentation for
+       details about each variable.)
+           The following new variables are valid:
+
+           eexxttrraaooppttss
+           iiggnnoorree__ccaacchhee
+           iippvveerrssiioonn
+           ppiinnggss
+           ppoorrtt
+           pprriioorriittyy
+           rreevvaalliiddaattee__ddaattaa
+           ttiimmeeoouutt
+           ttooss
+           uurrll
+           wwaaiittttiimmee
+
+           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
+
+               The following new variables are valid:
+
+               eexxttrraaooppttss
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               iiggnnoorree__ccaacchhee
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               iippvveerrssiioonn
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               ppiinnggss
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               ppoorrtt
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               pprriioorriittyy
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               rreevvaalliiddaattee__ddaattaa
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               ttiimmeeoouutt
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               ttooss This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               uurrll This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               wwaaiittttiimmee
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+           (End of dynamical grammar changes for variable "probe"
+           example value "EchoPingHttp".)
+
+       EEcchhooPPiinnggHHttttppss: (See the separate module documentation for
+       details about each variable.)
+           The following new variables are valid:
+
+           eexxttrraaooppttss
+           iiggnnoorree__ccaacchhee
+           iippvveerrssiioonn
+           ppiinnggss
+           ppoorrtt
+           pprriioorriittyy
+           rreevvaalliiddaattee__ddaattaa
+           ttiimmeeoouutt
+           ttooss
+           uurrll
+           wwaaiittttiimmee
+
+           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
+
+               The following new variables are valid:
+
+               eexxttrraaooppttss
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               iiggnnoorree__ccaacchhee
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               iippvveerrssiioonn
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               ppiinnggss
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               ppoorrtt
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               pprriioorriittyy
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               rreevvaalliiddaattee__ddaattaa
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               ttiimmeeoouutt
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               ttooss This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               uurrll This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               wwaaiittttiimmee
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+           (End of dynamical grammar changes for variable "probe"
+           example value "EchoPingHttps".)
+
+       EEcchhooPPiinnggIIccpp: (See the separate module documentation for
+       details about each variable.)
+           The following new variables are valid:
+
+           eexxttrraaooppttss
+           iippvveerrssiioonn
+           ppiinnggss
+           pprriioorriittyy
+           ttiimmeeoouutt
+           ttooss
+           uurrll
+           wwaaiittttiimmee
+
+           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
+
+               The following new variables are valid:
+
+               eexxttrraaooppttss
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               iippvveerrssiioonn
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               ppiinnggss
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               pprriioorriittyy
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               ttiimmeeoouutt
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               ttooss This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               uurrll This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               wwaaiittttiimmee
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+           (End of dynamical grammar changes for variable "probe"
+           example value "EchoPingIcp".)
+
+       EEcchhooPPiinnggSSmmttpp: (See the separate module documentation for
+       details about each variable.)
+           The following new variables are valid:
+
+           eexxttrraaooppttss
+           iippvveerrssiioonn
+           ppiinnggss
+           pprriioorriittyy
+           ttiimmeeoouutt
+           ttooss
+           wwaaiittttiimmee
+
+           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
+
+               The following new variables are valid:
+
+               eexxttrraaooppttss
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               iippvveerrssiioonn
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               ppiinnggss
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               pprriioorriittyy
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               ttiimmeeoouutt
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               ttooss This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               wwaaiittttiimmee
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+           (End of dynamical grammar changes for variable "probe"
+           example value "EchoPingSmtp".)
+
+       FFPPiinngg: (See the separate module documentation for details
+       about each variable.)
+           No changes that can be automatically described.
+
+           (End of dynamical grammar changes for variable "probe"
+           example value "FPing".)
+
+       FFPPiinngg66: (See the separate module documentation for details
+       about each variable.)
+           No changes that can be automatically described.
+
+           (End of dynamical grammar changes for variable "probe"
+           example value "FPing6".)
+
+       IIOOSSPPiinngg: (See the separate module documentation for
+       details about each variable.)
+           The following new variables are valid:
+
+           iioosshhoosstt
+           iioossiinntt
+           iioossuusseerr
+           ppiinnggss
+
+           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
+
+               The following new variables are valid:
+
+               iioosshhoosstt
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               iioossiinntt
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               iioossuusseerr
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               ppiinnggss
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+           (End of dynamical grammar changes for variable "probe"
+           example value "IOSPing".)
+
+       LLDDAAPP: (See the separate module documentation for details
+       about each variable.)
+           The following new variables are valid:
+
+           aattttrrss
+           bbaassee
+           bbiinnddddnn
+           ffiilltteerr
+           mmiinniinntteerrvvaall
+           ppaasssswwoorrdd
+           ppiinnggss
+           ppoorrtt
+           ssttaarrtt__ttllss
+           ttiimmeeoouutt
+           vveerrssiioonn
+
+           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
+
+               The following new variables are valid:
+
+               aattttrrss
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               bbaassee
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               bbiinnddddnn
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               ffiilltteerr
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               mmiinniinntteerrvvaall
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               ppaasssswwoorrdd
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               ppiinnggss
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               ppoorrtt
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               ssttaarrtt__ttllss
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               ttiimmeeoouutt
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               vveerrssiioonn
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+           (End of dynamical grammar changes for variable "probe"
+           example value "LDAP".)
+
+       RRaaddiiuuss: (See the separate module documentation for details
+       about each variable.)
+           The following new variables are valid:
+
+           mmiinniinntteerrvvaall
+           nnaass__iipp__aaddddrreessss
+           ppaasssswwoorrdd
+           ppiinnggss
+           ppoorrtt
+           sseeccrreett
+           ttiimmeeoouutt
+           uusseerrnnaammee
+
+           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
+
+               The following new variables are valid:
+
+               mmiinniinntteerrvvaall
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               nnaass__iipp__aaddddrreessss
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               ppaasssswwoorrdd
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               ppiinnggss
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               ppoorrtt
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               sseeccrreett
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               ttiimmeeoouutt
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               uusseerrnnaammee
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+           (End of dynamical grammar changes for variable "probe"
+           example value "Radius".)
+
+       RReemmootteeFFPPiinngg: (See the separate module documentation for
+       details about each variable.)
+           No changes that can be automatically described.
+
+           (End of dynamical grammar changes for variable "probe"
+           example value "RemoteFPing".)
+
+       SSSSHH: (See the separate module documentation for details
+       about each variable.)
+           The following new variables are valid:
+
+           ppiinnggss
+
+           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
+
+               The following new variables are valid:
+
+               ppiinnggss
+                   This variable _i_n_h_e_r_i_t_s its value from the
+                   parent section if nothing is specified here.
+
+           (End of dynamical grammar changes for variable "probe"
+           example value "SSH".)
+
+       TTeellnneettIIOOSSPPiinngg: (See the separate module documentation for
+       details about each variable.)
+           The following new variables are valid:
+
+           iioossppaassss
+           iioossuusseerr
+           ppiinnggss
+           ppssoouurrccee
+           ssoouurrccee
+
+           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
+
+               The following new variables are valid:
+
+               iioossppaassss
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               iioossuusseerr
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               ppiinnggss
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               ppssoouurrccee
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+               ssoouurrccee
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
+
+           (End of dynamical grammar changes for variable "probe"
+           example value "TelnetIOSPing".)
+
+       (End of dynamical grammar changes for example values of
+       variable "probe".)
 
 CCOOPPYYRRIIGGHHTT
        Copyright (c) 2001-2003 by Tobias Oetiker. All right
@@ -724,4 +3898,4 @@ AAUUTTHHOORR
 
 
 
-1.42                        2005-05-31        SMOKEPING_CONFIG(1)
+2.0.2                       2005-09-20        SMOKEPING_CONFIG(5)

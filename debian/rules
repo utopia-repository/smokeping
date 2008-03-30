@@ -25,11 +25,8 @@ update-docs:
 	-rm -f *tmp
 	-rm -f doc/*tmp
 
-	rm -f doc/smokeping.pod
-	ln -sf ../bin/smokeping.dist doc/smokeping.pod
-
 build: patch-stamp
-	$(MAKE) man html txt
+	$(MAKE) man html txt rename-man
 	touch build-stamp
 
 clean: clean-patched unpatch
@@ -42,9 +39,6 @@ clean-patched:
 
 	rm -f build-stamp
 	
-	rm -f doc/smokeping.pod
-	ln -sf ../bin/smokeping.dist doc/smokeping.pod
-
 install: build
 	dh_testdir
 	dh_testroot
@@ -55,56 +49,56 @@ install: build
 	install -m 644 lib/*pm $(TMP)/usr/share/perl5/smokeping
 	rm -f $(TMP)/usr/share/perl5/smokeping/BER.pm
 	rm -f $(TMP)/usr/share/perl5/smokeping/SNMP_*
-			        
 
-	install -d $(TMP)/usr/share/perl5/smokeping/probes
-	install -m 644 lib/probes/*pm $(TMP)/usr/share/perl5/smokeping/probes
+	install -d $(TMP)/usr/share/perl5/smokeping/Smokeping
+	install -m 644 lib/Smokeping/*pm $(TMP)/usr/share/perl5/smokeping/Smokeping
 
-	install -d $(TMP)/usr/share/perl5/smokeping/matchers
-	install -m 644 lib/matchers/*pm $(TMP)/usr/share/perl5/smokeping/matchers
+	install -d $(TMP)/usr/share/perl5/smokeping/Smokeping/probes
+	install -m 644 lib/Smokeping/probes/*pm $(TMP)/usr/share/perl5/smokeping/Smokeping/probes
 
-	install -d $(TMP)/usr/share/perl5/smokeping/ISG
-	install -m 644 lib/ISG/*pm $(TMP)/usr/share/perl5/smokeping/ISG/
+	install -d $(TMP)/usr/share/perl5/smokeping/Smokeping/matchers
+	install -m 644 lib/Smokeping/matchers/*pm $(TMP)/usr/share/perl5/smokeping/Smokeping/matchers
+
+	install -d $(TMP)/usr/share/perl5/smokeping/Config
+	install -m 644 lib/Config/*pm $(TMP)/usr/share/perl5/smokeping/Config/
 
 	install -d $(TMP)/usr/sbin/
 	install -m 755 bin/smokeping.dist $(TMP)/usr/sbin/smokeping
+	install -m 755 bin/tSmoke.dist $(TMP)/usr/sbin/tSmoke
 
 	install -d $(TMP)/etc/smokeping
 	install -m 644 etc/basepage.html.dist $(TMP)/etc/smokeping/basepage.html
 	install -m 644 etc/config.dist $(TMP)/etc/smokeping/config
 	install -m 644 etc/smokemail.dist $(TMP)/etc/smokeping/smokemail
+	install -m 644 etc/tmail.dist $(TMP)/etc/smokeping/tmail
 
 	install -d $(TMP)/usr/lib/cgi-bin
 	install htdocs/smokeping.cgi.dist $(TMP)/usr/lib/cgi-bin/smokeping.cgi
 
 	install -d $(TMP)/usr/share/doc/$(PACKAGE)/html
-	install -d $(TMP)/usr/share/doc/$(PACKAGE)/html/probes
-	install -d $(TMP)/usr/share/doc/$(PACKAGE)/html/matchers
+	install -d $(TMP)/usr/share/doc/$(PACKAGE)/html/Smokeping
+	install -d $(TMP)/usr/share/doc/$(PACKAGE)/html/Smokeping/probes
+	install -d $(TMP)/usr/share/doc/$(PACKAGE)/html/Smokeping/matchers
 	install -d $(TMP)/usr/share/doc/$(PACKAGE)/txt
-	install -d $(TMP)/usr/share/doc/$(PACKAGE)/txt/probes
-	install -d $(TMP)/usr/share/doc/$(PACKAGE)/txt/matchers
-	install -d $(TMP)/usr/share/man/man1
-	install -d $(TMP)/usr/share/man/man3
+	install -d $(TMP)/usr/share/doc/$(PACKAGE)/txt/Smokeping
+	install -d $(TMP)/usr/share/doc/$(PACKAGE)/txt/Smokeping/probes
+	install -d $(TMP)/usr/share/doc/$(PACKAGE)/txt/Smokeping/matchers
 
 	install -m 644 doc/*.txt $(TMP)/usr/share/doc/$(PACKAGE)/txt
-	install -m 644 doc/probes/*.txt $(TMP)/usr/share/doc/$(PACKAGE)/txt/probes
-	install -m 644 doc/matchers/*.txt $(TMP)/usr/share/doc/$(PACKAGE)/txt/matchers
+	install -m 644 doc/Smokeping/*.txt $(TMP)/usr/share/doc/$(PACKAGE)/txt/Smokeping
+	install -m 644 doc/Smokeping/probes/*.txt $(TMP)/usr/share/doc/$(PACKAGE)/txt/Smokeping/probes
+	install -m 644 doc/Smokeping/matchers/*.txt $(TMP)/usr/share/doc/$(PACKAGE)/txt/Smokeping/matchers
 	
 	install -m 644 doc/*.html $(TMP)/usr/share/doc/$(PACKAGE)/html
-	install -m 644 doc/probes/*.html $(TMP)/usr/share/doc/$(PACKAGE)/html/probes
-	install -m 644 doc/matchers/*.html $(TMP)/usr/share/doc/$(PACKAGE)/html/matchers
-	install -m 644 etc/config-echoping.dist $(TMP)/usr/share/doc/$(PACKAGE)/config-echoping.example
+	install -m 644 doc/Smokeping/*.html $(TMP)/usr/share/doc/$(PACKAGE)/html/Smokeping
+	install -m 644 doc/Smokeping/probes/*.html $(TMP)/usr/share/doc/$(PACKAGE)/html/Smokeping/probes
+	install -m 644 doc/Smokeping/matchers/*.html $(TMP)/usr/share/doc/$(PACKAGE)/html/Smokeping/probes
 	
-	install -m 644 doc/*.1 $(TMP)/usr/share/man/man1
-	mv $(TMP)/usr/share/man/man1/ParseConfig.pm.1 $(TMP)/usr/share/man/man3/ISG::ParseConfig.pm.3
-	
-	for i in doc/probes/*.1 ; do install -m 644 $$i $(TMP)/usr/share/man/man3/probes::`echo $$i | cut -d/ -f3 | cut -d. -f1,2`.3 ; done
-	
-	for i in doc/matchers/*.1 ; do install -m 644 $$i $(TMP)/usr/share/man/man3/matchers::`echo $$i | cut -d/ -f3 | cut -d. -f1,2`.3 ; done
-			
-        # Move man pages in section 3 from .1 files to .3
-	for i in `grep ".TH\ " $(TMP)/usr/share/man/man1/*.1 | grep "\ 3\ " | cut -f 1,2 -d .` ; do mv $$i.pm.1 $$i.pm.3 ; done
-	mv $(TMP)/usr/share/man/man1/*.3 $(TMP)/usr/share/man/man3/
+	for s in 1 3 5 7;\
+	do\
+		install -d $(TMP)/usr/share/man/man$$s;\
+		for f in `find doc/ -name \*.$$s` ; do install -m 644 $$f $(TMP)/usr/share/man/man$$s; done ; \
+	done
 
 binary-indep: build install
 	dh_testdir

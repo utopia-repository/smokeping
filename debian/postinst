@@ -55,6 +55,24 @@ case "$1" in
 
         rm -f $TMPFILE
       fi
+
+      if dpkg --compare-versions $2 lt 2.0rc5
+      then
+	if grep -q PROBE_CONF /etc/smokeping/config
+	then
+	  echo "Upgrading configuration file..."
+	  TMPFILE=/etc/smokeping/config.dpkg-save
+	  cp -f /etc/smokeping/config /etc/smokeping/config.dpkg-save
+	  grep -E -v '^[[:space:]]*\++[[:space:]]*PROBE_CONF' /etc/smokeping/config.dpkg-save > /etc/smokeping/config
+	fi
+	echo "Testing configuration file..."
+	if ! smokeping --check 2>/dev/null # the user will get the same output later with start--stop--daemon
+	then
+	  echo "NOTE: your configuration file (/etc/smokeping/config) is incompatible"
+          echo "      with this Smokeping version and could not be upgraded automatically."
+	  echo "      Please read the smokeping_upgrade document."
+	fi
+      fi
     fi
     
     getent passwd smokeping > /dev/null || \

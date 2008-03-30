@@ -1,3 +1,25 @@
+smokeping (2.0.2-1) unstable; urgency=low
+
+  [ Niko Tyni ]
+  * New upstream version
+  * debian/init.d: implemented 'reload'
+
+  [ Jose Carlos Garcia Sogo ]
+  * Merged versions 2.0.1-1 and 2.0.2-1 in my baz repository.
+  Thanks goes to Niko Tyni for his work.
+  * Changed FSF address from copyright file. 
+
+ -- Jose Carlos Garcia Sogo <jsogo@debian.org>  Sat, 24 Sep 2005 11:11:03 +0200
+
+smokeping (2.0.1-1) unstable; urgency=low
+
+  * New upstream version (Closes: #329339)
+  * try to upgrade the config file automatically
+  * give a warning and a pointer to the smokeping_upgrade doc
+    if the upgrade isn't succesful
+
+ -- Niko Tyni <ntyni@iki.fi>  Thu, 22 Sep 2005 17:58:53 +0000
+
 smokeping (1.42-2) unstable; urgency=low
 
   * Fix problem in default config file not allowing white space

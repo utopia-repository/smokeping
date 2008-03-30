@@ -1,31 +1,104 @@
-2005/5/31 -- 1.42
+2005/9/20 -- released version 2.0.2
 
-* make it work with the --statis option and PROBE_CONF -- Niko
-* make it work with rrdtool 1.2.x (technically) ! -- Niko
+* reload the config file on HUP signal and switch to the new one if it 
+  isn't broken. After reloading, restart gracefully so that no measurement is
+  interrupted. The signal can also be triggered by 'smokeping --reload'.
+  -- niko, suggested by Taisuke Yamada <tyamadajp *list.rakugaki.org>
+* made some alert docs in smokeping_config visible --niko
+* optionally only send alerts when the state changes ('edgetrigger')
+  -- niko, suggested by Marc Haber <mh+smokeping-users *zugschlus.de>
+* try to trigger an alert with the minimum number of values needed for it
+  rather than require a stack with the maximum number of possible values.
+  See http://lists.ee.ethz.ch/smokeping-users/msg01654.html for the problem.
+  -- niko, reported by Leos Bitto <smokeping *leos.cz>
+* automatically regenerate the logo images if Smokeping.pm has been updated --niko
 
-2005/5/10 -- 1.41
+2005/9/5 -- released version 2.0.1
 
-* stop Parse::Config from complaining about it being out of date.
-* die when someone tries to start with rrdtool 1.2.x loaded
-* documentation fixes for Smokeping Config -- Niko
-* documentation fixes for Curl Probe -- Niko
-* new options insecure_ssl and extraargs for the curl probe -- Niko
-* make --static work again -- Niko
+* fixed version number display in basetemplate -- tobi
 
-2005/4/17 -- 1.40
-* a last minute bug had broken the new navigator feature. now it works.
+2005/9/4 -- released version 2.0.0
 
-2005/4/15 -- 1.39
+* updated page template to match new logos and included Niko
+  -- tobi
+* don't create directories in "datadir" when running as a CGI
+  -- niko
+* the DYNAMIC-related files (.adr and .snmp) can now be located outside "datadir"
+  by specifying the new configuration variable "dyndir" 
+  -- niko, suggested by Marc Haber <mh+smokeping-users *zugschlus.de>
+* return '404 not found' when DYNAMIC updates fail
+  -- niko, suggested by Marc Haber <mh+smokeping-users *zugschlus.de>
+* make errors in DYNAMIC updates appear in the web server error log
+  -- niko
+* remove a quotemeta() call in Config::Grammar to allow metacharacters
+  at the right side of '@define'
+  -- niko, reported by Warrick FitzGerald <lists.smokeping.wfitzgerald *crtman.com>
+* set LC_NUMERIC to C so that users who work with a locale like french that
+  would use , as a decimal separator do not trip over failing regexp-matches
+  (tobi)
+* bugfix for CiscoRTTMonEchoICMP packetsize variable
+  -- niko, from Sam Stickland <sam_ml *spacething.org>
+* tune DS properties min/max/heartbeat instead of just complaing about
+  them not matching (tobi)
 
+2005/05/31 - publish rc5 (tobi)
+* Officially include the tSmoke script from the contrib download directory.
+  Note that this needs the new 'tmail' variable to be defined in the config file.
+  -- niko, original script by Dan McGinn-Combs <d.mcginn-combs *mindspring.com>
+* Perl 5.8.0 compatibility fix ("missing max for DS uptime")
+  -- niko, reported by Steve Wickert and Kennedy Clark <hkclark *gmail.com>
+* RRDtool 1.2.x compatibility fix ("unknown RRD version: 0003" on restart)
+  -- niko, reported by Sam Stickland <sam_ml *spacething.org>
+
+2005/05/11 - publish rc4 (tobi)
+* Curl now has a new 'insecure_ssl' option for those not caring about CA paths
+  -- niko, original patch by Marc Spitzer <mspitzer *gmail.com>
+* document '@include' and its friends in smokeping_config in addition to 
+  Config::Grammar -- niko, from Marc Haber (Debian bug #307955)
+* AnotherDNS: Double check the answer from the dns server and optionally enforce a
+  NOERROR response code -- Christoph.Heine in HaDiKo.DE
 * NEW Feature: when clicking on the graphs in detail view
   you can select different time ranges for the graph. The creation of this
   feature has been sponsored by BeverlyCorp.com -- tobi
 
-* make sure mailsetup works before using it -- tobi
+2005/03/10 - 2.0rc3 (tobi)
 
+* Curl now has a new "extraargs" option for any extra arguments, like "--header"
+  -- niko, requested by Warrick FitzGerald <lists.smokeping.wfitzgerald *crtman.com>
+* change ISG::ParseConfig references to its new name, Config::Grammar -- niko
+
+2005/02/28 - 2.0rc2 (tobi)
+
+* SYNOPSYS is really spelled SYNOPSIS. Shame on me. -- niko
+
+2005/02/22 - 2.0rc1 (tobi)
+
+* don't create any RRD files if running as a CGI -- niko
+* Curl timeouts work better now -- niko, reported by Chris Wilson <chris *aidworld.org>
+* Curl User-Agent string doesn't need quotes anymore -- niko
+* check at startup that existing RRD files conform to the config specifications -- niko
+* 3 pings is the official minimum now -- niko
+* graph fixes for small numbers of pings -- niko, reported by Chris Wilson <chris *aidworld.org>
+* fix the LDAP probe killing the CGI with perl <5.6 -- niko, reported by Peter Farmer <pfarmer *hashbang.org.uk>
+* make the LDAP probe work withouth IO::Socket::SSL -- niko
+* matchers start with a capital letter now -- niko
+* new probe programming interface -- niko
+ - more strict config file checking giving helpful error messages when necessary
+ - generate probe documentation automatically from the code
+ - eliminate PROBE_CONF sections
+ - several minor incompatible probe changes; see the smokeping_upgrade document for details 
+* allow target-specific vars get defaults from Probes section -- niko
+* timeout fixes in basefork.pm -- niko
+* config file examples and smokeping_examples document -- niko
+* documentation updates and reorganizing -- niko
+* move all smokeping-specific perl modules into the Smokeping namespace -- niko
+* new commandline options '--config=X' and '--check' -- niko
+* FPing: support "-t", "-p" and "-i" fping params -- niko, suggested by Chris Wilson <chris *aidworld.org>
+* FPing6: test against ::1 instead of localhost -- Sebastian Wiesinger <smokeping *tracker.fire-world.de>
+* make sure mailsetup works before using it -- tobi
 * fix for basefork.pm IO::Select property has_exception is very platform dependent
   by ignoring it altogether things actually work better. Especially on Solaris which
-  does have propper support for has_exception as oposed to linux. --  Niko Tyni <ntyni *iki.fi>
+  does have propper support for has_exception as oposed to linux. -- niko, reported by Jim Morris <wrdnet *earthlink.net> 
   
 2005/1/30 -- 1.38
 

@@ -14,6 +14,7 @@ imgurl   = ../smokeping
 datadir  = /var/lib/smokeping
 piddir   = /var/run/smokeping
 smokemail = /etc/smokeping/smokemail
+tmail    = /etc/smokeping/tmail
 ################################################
 # END OF DON'T TOUCH SECTION
 ################################################
@@ -120,7 +121,7 @@ title = Local Network
 
 ++ LocalMachine
 
-menu = LocalMachine
+menu = Local Machine
 title = This own machine
 host = localhost
 

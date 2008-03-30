@@ -1,0 +1,224 @@
+=head1 NAME
+
+Smokeping::probes::LDAP - a LDAP probe for SmokePing
+
+=head1 OVERVIEW
+
+Measures LDAP search latency for SmokePing
+
+=head1 SYNOPSIS
+
+ *** Probes ***
+
+ +LDAP
+
+ forks = 5
+ offset = 50%
+ passwordfile = /some/place/secret
+ step = 300
+
+ # The following variables can be overridden in each target section
+ attrs = uid,someotherattr
+ base = dc=foo,dc=bar
+ binddn = uid=testuser,dc=foo,dc=bar
+ filter = uid=testuser # mandatory
+ mininterval = 1
+ password = mypass
+ pings = 5
+ port = 389
+ start_tls = 1
+ timeout = 10
+ version = 3
+
+ # [...]
+
+ *** Targets ***
+
+ probe = LDAP # if this should be the default probe
+
+ # [...]
+
+ + mytarget
+ # probe = LDAP # if the default probe is something else
+ host = my.host
+ attrs = uid,someotherattr
+ base = dc=foo,dc=bar
+ binddn = uid=testuser,dc=foo,dc=bar
+ filter = uid=testuser # mandatory
+ mininterval = 1
+ password = mypass
+ pings = 5
+ port = 389
+ start_tls = 1
+ timeout = 10
+ version = 3
+
+=head1 DESCRIPTION
+
+This probe measures LDAP query latency for SmokePing.
+The query is specified by the target-specific variable `filter' and,
+optionally, by the target-specific variable `base'. The attributes 
+queried can be specified in the comma-separated list `attrs'.
+
+The TCP port of the LDAP server and the LDAP version to be used can
+be specified by the variables `port' and `version'.
+
+The probe can issue the starttls command to convert the connection
+into encrypted mode, if so instructed by the `start_tls' variable.
+This requires the 'IO::Socket::SSL' perl module to be installed.
+
+The probe can also optionally do an authenticated LDAP bind, if the `binddn'
+variable is present. The password to be used can be specified by the
+target-specific variable `password' or in an external file.
+The location of this file is given in the probe-specific variable
+`passwordfile'. See Smokeping::probes::passwordchecker(3pm) for the format
+of this file (summary: colon-separated triplets of the form
+`<host>:<bind-dn>:<password>')
+
+The probe tries to be nice to the server and does not send authentication
+requests more frequently than once every X seconds, where X is the value
+of the target-specific "min_interval" variable (1 by default).
+
+=head1 VARIABLES
+
+Supported probe-specific variables:
+
+=over
+
+=item forks
+
+Run this many concurrent processes at maximum
+
+Example value: 5
+
+Default value: 5
+
+=item offset
+
+If you run many probes concurrently you may want to prevent them from
+hitting your network all at the same time. Using the probe-specific
+offset parameter you can change the point in time when each probe will
+be run. Offset is specified in % of total interval, or alternatively as
+'random', and the offset from the 'General' section is used if nothing
+is specified here. Note that this does NOT influence the rrds itself,
+it is just a matter of when data acqusition is initiated.
+(This variable is only applicable if the variable 'concurrentprobes' is set
+in the 'General' section.)
+
+Example value: 50%
+
+=item passwordfile
+
+Location of the file containing usernames and passwords.
+
+Example value: /some/place/secret
+
+=item step
+
+Duration of the base interval that this probe should use, if different
+from the one specified in the 'Database' section. Note that the step in
+the RRD files is fixed when they are originally generated, and if you
+change the step parameter afterwards, you'll have to delete the old RRD
+files or somehow convert them. (This variable is only applicable if
+the variable 'concurrentprobes' is set in the 'General' section.)
+
+Example value: 300
+
+=back
+
+Supported target-specific variables:
+
+=over
+
+=item attrs
+
+The attributes queried.
+
+Example value: uid,someotherattr
+
+=item base
+
+The base to be used in the LDAP query
+
+Example value: dc=foo,dc=bar
+
+=item binddn
+
+If present, authenticate the LDAP bind with this DN.
+
+Example value: uid=testuser,dc=foo,dc=bar
+
+=item filter
+
+The actual search to be made
+
+Example value: uid=testuser
+
+This setting is mandatory.
+
+=item mininterval
+
+The minimum interval between each query sent, in (possibly fractional) second
+s.
+
+Default value: 1
+
+=item password
+
+The password to be used, if not present in <passwordfile>.
+
+Example value: mypass
+
+=item pings
+
+How many pings should be sent to each target, if different from the global
+value specified in the Database section. Note that the number of pings in
+the RRD files is fixed when they are originally generated, and if you
+change this parameter afterwards, you'll have to delete the old RRD
+files or somehow convert them.
+
+Example value: 5
+
+=item port
+
+TCP port of the LDAP server
+
+Example value: 389
+
+=item start_tls
+
+If true, encrypt the connection with the starttls command. Disabled by default.
+
+Example value: 1
+
+=item timeout
+
+LDAP query timeout in seconds.
+
+Example value: 10
+
+Default value: 5
+
+=item version
+
+The LDAP version to be used.
+
+Example value: 3
+
+=back
+
+
+=head1 AUTHORS
+
+Niko Tyni <ntyni@iki.fi>
+
+=head1 BUGS
+
+There should be a way of specifying TLS options, such as the certificates
+involved etc.
+
+The probe has an ugly way of working around the fact that the 
+IO::Socket::SSL class complains if start_tls() is done more than once
+in the same program. But It Works For Me (tm).
+
+=cut

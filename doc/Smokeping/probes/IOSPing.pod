@@ -1,0 +1,202 @@
+=head1 NAME
+
+Smokeping::probes::IOSPing - Cisco IOS Probe for SmokePing
+
+=head1 SYNOPSIS
+
+ *** Probes ***
+
+ +IOSPing
+
+ binary = /usr/bin/rsh # mandatory
+ forks = 5
+ offset = 50%
+ packetsize = 56
+ step = 300
+ timeout = 15
+
+ # The following variables can be overridden in each target section
+ ioshost = my.cisco.router # mandatory
+ iosint = Ethernet 1/0
+ iosuser = admin
+ pings = 5
+
+ # [...]
+
+ *** Targets ***
+
+ probe = IOSPing # if this should be the default probe
+
+ # [...]
+
+ + mytarget
+ # probe = IOSPing # if the default probe is something else
+ host = my.host
+ ioshost = my.cisco.router # mandatory
+ iosint = Ethernet 1/0
+ iosuser = admin
+ pings = 5
+
+=head1 DESCRIPTION
+
+Integrates Cisco IOS as a probe into smokeping.  Uses the rsh / remsh
+protocol to run a ping from an IOS device.
+
+=head1 VARIABLES
+
+Supported probe-specific variables:
+
+=over
+
+=item binary
+
+The binary option specifies the path of the binary to be used to
+connect to the IOS device.  Commonly used binaries are /usr/bin/rsh
+and /usr/bin/remsh, although any script or binary should work if can
+be called as 
+
+    /path/to/binary [ -l user ] router ping
+
+to produce the IOS ping dialog on stdin & stdout.
+
+Example value: /usr/bin/rsh
+
+This setting is mandatory.
+
+=item forks
+
+Run this many concurrent processes at maximum
+
+Example value: 5
+
+Default value: 5
+
+=item offset
+
+If you run many probes concurrently you may want to prevent them from
+hitting your network all at the same time. Using the probe-specific
+offset parameter you can change the point in time when each probe will
+be run. Offset is specified in % of total interval, or alternatively as
+'random', and the offset from the 'General' section is used if nothing
+is specified here. Note that this does NOT influence the rrds itself,
+it is just a matter of when data acqusition is initiated.
+(This variable is only applicable if the variable 'concurrentprobes' is set
+in the 'General' section.)
+
+Example value: 50%
+
+=item packetsize
+
+The (optional) packetsize option lets you configure the packetsize for
+the pings sent.
+
+Default value: 56
+
+=item step
+
+Duration of the base interval that this probe should use, if different
+from the one specified in the 'Database' section. Note that the step in
+the RRD files is fixed when they are originally generated, and if you
+change the step parameter afterwards, you'll have to delete the old RRD
+files or somehow convert them. (This variable is only applicable if
+the variable 'concurrentprobes' is set in the 'General' section.)
+
+Example value: 300
+
+=item timeout
+
+How long a single 'ping' takes at maximum
+
+Example value: 15
+
+Default value: 5
+
+=back
+
+Supported target-specific variables:
+
+=over
+
+=item ioshost
+
+The ioshost option specifies the IOS device which should be used for
+the ping.
+
+Example value: my.cisco.router
+
+This setting is mandatory.
+
+=item iosint
+
+The (optional) iosint option allows you to specify the source address
+or interface in the IOS device. The value should be an IP address or
+an interface name such as "Ethernet 1/0". If this option is omitted,
+the IOS device will pick the IP address of the outbound interface to
+use.
+
+Example value: Ethernet 1/0
+
+=item iosuser
+
+The (optional) iosuser option allows you to specify the remote
+username the IOS device.  If this option is omitted, the username
+defaults to the default user used by the remsh command (usually the
+user running the remsh command, ie the user running SmokePing).
+
+Example value: admin
+
+=item pings
+
+How many pings should be sent to each target, if different from the global
+value specified in the Database section. Note that the number of pings in
+the RRD files is fixed when they are originally generated, and if you
+change this parameter afterwards, you'll have to delete the old RRD
+files or somehow convert them.
+
+Example value: 5
+
+=back
+
+
+=head1 AUTHORS
+
+Paul J Murphy <paul@murph.org>
+
+based on L<Smokeping::probes::FPing|Smokeping::probes::FPing> by
+
+Tobias Oetiker <tobi@oetiker.ch>
+
+=head1 NOTES
+
+=head2 IOS Configuration
+
+The IOS device must have rsh enabled and an appropriate trust defined,
+eg:
+
+    !
+    ip rcmd rsh-enable
+    ip rcmd remote-host smoke 192.168.1.2 smoke enable
+    !
+
+Some IOS devices have a maximum of 5 VTYs available, so be careful not to 
+hit a limit with the 'forks' variable.
+
+=head2 Password authentication
+
+It is not possible to use password authentication with rsh or remsh
+due to fundamental limitations of the protocol.
+
+=head2 Ping packet size
+
+The FPing manpage has the following to say on the topic of ping packet
+size:
+
+Number of bytes of ping data to send.  The minimum size (normally 12)
+allows room for the data that fping needs to do its work (sequence
+number, timestamp).  The reported received data size includes the IP
+header (normally 20 bytes) and ICMP header (8 bytes), so the minimum
+total size is 40 bytes.  Default is 56, as in ping. Maximum is the
+theoretical maximum IP datagram size (64K), though most systems limit
+this to a smaller, system-dependent number.
+
+=cut

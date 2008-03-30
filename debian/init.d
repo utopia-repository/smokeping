@@ -33,7 +33,12 @@ case "$1" in
 
 	echo "$NAME."
 	;;
-  restart|force-reload)
+  reload|force-reload)
+  	echo -n "Reloading $DESC configuration..."
+	$DAEMON --reload >/dev/null
+	echo "$NAME."
+	;;
+  restart)
 	echo -n "Restarting $DESC: "
 	if [ -e /var/run/smokeping/$NAME.pid ];
 	then
@@ -47,7 +52,7 @@ case "$1" in
 	;;
   *)
 	N=/etc/init.d/$NAME
-	echo "Usage: $N {start|stop|restart|force-reload}" >&2
+	echo "Usage: $N {start|stop|reload|restart|force-reload}" >&2
 	exit 1
 	;;
 esac

@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>smokeping</title>
+<title>doc/smokeping</title>
 <link rev="made" href="mailto:dws@ee.ethz.ch" />
 </head>
 
@@ -36,13 +36,17 @@
 <pre>
  Options:</pre>
 <pre>
- --man        Show the manpage</pre>
+ --man[=x]    Show the manpage for the program (or for probe x, if specified)</pre>
 <pre>
  --help       Help :-)</pre>
 <pre>
  --email      Send SmokePing Agents to all Targets marked DYNAMIC</pre>
 <pre>
- --makepod    Create POD documentation on Config file</pre>
+ --config=x   Use a config file different from the default</pre>
+<pre>
+ --check      Just check the config file syntax, don't start the daemon</pre>
+<pre>
+ --makepod[=x] Create POD documentation on Config file (or for probe x, if specified)</pre>
 <pre>
  --version    Show SmokePing Version</pre>
 <pre>
@@ -52,16 +56,23 @@
 <pre>
  --restart    Restart SmokePing</pre>
 <pre>
+ --reload     Reload configuration in the running process without interrupting 
+              any probes</pre>
+<pre>
  --nodaemon    Do no daemonize the process (no fork)</pre>
 <pre>
  --filter=x   Only measure entries which pass the filter x</pre>
 <pre>
- --logfile    Append warnings to this logfile</pre>
+ --logfile=x    Append warnings to logfile x.</pre>
 <pre>
  --static[=x] Generates a static website in directory x.  If x is left out,
               pagedir from the config is used.</pre>
 <pre>
  --nosleep    For debugging you may want to run SmokePing without sleep interval</pre>
+<pre>
+ --gen-examples Generate the smokeping_examples document and example config files
+                (to be used while building inside the smokeping distribution)
+                With --check : check the syntax of the generated examples.</pre>
 <p>
 </p>
 <hr />
@@ -104,9 +115,9 @@ Multiple <strong>--filter</strong> arguments can be used to assemble complex fil
 <pre>
   --filter=/A --filter=/B --filter=!/B/C</pre>
 <p>would include all but /B/C.</p>
-<p>The <strong>--makepod</strong> does get used internally to produce the documentation on
-the SmokePing configuration file.</p>
-<p>Please refer to the installation document for detailed setup instructions.</p>
+<p>The <strong>--makepod</strong> does get used internally to produce the 
+<a href="././smokeping_config.html">documentation on the SmokePing configuration file</a>.</p>
+<p>Please refer to <a href="././smokeping_install.html">the installation document</a> for detailed setup instructions.</p>
 <p>
 </p>
 <hr />

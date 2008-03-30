@@ -1,0 +1,289 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Smokeping/probes/Curl</title>
+<link rev="made" href="mailto:dws@ee.ethz.ch" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+<!--
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#overview">OVERVIEW</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#variables">VARIABLES</a></li>
+	<li><a href="#authors">AUTHORS</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+-->
+<!-- INDEX END -->
+
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Smokeping::probes::Curl - a <code>curl(1)</code> probe for SmokePing</p>
+<p>
+</p>
+<hr />
+<h1><a name="overview">OVERVIEW</a></h1>
+<p>Fetches an HTTP or HTTPS URL using curl(1).</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ *** Probes ***</pre>
+<pre>
+ +Curl</pre>
+<pre>
+ binary = /usr/bin/curl
+ forks = 5
+ offset = 50%
+ step = 300</pre>
+<pre>
+ # The following variables can be overridden in each target section
+ agent = User-Agent: Lynx/2.8.4rel.1 libwww-FM/2.14 SSL-MM/1.4.1 OpenSSL/0.9.6c
+ extraargs = -6 --head --user user:password
+ extrare = / /
+ insecure_ssl = 1
+ interface = eth0
+ pings = 5
+ ssl2 = 1
+ timeout = 20
+ urlformat = <a href="http://%host%/">http://%host%/</a> # mandatory</pre>
+<pre>
+ # [...]</pre>
+<pre>
+ *** Targets ***</pre>
+<pre>
+ probe = Curl # if this should be the default probe</pre>
+<pre>
+ # [...]</pre>
+<pre>
+ + mytarget
+ # probe = Curl # if the default probe is something else
+ host = my.host
+ agent = User-Agent: Lynx/2.8.4rel.1 libwww-FM/2.14 SSL-MM/1.4.1 OpenSSL/0.9.6c
+ extraargs = -6 --head --user user:password
+ extrare = / /
+ insecure_ssl = 1
+ interface = eth0
+ pings = 5
+ ssl2 = 1
+ timeout = 20
+ urlformat = <a href="http://%host%/">http://%host%/</a> # mandatory</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>(see <code>curl(1)</code> for details of the options below)</p>
+<p>
+</p>
+<hr />
+<h1><a name="variables">VARIABLES</a></h1>
+<p>Supported probe-specific variables:</p>
+<dl>
+<dt><strong><a name="item_binary">binary</a></strong><br />
+
+</dt><dd>
+The location of your curl binary.
+
+</dd><dd>
+<p>Default value: /usr/bin/curl</p>
+
+<p></p>
+</dd><dt><strong><a name="item_forks">forks</a></strong><br />
+
+</dt><dd>
+Run this many concurrent processes at maximum
+
+</dd><dd>
+<p>Example value: 5</p>
+
+</dd><dd>
+<p>Default value: 5</p>
+
+<p></p>
+</dd><dt><strong><a name="item_offset">offset</a></strong><br />
+
+</dt><dd>
+If you run many probes concurrently you may want to prevent them from
+hitting your network all at the same time. Using the probe-specific
+offset parameter you can change the point in time when each probe will
+be run. Offset is specified in % of total interval, or alternatively as
+'random', and the offset from the 'General' section is used if nothing
+is specified here. Note that this does NOT influence the rrds itself,
+it is just a matter of when data acqusition is initiated.
+(This variable is only applicable if the variable 'concurrentprobes' is set
+in the 'General' section.)
+
+</dd><dd>
+<p>Example value: 50%</p>
+
+<p></p>
+</dd><dt><strong><a name="item_step">step</a></strong><br />
+
+</dt><dd>
+Duration of the base interval that this probe should use, if different
+from the one specified in the 'Database' section. Note that the step in
+the RRD files is fixed when they are originally generated, and if you
+change the step parameter afterwards, you'll have to delete the old RRD
+files or somehow convert them. (This variable is only applicable if
+the variable 'concurrentprobes' is set in the 'General' section.)
+
+</dd><dd>
+<p>Example value: 300</p>
+
+<p></p></dd></dl>
+<p>Supported target-specific variables:</p>
+<dl>
+<dt><strong><a name="item_agent">agent</a></strong><br />
+
+</dt><dd>
+The ``-A'' <code>curl(1)</code> option.  This is a full HTTP User-Agent header including
+the words ``User-Agent:''. Note that it does not need any quotes around it.
+
+</dd><dd>
+<p>Example value: User-Agent: Lynx/2.8.4rel.1 libwww-FM/2.14 SSL-MM/1.4.1 OpenSSL/0.9.6c</p>
+
+<p></p>
+</dd><dt><strong><a name="item_extraargs">extraargs</a></strong><br />
+
+</dt><dd>
+Any extra arguments you might want to hand to curl(1). The arguments
+should be separated by the regexp specified in ``extrare'', which
+contains just the space character (`` '') by default.
+
+</dd><dd>
+<p>Note that curl will be called with the resulting list of arguments
+without any shell expansion. If you need to specify any arguments
+containing spaces, you should set ``extrare'' to something else.</p>
+
+</dd><dd>
+<p>As a complicated example, to explicitly set the ``Host:'' header in Curl
+requests, you need to set ``extrare'' to something else, eg. ``/;/'',
+and then specify <code>extraargs = --header;Host: www.example.com</code>.</p>
+
+</dd><dd>
+<p>Example value: -6 --head --user user:password</p>
+
+<p></p>
+</dd><dt><strong><a name="item_extrare">extrare</a></strong><br />
+
+</dt><dd>
+The regexp used to split the extraargs string into an argument list,
+in the ``/regexp/'' notation.  This contains just the space character 
+(`` '') by default, but if you need to specify any arguments containing spaces,
+you can set this variable to a different value.
+
+</dd><dd>
+<p>Example value: / /</p>
+
+</dd><dd>
+<p>Default value: / /</p>
+
+<p></p>
+</dd><dt><strong><a name="item_insecure_ssl">insecure_ssl</a></strong><br />
+
+</dt><dd>
+The ``-k'' <code>curl(1)</code> option. Accept SSL connections that don't have a secure
+certificate chain to a trusted CA. Note that if you are going to monitor
+https targets, you'll probably have to either enable this option or specify
+the CA path to curl through extraargs below. For more info, see the
+<code>curl(1)</code> manual page.
+
+</dd><dd>
+<p>Example value: 1</p>
+
+<p></p>
+</dd><dt><strong><a name="item_interface">interface</a></strong><br />
+
+</dt><dd>
+The ``--interface'' <code>curl(1)</code> option.  Bind to a specific interface, IP address or
+host name.
+
+</dd><dd>
+<p>Example value: eth0</p>
+
+<p></p>
+</dd><dt><strong><a name="item_pings">pings</a></strong><br />
+
+</dt><dd>
+How many pings should be sent to each target, if different from the global
+value specified in the Database section. Note that the number of pings in
+the RRD files is fixed when they are originally generated, and if you
+change this parameter afterwards, you'll have to delete the old RRD
+files or somehow convert them.
+
+</dd><dd>
+<p>Example value: 5</p>
+
+<p></p>
+</dd><dt><strong><a name="item_ssl2">ssl2</a></strong><br />
+
+</dt><dd>
+The ``-2'' <code>curl(1)</code> option.  Force SSL2.
+
+</dd><dd>
+<p>Example value: 1</p>
+
+<p></p>
+</dd><dt><strong><a name="item_timeout">timeout</a></strong><br />
+
+</dt><dd>
+The ``-m'' <code>curl(1)</code> option.  Maximum timeout in seconds.
+
+</dd><dd>
+<p>Example value: 20</p>
+
+</dd><dd>
+<p>Default value: 10</p>
+
+<p></p>
+</dd><dt><strong><a name="item_urlformat">urlformat</a></strong><br />
+
+</dt><dd>
+The template of the URL to fetch.  Can be any one that curl supports.
+Any occurrence of the string '%host%' will be replaced with the
+host to be probed.
+
+</dd><dd>
+<p>Example value: http://%host%/</p>
+
+</dd><dd>
+<p>This setting is mandatory.</p>
+
+<p></p></dd></dl>
+<p>
+</p>
+<hr />
+<h1><a name="authors">AUTHORS</a></h1>
+<pre>
+ Gerald Combs &lt;gerald [AT] ethereal.com&gt;
+ Niko Tyni &lt;ntyni@iki.fi&gt;</pre>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p>You should consider setting a lower value for the <a href="#item_pings"><code>pings</code></a> variable than the
+default 20, as repetitive URL fetching may be quite heavy on the server.</p>
+<p>The URL to be tested used to be specified by the variable 'url' in earlier
+versions of Smokeping, and the 'host' setting did not influence it in any
+way. The variable name has now been changed to 'urlformat', and it can
+(and in most cases should) contain a placeholder for the 'host' variable.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p>curl(1), <a href="http://curl.haxx.se/">http://curl.haxx.se/</a></p>
+
+</body>
+
+</html>
