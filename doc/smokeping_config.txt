@@ -163,6 +163,17 @@ RREEFFEERREENNCCEE
            Path to your tSmoke HTML mail template file. See the
            tSmoke documentation for details.
 
+       cchhaannggeeccggiipprrooggrraammnnaammee
+           Usually the Smokeping CGI tries to log any possible
+           errors with an extended program name that includes the
+           IP address of the remote client for easier debugging.
+           If this variable is set to 'no', the program name will
+           not be modified. The only reason you would want this
+           is if you have a very old version of the CGI::Carp
+           module. See the installation document for details.
+
+           Default value: changecgiprogramname = yes
+
        ****** DDaattaabbaassee ****** _(_m_a_n_d_a_t_o_r_y _s_e_c_t_i_o_n_)
 
        Describes the properties of the round robin database for
@@ -184,15 +195,16 @@ RREEFFEERREENNCCEE
            somehow convert them.
 
        ppiinnggss _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
-           How many pings should be sent to each target. Sug-
-           gested: 20 pings. Minimum value: 3 pings.  This can be
-           overridden by each probe. Some probes (those derived
-           from basefork.pm, ie. most except the FPing variants)
-           will even let this be overridden target-specifically.
-           Note that the number of pings in the RRD files is
-           fixed when they are originally generated, and if you
-           change this parameter afterwards, you'll have to
-           delete the old RRD files or somehow convert them.
+           How many pings should be sent to each target.
+           Suggested: 20 pings. Minimum value: 3 pings.  This can
+           be overridden by each probe. Some probes (those
+           derived from basefork.pm, ie. most except the FPing
+           variants) will even let this be overridden tar-
+           get-specifically. Note that the number of pings in the
+           RRD files is fixed when they are originally generated,
+           and if you change this parameter afterwards, you'll
+           have to delete the old RRD files or somehow convert
+           them.
 
        This section also contains a table describing the setup of
        the SmokePing database. Below are reasonable defaults.
@@ -315,6 +327,7 @@ RREEFFEERREENNCCEE
 
            Example:
 
+
             "Last 3 Hours"    3h
             "Last 30 Hours"   30h
             "Last 10 Days"    10d
@@ -393,10 +406,9 @@ RREEFFEERREENNCCEE
        The following sections are valid on level 1:
 
        ++//[[--__00--99aa--zzAA--ZZ]]++//
-           Each module can take specific configuration
-           information from this area. The jumble of letters
-           above is a regular expression defining legal module
-           names.
+           Each module can take specific configuration informa-
+           tion from this area. The jumble of letters above is a
+           regular expression defining legal module names.
 
            See the documentation of each module for details about
            its variables.
@@ -2757,6 +2769,7 @@ RREEFFEERREENNCCEE
         pattern = >0%,*12*,>0%,*12*,>0%
         comment = detected loss 3 times over the last two hours
 
+
         +rttdetect
         type = rtt
         # in milliseconds
@@ -2833,9 +2846,6 @@ RREEFFEERREENNCCEE
                section if nothing is specified here.
 
                Default value: edgetrigger = no
-
-
-
 
        ****** TTaarrggeettss ****** _(_m_a_n_d_a_t_o_r_y _s_e_c_t_i_o_n_)
 
@@ -3155,8 +3165,8 @@ RREEFFEERREENNCCEE
                    This variable _i_n_h_e_r_i_t_s its value from the par-
                    ent section if nothing is specified here.
 
-               ttooss This variable _i_n_h_e_r_i_t_s its value from the par-
-                   ent section if nothing is specified here.
+               ttooss This variable _i_n_h_e_r_i_t_s its value from the
+                   parent section if nothing is specified here.
 
            (End of dynamical grammar changes for variable "probe"
            example value "CiscoRTTMonTcpConnect".)
@@ -3287,8 +3297,8 @@ RREEFFEERREENNCCEE
                    This variable _i_n_h_e_r_i_t_s its value from the par-
                    ent section if nothing is specified here.
 
-               ttooss This variable _i_n_h_e_r_i_t_s its value from the par-
-                   ent section if nothing is specified here.
+               ttooss This variable _i_n_h_e_r_i_t_s its value from the
+                   parent section if nothing is specified here.
 
                uuddpp This variable _i_n_h_e_r_i_t_s its value from the par-
                    ent section if nothing is specified here.
@@ -3617,8 +3627,8 @@ RREEFFEERREENNCCEE
                    ent section if nothing is specified here.
 
                iippvveerrssiioonn
-                   This variable _i_n_h_e_r_i_t_s its value from the par-
-                   ent section if nothing is specified here.
+                   This variable _i_n_h_e_r_i_t_s its value from the
+                   parent section if nothing is specified here.
 
                ppiinnggss
                    This variable _i_n_h_e_r_i_t_s its value from the par-
@@ -3749,8 +3759,8 @@ RREEFFEERREENNCCEE
                    ent section if nothing is specified here.
 
                vveerrssiioonn
-                   This variable _i_n_h_e_r_i_t_s its value from the par-
-                   ent section if nothing is specified here.
+                   This variable _i_n_h_e_r_i_t_s its value from the
+                   parent section if nothing is specified here.
 
            (End of dynamical grammar changes for variable "probe"
            example value "LDAP".)
@@ -3825,8 +3835,8 @@ RREEFFEERREENNCCEE
                The following new variables are valid:
 
                ppiinnggss
-                   This variable _i_n_h_e_r_i_t_s its value from the
-                   parent section if nothing is specified here.
+                   This variable _i_n_h_e_r_i_t_s its value from the par-
+                   ent section if nothing is specified here.
 
            (End of dynamical grammar changes for variable "probe"
            example value "SSH".)
@@ -3898,4 +3908,4 @@ AAUUTTHHOORR
 
 
 
-2.0.3                       2005-09-26        SMOKEPING_CONFIG(5)
+2.0.4                       2005-10-12        SMOKEPING_CONFIG(5)

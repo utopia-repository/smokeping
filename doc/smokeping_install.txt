@@ -119,6 +119,19 @@ DDEESSCCRRIIPPTTIIOONN
            apache error log. You can find a patch in the
            smokeping download area.
 
+       CGI::Carp
+           <http://http://search.cpan.org/~lds/CGI.pm/>
+
+           If you are using a version of Perl older than 5.8.1,
+           you should consider installing a newer version of
+           CGI::Carp (must be at least 1.24, included in
+           CGI.pm-2.82). Otherwise any error messages generated
+           by the CGI script will not show up quite as clean as
+           they could in the web server error log.  If you can't
+           or don't want to upgrade CGI::Carp, you can also set
+           the "changecgiprogramname" variable in the "General"
+           section to the value "no".
+
        IInnssttaallllaattiioonn
 
        Once the tools listed above are in place, you can start
@@ -203,4 +216,4 @@ AAUUTTHHOORR
 
 
 
-2.0.3                       2005-09-20       SMOKEPING_INSTALL(7)
+2.0.4                       2005-10-12       SMOKEPING_INSTALL(7)

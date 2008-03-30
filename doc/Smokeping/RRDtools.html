@@ -47,7 +47,8 @@
 <pre>
  # or compare them against another create list
  my @create = ('--step', 60, 'DS:ds0:GAUGE:120:0:U', 'RRA:AVERAGE:0.5:1:1008');
- my $comparison = Smokeping::RRDtools::compare($file, \@create);
+ my ($fatal, $comparison) = Smokeping::RRDtools::compare($file, \@create);
+ print &quot;Fatal: &quot; if $fatal;
  print &quot;Create arguments didn't match: $comparison\n&quot; if $comparison;</pre>
 <pre>
  Smokeping::RRDtools::tuneds($file, \@create);
@@ -66,9 +67,12 @@ but it <strong>will</strong> contain the <code>step</code> parameter.</p>
 <p>The function <code>compare</code> must be called with two arguments: the path to the
 interesting RRD file, and a reference to an argument list that could be fed
 to <code>RRDs::create</code>. The function will then simply compare the result of
-<code>info2create</code> with this argument list.  It will return <code>undef</code> if the
-arguments matched, and a string indicating the difference if a discrepancy
-was found. Note that if there is a <code>start</code> parameter in the argument list,
+<code>info2create</code> with this argument list. It will return an array of two values:
+<code>(fatal, text)</code> where  <code>fatal</code> is 1 if it found a fatal difference, and 0 if not.
+The <code>text</code> will contain an error message if <code>fatal == 1</code> and a possible warning 
+message if <code>fatal == 0</code>. If <code>fatal == 0</code> and <code>text</code> is <code>undef</code>, all the
+arguments matched.</p>
+<p>Note that if there is a <code>start</code> parameter in the argument list,
 <code>compare</code> disregards it. If <code>step</code> isn't specified, <code>compare</code> will use
 the <code>rrdtool</code> default of 300 seconds. <code>compare</code> ignores non-matching DS
 parameters since <code>tuneds</code> will fix them.</p>

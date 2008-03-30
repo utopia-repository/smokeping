@@ -129,7 +129,7 @@
 .\" ========================================================================
 .\"
 .IX Title "Smokeping::RRDtools 3"
-.TH Smokeping::RRDtools 3 "2005-07-04" "2.0.3" "SmokePing"
+.TH Smokeping::RRDtools 3 "2005-10-12" "2.0.4" "SmokePing"
 .SH "NAME"
 Smokeping::RRDtools \- Tools for RRD file handling
 .SH "SYNOPSIS"
@@ -153,10 +153,11 @@ Smokeping::RRDtools \- Tools for RRD file handling
 \& RRDs::create('/path/to/file2.rrd', @$create);
 .Ve
 .PP
-.Vb 4
+.Vb 5
 \& # or compare them against another create list
 \& my @create = ('--step', 60, 'DS:ds0:GAUGE:120:0:U', 'RRA:AVERAGE:0.5:1:1008');
-\& my $comparison = Smokeping::RRDtools::compare($file, \e@create);
+\& my ($fatal, $comparison) = Smokeping::RRDtools::compare($file, \e@create);
+\& print "Fatal: " if $fatal;
 \& print "Create arguments didn't match: $comparison\en" if $comparison;
 .Ve
 .PP
@@ -180,9 +181,13 @@ but it \fBwill\fR contain the \f(CW\*(C`step\*(C'\fR parameter.
 The function \f(CW\*(C`compare\*(C'\fR must be called with two arguments: the path to the
 interesting \s-1RRD\s0 file, and a reference to an argument list that could be fed
 to \f(CW\*(C`RRDs::create\*(C'\fR. The function will then simply compare the result of
-\&\f(CW\*(C`info2create\*(C'\fR with this argument list.  It will return \f(CW\*(C`undef\*(C'\fR if the
-arguments matched, and a string indicating the difference if a discrepancy
-was found. Note that if there is a \f(CW\*(C`start\*(C'\fR parameter in the argument list,
+\&\f(CW\*(C`info2create\*(C'\fR with this argument list. It will return an array of two values:
+\&\f(CW\*(C`(fatal, text)\*(C'\fR where  \f(CW\*(C`fatal\*(C'\fR is 1 if it found a fatal difference, and 0 if not.
+The \f(CW\*(C`text\*(C'\fR will contain an error message if \f(CW\*(C`fatal == 1\*(C'\fR and a possible warning 
+message if \f(CW\*(C`fatal == 0\*(C'\fR. If \f(CW\*(C`fatal == 0\*(C'\fR and \f(CW\*(C`text\*(C'\fR is \f(CW\*(C`undef\*(C'\fR, all the
+arguments matched.
+.PP
+Note that if there is a \f(CW\*(C`start\*(C'\fR parameter in the argument list,
 \&\f(CW\*(C`compare\*(C'\fR disregards it. If \f(CW\*(C`step\*(C'\fR isn't specified, \f(CW\*(C`compare\*(C'\fR will use
 the \f(CW\*(C`rrdtool\*(C'\fR default of 300 seconds. \f(CW\*(C`compare\*(C'\fR ignores non-matching \s-1DS\s0
 parameters since \f(CW\*(C`tuneds\*(C'\fR will fix them.

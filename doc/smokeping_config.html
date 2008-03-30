@@ -219,6 +219,20 @@ If 'concurrentprobes' is not set to 'yes', this variable has no effect.
 </dt><dd>
 Path to your tSmoke HTML mail template file. See the tSmoke documentation for details.
 
+<p></p>
+</dd><dt><strong><a name="item_changecgiprogramname"><strong>changecgiprogramname</strong></a></strong><br />
+
+</dt><dd>
+Usually the Smokeping CGI tries to log any possible errors with an extended
+program name that includes the IP address of the remote client for easier
+debugging. If this variable is set to 'no', the program name will not be 
+modified. The only reason you would want this is if you have a very old
+version of the CGI::Carp module. See 
+<a href="././smokeping_install.html">the installation document</a> for details.
+
+</dd><dd>
+<p>Default value: changecgiprogramname = yes</p>
+
 <p></p></dd></dl>
 <p>
 </p>

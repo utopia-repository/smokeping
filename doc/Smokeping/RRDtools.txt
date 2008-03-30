@@ -19,7 +19,8 @@ SSYYNNOOPPSSIISS
 
         # or compare them against another create list
         my @create = ('--step', 60, 'DS:ds0:GAUGE:120:0:U', 'RRA:AVERAGE:0.5:1:1008');
-        my $comparison = Smokeping::RRDtools::compare($file, \@create);
+        my ($fatal, $comparison) = Smokeping::RRDtools::compare($file, \@create);
+        print "Fatal: " if $fatal;
         print "Create arguments didn't match: $comparison\n" if $comparison;
 
         Smokeping::RRDtools::tuneds($file, \@create);
@@ -43,13 +44,18 @@ DDEESSCCRRIIPPTTIIOONN
        the path to the interesting RRD file, and a reference to
        an argument list that could be fed to "RRDs::create". The
        function will then simply compare the result of "info2cre-
-       ate" with this argument list.  It will return "undef" if
-       the arguments matched, and a string indicating the differ-
-       ence if a discrepancy was found. Note that if there is a
-       "start" parameter in the argument list, "compare" disre-
-       gards it. If "step" isn't specified, "compare" will use
-       the "rrdtool" default of 300 seconds. "compare" ignores
-       non-matching DS parameters since "tuneds" will fix them.
+       ate" with this argument list. It will return an array of
+       two values: "(fatal, text)" where  "fatal" is 1 if it
+       found a fatal difference, and 0 if not.  The "text" will
+       contain an error message if "fatal == 1" and a possible
+       warning message if "fatal == 0". If "fatal == 0" and
+       "text" is "undef", all the arguments matched.
+
+       Note that if there is a "start" parameter in the argument
+       list, "compare" disregards it. If "step" isn't specified,
+       "compare" will use the "rrdtool" default of 300 seconds.
+       "compare" ignores non-matching DS parameters since
+       "tuneds" will fix them.
 
        "tuneds" talks on stderr about the parameters it fixes.
 
@@ -89,4 +95,4 @@ SSEEEE AALLSSOO
 
 
 
-2.0.3                       2005-07-04     Smokeping::RRDtools(3)
+2.0.4                       2005-10-12     Smokeping::RRDtools(3)

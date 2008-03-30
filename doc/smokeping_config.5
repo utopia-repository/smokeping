@@ -129,7 +129,7 @@
 .\" ========================================================================
 .\"
 .IX Title "SMOKEPING_CONFIG 5"
-.TH SMOKEPING_CONFIG 5 "2005-09-26" "2.0.3" "SmokePing"
+.TH SMOKEPING_CONFIG 5 "2005-10-12" "2.0.4" "SmokePing"
 .SH "NAME"
 smokeping_config \- Reference for the SmokePing Config File
 .SH "OVERVIEW"
@@ -261,6 +261,16 @@ Default value: changeprocessnames = yes
 .IP "\fBtmail\fR" 4
 .IX Item "tmail"
 Path to your tSmoke \s-1HTML\s0 mail template file. See the tSmoke documentation for details.
+.IP "\fBchangecgiprogramname\fR" 4
+.IX Item "changecgiprogramname"
+Usually the Smokeping \s-1CGI\s0 tries to log any possible errors with an extended
+program name that includes the \s-1IP\s0 address of the remote client for easier
+debugging. If this variable is set to 'no', the program name will not be 
+modified. The only reason you would want this is if you have a very old
+version of the CGI::Carp module. See 
+the installation document for details.
+.Sp
+Default value: changecgiprogramname = yes
 .Sh "*** Database *** \fI(mandatory section)\fP"
 .IX Subsection "*** Database *** (mandatory section)"
 Describes the properties of the round robin database for storing the

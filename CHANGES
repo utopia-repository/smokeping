@@ -1,6 +1,16 @@
-2005/9/26 -- released version 2.0.3
+2005/10/12 -- released version 2.0.4
 
-2005/9/26 -- released version 2.0.2
+* avoid creating new RRD files as the user running 'smokeping --reload'
+  -- niko, reported by Stefan Schmidt <s.schmidt *mcbone.net>, 
+  http://bugs.debian.org/333373
+* only warn if RRA parameters other than CF are different 
+  in the config file and an RRD -- niko, for Javier Oviedo <joviedo *plcendesa.com>
+* make having an older version of CGI::Carp a non-fatal error and
+  recommend a newer one in the docs
+  -- niko, reported by Ron Bisset <Ron.Bisset *cnrinternational.com>
+* make it work (hopefully) with even older versions of CGI::Carp if
+  'changecgiprogramname' is set to 'no' in the General section
+  -- niko
 
 2005/9/26 -- released version 2.0.3
 
