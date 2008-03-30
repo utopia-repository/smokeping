@@ -58,6 +58,25 @@ case "$1" in
     chown smokeping:www-data /var/lib/smokeping/__cgi
     chmod 2775 /var/lib/smokeping/__cgi
 
+    # install the configuration files and register them with ucfr
+    [ -d /etc/smokeping ] || mkdir -p /etc/smokeping
+    for f in basepage.html smokemail tmail
+    do
+        ucf --debconf-ok --three-way /usr/share/smokeping/etc/${f}.dist /etc/smokeping/$f
+        ucfr smokeping /etc/smokeping/$f
+    done
+
+    [ -d /etc/smokeping/config.d ] || mkdir -p /etc/smokeping/config.d
+    for f in /usr/share/smokeping/etc/config.d/*
+    do
+        ucf --debconf-ok --three-way $f /etc/smokeping/config.d/$(basename $f)
+        ucfr smokeping /etc/smokeping/config.d/$(basename $f)
+    done
+
+    # do the main config last so the admin won't be quite so surprised
+    ucf --debconf-ok --three-way /usr/share/smokeping/etc/config /etc/smokeping/config
+    ucfr smokeping /etc/smokeping/config
+
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)

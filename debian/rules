@@ -68,18 +68,17 @@ install: build-stamp
 	install -m 755 bin/smokeping.dist $(TMP)/usr/sbin/smokeping
 	install -m 755 bin/tSmoke.dist $(TMP)/usr/sbin/tSmoke
 
-	install -d $(TMP)/etc/smokeping
-	install -m 644 etc/basepage.html.dist $(TMP)/etc/smokeping/basepage.html
-
-	install -m 644 debian/config $(TMP)/etc/smokeping/config
-	install -d $(TMP)/etc/smokeping/config.d
-	install -m 644 debian/config.d/* $(TMP)/etc/smokeping/config.d
-
-	install -m 644 etc/smokemail.dist $(TMP)/etc/smokeping/smokemail
-	install -m 644 etc/tmail.dist $(TMP)/etc/smokeping/tmail
-
 	install -d $(TMP)/etc/default
 	install -m 644 debian/defaults $(TMP)/etc/default/smokeping
+
+	# these are managed with ucf
+	install -d $(TMP)/usr/share/smokeping/etc
+	install -m 644 etc/basepage.html.dist $(TMP)/usr/share/smokeping/etc/
+	install -m 644 debian/config $(TMP)/usr/share/smokeping/etc/
+	install -d $(TMP)/usr/share/smokeping/etc/config.d
+	install -m 644 debian/config.d/* $(TMP)/usr/share/smokeping/etc/config.d/
+	install -m 644 etc/smokemail.dist $(TMP)/usr/share/smokeping/etc/
+	install -m 644 etc/tmail.dist $(TMP)/usr/share/smokeping/etc/
 
 	install -d $(TMP)/usr/lib/cgi-bin
 	install htdocs/smokeping.cgi.dist $(TMP)/usr/lib/cgi-bin/smokeping.cgi

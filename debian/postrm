@@ -25,7 +25,22 @@ case "$1" in
 	rm -rf /var/run/smokeping
 	rm -rf /var/www/smokeping
 	rm -rf /var/lib/smokeping
-	
+
+        for f in basepage.html smokemail tmail config
+        do
+            [ ! -x /usr/bin/ucf ] || ucf --purge /etc/smokeping/$f
+            [ ! -x /usr/bin/ucfr ] || ucfr --purge smokeping /etc/smokeping/$f
+            rm -f /etc/smokeping/$f
+        done
+        for f in Alerts Database  General  pathnames  Presentation  Probes  Targets
+        do
+            [ ! -x /usr/bin/ucf ] || ucf --purge /etc/smokeping/config.d/$f
+            [ ! -x /usr/bin/ucfr ] || ucfr --purge smokeping /etc/smokeping/config.d/$f
+            rm -f /etc/smokeping/config.d/$f
+        done
+
+        rmdir --ignore-fail-on-non-empty --parents /etc/smokeping/config.d
+
 esac
 
 # dh_installdeb will replace this with shell code automatically

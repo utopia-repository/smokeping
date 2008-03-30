@@ -4,7 +4,7 @@ smokeping (2.3.5-1) unstable; urgency=low
   subsection snippets in /etc/smokeping/config.d to ease merging of
   configuration changes. The installation scripts will automatically 
   split the old configuration on upgrades, but the split won't take
-  effect unless dpkg is allowed to overwrite /etc/smokeping/config.
+  effect unless ucf is allowed to overwrite /etc/smokeping/config.
   .
   This version also includes packaging changes to make the new
   master/slave functionality work. A new directory, /var/lib/smokeping/__cgi,
@@ -12,10 +12,9 @@ smokeping (2.3.5-1) unstable; urgency=low
   ping results received from its slaves. The main Smokeping daemon
   will then monitor the queue and update the RRD files accordingly.
   .
-  Make sure to accept or merge manually the new 'dyndir' and
-  'precreateperms' General section variables on upgrades, otherwise the
-  master/slave functionality (and most probably also the old DYNAMIC
-  host functionality) will not work.
+  Make sure to merge the new 'dyndir' and 'precreateperms' General section
+  variables on upgrades, otherwise the master/slave functionality (and
+  most probably also the old DYNAMIC host functionality) will not work.
 
  -- Niko Tyni <ntyni@debian.org>  Sat, 29 Mar 2008 23:39:33 +0200
 

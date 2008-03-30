@@ -19,6 +19,7 @@ smokeping (2.3.5-1) UNRELEASED; urgency=low
     working with a git repository.
   * Split the monolithic configuration file into configuration snippets
     in /etc/smokeping/config.d. See NEWS.Debian. (Closes: #473223)
+    + use ucf for managing all the configuration files to ease the merging
     + debian/patches/20_conffile.dpatch: removed
   * Install the upstream config template in /usr/share/doc too, because
     smokeping_examples(7) says so and it doesn't hurt.
