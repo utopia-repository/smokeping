@@ -26,14 +26,28 @@ set -e
 split_config () {
         version="$1"
         echo "splitting the old monolithic config into separate sections..." 1>&2
-        DIR=/etc/smokeping/config.d
+        local found
+        local stop
+        local DIR=/etc/smokeping/config.d
+        local sec
         [ -d $DIR ] || mkdir -p $DIR
         for sec in General Alerts Database Presentation Probes Targets
         do
             if [ ! -f ${DIR}/$sec ]; then
-                if [ -e /usr/share/smokeping/oldconfigs/$2/$sec ]; then
-                    # install an unmodified version of the section so ucf knows what changed
-                    ucf --three-way /usr/share/smokeping/oldconfigs/$version/$sec ${DIR}/$sec
+                # seed ucf with the default configuration from the version we're upgrading from
+                found=""
+                stop=false
+                for oldvers in 2.0.9-2  2.1.1-1  2.2.4-1  2.2.6-1  2.2.7-1  2.2.7-2  2.3.0-1  2.3.2-1
+                do
+                    if ! $stop && dpkg --compare-versions "$oldvers" gt "$version"; then
+                        stop=true
+                    fi
+                    if ! $stop && [ -e /usr/share/smokeping/oldconfigs/$oldvers/$sec ]; then
+                        found=/usr/share/smokeping/oldconfigs/$oldvers/$sec
+                    fi
+                done
+                if [ -n "$found" ]; then
+                    ucf --three-way $found ${DIR}/$sec
                 fi
                 sed -n "1,/^\*\*\* $sec \*\*\*/{h;d}; \${g;p;q}; /^\*\*\*/{g;p;q}; H" \
                 < /etc/smokeping/config > ${DIR}/$sec
