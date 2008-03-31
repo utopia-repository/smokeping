@@ -31,7 +31,7 @@ split_config () {
         local DIR=/etc/smokeping/config.d
         local sec
         [ -d $DIR ] || mkdir -p $DIR
-        for sec in General Alerts Database Presentation Probes Targets
+        for sec in General Alerts Database Presentation Probes Slaves Targets
         do
             if [ ! -f ${DIR}/$sec ]; then
                 # seed ucf with the default configuration from the version we're upgrading from
