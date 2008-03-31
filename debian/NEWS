@@ -1,4 +1,4 @@
-smokeping (2.3.5-1) unstable; urgency=low
+smokeping (2.3.5-1) experimental; urgency=low
 
   The configuration file, /etc/smokeping/config, has been split into
   subsection snippets in /etc/smokeping/config.d to ease merging of

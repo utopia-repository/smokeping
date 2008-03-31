@@ -1,4 +1,4 @@
-smokeping (2.3.5-1) UNRELEASED; urgency=low
+smokeping (2.3.5-1) experimental; urgency=low
 
   * New upstream release. (Closes: #470295)
     + debian/patches/30_slave_piddir.dpatch: removed, included upstream.
@@ -24,6 +24,7 @@ smokeping (2.3.5-1) UNRELEASED; urgency=low
   * Update debian/copyright.
   * Don't blindly remove the whole /etc/smokeping on purge, just the
     configuration files managed by maintainers scripts and any ucf leftovers.
+  * Upload to experimental to get a bit of testing first.
 
  -- Niko Tyni <ntyni@debian.org>  Tue, 11 Mar 2008 22:30:04 +0200
 
