@@ -23,14 +23,8 @@ set -e
 #     installation fails and the `postinst' is called with `abort-upgrade',
 #     `abort-remove' or `abort-deconfigure'.
 
-case "$1" in
-    configure|reconfigure)
-
-    getent passwd smokeping > /dev/null || \
-      adduser --system --group --home /var/lib/smokeping --no-create-home --gecos "SmokePing daemon" smokeping
-
-    if [ -n "$2" ] && dpkg --compare-versions "$2" lt "2.3.5-1"
-    then
+split_config () {
+        version="$1"
         echo "splitting the old monolithic config into separate sections..." 1>&2
         DIR=/etc/smokeping/config.d
         [ -d $DIR ] || mkdir -p $DIR
@@ -39,13 +33,15 @@ case "$1" in
             if [ ! -f ${DIR}/$sec ]; then
                 if [ -e /usr/share/smokeping/oldconfigs/$2/$sec ]; then
                     # install an unmodified version of the section so ucf knows what changed
-                    ucf --three-way /usr/share/smokeping/oldconfigs/$2/$sec ${DIR}/$sec
+                    ucf --three-way /usr/share/smokeping/oldconfigs/$version/$sec ${DIR}/$sec
                 fi
                 sed -n "1,/^\*\*\* $sec \*\*\*/{h;d}; \${g;p;q}; /^\*\*\*/{g;p;q}; H" \
                 < /etc/smokeping/config > ${DIR}/$sec
             fi
         done
+}
 
+migrate_cgi_directory () {
         echo "migrating CGI files into /var/lib/smokeping/__cgi..." 1>&2
         # move any old .adr files under __cgi
 
@@ -62,8 +58,9 @@ case "$1" in
         find /var/lib/smokeping/__cgi -type d -print0 | \
          xargs -0 --no-run-if-empty chmod 2775
 
-    fi
+}
 
+setup_permissions() {
     # Smokeping.cgi is run as user www-data, so we need it to be able
     # to write in /var/www/smokeping and in /var/lib/smokeping/__cgi
 
@@ -72,7 +69,9 @@ case "$1" in
     chown smokeping /var/run/smokeping
     chown smokeping:www-data /var/lib/smokeping/__cgi
     chmod 2775 /var/lib/smokeping/__cgi
+}
 
+do_ucf() {
     # install the configuration files and register them with ucfr
     [ -d /etc/smokeping ] || mkdir -p /etc/smokeping
     for f in basepage.html smokemail tmail
@@ -91,7 +90,22 @@ case "$1" in
     # do the main config last so the admin won't be quite so surprised
     ucf --debconf-ok --three-way /usr/share/smokeping/etc/config /etc/smokeping/config
     ucfr smokeping /etc/smokeping/config
+}
 
+# OK, let's go
+case "$1" in
+    configure|reconfigure)
+
+    getent passwd smokeping > /dev/null || \
+      adduser --system --group --home /var/lib/smokeping --no-create-home --gecos "SmokePing daemon" smokeping
+
+    if [ -n "$2" ] && dpkg --compare-versions "$2" lt "2.3.5-1"
+    then
+        split_config "$2"
+        migrate_cgi_directory
+    fi
+    setup_permissions
+    do_ucf
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
