@@ -75,8 +75,8 @@ install: build-stamp
 	install -d $(TMP)/usr/share/smokeping/etc
 	install -m 644 etc/basepage.html.dist $(TMP)/usr/share/smokeping/etc/
 	install -m 644 debian/basepage.html.dist.md5sum $(TMP)/usr/share/smokeping/etc/
-	install -m 644 debian/config $(TMP)/usr/share/smokeping/etc/
-	install -m 644 debian/config.md5sum $(TMP)/usr/share/smokeping/etc/
+	install -m 644 debian/default-config $(TMP)/usr/share/smokeping/etc/
+	install -m 644 debian/default-config.md5sum $(TMP)/usr/share/smokeping/etc/
 	install -d $(TMP)/usr/share/smokeping/etc/config.d
 	install -m 644 debian/config.d/* $(TMP)/usr/share/smokeping/etc/config.d/
 	cp -R debian/oldconfigs $(TMP)/usr/share/smokeping/oldconfigs
