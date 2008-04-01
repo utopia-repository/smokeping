@@ -97,7 +97,8 @@ do_ucf() {
     [ -d /etc/smokeping/config.d ] || mkdir -p /etc/smokeping/config.d
     for f in /usr/share/smokeping/etc/config.d/*
     do
-        ucf --debconf-ok --three-way $f /etc/smokeping/config.d/$(basename $f)
+        ucf --debconf-ok --three-way --src-dir /usr/share/smokeping/etc/config.d.md5sums/ \
+            $f /etc/smokeping/config.d/$(basename $f)
         ucfr smokeping /etc/smokeping/config.d/$(basename $f)
     done
 

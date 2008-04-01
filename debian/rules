@@ -80,6 +80,7 @@ install: build-stamp
 	install -d $(TMP)/usr/share/smokeping/etc/config.d
 	install -m 644 debian/config.d/* $(TMP)/usr/share/smokeping/etc/config.d/
 	cp -R debian/oldconfigs $(TMP)/usr/share/smokeping/oldconfigs
+	cp -R debian/config.d.md5sums $(TMP)/usr/share/smokeping/etc/config.d.md5sums
 	install -m 644 etc/smokemail.dist $(TMP)/usr/share/smokeping/etc/
 	install -m 644 etc/tmail.dist $(TMP)/usr/share/smokeping/etc/
 
