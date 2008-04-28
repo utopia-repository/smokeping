@@ -1,3 +1,10 @@
+smokeping (2.3.6-1) UNRELEASED; urgency=low
+
+  * New upstream release.
+    + honours the 'linkstyle' variable when zooming. (Closes: #476404)
+
+ -- Niko Tyni <ntyni@debian.org>  Mon, 28 Apr 2008 20:08:28 +0300
+
 smokeping (2.3.5-2) unstable; urgency=low
 
   * Prevent an unnecessary ucf prompt for the Slaves section on upgrades.
