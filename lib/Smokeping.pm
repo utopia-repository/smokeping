@@ -38,7 +38,7 @@ use Smokeping::RRDtools;
 
 # globale persistent variables for speedy
 use vars qw($cfg $probes $VERSION $havegetaddrinfo $cgimode);
-$VERSION="2.003005";
+$VERSION="2.003006";
 
 # we want opts everywhere
 my %opt;
@@ -660,7 +660,11 @@ sub target_menu($$$$;$){
     	    $menu =~ s/ /&nbsp;/g;
         	my $menuadd ="";
 		    $menuadd = "&nbsp;" x (20 - length($menu)) if length($menu) < 20;
-	        $print .= qq{<tr><td class="$class" colspan="2">&nbsp;-&nbsp;<a class="menulink" HREF="$path$key$suffix">$menu</a>$menuadd</td></tr>\n};
+               my $menuclass = "menulink";
+               if ($key eq $current and !@$open) {
+                   $menuclass = "menulinkactive";
+               }
+               $print .= qq{<tr><td class="$class" colspan="2">&nbsp;-&nbsp;<a class="$menuclass" HREF="$path$key$suffix">$menu</a>$menuadd</td></tr>\n};
     	    if ($key eq $current){
         	    my $prline = target_menu $tree->{$key}, $open, "$path$key.",$filter, $suffix;
 	            $print .= qq{<tr><td class="$class">&nbsp;&nbsp;</td><td align="left">$prline</td></tr>}
@@ -1298,7 +1302,7 @@ sub get_detail ($$$$;$){
                '--start',$realstart,
                ($end ne 'last' ? ('--end',$end) : ()),
                '--height',$cfg->{Presentation}{detail}{height},
-               '--width',,$cfg->{Presentation}{detail}{width},
+               '--width',$cfg->{Presentation}{detail}{width},
                '--title',$desc.$from,
                '--rigid','--upper-limit', $max->{$s}{$start},
                @log,
@@ -1310,7 +1314,7 @@ sub get_detail ($$$$;$){
                '--color', 'BACK#ffffff',
                '--color', 'CANVAS#ffffff',
                (map {"DEF:ping${_}=${rrd}:ping${_}:AVERAGE"} 1..$pings),
-               (map {"CDEF:cp${_}=ping${_},0,$max->{$s}{$start},LIMIT"} 1..$pings),
+               (map {"CDEF:cp${_}=ping${_},$max->{$s}{$start},LT,ping${_},INF,IF"} 1..$pings),
                ("DEF:loss=${rrd}:loss:AVERAGE"),
                @upargs,# draw the uptime bg color
                @lossargs, # draw the loss bg color
@@ -1378,7 +1382,7 @@ sub get_detail ($$$$;$){
 #           $page .= (time-$timer_start)."<br/>";
 #           $page .= join " ",map {"'$_'"} @task;
                 $page .= "<br/>";
-                $page .= ( qq{<a href="?}.hierarchy($q).qq{displaymode=n;start=$startstr;end=now;}."target=".$q->param('target').$s.'">'
+                $page .= ( qq{<a href="}.cgiurl($q,$cfg)."?".hierarchy($q).qq{displaymode=n;start=$startstr;end=now;}."target=".$q->param('target').$s.'">'
                       . qq{<IMG BORDER="0" SRC="${imghref}${s}_${end}_${start}.png">}."</a>" ); #"
                 $page .= "</div>";
             }

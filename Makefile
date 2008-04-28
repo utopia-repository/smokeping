@@ -1,12 +1,12 @@
 SHELL = /bin/sh
-VERSION := 2.3.5
+VERSION := 2.3.6
 SVNREPO = svn://svn.oetiker.ch/smokeping
 ############ A is for features
 ############ B is for bugfixes
 ############ V.AAABBB
 ############ 2.000001
 ############ 2.000002
-NUMVERSION = 2.003005
+NUMVERSION = 2.003006
 IGNORE = ~|CVS|var/|smokeping-$(VERSION)/smokeping-$(VERSION)|cvsignore|rej|orig|DEAD|pod2htm[di]\.tmp|\.svn|tar\.gz|DEADJOE|svn-commit\.tmp
 GROFF = groff
 PERL = perl-5.8.8
@@ -147,6 +147,12 @@ killdoc:
 	-rm doc/*.[1357] doc/*.txt doc/*.html doc/Smokeping/* doc/Smokeping/probes/* doc/Smokeping/matchers/* doc/Smokeping/sorters/* doc/Config/* doc/examples/* doc/smokeping_examples.pod doc/smokeping_config.pod doc/smokeping.pod doc/smokeping.cgi.pod
 
 doc:    killdoc ref examples man html txt rename-man
+
+docdirs: 
+	for d in doc/Config doc/examples doc/Smokeping/probes \
+	         doc/Smokeping/sorters doc/Smokeping/matchers; do \
+		[ -d $$d ] || mkdir -p $$d; \
+	done
 
 # patch first so Smokeping.pm is older than smokeping_config.pod in the tarball
 smokeping-$(VERSION).tar.gz:
