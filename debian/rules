@@ -13,15 +13,7 @@ include /usr/share/dpatch/dpatch.make
 build: build-stamp
 build-stamp: patch-stamp
 
-	# recreate the docdirs just in case something (like "git-clean -d -f")
-	# removed the empty directories
-	# this will be cleaner with the next upstream version
-	for d in doc/Config doc/examples doc/Smokeping/probes \
-	         doc/Smokeping/sorters doc/Smokeping/matchers; do \
-		[ -d $$d ] || mkdir -p $$d; \
-	done
-
-	$(MAKE) man html txt rename-man
+	$(MAKE) docdirs man html txt rename-man
 	touch build-stamp
 
 clean: clean-patched unpatch
