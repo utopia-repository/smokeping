@@ -123,7 +123,7 @@ case "$1" in
     log_daemon_msg "Shutting down $DESC" $NAME
 
     set +e
-    start-stop-daemon --oknodo --stop --quiet --pidfile /var/run/smokeping/$NAME.pid --signal 15
+    start-stop-daemon --oknodo --stop --retry 3 --quiet --pidfile /var/run/smokeping/$NAME.pid --signal 15
     STATUS=$?
     set -e
 

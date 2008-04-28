@@ -2,6 +2,9 @@ smokeping (2.3.6-1) UNRELEASED; urgency=low
 
   * New upstream release.
     + honours the 'linkstyle' variable when zooming. (Closes: #476404)
+  * Wait until the daemon has exited when stopping it with the init.d script.
+    This should fix a race condition that made restarts fail sporadically.
+    (Closes: #478241)
 
  -- Niko Tyni <ntyni@debian.org>  Mon, 28 Apr 2008 20:08:28 +0300
 
