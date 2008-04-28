@@ -1,0 +1,89 @@
+TSMOKE.DIST(1)                     SmokePing                    TSMOKE.DIST(1)
+
+
+
+NNAAMMEE
+       tSmoke - Commandline tool for sending SmokePing information
+
+SSYYNNOOPPSSIISS
+       ttSSmmookkee [ ----tteessttmmaaiill | ----mmoorrnniinngg | ----wweeeekkllyy | ----vveerrssiioonn | ----hheellpp |
+       ----mmaann]
+
+        Options:
+
+        --man      Show the manpage
+        --help     Help :-)
+        --version  Show SmokePing Version
+        --testmail Send a test message
+        --listrrds List the RRDs used by this Smokeping
+        --morning  Send a morning synopsis
+        --weekly   Send a weekly status report
+        --to       E-mail address to send message (i.e. '--to=xyz@company.com.invalid'
+        --detail   How much detail to send in weekly report (i.e. '--detail=1')
+        --quiet    Do not print welcome
+
+DDEESSCCRRIIPPTTIIOONN
+       The ttSSmmookkee tool is a commandline tool which interfaces with the
+       SmokePing system.  Its main function is to send a message indicating
+       the current status of the systems being monitored by Smokeping or an
+       HTML mail file containing the status over the past day, past week and
+       past month including an overview.
+
+       Typical crontab used to invoke this are
+
+        # Quick morning alert to see what's down
+        0 6 * * * /usr/local/smokeping/bin/tSmoke.pl --q --to=mobilephone@att.net.invalid --morning
+        # Weekly report on the percent availability of network systems with no detail
+        0 8 * * * /usr/local/smokeping/bin/tSmoke.pl --q --to=mailbox@company.com.invalid --weekly --detail=0
+
+SSEETTUUPP
+       When installing tSmoke, some variables must be adjusted to fit your
+       local system.
+
+       We need to use the following lliibbrraarriieess:
+
+       Smokeping
+       RRDTool Perl bindings
+       Getopt::Long
+
+       Set up your libraries:
+
+        use lib "/usr/local/smokeping/lib";
+        use lib "/usr/local/rrdtool-1.0.39/lib/perl";
+
+       Point to your Smokeping ccoonnffiigg file
+
+        my $cfgfile = "/usr/local/smokeping/etc/config";
+
+       Modify the Smokeping config file to include a path for tmail in the
+       General section:
+
+        tmail = /usr/local/smokeping/etc/tmail
+
+CCOOPPYYRRIIGGHHTT
+       Copyright (c) 2003 by Dan McGinn-Combs. All right reserved.
+
+LLIICCEENNSSEE
+       This program is free software; you can redistribute it and/or modify it
+       under the terms of the GNU General Public License as published by the
+       Free Software Foundation; either version 2 of the License, or (at your
+       option) any later version.
+
+       This program is distributed in the hope that it will be useful, but
+       WITHOUT ANY WARRANTY; without even the implied warranty of MER-
+       CHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General
+       Public License for more details.
+
+       You should have received a copy of the GNU General Public License along
+       with this program; if not, write to the Free Software Foundation, Inc.,
+       675 Mass Ave, Cambridge, MA 02139, USA.
+
+AAUUTTHHOORR
+       Dan McGinn-Combs <d.mcginn-combs@mindspring.com>
+
+       Modified for Smokeping official distribution by Niko Tyni
+       <ntyni@iki.fi>
+
+
+
+2.3.5                             2008-03-29                    TSMOKE.DIST(1)

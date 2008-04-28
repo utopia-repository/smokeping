@@ -1,0 +1,184 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>doc/smokeping</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:root@localhost" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+<!--
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#setup">SETUP</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+	<li><a href="#license">LICENSE</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+</ul>
+-->
+<!-- INDEX END -->
+
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>smokeping - Commandline tool for SmokePing</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p><strong>smokeping</strong> [ <strong>--email</strong> | <strong>--makepod</strong> | <strong>--version</strong> | <strong>--restart</strong> ]</p>
+<pre>
+ Options:</pre>
+<pre>
+ --man[=x]    Show the manpage for the program (or for probe x, if specified)</pre>
+<pre>
+ --help       Help :-)</pre>
+<pre>
+ --email      Send SmokePing Agents to all Targets marked DYNAMIC</pre>
+<pre>
+ --config=x   Use a config file different from the default</pre>
+<pre>
+ --check      Just check the config file syntax, don't start the daemon</pre>
+<pre>
+ --makepod[=x] Create POD documentation on Config file (or for probe x, if specified)</pre>
+<pre>
+ --version    Show SmokePing Version</pre>
+<pre>
+ --debug      Run Only once and do not Fork</pre>
+<pre>
+ --debug-daemon Start the daemon with debugging enabled</pre>
+<pre>
+ --restart    Restart SmokePing</pre>
+<pre>
+ --reload     Reload configuration in the running process without interrupting 
+              any probes</pre>
+<pre>
+ --nodaemon    Do no daemonize the process (no fork)</pre>
+<pre>
+ --filter=x   Only measure entries which pass the filter x</pre>
+<pre>
+ --logfile=x    Append warnings to logfile x.</pre>
+<pre>
+ --static[=x] Generates a static website in directory x.  If x is left out,
+              pagedir from the config is used.</pre>
+<pre>
+ --nosleep    For debugging you may want to run SmokePing without sleep interval</pre>
+<pre>
+ --gen-examples Generate the smokeping_examples document and example config files
+                (to be used while building inside the smokeping distribution)
+                With --check : check the syntax of the generated examples.</pre>
+<pre>
+ --master-url=s Run smokeping in slave mode. Attach to master for config.</pre>
+<pre>
+ --slave-name=s By default the slave will use whatever it thinks its name
+                is, when talking to its master. In some cases you may
+                probably want to override this.</pre>
+<pre>
+ --shared-secret=s File containing the shared secret for talking to the server.</pre>
+<pre>
+ --cache-dir=s Directory for temporary data storage when running in slave mode.</pre>
+<pre>
+ --pid-dir=s Directory for the PID file when running in slave mode.
+             (optional, defaults to --cache-dir)</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>The <strong>smokeping</strong> tool is the commandline part of the SmokePing system. Its
+main function is to run as a daemon and send Pings to all the Targets you
+have specified in the Config file. When you call <strong>smokeping</strong> without
+arguments it will start as a daemon and do its work.</p>
+<p>If called with an argument, then further functions can be activated, as seen
+in the Synopsis above. The <strong>--email</strong> function is explained in the
+documentation on the config file.</p>
+<p>The <strong>--filter</strong> option allows you to run the daemon on a big config file,
+but have the config file filtered and only measure the entries that pass the
+filter. This is useful for remote measurement. Run Smokeping with two
+exclusive filters in two locations and rsync the rrds back to the webserver
+host where you run the cgi. Filters act on the section names in the config
+file. Multiple section names are concatenated with <strong>/</strong> like path names:</p>
+<pre>
+ *** targets ***
+ + A
+ ....
+ + B
+ ...
+ ++ C</pre>
+<p>This gives</p>
+<pre>
+ /A</pre>
+<p>and</p>
+<pre>
+ /B, /B/C</pre>
+<p>If I want to monitor /A my filter would look like this:</p>
+<pre>
+ --filter=/A</pre>
+<p>Filters follow regular expression syntax. The are always anchored at the tip of the string.
+by adding a <strong>!</strong> to the front of the filter string you negate it. Matching entries will be excluded from monitoring.
+Multiple <strong>--filter</strong> arguments can be used to assemble complex filters:</p>
+<pre>
+  --filter=/A --filter=/B</pre>
+<p>would include all the targets</p>
+<pre>
+  --filter=/A --filter=/B --filter=!/B/C</pre>
+<p>would include all but /B/C.</p>
+<p>The <strong>--makepod</strong> does get used internally to produce the 
+<a href="././smokeping_config.html">documentation on the SmokePing configuration file</a>.</p>
+<p>Please refer to <a href="././smokeping_install.html">the installation document</a> for detailed setup instructions.</p>
+<p>
+</p>
+<hr />
+<h1><a name="setup">SETUP</a></h1>
+<p>When installing SmokePing, this file has to be adjusted to fit your
+local system. Three paths have to be entered.</p>
+<p>One pointing to your <strong>rrdtool</strong> installation</p>
+<pre>
+ use lib qw(/usr/pack/rrdtool-1.0.33-to/lib/perl);</pre>
+<p>One pointing to the place where you have installed the SmokePing libraries</p>
+<pre>
+ use lib qw(/home/oetiker/public_html/smokeping/lib);</pre>
+<p>The third path is the argument to the Smokeping::main command. It points to
+the SmokePing configuration file.</p>
+<pre>
+ use Smokeping;
+ Smokeping::main(&quot;/home/oetiker/.smokeping/config&quot;);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright (c) 2002 by Tobias Oetiker. All right reserved.</p>
+<p>
+</p>
+<hr />
+<h1><a name="license">LICENSE</a></h1>
+<p>This program is free software; you can redistribute it
+and/or modify it under the terms of the GNU General Public
+License as published by the Free Software Foundation; either
+version 2 of the License, or (at your option) any later
+version.</p>
+<p>This program is distributed in the hope that it will be
+useful, but WITHOUT ANY WARRANTY; without even the implied
+warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+PURPOSE.  See the GNU General Public License for more
+details.</p>
+<p>You should have received a copy of the GNU General Public
+License along with this program; if not, write to the Free
+Software Foundation, Inc., 675 Mass Ave, Cambridge, MA
+02139, USA.</p>
+<p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>Tobias Oetiker &lt;<a href="mailto:tobi@oetiker.ch">tobi@oetiker.ch</a>&gt;</p>
+
+</body>
+
+</html>

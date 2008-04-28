@@ -1,0 +1,189 @@
+doc::Smokeping::probes::Radius(3)  SmokePing doc::Smokeping::probes::Radius(3)
+
+
+
+NNAAMMEE
+       Smokeping::probes::Radius - a RADIUS authentication probe for SmokePing
+
+OOVVEERRVVIIEEWW
+       Measures RADIUS authentication latency for SmokePing
+
+SSYYNNOOPPSSIISS
+        *** Probes ***
+
+        +Radius
+
+        forks = 5
+        offset = 50%
+        passwordfile = /some/place/secret
+        secretfile = /another/place/secret
+        step = 300
+
+        # The following variables can be overridden in each target section
+        mininterval = 1
+        nas_ip_address = 10.1.2.3
+        password = test-password
+        pings = 5
+        port = 1645
+        secret = test-secret
+        timeout = 5
+        username = test-user # mandatory
+
+        # [...]
+
+        *** Targets ***
+
+        probe = Radius # if this should be the default probe
+
+        # [...]
+
+        + mytarget
+        # probe = Radius # if the default probe is something else
+        host = my.host
+        mininterval = 1
+        nas_ip_address = 10.1.2.3
+        password = test-password
+        pings = 5
+        port = 1645
+        secret = test-secret
+        timeout = 5
+        username = test-user # mandatory
+
+DDEESSCCRRIIPPTTIIOONN
+       This probe measures RADIUS (RFC 2865) authentication latency for
+       SmokePing.
+
+       The username to be tested is specified in either the probe-specific or
+       the target-specific variable `username', with the target-specific one
+       overriding the probe-specific one.
+
+       The password can be specified either (in order of precedence, with the
+       latter overriding the former) in the probe-specific variable `pass-
+       word', in an external file or in the target-specific variable `pass-
+       word'.  The location of this file is given in the probe-specific vari-
+       able `passwordfile'. See _S_m_o_k_e_p_i_n_g_:_:_p_r_o_b_e_s_:_:_p_a_s_s_w_o_r_d_c_h_e_c_k_e_r(3pm) for
+       the format of this file (summary: colon-separated triplets of the form
+       `<host>:<username>:<password>')
+
+       The RADIUS protocol requires a shared secret between the server and the
+       client.  This secret can be specified either (in order of precedence,
+       with the latter overriding the former) in the probe-specific variable
+       `secret', in an external file or in the target-specific variable
+       `secret'.  This external file is located by the probe-specific variable
+       `secretfile', and it should contain whitespace-separated pairs of the
+       form `<host> <secret>'. Comments and blank lines are OK.
+
+       If the optional probe-specific variable `nas_ip_address' is specified,
+       its value is inserted into the authentication requests as the
+       `NAS-IP-Address' RADIUS attribute.
+
+       The probe tries to be nice to the server and does not send authentica-
+       tion requests more frequently than once every X seconds, where X is the
+       value of the target-specific "min_interval" variable (1 by default).
+
+VVAARRIIAABBLLEESS
+       Supported probe-specific variables:
+
+       forks
+           Run this many concurrent processes at maximum
+
+           Example value: 5
+
+           Default value: 5
+
+       offset
+           If you run many probes concurrently you may want to prevent them
+           from hitting your network all at the same time. Using the probe-
+           specific offset parameter you can change the point in time when
+           each probe will be run. Offset is specified in % of total interval,
+           or alternatively as 'random', and the offset from the 'General'
+           section is used if nothing is specified here. Note that this does
+           NOT influence the rrds itself, it is just a matter of when data
+           acqusition is initiated.  (This variable is only applicable if the
+           variable 'concurrentprobes' is set in the 'General' section.)
+
+           Example value: 50%
+
+       passwordfile
+           Location of the file containing usernames and passwords.
+
+           Example value: /some/place/secret
+
+       secretfile
+           A file containing the RADIUS shared secrets for the targets. It
+           should contain whitespace-separated pairs of the form `<host>
+           <secret>'. Comments and blank lines are OK.
+
+           Example value: /another/place/secret
+
+       step
+           Duration of the base interval that this probe should use, if dif-
+           ferent from the one specified in the 'Database' section. Note that
+           the step in the RRD files is fixed when they are originally gener-
+           ated, and if you change the step parameter afterwards, you'll have
+           to delete the old RRD files or somehow convert them. (This variable
+           is only applicable if the variable 'concurrentprobes' is set in the
+           'General' section.)
+
+           Example value: 300
+
+       Supported target-specific variables:
+
+       mininterval
+           The minimum interval between each authentication request sent, in
+           (possibly fractional) seconds.
+
+           Default value: 1
+
+       nas_ip_address
+           The NAS-IP-Address RADIUS attribute for the authentication
+           requests. Not needed everywhere.
+
+           Example value: 10.1.2.3
+
+       password
+           The password for the user, if not present in the password file.
+
+           Example value: test-password
+
+       pings
+           How many pings should be sent to each target, if different from the
+           global value specified in the Database section. Note that the num-
+           ber of pings in the RRD files is fixed when they are originally
+           generated, and if you change this parameter afterwards, you'll have
+           to delete the old RRD files or somehow convert them.
+
+           Example value: 5
+
+       port
+           The RADIUS port to be used
+
+           Example value: 1645
+
+       secret
+           The RADIUS shared secret for the target, if not present in the
+           secrets file.
+
+           Example value: test-secret
+
+       timeout
+           Timeout in seconds for the RADIUS queries.
+
+           Default value: 5
+
+       username
+           The username to be tested.
+
+           Example value: test-user
+
+           This setting is mandatory.
+
+AAUUTTHHOORRSS
+       Niko Tyni <ntyni@iki.fi>
+
+BBUUGGSS
+       There should be a more general way of specifying RADIUS attributes.
+
+
+
+2.3.5                             2008-03-29 doc::Smokeping::probes::Radius(3)

@@ -1,0 +1,123 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>doc/tSmoke</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:root@localhost" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+<!--
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#setup">SETUP</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+	<li><a href="#license">LICENSE</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+</ul>
+-->
+<!-- INDEX END -->
+
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>tSmoke - Commandline tool for sending SmokePing information</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p><strong>tSmoke</strong> [ <strong>--testmail</strong> | <strong>--morning</strong> | <strong>--weekly</strong> | <strong>--version</strong> | <strong>--help</strong> | <strong>--man</strong>]</p>
+<pre>
+ Options:</pre>
+<pre>
+ --man      Show the manpage
+ --help     Help :-)
+ --version  Show SmokePing Version
+ --testmail Send a test message
+ --listrrds List the RRDs used by this Smokeping
+ --morning  Send a morning synopsis
+ --weekly   Send a weekly status report
+ --to       E-mail address to send message (i.e. '--to=xyz@company.com.invalid'
+ --detail   How much detail to send in weekly report (i.e. '--detail=1')
+ --quiet    Do not print welcome
+ 
+=head1 DESCRIPTION</pre>
+<p>The <strong>tSmoke</strong> tool is a commandline tool which interfaces with the SmokePing system.
+Its main function is to send a message indicating the current status of the systems
+being monitored by Smokeping or an HTML mail file containing the status over the past day,
+past week and past month including an overview.</p>
+<p>Typical crontab used to invoke this are</p>
+<pre>
+ # Quick morning alert to see what's down
+ 0 6 * * * /usr/local/smokeping/bin/tSmoke.pl --q --to=mobilephone@att.net.invalid --morning
+ # Weekly report on the percent availability of network systems with no detail
+ 0 8 * * * /usr/local/smokeping/bin/tSmoke.pl --q --to=mailbox@company.com.invalid --weekly --detail=0</pre>
+<p>
+</p>
+<hr />
+<h1><a name="setup">SETUP</a></h1>
+<p>When installing tSmoke, some variables must be adjusted to fit your local system.</p>
+<p>We need to use the following <strong>libraries</strong>:</p>
+<dl>
+<dt><strong><a name="item_smokeping">Smokeping</a></strong>
+
+<dt><strong><a name="item_rrdtool_perl_bindings">RRDTool Perl bindings</a></strong>
+
+<dt><strong><a name="item_getopt_3a_3along">Getopt::Long</a></strong>
+
+</dl>
+<p>Set up your libraries:</p>
+<pre>
+ use lib &quot;/usr/local/smokeping/lib&quot;;
+ use lib &quot;/usr/local/rrdtool-1.0.39/lib/perl&quot;;</pre>
+<p>Point to your Smokeping <strong>config</strong> file</p>
+<pre>
+ my $cfgfile = &quot;/usr/local/smokeping/etc/config&quot;;</pre>
+<p>Modify the Smokeping config file to include a path for tmail in the
+General section:</p>
+<pre>
+ tmail = /usr/local/smokeping/etc/tmail</pre>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright (c) 2003 by Dan McGinn-Combs. All right reserved.</p>
+<p>
+</p>
+<hr />
+<h1><a name="license">LICENSE</a></h1>
+<p>This program is free software; you can redistribute it
+and/or modify it under the terms of the GNU General Public
+License as published by the Free Software Foundation; either
+version 2 of the License, or (at your option) any later
+version.</p>
+<p>This program is distributed in the hope that it will be
+useful, but WITHOUT ANY WARRANTY; without even the implied
+warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+PURPOSE.  See the GNU General Public License for more
+details.</p>
+<p>You should have received a copy of the GNU General Public
+License along with this program; if not, write to the Free
+Software Foundation, Inc., 675 Mass Ave, Cambridge, MA
+02139, USA.</p>
+<p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>Dan McGinn-Combs &lt;<a href="mailto:d.mcginn-combs@mindspring.com">d.mcginn-combs@mindspring.com</a>&gt;
+
+</p>
+<p>Modified for Smokeping official distribution by Niko Tyni &lt;<a href="mailto:ntyni@iki.fi">ntyni@iki.fi</a>&gt;
+
+</p>
+
+</body>
+
+</html>

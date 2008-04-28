@@ -1,0 +1,296 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Smokeping/probes/EchoPingLDAP</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:root@localhost" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+<!--
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#overview">OVERVIEW</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#variables">VARIABLES</a></li>
+	<li><a href="#authors">AUTHORS</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+-->
+<!-- INDEX END -->
+
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Smokeping::probes::EchoPingLDAP - an <code>echoping(1)</code> probe for SmokePing</p>
+<p>
+</p>
+<hr />
+<h1><a name="overview">OVERVIEW</a></h1>
+<p>Measures LDAP roundtrip times for SmokePing with the echoping_ldap plugin.</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ *** Probes ***</pre>
+<pre>
+ +EchoPingLDAP</pre>
+<pre>
+ binary = /usr/bin/echoping
+ forks = 5
+ offset = 50%
+ step = 300</pre>
+<pre>
+ # The following variables can be overridden in each target section
+ extraopts = -some-letter-the-author-did-not-think-of
+ ipversion = 4
+ ldap_base = dc=current,dc=bugs,dc=debian,dc=org
+ ldap_request = (objectclass=*)
+ ldap_scope = one
+ pings = 5
+ plugin = /path/to/ldap.so
+ pluginargs = -p plugin_specific_arg
+ priority = 6
+ timeout = 1
+ tos = 0xa0
+ waittime = 1</pre>
+<pre>
+ # [...]</pre>
+<pre>
+ *** Targets ***</pre>
+<pre>
+ probe = EchoPingLDAP # if this should be the default probe</pre>
+<pre>
+ # [...]</pre>
+<pre>
+ + mytarget
+ # probe = EchoPingLDAP # if the default probe is something else
+ host = my.host
+ extraopts = -some-letter-the-author-did-not-think-of
+ ipversion = 4
+ ldap_base = dc=current,dc=bugs,dc=debian,dc=org
+ ldap_request = (objectclass=*)
+ ldap_scope = one
+ pings = 5
+ plugin = /path/to/ldap.so
+ pluginargs = -p plugin_specific_arg
+ priority = 6
+ timeout = 1
+ tos = 0xa0
+ waittime = 1</pre>
+<p>
+</p>
+<hr />
+<h1><a name="variables">VARIABLES</a></h1>
+<p>Supported probe-specific variables:</p>
+<dl>
+<dt><strong><a name="item_binary">binary</a></strong>
+
+<dd>
+<p>The location of your echoping binary.</p>
+
+</dd><dd>
+<p>Default value: /usr/bin/echoping</p>
+
+</li>
+</dd><dt><strong><a name="item_forks">forks</a></strong>
+
+<dd>
+<p>Run this many concurrent processes at maximum</p>
+
+</dd><dd>
+<p>Example value: 5</p>
+
+</dd><dd>
+<p>Default value: 5</p>
+
+</li>
+</dd><dt><strong><a name="item_offset">offset</a></strong>
+
+<dd>
+<p>If you run many probes concurrently you may want to prevent them from
+hitting your network all at the same time. Using the probe-specific
+offset parameter you can change the point in time when each probe will
+be run. Offset is specified in % of total interval, or alternatively as
+'random', and the offset from the 'General' section is used if nothing
+is specified here. Note that this does NOT influence the rrds itself,
+it is just a matter of when data acqusition is initiated.
+(This variable is only applicable if the variable 'concurrentprobes' is set
+in the 'General' section.)</p>
+
+</dd><dd>
+<p>Example value: 50%</p>
+
+</li>
+</dd><dt><strong><a name="item_step">step</a></strong>
+
+<dd>
+<p>Duration of the base interval that this probe should use, if different
+from the one specified in the 'Database' section. Note that the step in
+the RRD files is fixed when they are originally generated, and if you
+change the step parameter afterwards, you'll have to delete the old RRD
+files or somehow convert them. (This variable is only applicable if
+the variable 'concurrentprobes' is set in the 'General' section.)</p>
+
+</dd><dd>
+<p>Example value: 300</p>
+
+</li>
+</dd></dl>
+<p>Supported target-specific variables:</p>
+<dl>
+<dt><strong><a name="item_extraopts">extraopts</a></strong>
+
+<dd>
+<p>Any extra options specified here will be passed unmodified to echoping(1).</p>
+
+</dd><dd>
+<p>Example value: -some-letter-the-author-did-not-think-of</p>
+
+</li>
+</dd><dt><strong><a name="item_ipversion">ipversion</a></strong>
+
+<dd>
+<p>The IP protocol used. Possible values are ``4'' and ``6''. 
+Passed to <code>echoping(1)</code> as the ``-4'' or ``-6'' options.</p>
+
+</dd><dd>
+<p>Example value: 4</p>
+
+</li>
+</dd><dt><strong><a name="item_ldap_base">ldap_base</a></strong>
+
+<dd>
+<p>The echoping_ldap '-b' option:
+base of the search.</p>
+
+</dd><dd>
+<p>Example value: dc=current,dc=bugs,dc=debian,dc=org</p>
+
+</li>
+</dd><dt><strong><a name="item_ldap_request">ldap_request</a></strong>
+
+<dd>
+<p>The echoping_ldap '-r' option:
+the request to the LDAP server, in LDAP filter language.</p>
+
+</dd><dd>
+<p>Example value: (objectclass=*)</p>
+
+</li>
+</dd><dt><strong><a name="item_ldap_scope">ldap_scope</a></strong>
+
+<dd>
+<p>The echoping_ldap '-s' option:
+scope of the search, ``sub'', ``one'' or ``base''.</p>
+
+</dd><dd>
+<p>Example value: one</p>
+
+</li>
+</dd><dt><strong><a name="item_pings">pings</a></strong>
+
+<dd>
+<p>How many pings should be sent to each target, if different from the global
+value specified in the Database section. Note that the number of pings in
+the RRD files is fixed when they are originally generated, and if you
+change this parameter afterwards, you'll have to delete the old RRD
+files or somehow convert them.</p>
+
+</dd><dd>
+<p>Example value: 5</p>
+
+</li>
+</dd><dt><strong><a name="item_plugin">plugin</a></strong>
+
+<dd>
+<p>The echoping plugin that will be used. See <code>echoping(1)</code> for details.
+This can either be the name of the plugin or a full path to the
+plugin shared object.</p>
+
+</dd><dd>
+<p>Example value: /path/to/ldap.so</p>
+
+</dd><dd>
+<p>Default value: ldap</p>
+
+</li>
+</dd><dt><strong><a name="item_pluginargs">pluginargs</a></strong>
+
+<dd>
+<p>Any extra arguments needed by the echoping plugin specified with the 
+<em>pluginname</em> variable. These are generally provided by the subclass probe.</p>
+
+</dd><dd>
+<p>Example value: -p plugin_specific_arg</p>
+
+</li>
+</dd><dt><strong><a name="item_priority">priority</a></strong>
+
+<dd>
+<p>The ``-p'' <code>echoping(1)</code> option.</p>
+
+</dd><dd>
+<p>Example value: 6</p>
+
+</li>
+</dd><dt><strong><a name="item_timeout">timeout</a></strong>
+
+<dd>
+<p>The ``-t'' <code>echoping(1)</code> option.</p>
+
+</dd><dd>
+<p>Example value: 1</p>
+
+</dd><dd>
+<p>Default value: 5</p>
+
+</li>
+</dd><dt><strong><a name="item_tos">tos</a></strong>
+
+<dd>
+<p>The ``-P'' <code>echoping(1)</code> option.</p>
+
+</dd><dd>
+<p>Example value: 0xa0</p>
+
+</li>
+</dd><dt><strong><a name="item_waittime">waittime</a></strong>
+
+<dd>
+<p>The ``-w'' <code>echoping(1)</code> option.</p>
+
+</dd><dd>
+<p>Example value: 1</p>
+
+</li>
+</dd></dl>
+<p>
+</p>
+<hr />
+<h1><a name="authors">AUTHORS</a></h1>
+<p>Niko Tyni &lt;<a href="mailto:ntyni@iki.fi">ntyni@iki.fi</a>&gt;</p>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p>The <em>fill</em>, <em>size</em> and <em>udp</em> EchoPing variables are not valid.</p>
+<p>Plugins, including echoping_ldap, are available starting with echoping version 6.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="./../../Smokeping/probes/EchoPing.html">the Smokeping::probes::EchoPing manpage</a>, 
+<a href="./../../Smokeping/probes/EchoPingPlugin.html">the Smokeping::probes::EchoPingPlugin manpage</a></p>
+
+</body>
+
+</html>
