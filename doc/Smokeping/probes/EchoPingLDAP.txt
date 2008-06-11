@@ -187,4 +187,4 @@ SSEEEE AALLSSOO
 
 
 
-2.3.6                             2008-0d4o-c2:6:Smokeping::probes::EchoPingLDAP(3)
+2.4.0                             2008-0d6o-c1:0:Smokeping::probes::EchoPingLDAP(3)

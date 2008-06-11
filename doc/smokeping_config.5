@@ -129,7 +129,7 @@
 .\" ========================================================================
 .\"
 .IX Title "SMOKEPING_CONFIG 5"
-.TH SMOKEPING_CONFIG 5 "2008-04-26" "2.3.6" "SmokePing"
+.TH SMOKEPING_CONFIG 5 "2008-06-10" "2.4.0" "SmokePing"
 .SH "NAME"
 smokeping_config \- Reference for the SmokePing Config File
 .SH "OVERVIEW"
@@ -567,8 +567,8 @@ Page title for the Charts Section.
 .RS 4
 .Sp
 The following sections are valid on level 2:
-.IP "\fB++/[\-_0\-9a\-zA\-Z.]+/\fR" 4
-.IX Item "++/[-_0-9a-zA-Z.]+/"
+.IP "\fB++/[\-_0\-9a\-zA\-Z]+/\fR" 4
+.IX Item "++/[-_0-9a-zA-Z]+/"
 The following variables can be set in this section:
 .RS 4
 .IP "\fBmenu\fR \fI(mandatory setting)\fR" 4
@@ -611,8 +611,8 @@ the user switch presentation hierarchy.
 .Sp
 The following sections are valid on level 2:
 .RS 4
-.IP "\fB++/[\-_0\-9a\-zA\-Z.]+/\fR" 4
-.IX Item "++/[-_0-9a-zA-Z.]+/"
+.IP "\fB++/[\-_0\-9a\-zA\-Z]+/\fR" 4
+.IX Item "++/[-_0-9a-zA-Z]+/"
 Identifier of the hierarchie. Use this as prefix in the targets parent property
 .Sp
 The following variables can be set in this section:
@@ -633,8 +633,8 @@ an external ping command into SmokePing. Check the documentation of each
 module for more information about it.
 .PP
 The following sections are valid on level 1:
-.IP "\fB+/[\-_0\-9a\-zA\-Z.]+/\fR" 4
-.IX Item "+/[-_0-9a-zA-Z.]+/"
+.IP "\fB+/[\-_0\-9a\-zA\-Z]+/\fR" 4
+.IX Item "+/[-_0-9a-zA-Z]+/"
 Each module can take specific configuration information from this
 area. The jumble of letters above is a regular expression defining legal
 module names.
@@ -645,8 +645,8 @@ The grammar of this section is \fIdynamically\fR modified based on its name.
 .Sp
 The following sections are valid on level 2:
 .RS 4
-.IP "\fB++/[\-_0\-9a\-zA\-Z.]+/\fR" 4
-.IX Item "++/[-_0-9a-zA-Z.]+/"
+.IP "\fB++/[\-_0\-9a\-zA\-Z]+/\fR" 4
+.IX Item "++/[-_0-9a-zA-Z]+/"
 You can define multiple instances of the same probe with subsections. 
 These instances can have different values for their variables, so you
 can eg. have one instance of the FPing probe with packet size 1000 and
@@ -735,7 +735,7 @@ Default value: timeout = 5
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -842,7 +842,7 @@ Default value: timeout = 5
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -938,7 +938,7 @@ This variable \fIdynamically\fR modifies the grammar based on its value.
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -1031,7 +1031,7 @@ Default value: packetsize = 56
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -1129,7 +1129,7 @@ Default value: port = 80
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -1248,7 +1248,7 @@ This variable \fIdynamically\fR modifies the grammar based on its value.
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -1360,7 +1360,7 @@ Default value: timeout = 5
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -1465,7 +1465,7 @@ Default value: timeout = 5
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -1585,7 +1585,7 @@ Default value: timeout = 5
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -1717,7 +1717,7 @@ Default value: timeout = 5
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -1850,7 +1850,7 @@ Default value: timeout = 5
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -1981,7 +1981,7 @@ Default value: url = /
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -2120,7 +2120,7 @@ Default value: url = /
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -2247,7 +2247,7 @@ This variable \fIdynamically\fR modifies the grammar based on its value.
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -2372,7 +2372,7 @@ Default value: timeout = 5
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -2502,7 +2502,7 @@ Default value: timeout = 5
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -2613,7 +2613,7 @@ Default value: timeout = 5
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -2731,7 +2731,7 @@ This variable \fIdynamically\fR modifies the grammar based on its value.
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -2808,6 +2808,9 @@ The following new variables are valid:
 .IP "\fBbinary\fR \fI(mandatory setting)\fR" 4
 .IX Item "binary (mandatory setting)"
 see above
+.IP "\fBblazemode\fR" 4
+.IX Item "blazemode"
+see above
 .IP "\fBhostinterval\fR" 4
 .IX Item "hostinterval"
 see above
@@ -2837,12 +2840,17 @@ see above
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
 .IP "\fBbinary\fR \fI(mandatory setting)\fR" 4
 .IX Item "binary (mandatory setting)"
+see above
+.Sp
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBblazemode\fR" 4
+.IX Item "blazemode"
 see above
 .Sp
 This variable \fIinherits\fR its value from the parent section if nothing is specified here.
@@ -2903,6 +2911,9 @@ The following new variables are valid:
 .IP "\fBbinary\fR \fI(mandatory setting)\fR" 4
 .IX Item "binary (mandatory setting)"
 see above
+.IP "\fBblazemode\fR" 4
+.IX Item "blazemode"
+see above
 .IP "\fBhostinterval\fR" 4
 .IX Item "hostinterval"
 see above
@@ -2932,12 +2943,17 @@ see above
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
 .IP "\fBbinary\fR \fI(mandatory setting)\fR" 4
 .IX Item "binary (mandatory setting)"
+see above
+.Sp
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBblazemode\fR" 4
+.IX Item "blazemode"
 see above
 .Sp
 This variable \fIinherits\fR its value from the parent section if nothing is specified here.
@@ -3047,7 +3063,7 @@ see above
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -3169,7 +3185,7 @@ This variable \fIdynamically\fR modifies the grammar based on its value.
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -3294,7 +3310,7 @@ Default value: timeout = 5
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -3424,7 +3440,7 @@ This variable \fIdynamically\fR modifies the grammar based on its value.
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -3498,6 +3514,9 @@ The following new variables are valid:
 .IP "\fBbinary\fR \fI(mandatory setting)\fR" 4
 .IX Item "binary (mandatory setting)"
 see above
+.IP "\fBblazemode\fR" 4
+.IX Item "blazemode"
+see above
 .IP "\fBhostinterval\fR" 4
 .IX Item "hostinterval"
 see above
@@ -3536,12 +3555,17 @@ see above
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
 .IP "\fBbinary\fR \fI(mandatory setting)\fR" 4
 .IX Item "binary (mandatory setting)"
+see above
+.Sp
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBblazemode\fR" 4
+.IX Item "blazemode"
 see above
 .Sp
 This variable \fIinherits\fR its value from the parent section if nothing is specified here.
@@ -3649,7 +3673,7 @@ Default value: port = 22
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -3735,7 +3759,7 @@ Default value: timeout = 5
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -3840,7 +3864,7 @@ This variable \fIdynamically\fR modifies the grammar based on its value.
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -3960,7 +3984,7 @@ This variable \fIdynamically\fR modifies the grammar based on its value.
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -4067,7 +4091,7 @@ This variable \fIdynamically\fR modifies the grammar based on its value.
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -4172,7 +4196,7 @@ Default value: timeout = 2
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -4239,15 +4263,15 @@ Default value: timeout = 2
 .RE
 .RS 4
 .Sp
-(End of dynamical grammar changes for example instances of section \f(CW\*(C`/[\-_0\-9a\-zA\-Z.]+/\*(C'\fR.)
+(End of dynamical grammar changes for example instances of section \f(CW\*(C`/[\-_0\-9a\-zA\-Z]+/\*(C'\fR.)
 .RE
 .Sh "*** Targets *** \fI(mandatory section)\fP"
 .IX Subsection "*** Targets *** (mandatory section)"
 The Target Section defines the actual work of SmokePing. It contains a
 hierarchical list of hosts which mark the endpoints of the network
 connections the system should monitor. Each section can contain one host as
-well as other sections. By adding slaves you can measure the connectivity of
-an endpoint looking from several sources.
+well as other sections. By adding slaves you can measure the connection to
+an endpoint from multiple locations.
 .PP
 The following variables can be set in this section:
 .IP "\fBprobe\fR \fI(mandatory setting)\fR" 4
@@ -4274,14 +4298,18 @@ an empty alerts definition to remove inherited alerts from the current target
 and its children.
 .IP "\fBslaves\fR" 4
 .IX Item "slaves"
-.PD 0
+List of slave servers. It gets inherited by all targets.
+.IP "\fBmenuextra\fR" 4
+.IX Item "menuextra"
+\&\s-1HTML\s0 String to be added to the end of each menu entry. The \f(CW\*(C`{HOST}\*(C'\fR entry will be replaced by the
+host property of the relevant section. The \f(CW\*(C`{CLASS}\*(C'\fR entry will be replaced by the same
+class as the other tags in the manu line.
 .IP "\fBparents\fR" 4
 .IX Item "parents"
-.PD
 .PP
 The following sections are valid on level 1:
-.IP "\fB+/[\-_0\-9a\-zA\-Z.]+/\fR" 4
-.IX Item "+/[-_0-9a-zA-Z.]+/"
+.IP "\fB+/[\-_0\-9a\-zA\-Z]+/\fR" 4
+.IX Item "+/[-_0-9a-zA-Z]+/"
 Each target section can contain information about a host to monitor as
 well as further target sections. Most variables have already been
 described above. The expression above defines legal names for target
@@ -4382,6 +4410,13 @@ This variable \fIinherits\fR its value from the parent section if nothing is spe
 The slave names must match the slaves you have setup in the slaves section.
 .Sp
 This variable \fIinherits\fR its value from the parent section if nothing is specified here.
+.IP "\fBmenuextra\fR" 4
+.IX Item "menuextra"
+\&\s-1HTML\s0 String to be added to the end of each menu entry. The \f(CW\*(C`{HOST}\*(C'\fR entry will be replaced by the
+host property of the relevant section. The \f(CW\*(C`{CLASS}\*(C'\fR entry will be replaced by the same
+class as the other tags in the manu line.
+.Sp
+This variable \fIinherits\fR its value from the parent section if nothing is specified here.
 .IP "\fBparents\fR" 4
 .IX Item "parents"
 After setting up a hierarchy in the Presentation section of the
@@ -4427,8 +4462,8 @@ Default value: nomasterpoll = no
 .RS 4
 .Sp
 The following sections are valid on level 2:
-.IP "\fB++/[\-_0\-9a\-zA\-Z.]+/\fR" 4
-.IX Item "++/[-_0-9a-zA-Z.]+/"
+.IP "\fB++/[\-_0\-9a\-zA\-Z]+/\fR" 4
+.IX Item "++/[-_0-9a-zA-Z]+/"
 This section is \fIrecursive\fR: it can contain subsection(s) with the same syntax.
 .RE
 .RS 4
@@ -4466,7 +4501,7 @@ see above
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -4543,7 +4578,7 @@ see above
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -4604,7 +4639,7 @@ see above
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -4661,7 +4696,7 @@ see above
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -4725,7 +4760,7 @@ see above
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -4802,7 +4837,7 @@ see above
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -4885,7 +4920,7 @@ see above
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -4949,7 +4984,7 @@ see above
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -5045,7 +5080,7 @@ see above
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -5145,7 +5180,7 @@ see above
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -5254,7 +5289,7 @@ see above
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -5359,7 +5394,7 @@ see above
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -5474,7 +5509,7 @@ see above
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -5577,7 +5612,7 @@ see above
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -5672,7 +5707,7 @@ see above
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -5778,7 +5813,7 @@ see above
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -5863,7 +5898,7 @@ see above
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -5947,7 +5982,7 @@ see above
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -6047,7 +6082,7 @@ see above
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -6113,7 +6148,7 @@ see above
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -6188,7 +6223,7 @@ see above
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -6291,7 +6326,7 @@ see above
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -6364,7 +6399,7 @@ see above
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -6404,7 +6439,7 @@ see above
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -6457,7 +6492,7 @@ see above
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -6531,7 +6566,7 @@ see above
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -6590,7 +6625,7 @@ see above
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:
@@ -6646,7 +6681,7 @@ see above
 .RE
 .RS 4
 .Sp
-Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z.]+/\fR
+Syntax changes for subsection \fB/[\-_0\-9a\-zA\-Z]+/\fR
 .Sp
 .RS 4
 The following new variables are valid:

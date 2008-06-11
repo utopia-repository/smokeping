@@ -187,8 +187,13 @@ DDEESSCCRRIIPPTTIIOONN
        When you can now also open the smokeping.cgi webpage to look at your
        data.
 
+       AAddddiinngg SSmmookkeeTTrraaccee oonnlliinnee TTrraacceerroouuttee aabbiilliittyy
+
+       If you want to add traceroute ability to your smokeping setup, check
+       out the smoketrace manual page.
+
 CCOOPPYYRRIIGGHHTT
-       Copyright (c) 2001, 2005 by Tobias Oetiker. All right reserved.
+       Copyright (c) 2001, 2008 by Tobias Oetiker. All right reserved.
 
 LLIICCEENNSSEE
        This program is free software; you can redistribute it and/or modify it
@@ -210,4 +215,4 @@ AAUUTTHHOORR
 
 
 
-2.3.6                             2007-12-01              SMOKEPING_INSTALL(7)
+2.4.0                             2008-06-10              SMOKEPING_INSTALL(7)

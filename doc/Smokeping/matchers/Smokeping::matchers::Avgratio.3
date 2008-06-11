@@ -129,7 +129,7 @@
 .\" ========================================================================
 .\"
 .IX Title "Smokeping::matchers::Avgratio 3"
-.TH Smokeping::matchers::Avgratio 3 "2005-03-11" "2.3.6" "SmokePing"
+.TH Smokeping::matchers::Avgratio 3 "2005-03-11" "2.4.0" "SmokePing"
 .SH "NAME"
 Smokeping::matchers::Avgratio \- detect changes in average median latency
 .SH "OVERVIEW"
@@ -168,7 +168,7 @@ current average latency built over 2 samples and check if it is bigger than
 150%.
 .PP
 .Vb 1
-\& Avgratio(historic=>10,current=>2,comparator=>'>',percentage=>150);
+\& Avgratio(historic=>10,current=>2,comparator=>\(aq>\(aq,percentage=>150);
 .Ve
 .PP
 .Vb 1

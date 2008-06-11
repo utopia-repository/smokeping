@@ -38,6 +38,7 @@
  +FPing</pre>
 <pre>
  binary = /usr/bin/fping # mandatory
+ blazemode = true
  hostinterval = 1.5
  mininterval = 0.001
  offset = 50%
@@ -69,6 +70,8 @@ your system yet, you can get it from <a href="http://www.fping.com/">http://www.
 <pre>
 
 The (optional) B&lt;packetsize&gt; option lets you configure the packetsize for the pings sent.</pre>
+<p>In <strong>blazemode</strong>, FPing sends one more ping than requested, and discards
+the first RTT value returned as it's likely to be an outlier.</p>
 <p>The FPing manpage has the following to say on this topic:</p>
 <p>Number of bytes of ping data to send.  The minimum size (normally 12) allows
 room for the data that fping needs to do its work (sequence number,
@@ -85,49 +88,38 @@ system-dependent number.</p>
 <dl>
 <dt><strong><a name="item_binary">binary</a></strong>
 
-<dd>
+</dt><dd>
 <p>The location of your fping binary.</p>
-
-</dd><dd>
 <p>Example value: /usr/bin/fping</p>
-
-</dd><dd>
 <p>This setting is mandatory.</p>
 
-</li>
+</dd><dt><strong><a name="item_blazemode">blazemode</a></strong>
+
+</dt><dd>
+<p>Send an extra ping and then discarge the first answer since the first is bound to be an outliner.</p>
+<p>Example value: true</p>
+
 </dd><dt><strong><a name="item_hostinterval">hostinterval</a></strong>
 
-<dd>
+</dt><dd>
 <p>The fping ``-p'' parameter, but in (possibly fractional) seconds rather than
 milliseconds, for consistency with other Smokeping probes. From fping(1):</p>
-
-</dd><dd>
 <p>This parameter sets the time that fping  waits between successive packets
 to an individual target.</p>
-
-</dd><dd>
 <p>Example value: 1.5</p>
 
-</li>
 </dd><dt><strong><a name="item_mininterval">mininterval</a></strong>
 
-<dd>
+</dt><dd>
 <p>The fping ``-i'' parameter, but in (probably fractional) seconds rather than
 milliseconds, for consistency with other Smokeping probes. From fping(1):</p>
-
-</dd><dd>
 <p>The minimum amount of time between sending a ping packet to any target.</p>
-
-</dd><dd>
 <p>Example value: 0.001</p>
-
-</dd><dd>
 <p>Default value: 0.01</p>
 
-</li>
 </dd><dt><strong><a name="item_offset">offset</a></strong>
 
-<dd>
+</dt><dd>
 <p>If you run many probes concurrently you may want to prevent them from
 hitting your network all at the same time. Using the probe-specific
 offset parameter you can change the point in time when each probe will
@@ -137,71 +129,51 @@ is specified here. Note that this does NOT influence the rrds itself,
 it is just a matter of when data acqusition is initiated.
 (This variable is only applicable if the variable 'concurrentprobes' is set
 in the 'General' section.)</p>
-
-</dd><dd>
 <p>Example value: 50%</p>
 
-</li>
 </dd><dt><strong><a name="item_packetsize">packetsize</a></strong>
 
-<dd>
+</dt><dd>
 <p>The ping packet size (in the range of 12-64000 bytes).</p>
-
-</dd><dd>
 <p>Example value: 5000</p>
 
-</li>
 </dd><dt><strong><a name="item_pings">pings</a></strong>
 
-<dd>
+</dt><dd>
 <p>How many pings should be sent to each target, if different from the global
 value specified in the Database section. Note that the number of pings in
 the RRD files is fixed when they are originally generated, and if you
 change this parameter afterwards, you'll have to delete the old RRD
 files or somehow convert them.</p>
-
-</dd><dd>
 <p>Example value: 20</p>
 
-</li>
 </dd><dt><strong><a name="item_sourceaddress">sourceaddress</a></strong>
 
-<dd>
+</dt><dd>
 <p>The fping ``-S'' parameter . From fping(1):</p>
-
-</dd><dd>
 <p>Set source address.</p>
-
-</dd><dd>
 <p>Example value: 192.168.0.1</p>
 
-</li>
 </dd><dt><strong><a name="item_step">step</a></strong>
 
-<dd>
+</dt><dd>
 <p>Duration of the base interval that this probe should use, if different
 from the one specified in the 'Database' section. Note that the step in
 the RRD files is fixed when they are originally generated, and if you
 change the step parameter afterwards, you'll have to delete the old RRD
 files or somehow convert them. (This variable is only applicable if
 the variable 'concurrentprobes' is set in the 'General' section.)</p>
-
-</dd><dd>
 <p>Example value: 300</p>
 
-</li>
 </dd><dt><strong><a name="item_timeout">timeout</a></strong>
 
-<dd>
+</dt><dd>
 <p>The fping ``-t'' parameter, but in (possibly fractional) seconds rather than
 milliseconds, for consistency with other Smokeping probes. Note that as
 Smokeping uses the fping 'counting' mode (-C), this apparently only affects
 the last ping.</p>
-
-</dd><dd>
 <p>Example value: 1.5</p>
 
-</li>
 </dd></dl>
 <p>
 </p>

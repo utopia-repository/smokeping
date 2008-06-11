@@ -129,7 +129,7 @@
 .\" ========================================================================
 .\"
 .IX Title "Smokeping::RRDtools 3"
-.TH Smokeping::RRDtools 3 "2006-08-29" "2.3.6" "SmokePing"
+.TH Smokeping::RRDtools 3 "2006-08-29" "2.4.0" "SmokePing"
 .SH "NAME"
 Smokeping::RRDtools \- Tools for RRD file handling
 .SH "SYNOPSIS"
@@ -140,7 +140,7 @@ Smokeping::RRDtools \- Tools for RRD file handling
 .Ve
 .PP
 .Vb 1
-\& my $file = '/path/to/file.rrd';
+\& my $file = \(aq/path/to/file.rrd\(aq;
 .Ve
 .PP
 .Vb 2
@@ -150,15 +150,15 @@ Smokeping::RRDtools \- Tools for RRD file handling
 .PP
 .Vb 2
 \& # use them to create a new file
-\& RRDs::create('/path/to/file2.rrd', @$create);
+\& RRDs::create(\(aq/path/to/file2.rrd\(aq, @$create);
 .Ve
 .PP
 .Vb 5
 \& # or compare them against another create list
-\& my @create = ('\-\-step', 60, 'DS:ds0:GAUGE:120:0:U', 'RRA:AVERAGE:0.5:1:1008');
+\& my @create = (\(aq\-\-step\(aq, 60, \(aqDS:ds0:GAUGE:120:0:U\(aq, \(aqRRA:AVERAGE:0.5:1:1008\(aq);
 \& my ($fatal, $comparison) = Smokeping::RRDtools::compare($file, \e@create);
 \& print "Fatal: " if $fatal;
-\& print "Create arguments didn't match: $comparison\en" if $comparison;
+\& print "Create arguments didn\(aqt match: $comparison\en" if $comparison;
 .Ve
 .PP
 .Vb 1

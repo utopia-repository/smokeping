@@ -212,4 +212,4 @@ NNOOTTEESS
 
 
 
-2.3.6                             200d8o-c0:4:-S2m6okeping::probes::TelnetJunOSPing(3)
+2.4.0                             200d8o-c0:6:-S1m0okeping::probes::TelnetJunOSPing(3)

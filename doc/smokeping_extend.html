@@ -138,55 +138,51 @@ is taken straight from the <code>Config::Grammar</code> manual.</p>
 <dl>
 <dt><strong><a name="item_keys_you_must_provide">Keys you <strong>must</strong> provide</a></strong>
 
-<dl>
+</dt><dd><dl>
 <dt><strong><a name="item__doc">_doc</a></strong>
 
-<dd>
+</dt><dd>
 <p>Description of the variable.</p>
 
-</li>
 </dd><dt><strong><a name="item__example">_example</a></strong>
 
-<dd>
+</dt><dd>
 <p>An example value. This will be used in the SYNOPSIS section in the
 probe manual.</p>
 
-</li>
 </dd></dl>
-<dt><strong><a name="item_optional_keys">Optional keys</a></strong>
 
-<dl>
+</dd><dt><strong><a name="item_optional_keys">Optional keys</a></strong>
+
+</dt><dd><dl>
 <dt><strong><a name="item__default">_default</a></strong>
 
-<dd>
+</dt><dd>
 <p>A default value that will be assigned to the variable if none is specified or inherited.</p>
 
-</li>
 </dd><dt><strong><a name="item__re">_re</a></strong>
 
-<dd>
+</dt><dd>
 <p>Regular expression upon which the value will be checked.</p>
 
-</li>
 </dd><dt><strong><a name="item__re_error">_re_error</a></strong>
 
-<dd>
+</dt><dd>
 <p>String containing the returned error in case the regular expression
 doesn't match (if not specified, a generic 'syntax error' message will
 be returned).</p>
 
-</li>
 </dd><dt><strong><a name="item__sub">_sub</a></strong>
 
-<dd>
+</dt><dd>
 <p>A function pointer. It is called for every value, with the value passed
 as its first argument. If the function returns a defined value it is
 assumed that the test was not successful and an error is generated with
 the returned string as content.</p>
 
-</li>
 </dd></dl>
-</dl>
+
+</dd></dl>
 <p>The <code>probevars</code> and <code>targetvars</code> methods should return hash references
 that contain the variable names as keys and the hashes described above
 as values. In addition the <code>Config::Grammar</code> special section key

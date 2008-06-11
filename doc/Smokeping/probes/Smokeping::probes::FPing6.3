@@ -129,7 +129,7 @@
 .\" ========================================================================
 .\"
 .IX Title "doc::Smokeping::probes::FPing6 3"
-.TH doc::Smokeping::probes::FPing6 3 "2008-04-26" "2.3.6" "SmokePing"
+.TH doc::Smokeping::probes::FPing6 3 "2008-06-10" "2.4.0" "SmokePing"
 .SH "NAME"
 Smokeping::probes::FPing6 \- FPing6 Probe for SmokePing
 .SH "SYNOPSIS"
@@ -142,8 +142,9 @@ Smokeping::probes::FPing6 \- FPing6 Probe for SmokePing
 \& +FPing6
 .Ve
 .PP
-.Vb 9
+.Vb 10
 \& binary = /usr/bin/fping6 # mandatory
+\& blazemode = true
 \& hostinterval = 1.5
 \& mininterval = 0.001
 \& offset = 50%
@@ -190,6 +191,11 @@ The location of your fping binary.
 Example value: /usr/bin/fping6
 .Sp
 This setting is mandatory.
+.IP "blazemode" 4
+.IX Item "blazemode"
+Send an extra ping and then discarge the first answer since the first is bound to be an outliner.
+.Sp
+Example value: true
 .IP "hostinterval" 4
 .IX Item "hostinterval"
 The fping \*(L"\-p\*(R" parameter, but in (possibly fractional) seconds rather than

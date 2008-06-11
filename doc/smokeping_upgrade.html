@@ -17,6 +17,7 @@
 
 	<li><a href="#name">NAME</a></li>
 	<li><a href="#overview">OVERVIEW</a></li>
+	<li><a href="#2_3_6_to_2_4_0">2.3.6 to 2.4.0</a></li>
 	<li><a href="#2_3_3_to_2_3_4">2.3.3 to 2.3.4</a></li>
 	<li><a href="#2_2_x_to_2_3_x">2.2.x to 2.3.x</a></li>
 	<li><a href="#2_1_x_to_2_2_0">2.1.x to 2.2.0</a></li>
@@ -97,6 +98,12 @@ to it from the previous release.</p>
 <p>An official list of changes with each release can be found in the CHANGES
 file in the Smokeping distribution. This document tries to complement
 that with upgrading instructions etc.</p>
+<p>
+</p>
+<hr />
+<h1><a name="N2_3_6_to_2_4_0">2.3.6 to 2.4.0</a></h1>
+<p>The new SmokeTrace tool was added to SmokePing. For setup instructions
+read the <a href="././smoketrace.html">the smoketrace manpage</a> manual page.</p>
 <p>
 </p>
 <hr />
@@ -235,226 +242,175 @@ issues below.</p>
 <dl>
 <dt><strong><a name="item_probe_conf">PROBE_CONF</a></strong>
 
-<dd>
+</dt><dd>
 <p>The PROBE_CONF subsections have been deprecated. All the target-specific
 variables are now configured in the same section as the target is. Just
 deleting the</p>
-
-</dd><dd>
 <p>++ PROBE_CONF</p>
-
-</dd><dd>
 <p>lines should fix this (for any number of '+', obviously.)</p>
-
-</dd><dd>
 <p>The existence of a PROBE_CONF section makes smokeping exit with an error
 message at parse time.</p>
-
-</dd><dd>
 <p>Note for distributors: these lines could easily be removed automatically
 during upgrade.</p>
 
-</li>
 </dd><dt><strong><a name="item_variable_order">Variable order</a></strong>
 
-<dd>
+</dt><dd>
 <p>The <code>probe</code> variable must now be set before any variables that depend on
 the selected probe. This is because setting <code>probe</code> modifies the grammar
 of the rest of the section dynamically at parse time.</p>
-
-</dd><dd>
 <p>Additionally, <code>probe</code> must now precede <code>host</code>, for reasons that have
 to do with the current implementation of mandatory variable checking.</p>
-
-</dd><dd>
 <p>Both of these errors are recognized at parse time and produce error messages
 accordingly.</p>
-
-</dd><dd>
 <p>Note for distributors: the <code>smokeping</code> command now has a new '--check'
 option that can be used to verify the syntax of the configuration
 file. It might be a good idea to do this on upgrade and give the user
 an explanatory note if the verification fails.</p>
 
-</li>
 </dd><dt><strong><a name="item_target_2dspecific_variables_in_the_probes_section">Target-specific variables in the Probes section</a></strong>
 
-<dd>
+</dt><dd>
 <p>This is not an incompatible change, but it is mentioned here nevertheless.
 Target-specific variables can now be specified in the Probes section as well,
 and the values given become defaults for all the targets.</p>
 
-</li>
 </dd><dt><strong><a name="item_timeouts">Timeouts</a></strong>
 
-<dd>
+</dt><dd>
 <p>The <code>timeout</code> variable in the Probes section is now the maximum time
 expected for <strong>one</strong> ping to take. Previously it was the maximum time
 allowed for all the pings to one target.  This is an incompatible change,
 but the code now works in the way it was documented to work even in 1.38.</p>
-
-</dd><dd>
 <p>Those probes offering a target-specific <code>timeout</code> variable will get a
 default for it from the Probes section, as noted in the previous item.
 This should ensure that probes that enforce the ping timeout themselves
 (most do) will not get killed due to timeout before they have a chance
 to do it.</p>
 
-</li>
 </dd><dt><strong><a name="item_matchers">Matchers</a></strong>
 
-<dd>
+</dt><dd>
 <p>The matcher modules have been renamed to start with a capital letter,
 to differentiate the actual modules from the base classes. You have to
 capitalize the matcher name in the pattern definition accordingly.</p>
 
-</li>
 </dd><dt><strong><a name="item_minimum_number_of_pings">Minimum number of pings</a></strong>
 
-<dd>
+</dt><dd>
 <p>The <code>pings</code> variable now has an enforced minimum value of 3, as the
 whole design of Smokeping is based on the idea of sending several probes
 and measuring and visualizing the variation between them.</p>
 
-</li>
 </dd><dt><strong><a name="item_rrd_parameter_checking">RRD parameter checking</a></strong>
 
-<dd>
+</dt><dd>
 <p>Smokeping now checks at startup that the parameters of any existing RRD files
 match those specified in the configuration file. If there is a discrepancy,
 it will try to fix the situation and refuse to start if it can't.</p>
-
-</dd><dd>
 <p>This situation is most likely to happen if you have modified the
 <code>pings</code> variable in your configuration file. You'll then have to
 delete the old RRD file or somehow convert it to use the new parameters.
 The <code>rrdtune</code> command might be helpful here.</p>
 
-</li>
 </dd><dt><strong><a name="item_configurable_location_for_dynamic_2drelated_files">Configurable location for DYNAMIC-related files</a></strong>
 
-<dd>
+</dt><dd>
 <p>There is now a new configuration variable, <code>dyndir</code>, that can be used
 to specify the location of the DYNAMIC-related files (.adr and .snmp).
 These files used to be kept under <code>datadir</code> along with the RRD files,
 but since they need to be writable by the web server, it may be useful
 to separate these.</p>
-
-</dd><dd>
 <p>If <code>dyndir</code> is not specified, Smokeping will use the <code>datadir</code> value
 as the default. This should ensure that no existing setups will break.</p>
 
-</li>
 </dd></dl>
 <p>In addition to this, some probes have had minor incompatible changes to
 their configuration.</p>
 <dl>
 <dt><strong><a name="item_remotefping_7csmokeping_3a_3aprobes_3a_3aremotefpi"></a><a href="././Smokeping/probes/RemoteFPing.html">RemoteFPing</a></strong>
 
-<dd>
+</dt><dd>
 <p>The <code>rbinary</code> variable is now mandatory. This is a side effect from a bigger change:
 the probe is now derived from the FPing probe and supports all the variables
 FPing does.</p>
 
-</li>
 </dd><dt><strong><a name="item_fping6_7csmokeping_3a_3aprobes_3a_3afping6"></a><a href="././Smokeping/probes/FPing6.html">FPing6</a></strong>
 
-<dd>
+</dt><dd>
 <p>This probe is also now derived from FPing and supports all the variables FPing does.</p>
 
-</li>
 </dd><dt><strong><a name="item_curl_7csmokeping_3a_3aprobes_3a_3acurl"></a><a href="././Smokeping/probes/Curl.html">Curl</a></strong>
 
-<dd>
+</dt><dd>
 <p>The URL that will be used is now specified with the variable <code>urlformat</code> instead
 of <code>url</code>. The new variable can (and usually should) include a placeholder
 for the <code>host</code> variable of each target as <code>%host%</code>, eg. <code>urlformat = http://%host%/</code>.
 The new variable is mandatory.</p>
-
-</dd><dd>
 <p>The change was made to fix the confusing situation where the <code>host</code> variable
 was required for each actual target, but it didn't actually have any effect
 (as the server to be probed came from the <code>url</code> variable.)</p>
-
-</dd><dd>
 <p>Timeouts are now recognized properly by looking at the curl exit code.
 The default timeout of this probe has been raised to 10 seconds.</p>
-
-</dd><dd>
 <p>The command line is now executed without an intervening /bin/sh, and so
 quotes are not needed anymore around the User-Agent string (the <code>agent</code>
 parameter).  Smokeping will complain if it notices quotes around the
 string.</p>
-
-</dd><dd>
 <p>Any extra arguments for <code>curl</code> can now be specified in the <code>extraargs</code> variable.</p>
 
-</li>
 </dd><dt><strong><a name="item_echopinghttp_7csmokeping_3a_3aprobes_3a_3aechoping"></a><a href="././Smokeping/probes/EchoPingHttp.html">EchoPingHttp</a></strong>
 
-<dd>
+</dt><dd>
 <p>The default timeout of this probe has been raised to 10 seconds.</p>
 
-</li>
 </dd><dt><strong><a name="item_echopinghttps_7csmokeping_3a_3aprobes_3a_3aechopin"></a><a href="././Smokeping/probes/EchoPingHttps.html">EchoPingHttps</a></strong>
 
-<dd>
+</dt><dd>
 <p>The default timeout of this probe has been raised to 10 seconds.</p>
 
-</li>
 </dd><dt><strong><a name="item_echopingicp_7csmokeping_3a_3aprobes_3a_3aechopingi"></a><a href="././Smokeping/probes/EchoPingIcp.html">EchoPingIcp</a></strong>
 
-<dd>
+</dt><dd>
 <p>The <code>url</code> variable is now mandatory, as the old default ``/'' didn't make
 sense because it's relative rather than absolute.</p>
 
-</li>
 </dd><dt><strong><a name="item_ldap_7csmokeping_3a_3aprobes_3a_3aldap"></a><a href="././Smokeping/probes/LDAP.html">LDAP</a></strong>
 
-<dd>
+</dt><dd>
 <p>The <code>filter</code> variable is now mandatory, as Net::LDAP bails out without it.</p>
-
-</dd><dd>
 <p>The <code>sleeptime</code> variable was changed to <code>mininterval</code> and its semantics
 were changed accordingly (it's now the minimum time between two queries
 rather than the time slept between the end of one and the start of the
 another.)</p>
 
-</li>
 </dd><dt><strong><a name="item_radius_7csmokeping_3a_3aprobes_3a_3aradius"></a><a href="././Smokeping/probes/Radius.html">Radius</a></strong>
 
-<dd>
+</dt><dd>
 <p>The <code>sleeptime</code> variable was changed to <code>mininterval</code> and its semantics
 were changed accordingly. See the LDAP explanation above.</p>
 
-</li>
 </dd><dt><strong><a name="item_anotherdns_7csmokeping_3a_3aprobes_3a_3aanotherdns"></a><a href="././Smokeping/probes/AnotherDNS.html">AnotherDNS</a></strong>
 
-<dd>
+</dt><dd>
 <p>The <code>sleeptime</code> variable was changed to <code>mininterval</code> and its semantics
 were changed accordingly. See the LDAP explanation above. Additionally,
 the time is now specified in seconds rather than microseconds.</p>
 
-</li>
 </dd><dt><strong><a name="item_anotherssh_7csmokeping_3a_3aprobes_3a_3aanotherssh"></a><a href="././Smokeping/probes/AnotherSSH.html">AnotherSSH</a></strong>
 
-<dd>
+</dt><dd>
 <p>The <code>sleeptime</code> variable was changed to <code>mininterval</code> and its semantics
 were changed accordingly. See the LDAP explanation above. Additionally,
 the time is now specified in seconds rather than microseconds.</p>
 
-</li>
 </dd><dt><strong><a name="item_telnetiosping_7csmokeping_3a_3aprobes_3a_3atelneti"></a><a href="././Smokeping/probes/TelnetIOSPing.html">TelnetIOSPing</a></strong>
 
-<dd>
+</dt><dd>
 <p>The name of this probe was changed: it now starts with a capital letter
 like all the others do.</p>
-
-</dd><dd>
 <p>The <code>target</code> variable was removed. The target should now be specified
 in the <code>host</code> variable, like it is with all the other probes.</p>
 
-</li>
 </dd></dl>
 <p>
 </p>
@@ -469,13 +425,12 @@ See <a href="././smokeping_install.html">the smokeping_install document</a>.</p>
 <dl>
 <dt><strong><a name="item_the_new_navigation_feature">The new navigation feature</a></strong>
 
-<dd>
+</dt><dd>
 <p>The big visible difference between 1.38 and 1.40 is the new browser navigation
 feature: when clicking on the graphs in detail view you can select
 different time ranges for the graph. The creation of this
 feature has been sponsored by BeverlyCorp.com.</p>
 
-</li>
 </dd></dl>
 <p>
 </p>
@@ -484,29 +439,26 @@ feature has been sponsored by BeverlyCorp.com.</p>
 <dl>
 <dt><strong><a name="item_the_remotefping_7csmokeping_3a_3aprobes_3a_3aremot">The </a><a href="././Smokeping/probes/RemoteFPing.html">RemoteFPing</a> probe</strong>
 
-<dd>
+</dt><dd>
 <p>The configuration of this probe was moved from the Targets section to the
 Probes section, as all the variables are really probe-specific. The moved
 variables were <code>rhost</code>, <code>rbinary</code> and <code>rhost</code>.</p>
 
-</li>
 </dd><dt><strong><a name="item_logging_changes">Logging changes</a></strong>
 
-<dd>
+</dt><dd>
 <p>The <code>smokeping</code> daemon now warns at startup if syslog support is not turned on
 in the config file. This is because many diagnostic messages will otherwise
 get lost.</p>
 
-</li>
 </dd><dt><strong><a name="item_concurrent_probes">Concurrent probes</a></strong>
 
-<dd>
+</dt><dd>
 <p>Each probe now runs in its own process, instead of them all running
 sequentially in one process. This makes it possible to specify different
 step lengths for different probes. You can get the old behaviour back
 by setting 'concurrentprobes = no'.</p>
 
-</li>
 </dd></dl>
 <p>
 </p>

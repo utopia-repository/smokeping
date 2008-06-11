@@ -113,52 +113,36 @@ transfers of limit the graph size.</p>
 <dl>
 <dt><strong><a name="item_destfile">destfile</a></strong>
 
-<dd>
+</dt><dd>
 <p>Normally the destination filename is the same as the source filename
 (without the path). If you want keep files in different directories this may not
 work, and you have to specify destfile as well.</p>
-
-</dd><dd>
 <p>Example value: path/to/destinationfile.xxx</p>
 
-</li>
 </dd><dt><strong><a name="item_forks">forks</a></strong>
 
-<dd>
+</dt><dd>
 <p>Run this many concurrent processes at maximum</p>
-
-</dd><dd>
 <p>Example value: 5</p>
-
-</dd><dd>
 <p>Default value: 5</p>
 
-</li>
 </dd><dt><strong><a name="item_min_interval">min_interval</a></strong>
 
-<dd>
+</dt><dd>
 <p>The minimum interval between each starting ftp sessions in seconds.</p>
-
-</dd><dd>
 <p>Default value: 1</p>
 
-</li>
 </dd><dt><strong><a name="item_mode">mode</a></strong>
 
-<dd>
+</dt><dd>
 <p>The ftp probe can be in either put or get mode. If it is in put mode then it will send a file to the ftp server. In get mode it will retrieve a file
 from the ftp server.</p>
-
-</dd><dd>
 <p>Example value: get</p>
-
-</dd><dd>
 <p>This setting is mandatory.</p>
 
-</li>
 </dd><dt><strong><a name="item_offset">offset</a></strong>
 
-<dd>
+</dt><dd>
 <p>If you run many probes concurrently you may want to prevent them from
 hitting your network all at the same time. Using the probe-specific
 offset parameter you can change the point in time when each probe will
@@ -168,137 +152,95 @@ is specified here. Note that this does NOT influence the rrds itself,
 it is just a matter of when data acqusition is initiated.
 (This variable is only applicable if the variable 'concurrentprobes' is set
 in the 'General' section.)</p>
-
-</dd><dd>
 <p>Example value: 50%</p>
 
-</li>
 </dd><dt><strong><a name="item_passwordfile">passwordfile</a></strong>
 
-<dd>
+</dt><dd>
 <p>Location of the file containing usernames and passwords.</p>
-
-</dd><dd>
 <p>Example value: /some/place/secret</p>
 
-</li>
 </dd><dt><strong><a name="item_srcfile">srcfile</a></strong>
 
-<dd>
+</dt><dd>
 <p>The name of the source file. If the probe is in <strong>put</strong> mode, this file
 has to be on the local machine, if the probe is in <strong>get</strong> mode then this
 file should sit in the remote ftp account.</p>
-
-</dd><dd>
 <p>Example value: src/path/mybig.pdf</p>
-
-</dd><dd>
 <p>This setting is mandatory.</p>
 
-</li>
 </dd><dt><strong><a name="item_step">step</a></strong>
 
-<dd>
+</dt><dd>
 <p>Duration of the base interval that this probe should use, if different
 from the one specified in the 'Database' section. Note that the step in
 the RRD files is fixed when they are originally generated, and if you
 change the step parameter afterwards, you'll have to delete the old RRD
 files or somehow convert them. (This variable is only applicable if
 the variable 'concurrentprobes' is set in the 'General' section.)</p>
-
-</dd><dd>
 <p>Example value: 300</p>
 
-</li>
 </dd><dt><strong><a name="item_timeout">timeout</a></strong>
 
-<dd>
+</dt><dd>
 <p>The timeout is the maximum amount of time you will allow the probe to
 transfer the file. If the probe does not succeed to transfer in the time specified,
 it will get killed and a 'loss' will be loged.</p>
-
-</dd><dd>
 <p>Since FTPtransfer is an invasive probe you should make sure you do not load
 the link for more than a few seconds anyway. Smokeping curently has a hard
 limit of 180 seconds for any RTT.</p>
-
-</dd><dd>
 <p>Example value: 15</p>
-
-</dd><dd>
 <p>This setting is mandatory.</p>
 
-</li>
 </dd></dl>
 <p>Supported target-specific variables:</p>
 <dl>
 <dt><strong><a name="item_localaddr">localaddr</a></strong>
 
-<dd>
+</dt><dd>
 <p>The local address to be used when making connections</p>
-
-</dd><dd>
 <p>Example value: myhost-nat-if</p>
 
-</li>
 </dd><dt><strong><a name="item_passive">passive</a></strong>
 
-<dd>
+</dt><dd>
 <p>Use passive FTP protocol</p>
-
-</dd><dd>
 <p>Example value: yes</p>
 
-</li>
 </dd><dt><strong><a name="item_password">password</a></strong>
 
-<dd>
+</dt><dd>
 <p>The password for the user, if not present in the password file.</p>
-
-</dd><dd>
 <p>Example value: test-password</p>
 
-</li>
 </dd><dt><strong><a name="item_pings">pings</a></strong>
 
-<dd>
+</dt><dd>
 <p>How many pings should be sent to each target, if different from the global
 value specified in the Database section. Note that the number of pings in
 the RRD files is fixed when they are originally generated, and if you
 change this parameter afterwards, you'll have to delete the old RRD
 files or somehow convert them.</p>
-
-</dd><dd>
 <p>Example value: 5</p>
 
-</li>
 </dd><dt><strong><a name="item_port">port</a></strong>
 
-<dd>
+</dt><dd>
 <p>A non-standard FTP port to be used</p>
-
-</dd><dd>
 <p>Example value: 3255</p>
 
-</li>
 </dd><dt><strong>timeout</strong>
 
-<dd>
+</dt><dd>
 <p>Timeout in seconds for the FTP transfer to complete.</p>
-
-</dd><dd>
 <p>Example value: 10</p>
 
-</li>
 </dd><dt><strong><a name="item_username">username</a></strong>
 
-<dd>
+</dt><dd>
 <p>The username to be tested.</p>
-
-</dd><dd>
 <p>Example value: test-user</p>
 
-</li>
 </dd></dl>
 <p>
 </p>

@@ -441,7 +441,7 @@ RREEFFEERREENNCCEE
 
            The following sections are valid on level 2:
 
-           ++++//[[--__00--99aa--zzAA--ZZ..]]++//
+           ++++//[[--__00--99aa--zzAA--ZZ]]++//
                The following variables can be set in this section:
 
                mmeennuu _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
@@ -476,7 +476,7 @@ RREEFFEERREENNCCEE
 
            The following sections are valid on level 2:
 
-           ++++//[[--__00--99aa--zzAA--ZZ..]]++//
+           ++++//[[--__00--99aa--zzAA--ZZ]]++//
                Identifier of the hierarchie. Use this as prefix in the targets
                parent property
 
@@ -493,7 +493,7 @@ RREEFFEERREENNCCEE
 
        The following sections are valid on level 1:
 
-       ++//[[--__00--99aa--zzAA--ZZ..]]++//
+       ++//[[--__00--99aa--zzAA--ZZ]]++//
            Each module can take specific configuration information from this
            area. The jumble of letters above is a regular expression defining
            legal module names.
@@ -506,7 +506,7 @@ RREEFFEERREENNCCEE
 
            The following sections are valid on level 2:
 
-           ++++//[[--__00--99aa--zzAA--ZZ..]]++//
+           ++++//[[--__00--99aa--zzAA--ZZ]]++//
                You can define multiple instances of the same probe with sub-
                sections.  These instances can have different values for their
                variables, so you can eg. have one instance of the FPing probe
@@ -592,7 +592,7 @@ RREEFFEERREENNCCEE
 
                    Default value: timeout = 5
 
-               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ..]]++//
+               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
                    The following new variables are valid:
 
@@ -709,7 +709,7 @@ RREEFFEERREENNCCEE
 
                    Default value: timeout = 5
 
-               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ..]]++//
+               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
                    The following new variables are valid:
 
@@ -813,7 +813,7 @@ RREEFFEERREENNCCEE
                    (This variable can be overridden target-specifically in the
                    Targets section.)
 
-               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ..]]++//
+               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
                    The following new variables are valid:
 
@@ -911,7 +911,7 @@ RREEFFEERREENNCCEE
                vvrrff (This variable can be overridden target-specifically in the
                    Targets section.)
 
-               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ..]]++//
+               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
                    The following new variables are valid:
 
@@ -1014,7 +1014,7 @@ RREEFFEERREENNCCEE
                ttooss (This variable can be overridden target-specifically in the
                    Targets section.)
 
-               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ..]]++//
+               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
                    The following new variables are valid:
 
@@ -1145,7 +1145,7 @@ RREEFFEERREENNCCEE
                    This variable _d_y_n_a_m_i_c_a_l_l_y modifies the grammar based on its
                    value.
 
-               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ..]]++//
+               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
                    The following new variables are valid:
 
@@ -1266,7 +1266,7 @@ RREEFFEERREENNCCEE
                    (This variable can be overridden target-specifically in the
                    Targets section.)
 
-               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ..]]++//
+               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
                    The following new variables are valid:
 
@@ -1378,7 +1378,7 @@ RREEFFEERREENNCCEE
                    (This variable can be overridden target-specifically in the
                    Targets section.)
 
-               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ..]]++//
+               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
                    The following new variables are valid:
 
@@ -1510,7 +1510,7 @@ RREEFFEERREENNCCEE
                    (This variable can be overridden target-specifically in the
                    Targets section.)
 
-               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ..]]++//
+               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
                    The following new variables are valid:
 
@@ -1658,7 +1658,7 @@ RREEFFEERREENNCCEE
                    (This variable can be overridden target-specifically in the
                    Targets section.)
 
-               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ..]]++//
+               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
                    The following new variables are valid:
 
@@ -1806,7 +1806,7 @@ RREEFFEERREENNCCEE
                    (This variable can be overridden target-specifically in the
                    Targets section.)
 
-               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ..]]++//
+               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
                    The following new variables are valid:
 
@@ -1951,7 +1951,7 @@ RREEFFEERREENNCCEE
                    (This variable can be overridden target-specifically in the
                    Targets section.)
 
-               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ..]]++//
+               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
                    The following new variables are valid:
 
@@ -2106,7 +2106,7 @@ RREEFFEERREENNCCEE
                    (This variable can be overridden target-specifically in the
                    Targets section.)
 
-               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ..]]++//
+               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
                    The following new variables are valid:
 
@@ -2246,7 +2246,7 @@ RREEFFEERREENNCCEE
                    (This variable can be overridden target-specifically in the
                    Targets section.)
 
-               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ..]]++//
+               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
                    The following new variables are valid:
 
@@ -2384,7 +2384,7 @@ RREEFFEERREENNCCEE
                    (This variable can be overridden target-specifically in the
                    Targets section.)
 
-               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ..]]++//
+               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
                    The following new variables are valid:
 
@@ -2530,7 +2530,7 @@ RREEFFEERREENNCCEE
                    (This variable can be overridden target-specifically in the
                    Targets section.)
 
-               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ..]]++//
+               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
                    The following new variables are valid:
 
@@ -2651,7 +2651,7 @@ RREEFFEERREENNCCEE
                    (This variable can be overridden target-specifically in the
                    Targets section.)
 
-               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ..]]++//
+               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
                    The following new variables are valid:
 
@@ -2781,7 +2781,7 @@ RREEFFEERREENNCCEE
                    This variable _d_y_n_a_m_i_c_a_l_l_y modifies the grammar based on its
                    value.
 
-               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ..]]++//
+               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
                    The following new variables are valid:
 
@@ -2866,6 +2866,9 @@ RREEFFEERREENNCCEE
                bbiinnaarryy _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
                    see above
 
+               bbllaazzeemmooddee
+                   see above
+
                hhoossttiinntteerrvvaall
                    see above
 
@@ -2892,11 +2895,17 @@ RREEFFEERREENNCCEE
                ttiimmeeoouutt
                    see above
 
-               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ..]]++//
+               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
                    The following new variables are valid:
 
                    bbiinnaarryy _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
+                       see above
+
+                       This variable _i_n_h_e_r_i_t_s its value from the parent sec-
+                       tion if nothing is specified here.
+
+                   bbllaazzeemmooddee
                        see above
 
                        This variable _i_n_h_e_r_i_t_s its value from the parent sec-
@@ -2962,6 +2971,9 @@ RREEFFEERREENNCCEE
                bbiinnaarryy _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
                    see above
 
+               bbllaazzeemmooddee
+                   see above
+
                hhoossttiinntteerrvvaall
                    see above
 
@@ -2988,15 +3000,21 @@ RREEFFEERREENNCCEE
                ttiimmeeoouutt
                    see above
 
-               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ..]]++//
+               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
                    The following new variables are valid:
 
                    bbiinnaarryy _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
                        see above
 
-                       This variable _i_n_h_e_r_i_t_s its value from the parent
-                       section if nothing is specified here.
+                       This variable _i_n_h_e_r_i_t_s its value from the parent sec-
+                       tion if nothing is specified here.
+
+                   bbllaazzeemmooddee
+                       see above
+
+                       This variable _i_n_h_e_r_i_t_s its value from the parent sec-
+                       tion if nothing is specified here.
 
                    hhoossttiinntteerrvvaall
                        see above
@@ -3111,7 +3129,7 @@ RREEFFEERREENNCCEE
                    (This variable can be overridden target-specifically in the
                    Targets section.)
 
-               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ..]]++//
+               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
                    The following new variables are valid:
 
@@ -3245,7 +3263,7 @@ RREEFFEERREENNCCEE
                    (This variable can be overridden target-specifically in the
                    Targets section.)
 
-               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ..]]++//
+               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
                    The following new variables are valid:
 
@@ -3307,8 +3325,8 @@ RREEFFEERREENNCCEE
                        This variable _i_n_h_e_r_i_t_s its value from the parent sec-
                        tion if nothing is specified here.
 
-               (End of dynamical grammar changes for example instance
-               "IOSPing".)
+               (End of dynamical grammar changes for example instance "IOSP-
+               ing".)
 
            LLDDAAPP: (See the separate module documentation for details about each
            variable.)
@@ -3385,7 +3403,7 @@ RREEFFEERREENNCCEE
                    (This variable can be overridden target-specifically in the
                    Targets section.)
 
-               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ..]]++//
+               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
                    The following new variables are valid:
 
@@ -3531,7 +3549,7 @@ RREEFFEERREENNCCEE
                    This variable _d_y_n_a_m_i_c_a_l_l_y modifies the grammar based on its
                    value.
 
-               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ..]]++//
+               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
                    The following new variables are valid:
 
@@ -3613,6 +3631,9 @@ RREEFFEERREENNCCEE
                bbiinnaarryy _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
                    see above
 
+               bbllaazzeemmooddee
+                   see above
+
                hhoossttiinntteerrvvaall
                    see above
 
@@ -3648,11 +3669,17 @@ RREEFFEERREENNCCEE
                ttiimmeeoouutt
                    see above
 
-               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ..]]++//
+               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
                    The following new variables are valid:
 
                    bbiinnaarryy _(_m_a_n_d_a_t_o_r_y _s_e_t_t_i_n_g_)
+                       see above
+
+                       This variable _i_n_h_e_r_i_t_s its value from the parent sec-
+                       tion if nothing is specified here.
+
+                   bbllaazzeemmooddee
                        see above
 
                        This variable _i_n_h_e_r_i_t_s its value from the parent sec-
@@ -3768,7 +3795,7 @@ RREEFFEERREENNCCEE
 
                    Default value: port = 22
 
-               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ..]]++//
+               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
                    The following new variables are valid:
 
@@ -3855,7 +3882,7 @@ RREEFFEERREENNCCEE
                    (This variable can be overridden target-specifically in the
                    Targets section.)
 
-               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ..]]++//
+               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
                    The following new variables are valid:
 
@@ -3968,7 +3995,7 @@ RREEFFEERREENNCCEE
                    This variable _d_y_n_a_m_i_c_a_l_l_y modifies the grammar based on its
                    value.
 
-               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ..]]++//
+               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
                    The following new variables are valid:
 
@@ -4101,7 +4128,7 @@ RREEFFEERREENNCCEE
                    This variable _d_y_n_a_m_i_c_a_l_l_y modifies the grammar based on its
                    value.
 
-               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ..]]++//
+               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
                    The following new variables are valid:
 
@@ -4218,7 +4245,7 @@ RREEFFEERREENNCCEE
                    This variable _d_y_n_a_m_i_c_a_l_l_y modifies the grammar based on its
                    value.
 
-               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ..]]++//
+               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
                    The following new variables are valid:
 
@@ -4330,7 +4357,7 @@ RREEFFEERREENNCCEE
 
                    Default value: timeout = 2
 
-               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ..]]++//
+               Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
                    The following new variables are valid:
 
@@ -4401,7 +4428,7 @@ RREEFFEERREENNCCEE
                "WebProxyFilter".)
 
            (End of dynamical grammar changes for example instances of section
-           "/[-_0-9a-zA-Z.]+/".)
+           "/[-_0-9a-zA-Z]+/".)
 
        ****** TTaarrggeettss ****** _(_m_a_n_d_a_t_o_r_y _s_e_c_t_i_o_n_)
 
@@ -4409,7 +4436,7 @@ RREEFFEERREENNCCEE
        hierarchical list of hosts which mark the endpoints of the network con-
        nections the system should monitor. Each section can contain one host
        as well as other sections. By adding slaves you can measure the connec-
-       tivity of an endpoint looking from several sources.
+       tion to an endpoint from multiple locations.
 
        The following variables can be set in this section:
 
@@ -4438,11 +4465,19 @@ RREEFFEERREENNCCEE
            alerts from the current target and its children.
 
        ssllaavveess
+           List of slave servers. It gets inherited by all targets.
+
+       mmeennuueexxttrraa
+           HTML String to be added to the end of each menu entry. The "{HOST}"
+           entry will be replaced by the host property of the relevant sec-
+           tion. The "{CLASS}" entry will be replaced by the same class as the
+           other tags in the manu line.
+
        ppaarreennttss
 
        The following sections are valid on level 1:
 
-       ++//[[--__00--99aa--zzAA--ZZ..]]++//
+       ++//[[--__00--99aa--zzAA--ZZ]]++//
            Each target section can contain information about a host to monitor
            as well as further target sections. Most variables have already
            been described above. The expression above defines legal names for
@@ -4538,6 +4573,15 @@ RREEFFEERREENNCCEE
                This variable _i_n_h_e_r_i_t_s its value from the parent section if
                nothing is specified here.
 
+           mmeennuueexxttrraa
+               HTML String to be added to the end of each menu entry. The
+               "{HOST}" entry will be replaced by the host property of the
+               relevant section. The "{CLASS}" entry will be replaced by the
+               same class as the other tags in the manu line.
+
+               This variable _i_n_h_e_r_i_t_s its value from the parent section if
+               nothing is specified here.
+
            ppaarreennttss
                After setting up a hierarchy in the Presentation section of the
                configuration file you can use this property to assign an entry
@@ -4583,7 +4627,7 @@ RREEFFEERREENNCCEE
 
            The following sections are valid on level 2:
 
-           ++++//[[--__00--99aa--zzAA--ZZ..]]++//
+           ++++//[[--__00--99aa--zzAA--ZZ]]++//
                This section is _r_e_c_u_r_s_i_v_e: it can contain subsection(s) with
                the same syntax.
 
@@ -4617,7 +4661,7 @@ RREEFFEERREENNCCEE
            ttiimmeeoouutt
                see above
 
-           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ..]]++//
+           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
                The following new variables are valid:
 
@@ -4694,7 +4738,7 @@ RREEFFEERREENNCCEE
            ttiimmeeoouutt
                see above
 
-           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ..]]++//
+           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
                The following new variables are valid:
 
@@ -4753,7 +4797,7 @@ RREEFFEERREENNCCEE
            ppiinnggss
                see above
 
-           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ..]]++//
+           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
                The following new variables are valid:
 
@@ -4804,7 +4848,7 @@ RREEFFEERREENNCCEE
 
            vvrrff see above
 
-           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ..]]++//
+           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
                The following new variables are valid:
 
@@ -4863,7 +4907,7 @@ RREEFFEERREENNCCEE
 
            ttooss see above
 
-           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ..]]++//
+           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
                The following new variables are valid:
 
@@ -4936,7 +4980,7 @@ RREEFFEERREENNCCEE
            uurrllffoorrmmaatt
                see above
 
-           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ..]]++//
+           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
                The following new variables are valid:
 
@@ -5022,7 +5066,7 @@ RREEFFEERREENNCCEE
            sseerrvveerr
                see above
 
-           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ..]]++//
+           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
                The following new variables are valid:
 
@@ -5079,7 +5123,7 @@ RREEFFEERREENNCCEE
            wwaaiittttiimmee
                see above
 
-           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ..]]++//
+           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
                The following new variables are valid:
 
@@ -5174,7 +5218,7 @@ RREEFFEERREENNCCEE
            wwaaiittttiimmee
                see above
 
-           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ..]]++//
+           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
                The following new variables are valid:
 
@@ -5273,7 +5317,7 @@ RREEFFEERREENNCCEE
            wwaaiittttiimmee
                see above
 
-           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ..]]++//
+           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
                The following new variables are valid:
 
@@ -5383,7 +5427,7 @@ RREEFFEERREENNCCEE
            wwaaiittttiimmee
                see above
 
-           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ..]]++//
+           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
                The following new variables are valid:
 
@@ -5486,7 +5530,7 @@ RREEFFEERREENNCCEE
            wwaaiittttiimmee
                see above
 
-           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ..]]++//
+           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
                The following new variables are valid:
 
@@ -5601,7 +5645,7 @@ RREEFFEERREENNCCEE
            wwaaiittttiimmee
                see above
 
-           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ..]]++//
+           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
                The following new variables are valid:
 
@@ -5704,7 +5748,7 @@ RREEFFEERREENNCCEE
            wwaaiittttiimmee
                see above
 
-           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ..]]++//
+           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
                The following new variables are valid:
 
@@ -5796,7 +5840,7 @@ RREEFFEERREENNCCEE
            wwaaiittttiimmee
                see above
 
-           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ..]]++//
+           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
                The following new variables are valid:
 
@@ -5904,7 +5948,7 @@ RREEFFEERREENNCCEE
            wwaaiittttiimmee
                see above
 
-           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ..]]++//
+           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
                The following new variables are valid:
 
@@ -5988,7 +6032,7 @@ RREEFFEERREENNCCEE
            wwaaiittttiimmee
                see above
 
-           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ..]]++//
+           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
                The following new variables are valid:
 
@@ -6069,7 +6113,7 @@ RREEFFEERREENNCCEE
            wwhhooiiss__rreeqquueesstt
                see above
 
-           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ..]]++//
+           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
                The following new variables are valid:
 
@@ -6174,7 +6218,7 @@ RREEFFEERREENNCCEE
            uusseerrnnaammee
                see above
 
-           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ..]]++//
+           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
                The following new variables are valid:
 
@@ -6239,7 +6283,7 @@ RREEFFEERREENNCCEE
            ppiinnggss
                see above
 
-           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ..]]++//
+           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
                The following new variables are valid:
 
@@ -6310,7 +6354,7 @@ RREEFFEERREENNCCEE
            vveerrssiioonn
                see above
 
-           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ..]]++//
+           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
                The following new variables are valid:
 
@@ -6417,7 +6461,7 @@ RREEFFEERREENNCCEE
            uusseerrnnaammee
                see above
 
-           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ..]]++//
+           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
                The following new variables are valid:
 
@@ -6492,7 +6536,7 @@ RREEFFEERREENNCCEE
            ppoorrtt
                see above
 
-           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ..]]++//
+           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
                The following new variables are valid:
 
@@ -6527,7 +6571,7 @@ RREEFFEERREENNCCEE
            ppoorrtt
                see above
 
-           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ..]]++//
+           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
                The following new variables are valid:
 
@@ -6574,7 +6618,7 @@ RREEFFEERREENNCCEE
            uusseerrnnaammee
                see above
 
-           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ..]]++//
+           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
                The following new variables are valid:
 
@@ -6648,7 +6692,7 @@ RREEFFEERREENNCCEE
            ssoouurrccee
                see above
 
-           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ..]]++//
+           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
                The following new variables are valid:
 
@@ -6704,7 +6748,7 @@ RREEFFEERREENNCCEE
            ssoouurrccee
                see above
 
-           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ..]]++//
+           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
                The following new variables are valid:
 
@@ -6757,7 +6801,7 @@ RREEFFEERREENNCCEE
            ttiimmeeoouutt
                see above
 
-           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ..]]++//
+           Syntax changes for subsection //[[--__00--99aa--zzAA--ZZ]]++//
 
                The following new variables are valid:
 
@@ -7045,4 +7089,4 @@ AAUUTTHHOORR
 
 
 
-2.3.6                             2008-04-26               SMOKEPING_CONFIG(5)
+2.4.0                             2008-06-10               SMOKEPING_CONFIG(5)

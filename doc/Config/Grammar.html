@@ -107,82 +107,69 @@ starting hash given as parameter to 'new' contains the ``root section''.</p>
 <dl>
 <dt><strong><a name="item__sections">_sections</a></strong>
 
-<dd>
+</dt><dd>
 <p>Array containing the list of sub-sections of this section. Each sub-section
 must then be represented by a sub-hash in this hash with the same name of the
 sub-section.</p>
-
-</dd><dd>
 <p>The sub-section can also be a regular expression denoted by the syntax '/re/',
 where re is the regular-expression. In case a regular expression is used, a
 sub-hash named with the same '/re/' must be included in this hash.</p>
 
-</li>
 </dd><dt><strong><a name="item__vars">_vars</a></strong>
 
-<dd>
+</dt><dd>
 <p>Array containing the list of variables (assignments) in this section.
 Analogous to sections, regular expressions can be used.</p>
 
-</li>
 </dd><dt><strong><a name="item__mandatory">_mandatory</a></strong>
 
-<dd>
+</dt><dd>
 <p>Array containing the list of mandatory sections and variables.</p>
 
-</li>
 </dd><dt><strong><a name="item__inherited">_inherited</a></strong>
 
-<dd>
+</dt><dd>
 <p>Array containing the list of the variables that should be assigned the
 same value as in the parent section if nothing is specified here.</p>
 
-</li>
 </dd><dt><strong><a name="item__table">_table</a></strong>
 
-<dd>
+</dt><dd>
 <p>Hash containing the table grammar (see Special Table Keys). If not specified,
 no table is allowed in this section. The grammar of the columns if specified
 by sub-hashes named with the column number.</p>
 
-</li>
 </dd><dt><strong><a name="item__text">_text</a></strong>
 
-<dd>
+</dt><dd>
 <p>Section contains free-form text. Only sections and @includes statements will
 be interpreted, the rest will be added in the returned hash under '_text' as
 string.</p>
-
-</dd><dd>
 <p><strong>_text</strong> is a hash reference which can contain a <strong>_re</strong> and a <strong>_re_error</strong> key
 which will be used to scrutanize the text ... if the hash is empty, all text
 will be accepted.</p>
 
-</li>
 </dd><dt><strong><a name="item__order">_order</a></strong>
 
-<dd>
+</dt><dd>
 <p>If defined, a '_order' element will be put in every hash containing the
 sections with a number that determines the order in which the sections were
 defined.</p>
 
-</li>
 </dd><dt><strong><a name="item__doc">_doc</a></strong>
 
-<dd>
+</dt><dd>
 <p>Describes what this section is about</p>
 
-</li>
 </dd><dt><strong><a name="item__sub">_sub</a></strong>
 
-<dd>
+</dt><dd>
 <p>A function pointer. It is called for every instance of this section,
 with the real name of the section passed as its first argument. This is
 probably only useful for the regexp sections. If the function returns
 a defined value it is assumed that the test was not successful and an
 error is generated with the returned string as content.</p>
 
-</li>
 </dd></dl>
 <p>
 </p>
@@ -190,50 +177,42 @@ error is generated with the returned string as content.</p>
 <dl>
 <dt><strong><a name="item__re">_re</a></strong>
 
-<dd>
+</dt><dd>
 <p>Regular expression upon which the value will be checked.</p>
 
-</li>
 </dd><dt><strong><a name="item__re_error">_re_error</a></strong>
 
-<dd>
+</dt><dd>
 <p>String containing the returned error in case the regular expression doesn't
 match (if not specified, a generic 'syntax error' message will be returned).</p>
 
-</li>
 </dd><dt><strong>_sub</strong>
 
-<dd>
+</dt><dd>
 <p>A function pointer. It called for every value, with the value passed as its
 first argument. If the function returns a defined value it is assumed that
 the test was not successful and an error is generated with the returned
 string as content.</p>
-
-</dd><dd>
 <p>If the '_varlist' key (see above) is defined in this section, the '_sub'
 function will also receive an array reference as the second argument. The
 array contains a list of those variables already defined in the same
 section. This can be used to enforce the order of the variables.</p>
 
-</li>
 </dd><dt><strong><a name="item__default">_default</a></strong>
 
-<dd>
+</dt><dd>
 <p>A default value that will be assigned to the variable if none is specified or inherited.</p>
 
-</li>
 </dd><dt><strong>_doc</strong>
 
-<dd>
+</dt><dd>
 <p>Description of the variable.</p>
 
-</li>
 </dd><dt><strong><a name="item__example">_example</a></strong>
 
-<dd>
+</dt><dd>
 <p>A one line example for the content of this variable.</p>
 
-</li>
 </dd></dl>
 <p>
 </p>
@@ -241,37 +220,32 @@ section. This can be used to enforce the order of the variables.</p>
 <dl>
 <dt><strong><a name="item__columns">_columns</a></strong>
 
-<dd>
+</dt><dd>
 <p>Number of columns. If not specified, it will not be enforced.</p>
 
-</li>
 </dd><dt><strong><a name="item__key">_key</a></strong>
 
-<dd>
+</dt><dd>
 <p>If defined, the specified column number will be used as key in a hash in the
 returned hash. If not defined, the returned hash will contain a '_table'
 element with the contents of the table as array. The rows of the tables are
 stored as arrays.</p>
 
-</li>
 </dd><dt><strong>_sub</strong>
 
-<dd>
+</dt><dd>
 <p>they work analog to the description in the previous section.</p>
 
-</li>
 </dd><dt><strong>_doc</strong>
 
-<dd>
+</dt><dd>
 <p>describes the content of the column.</p>
 
-</li>
 </dd><dt><strong>_example</strong>
 
-<dd>
+</dt><dd>
 <p>example for the content of this column</p>
 
-</li>
 </dd></dl>
 <p>
 </p>
@@ -279,36 +253,31 @@ stored as arrays.</p>
 <dl>
 <dt><strong>_re</strong>
 
-<dd>
+</dt><dd>
 <p>Regular expression upon which the text will be checked (everything as a single
 line).</p>
 
-</li>
 </dd><dt><strong>_re_error</strong>
 
-<dd>
+</dt><dd>
 <p>String containing the returned error in case the regular expression doesn't
 match (if not specified, a generic 'syntax error' message will be returned).</p>
 
-</li>
 </dd><dt><strong>_sub</strong>
 
-<dd>
+</dt><dd>
 <p>they work analog to the description in the previous section.</p>
 
-</li>
 </dd><dt><strong>_doc</strong>
 
-<dd>
+</dt><dd>
 <p>Ditto.</p>
 
-</li>
 </dd><dt><strong>_example</strong>
 
-<dd>
+</dt><dd>
 <p>Potential multi line example for the content of this text section</p>
 
-</li>
 </dd></dl>
 <p>
 </p>
@@ -335,28 +304,24 @@ syntax is as follows:</p>
 <dl>
 <dt><strong><a name="item_level_1">Level 1</a></strong>
 
-<dd>
+</dt><dd>
 <p>*** section name ***</p>
 
-</li>
 </dd><dt><strong><a name="item_level_2">Level 2</a></strong>
 
-<dd>
+</dt><dd>
 <p>+ section name</p>
 
-</li>
 </dd><dt><strong><a name="item_level_3">Level 3</a></strong>
 
-<dd>
+</dt><dd>
 <p>++ section name</p>
 
-</li>
 </dd><dt><strong><a name="item_level_n_2c_n_3e1">Level n, n&gt;1</a></strong>
 
-<dd>
+</dt><dd>
 <p>+..+ section name (number of '+' determines level)</p>
 
-</li>
 </dd></dl>
 <p>
 </p>

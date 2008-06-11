@@ -11,6 +11,7 @@ SSYYNNOOPPSSIISS
         +FPing
 
         binary = /usr/bin/fping # mandatory
+        blazemode = true
         hostinterval = 1.5
         mininterval = 0.001
         offset = 50%
@@ -40,6 +41,9 @@ DDEESSCCRRIIPPTTIIOONN
        The (optional) ppaacckkeettssiizzee option lets you configure the packetsize for
        the pings sent.
 
+       In bbllaazzeemmooddee, FPing sends one more ping than requested, and discards
+       the first RTT value returned as it's likely to be an outlier.
+
        The FPing manpage has the following to say on this topic:
 
        Number of bytes of ping data to send.  The minimum size (normally 12)
@@ -59,6 +63,12 @@ VVAARRIIAABBLLEESS
            Example value: /usr/bin/fping
 
            This setting is mandatory.
+
+       blazemode
+           Send an extra ping and then discarge the first answer since the
+           first is bound to be an outliner.
+
+           Example value: true
 
        hostinterval
            The fping "-p" parameter, but in (possibly fractional) seconds
@@ -119,11 +129,11 @@ VVAARRIIAABBLLEESS
        step
            Duration of the base interval that this probe should use, if dif-
            ferent from the one specified in the 'Database' section. Note that
-           the step in the RRD files is fixed when they are originally gener-
-           ated, and if you change the step parameter afterwards, you'll have
-           to delete the old RRD files or somehow convert them. (This variable
-           is only applicable if the variable 'concurrentprobes' is set in the
-           'General' section.)
+           the step in the RRD files is fixed when they are originally
+           generated, and if you change the step parameter afterwards, you'll
+           have to delete the old RRD files or somehow convert them. (This
+           variable is only applicable if the variable 'concurrentprobes' is
+           set in the 'General' section.)
 
            Example value: 300
 
@@ -140,4 +150,4 @@ AAUUTTHHOORRSS
 
 
 
-2.3.6                             2008-04-26  doc::Smokeping::probes::FPing(3)
+2.4.0                             2008-06-10  doc::Smokeping::probes::FPing(3)

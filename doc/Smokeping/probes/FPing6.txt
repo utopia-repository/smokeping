@@ -11,6 +11,7 @@ SSYYNNOOPPSSIISS
         +FPing6
 
         binary = /usr/bin/fping6 # mandatory
+        blazemode = true
         hostinterval = 1.5
         mininterval = 0.001
         offset = 50%
@@ -46,6 +47,12 @@ VVAARRIIAABBLLEESS
            Example value: /usr/bin/fping6
 
            This setting is mandatory.
+
+       blazemode
+           Send an extra ping and then discarge the first answer since the
+           first is bound to be an outliner.
+
+           Example value: true
 
        hostinterval
            The fping "-p" parameter, but in (possibly fractional) seconds
@@ -132,4 +139,4 @@ SSEEEE AALLSSOO
 
 
 
-2.3.6                             2008-04-26 doc::Smokeping::probes::FPing6(3)
+2.4.0                             2008-06-10 doc::Smokeping::probes::FPing6(3)

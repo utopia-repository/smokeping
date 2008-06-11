@@ -1,3 +1,26 @@
+2008/6/10 -- released version 2.4.0
+
+* building a --static version of the smokeping page is broken. Make
+  it a little less broken by providing a dummyCGI->script_name method.
+  --tobi
+
+* added blazemode option to FPing, so that it sends an extra ping to
+  blaze a path to the destionation and then discarges it. Based on idea by
+  G.W. Haywood  -- tobi
+
+* fix for telneJunOSPing by Christian Hahn -- tobi
+
+* fixed FPing regression created in r680 it broke the proper handling of old
+  version of fping. Found by  Celedonio Miranda Torresano -- tobi
+
+* first cut at mtr integration ... added new menuextra config item
+  to build mtr links. -- tobi
+
+* use localtime to construct the rawlog filename 
+  --tobi as reported by Kent Kuriyama
+
+* allow slave names to have . in them but not target sections. --tobi
+
 2008/4/26 -- released version 2.3.6
 
 * add custom style for active menu link

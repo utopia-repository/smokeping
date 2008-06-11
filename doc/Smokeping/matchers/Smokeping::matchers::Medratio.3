@@ -129,7 +129,7 @@
 .\" ========================================================================
 .\"
 .IX Title "Smokeping::matchers::Medratio 3"
-.TH Smokeping::matchers::Medratio 3 "2006-12-12" "2.3.6" "SmokePing"
+.TH Smokeping::matchers::Medratio 3 "2006-12-12" "2.4.0" "SmokePing"
 .SH "NAME"
 Smokeping::matchers::Medratio \- detect changes in the latency median
 .SH "OVERVIEW"
@@ -171,7 +171,7 @@ and the median from the other 2 values. Divide the results and decide
 if it is bigger than 150 percent.
 .PP
 .Vb 1
-\& Medratio(historic=>10,current=>2,comparator=>'>',percentage=>150);
+\& Medratio(historic=>10,current=>2,comparator=>\(aq>\(aq,percentage=>150);
 .Ve
 .PP
 .Vb 1

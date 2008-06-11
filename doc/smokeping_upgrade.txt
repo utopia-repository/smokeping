@@ -26,6 +26,10 @@ OOVVEERRVVIIEEWW
        CHANGES file in the Smokeping distribution. This document tries to com-
        plement that with upgrading instructions etc.
 
+22..33..66 ttoo 22..44..00
+       The new SmokeTrace tool was added to SmokePing. For setup instructions
+       read the smoketrace manual page.
+
 22..33..33 ttoo 22..33..44
        The communication protocol between master and slave has been made more
        secure. This requires that BOTH master and slave are upgraded to con-
@@ -359,4 +363,4 @@ SSEEEE AALLSSOO
 
 
 
-2.3.6                             2008-03-18              SMOKEPING_UPGRADE(7)
+2.4.0                             2008-06-09              SMOKEPING_UPGRADE(7)

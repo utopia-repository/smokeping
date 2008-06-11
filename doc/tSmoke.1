@@ -129,7 +129,7 @@
 .\" ========================================================================
 .\"
 .IX Title "TSMOKE.DIST 1"
-.TH TSMOKE.DIST 1 "2008-04-26" "2.3.6" "SmokePing"
+.TH TSMOKE.DIST 1 "2008-06-10" "2.4.0" "SmokePing"
 .SH "NAME"
 tSmoke \- Commandline tool for sending SmokePing information
 .SH "SYNOPSIS"
@@ -148,8 +148,8 @@ tSmoke \- Commandline tool for sending SmokePing information
 \& \-\-listrrds List the RRDs used by this Smokeping
 \& \-\-morning  Send a morning synopsis
 \& \-\-weekly   Send a weekly status report
-\& \-\-to       E\-mail address to send message (i.e. '\-\-to=xyz@company.com.invalid'
-\& \-\-detail   How much detail to send in weekly report (i.e. '\-\-detail=1')
+\& \-\-to       E\-mail address to send message (i.e. \(aq\-\-to=xyz@company.com.invalid\(aq
+\& \-\-detail   How much detail to send in weekly report (i.e. \(aq\-\-detail=1\(aq)
 \& \-\-quiet    Do not print welcome
 .Ve
 .SH "DESCRIPTION"
@@ -162,7 +162,7 @@ past week and past month including an overview.
 Typical crontab used to invoke this are
 .PP
 .Vb 4
-\& # Quick morning alert to see what's down
+\& # Quick morning alert to see what\(aqs down
 \& 0 6 * * * /usr/local/smokeping/bin/tSmoke.pl \-\-q \-\-to=mobilephone@att.net.invalid \-\-morning
 \& # Weekly report on the percent availability of network systems with no detail
 \& 0 8 * * * /usr/local/smokeping/bin/tSmoke.pl \-\-q \-\-to=mailbox@company.com.invalid \-\-weekly \-\-detail=0

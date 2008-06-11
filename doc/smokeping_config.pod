@@ -585,7 +585,7 @@ The following sections are valid on level 2:
 
 =over
 
-=item B<++/[-_0-9a-zA-Z.]+/>
+=item B<++/[-_0-9a-zA-Z]+/>
 
 The following variables can be set in this section:
 
@@ -638,7 +638,7 @@ The following sections are valid on level 2:
 
 =over
 
-=item B<++/[-_0-9a-zA-Z.]+/>
+=item B<++/[-_0-9a-zA-Z]+/>
 
 Identifier of the hierarchie. Use this as prefix in the targets parent property
 
@@ -667,7 +667,7 @@ The following sections are valid on level 1:
 
 =over
 
-=item B<+/[-_0-9a-zA-Z.]+/>
+=item B<+/[-_0-9a-zA-Z]+/>
 
 Each module can take specific configuration information from this
 area. The jumble of letters above is a regular expression defining legal
@@ -682,7 +682,7 @@ The following sections are valid on level 2:
 
 =over
 
-=item B<++/[-_0-9a-zA-Z.]+/>
+=item B<++/[-_0-9a-zA-Z]+/>
 
 You can define multiple instances of the same probe with subsections. 
 These instances can have different values for their variables, so you
@@ -781,7 +781,7 @@ Default value: timeout = 5
 
 =back
 
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
 
 =over
 
@@ -911,7 +911,7 @@ Default value: timeout = 5
 
 =back
 
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
 
 =over
 
@@ -1027,7 +1027,7 @@ This variable I<dynamically> modifies the grammar based on its value.
 
 =back
 
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
 
 =over
 
@@ -1141,7 +1141,7 @@ Default value: packetsize = 56
 
 =back
 
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
 
 =over
 
@@ -1261,7 +1261,7 @@ Default value: port = 80
 
 =back
 
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
 
 =over
 
@@ -1407,7 +1407,7 @@ This variable I<dynamically> modifies the grammar based on its value.
 
 =back
 
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
 
 =over
 
@@ -1545,7 +1545,7 @@ Default value: timeout = 5
 
 =back
 
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
 
 =over
 
@@ -1675,7 +1675,7 @@ Default value: timeout = 5
 
 =back
 
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
 
 =over
 
@@ -1825,7 +1825,7 @@ Default value: timeout = 5
 
 =back
 
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
 
 =over
 
@@ -1989,7 +1989,7 @@ Default value: timeout = 5
 
 =back
 
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
 
 =over
 
@@ -2155,7 +2155,7 @@ Default value: timeout = 5
 
 =back
 
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
 
 =over
 
@@ -2319,7 +2319,7 @@ Default value: url = /
 
 =back
 
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
 
 =over
 
@@ -2493,7 +2493,7 @@ Default value: url = /
 
 =back
 
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
 
 =over
 
@@ -2651,7 +2651,7 @@ This variable I<dynamically> modifies the grammar based on its value.
 
 =back
 
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
 
 =over
 
@@ -2807,7 +2807,7 @@ Default value: timeout = 5
 
 =back
 
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
 
 =over
 
@@ -2969,7 +2969,7 @@ Default value: timeout = 5
 
 =back
 
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
 
 =over
 
@@ -3107,7 +3107,7 @@ Default value: timeout = 5
 
 =back
 
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
 
 =over
 
@@ -3253,7 +3253,7 @@ This variable I<dynamically> modifies the grammar based on its value.
 
 =back
 
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
 
 =over
 
@@ -3349,6 +3349,10 @@ The following new variables are valid:
 
 see above
 
+=item B<blazemode>
+
+see above
+
 =item B<hostinterval>
 
 see above
@@ -3385,7 +3389,7 @@ see above
 
 =back
 
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
 
 =over
 
@@ -3394,6 +3398,12 @@ The following new variables are valid:
 =over
 
 =item B<binary> I<(mandatory setting)>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<blazemode>
 
 see above
 
@@ -3465,6 +3475,10 @@ The following new variables are valid:
 
 see above
 
+=item B<blazemode>
+
+see above
+
 =item B<hostinterval>
 
 see above
@@ -3501,7 +3515,7 @@ see above
 
 =back
 
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
 
 =over
 
@@ -3510,6 +3524,12 @@ The following new variables are valid:
 =over
 
 =item B<binary> I<(mandatory setting)>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<blazemode>
 
 see above
 
@@ -3643,7 +3663,7 @@ see above
 
 =back
 
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
 
 =over
 
@@ -3793,7 +3813,7 @@ This variable I<dynamically> modifies the grammar based on its value.
 
 =back
 
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
 
 =over
 
@@ -3947,7 +3967,7 @@ Default value: timeout = 5
 
 =back
 
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
 
 =over
 
@@ -4109,7 +4129,7 @@ This variable I<dynamically> modifies the grammar based on its value.
 
 =back
 
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
 
 =over
 
@@ -4201,6 +4221,10 @@ The following new variables are valid:
 
 see above
 
+=item B<blazemode>
+
+see above
+
 =item B<hostinterval>
 
 see above
@@ -4249,7 +4273,7 @@ see above
 
 =back
 
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
 
 =over
 
@@ -4258,6 +4282,12 @@ The following new variables are valid:
 =over
 
 =item B<binary> I<(mandatory setting)>
+
+see above
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
+=item B<blazemode>
 
 see above
 
@@ -4385,7 +4415,7 @@ Default value: port = 22
 
 =back
 
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
 
 =over
 
@@ -4489,7 +4519,7 @@ Default value: timeout = 5
 
 =back
 
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
 
 =over
 
@@ -4617,7 +4647,7 @@ This variable I<dynamically> modifies the grammar based on its value.
 
 =back
 
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
 
 =over
 
@@ -4763,7 +4793,7 @@ This variable I<dynamically> modifies the grammar based on its value.
 
 =back
 
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
 
 =over
 
@@ -4893,7 +4923,7 @@ This variable I<dynamically> modifies the grammar based on its value.
 
 =back
 
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
 
 =over
 
@@ -5021,7 +5051,7 @@ Default value: timeout = 2
 
 =back
 
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
 
 =over
 
@@ -5099,7 +5129,7 @@ Default value: timeout = 2
 
 =back
 
-(End of dynamical grammar changes for example instances of section C</[-_0-9a-zA-Z.]+/>.)
+(End of dynamical grammar changes for example instances of section C</[-_0-9a-zA-Z]+/>.)
 
 =back
 
@@ -5108,8 +5138,8 @@ Default value: timeout = 2
 The Target Section defines the actual work of SmokePing. It contains a
 hierarchical list of hosts which mark the endpoints of the network
 connections the system should monitor. Each section can contain one host as
-well as other sections. By adding slaves you can measure the connectivity of
-an endpoint looking from several sources.
+well as other sections. By adding slaves you can measure the connection to
+an endpoint from multiple locations.
 
 
 The following variables can be set in this section:
@@ -5151,6 +5181,16 @@ and its children.
 
 =item B<slaves>
 
+List of slave servers. It gets inherited by all targets.
+
+
+=item B<menuextra>
+
+HTML String to be added to the end of each menu entry. The C<{HOST}> entry will be replaced by the
+host property of the relevant section. The C<{CLASS}> entry will be replaced by the same
+class as the other tags in the manu line.
+
+
 =item B<parents>
 
 =back
@@ -5159,7 +5199,7 @@ The following sections are valid on level 1:
 
 =over
 
-=item B<+/[-_0-9a-zA-Z.]+/>
+=item B<+/[-_0-9a-zA-Z]+/>
 
 Each target section can contain information about a host to monitor as
 well as further target sections. Most variables have already been
@@ -5271,6 +5311,15 @@ The slave names must match the slaves you have setup in the slaves section.
 
 This variable I<inherits> its value from the parent section if nothing is specified here.
 
+=item B<menuextra>
+
+HTML String to be added to the end of each menu entry. The C<{HOST}> entry will be replaced by the
+host property of the relevant section. The C<{CLASS}> entry will be replaced by the same
+class as the other tags in the manu line.
+
+
+This variable I<inherits> its value from the parent section if nothing is specified here.
+
 =item B<parents>
 
 After setting up a hierarchy in the Presentation section of the
@@ -5324,7 +5373,7 @@ The following sections are valid on level 2:
 
 =over
 
-=item B<++/[-_0-9a-zA-Z.]+/>
+=item B<++/[-_0-9a-zA-Z]+/>
 
 This section is I<recursive>: it can contain subsection(s) with the same syntax.
 
@@ -5376,7 +5425,7 @@ see above
 
 =back
 
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
 
 =over
 
@@ -5470,7 +5519,7 @@ see above
 
 =back
 
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
 
 =over
 
@@ -5544,7 +5593,7 @@ see above
 
 =back
 
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
 
 =over
 
@@ -5614,7 +5663,7 @@ see above
 
 =back
 
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
 
 =over
 
@@ -5692,7 +5741,7 @@ see above
 
 =back
 
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
 
 =over
 
@@ -5788,7 +5837,7 @@ see above
 
 =back
 
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
 
 =over
 
@@ -5888,7 +5937,7 @@ see above
 
 =back
 
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
 
 =over
 
@@ -5968,7 +6017,7 @@ see above
 
 =back
 
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
 
 =over
 
@@ -6086,7 +6135,7 @@ see above
 
 =back
 
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
 
 =over
 
@@ -6210,7 +6259,7 @@ see above
 
 =back
 
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
 
 =over
 
@@ -6344,7 +6393,7 @@ see above
 
 =back
 
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
 
 =over
 
@@ -6474,7 +6523,7 @@ see above
 
 =back
 
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
 
 =over
 
@@ -6616,7 +6665,7 @@ see above
 
 =back
 
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
 
 =over
 
@@ -6742,7 +6791,7 @@ see above
 
 =back
 
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
 
 =over
 
@@ -6860,7 +6909,7 @@ see above
 
 =back
 
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
 
 =over
 
@@ -6990,7 +7039,7 @@ see above
 
 =back
 
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
 
 =over
 
@@ -7094,7 +7143,7 @@ see above
 
 =back
 
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
 
 =over
 
@@ -7198,7 +7247,7 @@ see above
 
 =back
 
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
 
 =over
 
@@ -7320,7 +7369,7 @@ see above
 
 =back
 
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
 
 =over
 
@@ -7400,7 +7449,7 @@ see above
 
 =back
 
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
 
 =over
 
@@ -7494,7 +7543,7 @@ see above
 
 =back
 
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
 
 =over
 
@@ -7620,7 +7669,7 @@ see above
 
 =back
 
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
 
 =over
 
@@ -7708,7 +7757,7 @@ see above
 
 =back
 
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
 
 =over
 
@@ -7756,7 +7805,7 @@ see above
 
 =back
 
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
 
 =over
 
@@ -7822,7 +7871,7 @@ see above
 
 =back
 
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
 
 =over
 
@@ -7912,7 +7961,7 @@ see above
 
 =back
 
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
 
 =over
 
@@ -7984,7 +8033,7 @@ see above
 
 =back
 
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
 
 =over
 
@@ -8052,7 +8101,7 @@ see above
 
 =back
 
-Syntax changes for subsection B</[-_0-9a-zA-Z.]+/>
+Syntax changes for subsection B</[-_0-9a-zA-Z]+/>
 
 =over
 

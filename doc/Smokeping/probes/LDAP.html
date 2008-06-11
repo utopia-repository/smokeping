@@ -117,19 +117,14 @@ of the target-specific ``min_interval'' variable (1 by default).</p>
 <dl>
 <dt><strong><a name="item_forks">forks</a></strong>
 
-<dd>
+</dt><dd>
 <p>Run this many concurrent processes at maximum</p>
-
-</dd><dd>
 <p>Example value: 5</p>
-
-</dd><dd>
 <p>Default value: 5</p>
 
-</li>
 </dd><dt><strong><a name="item_offset">offset</a></strong>
 
-<dd>
+</dt><dd>
 <p>If you run many probes concurrently you may want to prevent them from
 hitting your network all at the same time. Using the probe-specific
 offset parameter you can change the point in time when each probe will
@@ -139,159 +134,108 @@ is specified here. Note that this does NOT influence the rrds itself,
 it is just a matter of when data acqusition is initiated.
 (This variable is only applicable if the variable 'concurrentprobes' is set
 in the 'General' section.)</p>
-
-</dd><dd>
 <p>Example value: 50%</p>
 
-</li>
 </dd><dt><strong><a name="item_passwordfile">passwordfile</a></strong>
 
-<dd>
+</dt><dd>
 <p>Location of the file containing usernames and passwords.</p>
-
-</dd><dd>
 <p>Example value: /some/place/secret</p>
 
-</li>
 </dd><dt><strong><a name="item_step">step</a></strong>
 
-<dd>
+</dt><dd>
 <p>Duration of the base interval that this probe should use, if different
 from the one specified in the 'Database' section. Note that the step in
 the RRD files is fixed when they are originally generated, and if you
 change the step parameter afterwards, you'll have to delete the old RRD
 files or somehow convert them. (This variable is only applicable if
 the variable 'concurrentprobes' is set in the 'General' section.)</p>
-
-</dd><dd>
 <p>Example value: 300</p>
 
-</li>
 </dd></dl>
 <p>Supported target-specific variables:</p>
 <dl>
 <dt><strong><a name="item_attrs">attrs</a></strong>
 
-<dd>
+</dt><dd>
 <p>The attributes queried.</p>
-
-</dd><dd>
 <p>Example value: uid,someotherattr</p>
 
-</li>
 </dd><dt><strong><a name="item_base">base</a></strong>
 
-<dd>
+</dt><dd>
 <p>The base to be used in the LDAP query</p>
-
-</dd><dd>
 <p>Example value: dc=foo,dc=bar</p>
 
-</li>
 </dd><dt><strong><a name="item_binddn">binddn</a></strong>
 
-<dd>
+</dt><dd>
 <p>If present, authenticate the LDAP bind with this DN.</p>
-
-</dd><dd>
 <p>Example value: uid=testuser,dc=foo,dc=bar</p>
 
-</li>
 </dd><dt><strong><a name="item_filter">filter</a></strong>
 
-<dd>
+</dt><dd>
 <p>The actual search to be made</p>
-
-</dd><dd>
 <p>Example value: uid=testuser</p>
-
-</dd><dd>
 <p>This setting is mandatory.</p>
 
-</li>
 </dd><dt><strong><a name="item_mininterval">mininterval</a></strong>
 
-<dd>
+</dt><dd>
 <p>The minimum interval between each query sent, in (possibly fractional) second
 s.</p>
-
-</dd><dd>
 <p>Default value: 1</p>
 
-</li>
 </dd><dt><strong><a name="item_password">password</a></strong>
 
-<dd>
+</dt><dd>
 <p>The password to be used, if not present in &lt;passwordfile&gt;.</p>
-
-</dd><dd>
 <p>Example value: mypass</p>
 
-</li>
 </dd><dt><strong><a name="item_pings">pings</a></strong>
 
-<dd>
+</dt><dd>
 <p>How many pings should be sent to each target, if different from the global
 value specified in the Database section. Note that the number of pings in
 the RRD files is fixed when they are originally generated, and if you
 change this parameter afterwards, you'll have to delete the old RRD
 files or somehow convert them.</p>
-
-</dd><dd>
 <p>Example value: 5</p>
 
-</li>
 </dd><dt><strong><a name="item_port">port</a></strong>
 
-<dd>
+</dt><dd>
 <p>TCP port of the LDAP server</p>
-
-</dd><dd>
 <p>Example value: 389</p>
 
-</li>
 </dd><dt><strong><a name="item_scope">scope</a></strong>
 
-<dd>
+</dt><dd>
 <p>The scope of the query. Can be either 'base', 'one' or 'sub'. See the Net::LDAP documentation for details.</p>
-
-</dd><dd>
 <p>Example value: one</p>
-
-</dd><dd>
 <p>Default value: sub</p>
 
-</li>
 </dd><dt><strong><a name="item_start_tls">start_tls</a></strong>
 
-<dd>
+</dt><dd>
 <p>If true, encrypt the connection with the starttls command. Disabled by default.</p>
-
-</dd><dd>
 <p>Example value: 1</p>
 
-</li>
 </dd><dt><strong><a name="item_timeout">timeout</a></strong>
 
-<dd>
+</dt><dd>
 <p>LDAP query timeout in seconds.</p>
-
-</dd><dd>
 <p>Example value: 10</p>
-
-</dd><dd>
 <p>Default value: 5</p>
 
-</li>
 </dd><dt><strong><a name="item_version">version</a></strong>
 
-<dd>
+</dt><dd>
 <p>The LDAP version to be used.</p>
-
-</dd><dd>
 <p>Example value: 3</p>
 
-</li>
 </dd></dl>
 <p>
 </p>

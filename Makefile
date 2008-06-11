@@ -1,12 +1,12 @@
 SHELL = /bin/sh
-VERSION := 2.3.6
+VERSION := 2.4.0
 SVNREPO = svn://svn.oetiker.ch/smokeping
 ############ A is for features
 ############ B is for bugfixes
 ############ V.AAABBB
 ############ 2.000001
 ############ 2.000002
-NUMVERSION = 2.003006
+NUMVERSION = 2.004000
 IGNORE = ~|CVS|var/|smokeping-$(VERSION)/smokeping-$(VERSION)|cvsignore|rej|orig|DEAD|pod2htm[di]\.tmp|\.svn|tar\.gz|DEADJOE|svn-commit\.tmp
 GROFF = groff
 PERL = perl-5.8.8
@@ -161,8 +161,21 @@ smokeping-$(VERSION).tar.gz:
 	$(PERL) -i~ -p -e 'do { my @d = localtime; my $$d = (1900+$$d[5])."/".(1+$$d[4])."/".$$d[3]; print "$$d -- released version $(VERSION)\n\n" } unless $$done++ || /version $(VERSION)/' CHANGES
 	svn commit -m "prepare for the release of smokeping-$(VERSION)"
 	svn export $(SVNREPO)/trunk/software smokeping-$(VERSION)
-	rm -rf smokeping-$(VERSION)/qooxdoo
+	rm -rf  smokeping-$(VERSION)/qooxdoo/source/class/Smokeping
+	rm -rf  smokeping-$(VERSION)/qooxdoo/source/grapher.cgi 
+	rm -rf  smokeping-$(VERSION)/qooxdoo/source/smokeping.cgi
+	rm -rf  smokeping-$(VERSION)/qooxdoo/source/perl/Qooxdoo/Services/Smokeping.pm 
 	(cd smokeping-$(VERSION) && $(MAKE) doc)
+	(cd smokeping-$(VERSION)/qooxdoo && $(MAKE) build)
+	(cd smokeping-$(VERSION)/qooxdoo; \
+	cp build/tr.cgi ../htdocs/tr.cgi.dist;\
+	cp build/index.html ../htdocs/tr.html;\
+	cp -rp build/script ../htdocs;\
+	cp -rp build/resource ../htdocs;\
+	cp -rp build/perl/* ../lib;\
+	make clean; \
+	rm -rf build)
+	$(PERL) -i -p -e 's/VERSION/$(VERSION)/' smokeping-$(VERSION)/htdocs/script/Tr.js
 	tar czvf smokeping-$(VERSION).tar.gz --exclude '*.tmp' smokeping-$(VERSION)
 	rm -rf smokeping-$(VERSION)
 

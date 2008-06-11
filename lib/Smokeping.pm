@@ -38,7 +38,7 @@ use Smokeping::RRDtools;
 
 # globale persistent variables for speedy
 use vars qw($cfg $probes $VERSION $havegetaddrinfo $cgimode);
-$VERSION="2.003006";
+$VERSION="2.004000";
 
 # we want opts everywhere
 my %opt;
@@ -69,6 +69,10 @@ sub do_log(@);
 sub load_probe($$$$);
 
 sub dummyCGI::param {
+    return wantarray ? () : "";
+}
+
+sub dummyCGI::script_name {
     return wantarray ? () : "";
 }
 
@@ -631,15 +635,26 @@ sub target_menu($$$$;$){
 		my $menu = $key;
         my $title = $key;
         my $hide;
+        my $host;
+        my $menuextra;
         if ($tree->{$key}{__tree_link} and $tree->{$key}{__tree_link}{menu}){
     		$menu = $tree->{$key}{__tree_link}{menu};
     		$title = $tree->{$key}{__tree_link}{title};
-                next if $tree->{$key}{__tree_link}{hide} and $tree->{$key}{__tree_link}{hide} eq 'yes';
-		} elsif ($tree->{$key}{menu}) {	
+    		$host = $tree->{$key}{__tree_link}{host};
+            $menuextra = $tree->{$key}{__tree_link}{menuextra};
+            next if $tree->{$key}{__tree_link}{hide} and $tree->{$key}{__tree_link}{hide} eq 'yes';
+        } elsif ($tree->{$key}{menu}) {	
 	        $menu = $tree->{$key}{menu};
 	        $title = $tree->{$key}{title};
-                next if $tree->{$key}{hide} and $tree->{$key}{hide} eq 'yes';
-        };
+    		$host = $tree->{$key}{host};
+            $menuextra = $tree->{$key}{menuextra};
+            next if $tree->{$key}{hide} and $tree->{$key}{hide} eq 'yes';
+        }
+
+        # no menuextra for multihost   
+        if (not $host or $host =~ m|^/|){
+            $menuextra = undef;
+        }
 
 		my $class = 'menuitem';
    	    if ($key eq $current ){
@@ -649,7 +664,6 @@ sub target_menu($$$$;$){
    	            $class = 'menuactive';
             }
    	    };
-
 		if ($filter){
 			if (($menu and $menu =~ /$filter/i) or ($title and $title =~ /$filter/i)){
 				push @matches, ["$path$key$suffix",$menu,$class];
@@ -658,14 +672,22 @@ sub target_menu($$$$;$){
 		}
 		else {
     	    $menu =~ s/ /&nbsp;/g;
-        	my $menuadd ="";
-		    $menuadd = "&nbsp;" x (20 - length($menu)) if length($menu) < 20;
-               my $menuclass = "menulink";
-               if ($key eq $current and !@$open) {
-                   $menuclass = "menulinkactive";
-               }
-               $print .= qq{<tr><td class="$class" colspan="2">&nbsp;-&nbsp;<a class="$menuclass" HREF="$path$key$suffix">$menu</a>$menuadd</td></tr>\n};
-    	    if ($key eq $current){
+            my $menuclass = "menulink";
+            if ($key eq $current and !@$open) {
+                 $menuclass = "menulinkactive";
+             }
+             if ($menuextra){
+                 $menuextra =~ s/{HOST}/#$host/g;
+                 $menuextra =~ s/{CLASS}/$menuclass/g;
+                 $menuextra = '&nbsp;'.$menuextra;
+             } else {
+                 $menuextra = '';
+             }
+
+          	 my $menuadd ="";
+		     $menuadd = "&nbsp;" x (20 - length($menu.$menuextra)) if length($menu.$menuextra) < 20;
+             $print .= qq{<tr><td class="$class" colspan="2">&nbsp;-&nbsp;<a class="$menuclass" HREF="$path$key$suffix">$menu</a>$menuextra$menuadd</td></tr>\n};
+     	    if ($key eq $current){
         	    my $prline = target_menu $tree->{$key}, $open, "$path$key.",$filter, $suffix;
 	            $print .= qq{<tr><td class="$class">&nbsp;&nbsp;</td><td align="left">$prline</td></tr>}
    		           if $prline;
@@ -1896,7 +1918,7 @@ sub update_rrds($$$$$$) {
             for my $update (sort {$a->[1] <=> $b->[1]}  @updates){ # make sure we put the updates in chronological order in
                 my $s = $update->[0] ? "~".$update->[0] : "";
                 if ( $tree->{rawlog} ){
-                        my $file =  POSIX::strftime $tree->{rawlog},$update->[1];
+                        my $file =  POSIX::strftime $tree->{rawlog},localtime($update->[1]);
                     if (open LOG,">>$name$s.$file.csv"){
                             print LOG time,"\t",join("\t",split /:/,$update->[2]),"\n";
                                 close LOG;
@@ -1967,7 +1989,8 @@ sub get_parser () {
     #     current 'probe' setting.
 
 
-    my $KEYD_RE = '[-_0-9a-zA-Z.]+';
+    my $KEYD_RE = '[-_0-9a-zA-Z]+';
+    my $KEYDD_RE = '[-_0-9a-zA-Z.]+';
     my $PROBE_RE = '[A-Z][a-zA-Z]+';
     my $e = "=";
     my %knownprobes; # the probes encountered so far
@@ -2015,11 +2038,11 @@ sub get_parser () {
     # the part of target section syntax that doesn't depend on the selected probe
     my $TARGETCOMMON; # predeclare self-referencing structures
     # the common variables
-    my $TARGETCOMMONVARS = [ qw (probe menu title alerts note email host remark rawlog alertee slaves parents hide nomasterpoll) ];
+    my $TARGETCOMMONVARS = [ qw (probe menu title alerts note email host remark rawlog alertee slaves menuextra parents hide nomasterpoll) ];
     $TARGETCOMMON = 
       {
        _vars     => $TARGETCOMMONVARS,
-       _inherited=> [ qw (probe alerts alertee slaves nomasterpoll) ],
+       _inherited=> [ qw (probe alerts alertee slaves menuextra nomasterpoll) ],
        _sections => [ "/$KEYD_RE/" ],
        _recursive=> [ "/$KEYD_RE/" ],
        _sub => sub {
@@ -2200,10 +2223,16 @@ DOC
 If you want to have alerts for this target and all targets below it go to a particular address
 on top of the address already specified in the alert, you can add it here. This can be a comma separated list of items.
 DOC
-           slaves => {  _re => "(${KEYD_RE}(?:\\s+${KEYD_RE})*)?",
-                        _re_error => 'Use the format: slaves='.${KEYD_RE}.' [slave2]',
+           slaves => {  _re => "(${KEYDD_RE}(?:\\s+${KEYDD_RE})*)?",
+                        _re_error => 'Use the format: slaves='.${KEYDD_RE}.' [slave2]',
                         _doc => <<DOC },
 The slave names must match the slaves you have setup in the slaves section.
+DOC
+           menuextra => { 
+                        _doc => <<DOC },
+HTML String to be added to the end of each menu entry. The C<{HOST}> entry will be replaced by the
+host property of the relevant section. The C<{CLASS}> entry will be replaced by the same
+class as the other tags in the manu line.
 DOC
            probe => {
                         _sub => sub {
@@ -3343,7 +3372,7 @@ slaves you are going to use.
 END_DOC
           _vars        => [ qw(secrets) ],
           _mandatory   => [ qw(secrets) ],
-          _sections    => [ "/$KEYD_RE/" ],
+          _sections    => [ "/$KEYDD_RE/" ],
           secrets => {              
               _sub => sub {
                  return "File '$_[0]' does not exist" unless -f $_[ 0 ];
@@ -3372,7 +3401,7 @@ END_DOC
 How long should the master wait for its slave to answer?
 END_DOC
           },     
-          "/$KEYD_RE/" => {
+          "/$KEYDD_RE/" => {
               _vars => [ qw(display_name location color) ],
               _mandatory => [ qw(display_name color) ],
               _sections => [ qw(override) ],
@@ -3420,10 +3449,10 @@ END_DOC
 The Target Section defines the actual work of SmokePing. It contains a
 hierarchical list of hosts which mark the endpoints of the network
 connections the system should monitor. Each section can contain one host as
-well as other sections. By adding slaves you can measure the connectivity of
-an endpoint looking from several sources.
+well as other sections. By adding slaves you can measure the connection to
+an endpoint from multiple locations.
 DOC
-                   _vars       => [ qw(probe menu title remark alerts slaves parents) ],
+                   _vars       => [ qw(probe menu title remark alerts slaves menuextra parents) ],
                    _mandatory  => [ qw(probe menu title) ],
                    _order => 1,
                    _sections   => [ "/$KEYD_RE/" ],
@@ -3493,6 +3522,14 @@ DOC
 
                    remark => { _doc => <<DOC },
 An optional remark on the current section. It gets displayed on the webpage.
+DOC
+                   slaves => { _doc => <<DOC },
+List of slave servers. It gets inherited by all targets.
+DOC
+                   menuextra => { _doc => <<DOC },
+HTML String to be added to the end of each menu entry. The C<{HOST}> entry will be replaced by the
+host property of the relevant section. The C<{CLASS}> entry will be replaced by the same
+class as the other tags in the manu line.
 DOC
 
            }

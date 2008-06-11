@@ -129,7 +129,7 @@
 .\" ========================================================================
 .\"
 .IX Title "Config::Grammar 3"
-.TH Config::Grammar 3 "2007-09-26" "2.3.6" "SmokePing"
+.TH Config::Grammar 3 "2007-09-26" "2.4.0" "SmokePing"
 .SH "NAME"
 Config::Grammar \- A grammar\-based, user\-friendly config parser
 .SH "SYNOPSIS"
@@ -140,10 +140,10 @@ Config::Grammar \- A grammar\-based, user\-friendly config parser
 .PP
 .Vb 5
 \& my $parser = Config::Grammar\->new(\e%grammar);
-\& my $cfg = $parser\->parse('app.cfg') or die "ERROR: $parser\->{err}\en";
+\& my $cfg = $parser\->parse(\(aqapp.cfg\(aq) or die "ERROR: $parser\->{err}\en";
 \& my $pod = $parser\->makepod();
-\& my $ex = $parser\->maketmpl('TOP','SubNode');
-\& my $minex = $parser\->maketmplmin('TOP','SubNode');
+\& my $ex = $parser\->maketmpl(\(aqTOP\(aq,\(aqSubNode\(aq);
+\& my $minex = $parser\->maketmplmin(\(aqTOP\(aq,\(aqSubNode\(aq);
 .Ve
 .SH "DESCRIPTION"
 .IX Header "DESCRIPTION"
@@ -356,41 +356,41 @@ The data is interpreted as one or more columns separated by spaces.
 .Ve
 .PP
 .Vb 3
-\& my $RE_IP       = '\ed+\e.\ed+\e.\ed+\e.\ed+';
-\& my $RE_MAC      = '[0\-9a\-f]{2}(?::[0\-9a\-f]{2}){5}';
-\& my $RE_HOST     = '\eS+';
+\& my $RE_IP       = \(aq\ed+\e.\ed+\e.\ed+\e.\ed+\(aq;
+\& my $RE_MAC      = \(aq[0\-9a\-f]{2}(?::[0\-9a\-f]{2}){5}\(aq;
+\& my $RE_HOST     = \(aq\eS+\(aq;
 .Ve
 .PP
 .Vb 58
 \& my $parser = Config::Grammar\->new({
-\&   _sections => [ 'network', 'hosts' ],
+\&   _sections => [ \(aqnetwork\(aq, \(aqhosts\(aq ],
 \&   network => {
-\&      _vars     => [ 'dns' ],
+\&      _vars     => [ \(aqdns\(aq ],
 \&      _sections => [ "/$RE_IP/" ],
 \&      dns       => {
 \&         _doc => "address of the dns server",
 \&         _example => "ns1.oetiker.xs",
 \&         _re => $RE_HOST,
 \&         _re_error =>
-\&            'dns must be an host name or ip address',
+\&            \(aqdns must be an host name or ip address\(aq,
 \&         },
 \&      "/$RE_IP/" => {
 \&         _doc    => "Ip Adress",
-\&         _example => '10.2.3.2',
-\&         _vars   => [ 'netmask', 'gateway' ],
+\&         _example => \(aq10.2.3.2\(aq,
+\&         _vars   => [ \(aqnetmask\(aq, \(aqgateway\(aq ],
 \&         netmask => {
 \&            _doc => "Netmask",
 \&            _example => "255.255.255.0",
 \&            _re => $RE_IP,
 \&            _re_error =>
-\&               'netmask must be a dotted ip address'
+\&               \(aqnetmask must be a dotted ip address\(aq
 \&            },
 \&         gateway => {
 \&            _doc => "Default Gateway address in IP notation",
 \&            _example => "10.22.12.1",
 \&            _re => $RE_IP,
 \&            _re_error =>
-\&               'gateway must be a dotted ip address' },
+\&               \(aqgateway must be a dotted ip address\(aq },
 \&         },
 \&      },
 \&   hosts => {
@@ -404,14 +404,14 @@ The data is interpreted as one or more columns separated by spaces.
 \&            _example => "0:3:3:d:a:3:dd:a:cd",
 \&            _re => $RE_MAC,
 \&            _re_error =>
-\&               'first column must be an ethernet mac address',
+\&               \(aqfirst column must be an ethernet mac address\(aq,
 \&            },
 \&         1 => {
 \&            _doc => "IP Address",
 \&            _example => "10.11.23.1",
 \&            _re => $RE_IP,
 \&            _re_error =>
-\&               'second column must be a dotted ip address',
+\&               \(aqsecond column must be a dotted ip address\(aq,
 \&            },
 \&         2 => {
 \&            _doc => "Host Name",
@@ -423,7 +423,7 @@ The data is interpreted as one or more columns separated by spaces.
 .Ve
 .PP
 .Vb 4
-\& my $cfg = $parser\->parse('test.cfg') or
+\& my $cfg = $parser\->parse(\(aqtest.cfg\(aq) or
 \&   die "ERROR: $parser\->{err}\en";
 \& print Dumper($cfg);
 \& print $parser\->makepod;
@@ -464,29 +464,29 @@ The data is interpreted as one or more columns separated by spaces.
 .PP
 .Vb 26
 \& {
-\&   'hosts' => {
-\&                '00:50:fe:bc:65:11' => [
-\&                                         '00:50:fe:bc:65:11',
-\&                                         '192.168.7.97',
-\&                                         'plain.hades'
+\&   \(aqhosts\(aq => {
+\&                \(aq00:50:fe:bc:65:11\(aq => [
+\&                                         \(aq00:50:fe:bc:65:11\(aq,
+\&                                         \(aq192.168.7.97\(aq,
+\&                                         \(aqplain.hades\(aq
 \&                                       ],
-\&                '00:50:fe:bc:65:12' => [
-\&                                         '00:50:fe:bc:65:12',
-\&                                         '192.168.7.98',
-\&                                         'isg.ee.hades'
+\&                \(aq00:50:fe:bc:65:12\(aq => [
+\&                                         \(aq00:50:fe:bc:65:12\(aq,
+\&                                         \(aq192.168.7.98\(aq,
+\&                                         \(aqisg.ee.hades\(aq
 \&                                       ],
-\&                '00:50:fe:bc:65:14' => [
-\&                                         '00:50:fe:bc:65:14',
-\&                                         '192.168.7.99',
-\&                                         'isg.ee.hades'
+\&                \(aq00:50:fe:bc:65:14\(aq => [
+\&                                         \(aq00:50:fe:bc:65:14\(aq,
+\&                                         \(aq192.168.7.99\(aq,
+\&                                         \(aqisg.ee.hades\(aq
 \&                                       ]
 \&              },
-\&   'network' => {
-\&                  '192.168.7.64' => {
-\&                                      'netmask' => '255.255.255.192',
-\&                                      'gateway' => '192.168.7.65'
+\&   \(aqnetwork\(aq => {
+\&                  \(aq192.168.7.64\(aq => {
+\&                                      \(aqnetmask\(aq => \(aq255.255.255.192\(aq,
+\&                                      \(aqgateway\(aq => \(aq192.168.7.65\(aq
 \&                                    },
-\&                  'dns' => '192.168.7.87'
+\&                  \(aqdns\(aq => \(aq192.168.7.87\(aq
 \&                }
 \& };
 .Ve

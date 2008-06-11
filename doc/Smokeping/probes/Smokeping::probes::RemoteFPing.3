@@ -129,7 +129,7 @@
 .\" ========================================================================
 .\"
 .IX Title "doc::Smokeping::probes::RemoteFPing 3"
-.TH doc::Smokeping::probes::RemoteFPing 3 "2008-04-26" "2.3.6" "SmokePing"
+.TH doc::Smokeping::probes::RemoteFPing 3 "2008-06-10" "2.4.0" "SmokePing"
 .SH "NAME"
 Smokeping::probes::RemoteFPing \- Remote FPing Probe for SmokePing
 .SH "SYNOPSIS"
@@ -142,8 +142,9 @@ Smokeping::probes::RemoteFPing \- Remote FPing Probe for SmokePing
 \& +RemoteFPing
 .Ve
 .PP
-.Vb 12
+.Vb 13
 \& binary = /usr/bin/ssh # mandatory
+\& blazemode = true
 \& hostinterval = 1.5
 \& mininterval = 0.001
 \& offset = 50%
@@ -199,6 +200,11 @@ may be used.
 Example value: /usr/bin/ssh
 .Sp
 This setting is mandatory.
+.IP "blazemode" 4
+.IX Item "blazemode"
+Send an extra ping and then discarge the first answer since the first is bound to be an outliner.
+.Sp
+Example value: true
 .IP "hostinterval" 4
 .IX Item "hostinterval"
 The fping \*(L"\-p\*(R" parameter, but in (possibly fractional) seconds rather than

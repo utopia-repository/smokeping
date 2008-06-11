@@ -87,41 +87,27 @@ protocol to run a ping from an IOS device.</p>
 <dl>
 <dt><strong><a name="item_binary">binary</a></strong>
 
-<dd>
+</dt><dd>
 <p>The binary option specifies the path of the binary to be used to
 connect to the IOS device.  Commonly used binaries are /usr/bin/rsh
 and /usr/bin/remsh, although any script or binary should work if can
 be called as</p>
-
-</dd><dd>
 <pre>
     /path/to/binary [ -l user ] router ping</pre>
-
-</dd><dd>
 <p>to produce the IOS ping dialog on stdin &amp; stdout.</p>
-
-</dd><dd>
 <p>Example value: /usr/bin/rsh</p>
-
-</dd><dd>
 <p>This setting is mandatory.</p>
 
-</li>
 </dd><dt><strong><a name="item_forks">forks</a></strong>
 
-<dd>
+</dt><dd>
 <p>Run this many concurrent processes at maximum</p>
-
-</dd><dd>
 <p>Example value: 5</p>
-
-</dd><dd>
 <p>Default value: 5</p>
 
-</li>
 </dd><dt><strong><a name="item_offset">offset</a></strong>
 
-<dd>
+</dt><dd>
 <p>If you run many probes concurrently you may want to prevent them from
 hitting your network all at the same time. Using the probe-specific
 offset parameter you can change the point in time when each probe will
@@ -131,101 +117,73 @@ is specified here. Note that this does NOT influence the rrds itself,
 it is just a matter of when data acqusition is initiated.
 (This variable is only applicable if the variable 'concurrentprobes' is set
 in the 'General' section.)</p>
-
-</dd><dd>
 <p>Example value: 50%</p>
 
-</li>
 </dd><dt><strong><a name="item_packetsize">packetsize</a></strong>
 
-<dd>
+</dt><dd>
 <p>The (optional) packetsize option lets you configure the packetsize for
 the pings sent.</p>
-
-</dd><dd>
 <p>Default value: 56</p>
 
-</li>
 </dd><dt><strong><a name="item_step">step</a></strong>
 
-<dd>
+</dt><dd>
 <p>Duration of the base interval that this probe should use, if different
 from the one specified in the 'Database' section. Note that the step in
 the RRD files is fixed when they are originally generated, and if you
 change the step parameter afterwards, you'll have to delete the old RRD
 files or somehow convert them. (This variable is only applicable if
 the variable 'concurrentprobes' is set in the 'General' section.)</p>
-
-</dd><dd>
 <p>Example value: 300</p>
 
-</li>
 </dd><dt><strong><a name="item_timeout">timeout</a></strong>
 
-<dd>
+</dt><dd>
 <p>How long a single 'ping' takes at maximum</p>
-
-</dd><dd>
 <p>Example value: 15</p>
-
-</dd><dd>
 <p>Default value: 5</p>
 
-</li>
 </dd></dl>
 <p>Supported target-specific variables:</p>
 <dl>
 <dt><strong><a name="item_ioshost">ioshost</a></strong>
 
-<dd>
+</dt><dd>
 <p>The ioshost option specifies the IOS device which should be used for
 the ping.</p>
-
-</dd><dd>
 <p>Example value: my.cisco.router</p>
-
-</dd><dd>
 <p>This setting is mandatory.</p>
 
-</li>
 </dd><dt><strong><a name="item_iosint">iosint</a></strong>
 
-<dd>
+</dt><dd>
 <p>The (optional) iosint option allows you to specify the source address
 or interface in the IOS device. The value should be an IP address or
 an interface name such as ``Ethernet 1/0''. If this option is omitted,
 the IOS device will pick the IP address of the outbound interface to
 use.</p>
-
-</dd><dd>
 <p>Example value: Ethernet 1/0</p>
 
-</li>
 </dd><dt><strong><a name="item_iosuser">iosuser</a></strong>
 
-<dd>
+</dt><dd>
 <p>The (optional) iosuser option allows you to specify the remote
 username the IOS device.  If this option is omitted, the username
 defaults to the default user used by the remsh command (usually the
 user running the remsh command, ie the user running SmokePing).</p>
-
-</dd><dd>
 <p>Example value: admin</p>
 
-</li>
 </dd><dt><strong><a name="item_pings">pings</a></strong>
 
-<dd>
+</dt><dd>
 <p>How many pings should be sent to each target, if different from the global
 value specified in the Database section. Note that the number of pings in
 the RRD files is fixed when they are originally generated, and if you
 change this parameter afterwards, you'll have to delete the old RRD
 files or somehow convert them.</p>
-
-</dd><dd>
 <p>Example value: 5</p>
 
-</li>
 </dd></dl>
 <p>
 </p>

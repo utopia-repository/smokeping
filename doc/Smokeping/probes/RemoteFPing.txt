@@ -11,6 +11,7 @@ SSYYNNOOPPSSIISS
         +RemoteFPing
 
         binary = /usr/bin/ssh # mandatory
+        blazemode = true
         hostinterval = 1.5
         mininterval = 0.001
         offset = 50%
@@ -56,6 +57,12 @@ VVAARRIIAABBLLEESS
            Example value: /usr/bin/ssh
 
            This setting is mandatory.
+
+       blazemode
+           Send an extra ping and then discarge the first answer since the
+           first is bound to be an outliner.
+
+           Example value: true
 
        hostinterval
            The fping "-p" parameter, but in (possibly fractional) seconds
@@ -183,4 +190,4 @@ BBUUGGSS
 
 
 
-2.3.6                             2008-04d-o2c6::Smokeping::probes::RemoteFPing(3)
+2.4.0                             2008-06d-o1c0::Smokeping::probes::RemoteFPing(3)

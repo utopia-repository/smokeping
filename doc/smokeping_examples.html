@@ -70,7 +70,7 @@ the proposed changes to the smokeping-users mailing list.</p>
 <dl>
 <dt><strong><a name="item_probe_configuration">Probe configuration</a></strong>
 
-<dd>
+</dt><dd>
 <pre>
  *** Probes ***
  +FPing
@@ -78,18 +78,15 @@ the proposed changes to the smokeping-users mailing list.</p>
 
 </dd><dt><strong><a name="item_probe_explanation">Probe explanation</a></strong>
 
-<dd>
+</dt><dd>
 <p>Here we have just one probe, fping, pinging four hosts.</p>
-
-</dd><dd>
 <p>The fping probe is using the default parameters, some of them supplied
 from the Database section (``step'' and ``pings''), and some of them by
 the probe module.</p>
 
-</li>
 </dd><dt><strong><a name="item_target_configuration">Target configuration</a></strong>
 
-<dd>
+</dt><dd>
 <pre>
  *** Targets ***
  probe = FPing
@@ -118,12 +115,11 @@ the probe module.</p>
 
 </dd><dt><strong><a name="item_target_explanation">Target explanation</a></strong>
 
-<dd>
+</dt><dd>
 <p>The hosts are located in two sites of two hosts each, and the
 configuration has been divided to site sections ('+') and host subsections
 ('++') accordingly.</p>
 
-</li>
 </dd></dl>
 <p>
 </p>
@@ -131,7 +127,7 @@ configuration has been divided to site sections ('+') and host subsections
 <dl>
 <dt><strong>Probe configuration</strong>
 
-<dd>
+</dt><dd>
 <pre>
  *** Probes ***
  + FPing
@@ -150,26 +146,21 @@ configuration has been divided to site sections ('+') and host subsections
 
 </dd><dt><strong>Probe explanation</strong>
 
-<dd>
+</dt><dd>
 <p>Here we have three probes: FPing for the regular ICMP pings,
 DNS for name server latency measurement and EchoPingHttp
 for web servers.</p>
-
-</dd><dd>
 <p>The FPing probe runs with the default parameters, except that the ICMP
 packet size is 1000 bytes instead of the default 56 bytes.</p>
-
-</dd><dd>
 <p>The DNS and EchoPingHttp probes have been configured to be a bit more
 gentle with the servers, as they only do 5 queries (pings) instead of the
 default 20 (or whatever is specified in the Database section). However,
 DNS queries are made more often: 5 queries every 3 minutes instead of
 every 5 minutes.</p>
 
-</li>
 </dd><dt><strong>Target configuration</strong>
 
-<dd>
+</dt><dd>
 <pre>
  *** Targets ***
  probe = FPing
@@ -213,12 +204,11 @@ every 5 minutes.</p>
 
 </dd><dt><strong>Target explanation</strong>
 
-<dd>
+</dt><dd>
 <p>The target tree has been divided by the probe used. This does not have
 to be the case: every target (sub)section can use a different probe,
 and the same probe can be used in different parts of the config tree.</p>
 
-</li>
 </dd></dl>
 <p>
 </p>
@@ -226,7 +216,7 @@ and the same probe can be used in different parts of the config tree.</p>
 <dl>
 <dt><strong>Probe configuration</strong>
 
-<dd>
+</dt><dd>
 <pre>
  *** Probes ***
  + FPing
@@ -241,28 +231,23 @@ and the same probe can be used in different parts of the config tree.</p>
 
 </dd><dt><strong>Probe explanation</strong>
 
-<dd>
+</dt><dd>
 <p>This example demonstrates the concept of probe instances. The FPingLarge
 and FPingNormal probes are independent of each other, they just use
 the same module, FPing. FPingNormal uses the default parameters, and
 so does FPingLarge except for the 5 kilobyte packetsize. Both use the
 same fping binary, and its path is configured FPing top section.</p>
-
-</dd><dd>
 <p>The 'offset' parameters make sure the probes don't run at the same time -
 FPingNormal is run every 'full' 5 minutes (eg. 8:00, 8:05, 8:10 and so on,
 in wallclock time) while FPingLarge is run halfway through these intervals
 (eg. 8:02:30, 8:07:30 etc.)</p>
-
-</dd><dd>
 <p>The top FPing section does not define a probe in itself because it
 has subsections. If we really wanted to have one probe named ``FPing'',
 we could do so by making a subsection by that name.</p>
 
-</li>
 </dd><dt><strong>Target configuration</strong>
 
-<dd>
+</dt><dd>
 <pre>
  *** Targets ***
  probe = FPingNormal
@@ -304,12 +289,11 @@ we could do so by making a subsection by that name.</p>
 
 </dd><dt><strong>Target explanation</strong>
 
-<dd>
+</dt><dd>
 <p>The target section shows two host, myhost1.example and myhost2.example,
 being pinged with two differently sized ICMP packets. This time the tree
 is divided by the target host rather than the probe.</p>
 
-</li>
 </dd></dl>
 <p>
 </p>
@@ -317,7 +301,7 @@ is divided by the target host rather than the probe.</p>
 <dl>
 <dt><strong>Probe configuration</strong>
 
-<dd>
+</dt><dd>
 <pre>
  *** Probes ***
  + Curl
@@ -330,44 +314,33 @@ is divided by the target host rather than the probe.</p>
 
 </dd><dt><strong>Probe explanation</strong>
 
-<dd>
+</dt><dd>
 <p>This example explains the difference between probe- and target-specific
 variables. We use the Curl probe for this.</p>
-
-</dd><dd>
 <p>Every probe supports at least some probe-specific variables. The values
 of these variables are common to all the targets of the probe, and
 they can only be configured in the Probes section. In this case, 
 the probe-specific variables are ``binary'' and ``step''.</p>
-
-</dd><dd>
 <p>Target-specific variables are supported by most probes, the most notable
 exception being the FPing probe and its derivatives. Target-specific
 variables can have different values for different targets. They can be
 configured in both Probes and Targets sections. The values assigned in the
 Probes section function become default values that can be overridden
 in the Targets section.</p>
-
-</dd><dd>
 <p>The documentation of each probe states which of its variables are
 probe-specific and which are target-specific.</p>
-
-</dd><dd>
 <p>In this case the ``urlformat'' variable is a target-specific one.  It is
 also quite uncommon, because it can contain a placeholder for the ``host''
 variable in the Targets section. This is not a general feature, its
 usage is only limited to the ``urlformat'' variable and the ``%host%'' escape.</p>
-
-</dd><dd>
 <p>(The reason why the FPing probe does not support target-specific variables
 is simply the fact that the fping program measures all its targets in one
 go, so they all have the same parameters. The other probes ping their targets
 one at a time.)</p>
 
-</li>
 </dd><dt><strong>Target configuration</strong>
 
-<dd>
+</dt><dd>
 <pre>
  *** Targets ***
  probe = Curl
@@ -412,25 +385,20 @@ one at a time.)</p>
 
 </dd><dt><strong>Target explanation</strong>
 
-<dd>
+</dt><dd>
 <p>The target tree is divided into an HTTP branch and an FTP one.
 The servers ``myhost1.example'' and ``myhost2.example'' are probed
 in both. The third server, ``myhost3.example'', only has an HTTP
 server, and it's in a non-standard port (8080).</p>
-
-</dd><dd>
 <p>The ``urlformat'' variable is specified for the whole FTP branch
 as ``ftp://%host%/''. For the HTTP branch, the default from the
 Probes section is used, except for myhost3, which overrides
 it to tag the port number into the URL.</p>
-
-</dd><dd>
 <p>The myhost3 assignment could just as well have included the hostname
 verbatim (ie. urlformat = <a href="http://myhost3.example:8080/)">http://myhost3.example:8080/)</a> instead of
 using the %host% placeholder, but the host variable would still have
 been required (even though it wouldn't have been used for anything).</p>
 
-</li>
 </dd></dl>
 <p>
 </p>
@@ -438,7 +406,7 @@ been required (even though it wouldn't have been used for anything).</p>
 <dl>
 <dt><strong>Probe configuration</strong>
 
-<dd>
+</dt><dd>
 <pre>
  *** Probes ***
  + FPing
@@ -460,13 +428,12 @@ been required (even though it wouldn't have been used for anything).</p>
 
 </dd><dt><strong>Probe explanation</strong>
 
-<dd>
+</dt><dd>
 <p>This example shows most of the echoping-derived probes in action.</p>
 
-</li>
 </dd><dt><strong>Target configuration</strong>
 
-<dd>
+</dt><dd>
 <pre>
  *** Targets ***
  # default probe
@@ -569,13 +536,12 @@ been required (even though it wouldn't have been used for anything).</p>
 
 </dd><dt><strong>Target explanation</strong>
 
-<dd>
+</dt><dd>
 <p>All the servers are pinged both with ICMP (the FPing probe)
 and their respective echoping probe. The proxy server, www-cache,
 is probed with both HTTP requests and ICP requests for the same
 URL.</p>
 
-</li>
 </dd></dl>
 <p>
 </p>
@@ -583,7 +549,7 @@ URL.</p>
 <dl>
 <dt><strong>Probe configuration</strong>
 
-<dd>
+</dt><dd>
 <pre>
  *** Probes ***
  
@@ -600,14 +566,13 @@ URL.</p>
 
 </dd><dt><strong>Probe explanation</strong>
 
-<dd>
+</dt><dd>
 <p>This is the template configuration file distributed with Smokeping.
 It is included in the examples as well for the sake of completeness.</p>
 
-</li>
 </dd><dt><strong>Target configuration</strong>
 
-<dd>
+</dt><dd>
 <pre>
  *** Targets ***
  
@@ -638,11 +603,10 @@ It is included in the examples as well for the sake of completeness.</p>
 
 </dd><dt><strong>Target explanation</strong>
 
-<dd>
+</dt><dd>
 <p>This is the template configuration file distributed with Smokeping.
 It is included in the examples as well for the sake of completeness.</p>
 
-</li>
 </dd></dl>
 <p>
 </p>

@@ -129,7 +129,7 @@
 .\" ========================================================================
 .\"
 .IX Title "doc::Smokeping::probes::FPing 3"
-.TH doc::Smokeping::probes::FPing 3 "2008-04-26" "2.3.6" "SmokePing"
+.TH doc::Smokeping::probes::FPing 3 "2008-06-10" "2.4.0" "SmokePing"
 .SH "NAME"
 Smokeping::probes::FPing \- FPing Probe for SmokePing
 .SH "SYNOPSIS"
@@ -142,8 +142,9 @@ Smokeping::probes::FPing \- FPing Probe for SmokePing
 \& +FPing
 .Ve
 .PP
-.Vb 9
+.Vb 10
 \& binary = /usr/bin/fping # mandatory
+\& blazemode = true
 \& hostinterval = 1.5
 \& mininterval = 0.001
 \& offset = 50%
@@ -183,6 +184,9 @@ your system yet, you can get it from <http://www.fping.com/>.
 .PP
 The (optional) \fBpacketsize\fR option lets you configure the packetsize for the pings sent.
 .PP
+In \fBblazemode\fR, FPing sends one more ping than requested, and discards
+the first \s-1RTT\s0 value returned as it's likely to be an outlier.
+.PP
 The FPing manpage has the following to say on this topic:
 .PP
 Number of bytes of ping data to send.  The minimum size (normally 12) allows
@@ -202,6 +206,11 @@ The location of your fping binary.
 Example value: /usr/bin/fping
 .Sp
 This setting is mandatory.
+.IP "blazemode" 4
+.IX Item "blazemode"
+Send an extra ping and then discarge the first answer since the first is bound to be an outliner.
+.Sp
+Example value: true
 .IP "hostinterval" 4
 .IX Item "hostinterval"
 The fping \*(L"\-p\*(R" parameter, but in (possibly fractional) seconds rather than
