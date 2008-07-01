@@ -123,9 +123,8 @@ case "$1" in
     log_daemon_msg "Shutting down $DESC" $NAME
 
     set +e
-    start-stop-daemon --oknodo --stop --retry 3 --quiet --pidfile /var/run/smokeping/$NAME.pid --signal 15
-    # Kill speedy_backend processes out there
-    pkill -u www-data speedy_backend
+    start-stop-daemon --oknodo --stop --retry 3 --quiet --pidfile /var/run/smokeping/$NAME.pid --signal 15 \
+      && pkill -u www-data speedy_backend
     STATUS=$?
     set -e
 
