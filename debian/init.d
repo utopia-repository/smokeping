@@ -124,6 +124,8 @@ case "$1" in
 
     set +e
     start-stop-daemon --oknodo --stop --retry 3 --quiet --pidfile /var/run/smokeping/$NAME.pid --signal 15
+    # Force killing of speedy_backend process.
+    pkill -u smokeping speedy_backend
     STATUS=$?
     set -e
 
