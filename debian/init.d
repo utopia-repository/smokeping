@@ -123,14 +123,14 @@ case "$1" in
     log_daemon_msg "Shutting down $DESC" $NAME
 
     set +e
-    start-stop-daemon --oknodo --stop --retry 3 --quiet --pidfile /var/run/smokeping/$NAME.pid --signal 15 \
-      && pkill -u www-data speedy_backend
+    start-stop-daemon --oknodo --stop --retry 3 --quiet --pidfile /var/run/smokeping/$NAME.pid --signal 15
     STATUS=$?
     set -e
 
     if [ "$STATUS" = 0 ]
     then
         rm -f $PIDFILE
+	pkill -u www-data speedy_backend || true
     fi
 
     log_end_msg $STATUS
