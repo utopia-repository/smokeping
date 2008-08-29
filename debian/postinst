@@ -28,8 +28,10 @@ split_config () {
         echo "splitting the old monolithic config into separate sections..." 1>&2
         local found
         local stop
-        local DIR=/etc/smokeping/config.d
+        local DIR
         local sec
+
+        DIR=/etc/smokeping/config.d
         [ -d $DIR ] || mkdir -p $DIR
         for sec in General Alerts Database Presentation Probes Slaves Targets
         do

@@ -2,6 +2,7 @@ smokeping (2.3.6-3) unstable; urgency=low
 
   * Unset LC_ALL in the init script because the daemon needs to 
     reset LC_NUMERIC. (Closes: #489766)
+  * Fix a bashism in the postinst script. Thanks, lintian.
 
  -- Niko Tyni <ntyni@debian.org>  Fri, 29 Aug 2008 18:29:34 +0300
 
