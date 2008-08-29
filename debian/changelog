@@ -1,3 +1,10 @@
+smokeping (2.3.6-3) unstable; urgency=low
+
+  * Unset LC_ALL in the init script because the daemon needs to 
+    reset LC_NUMERIC. (Closes: #489766)
+
+ -- Niko Tyni <ntyni@debian.org>  Fri, 29 Aug 2008 18:29:34 +0300
+
 smokeping (2.3.6-2) unstable; urgency=low
 
   * Kill speedy_backend processes that are running on stop (Closes: #485880)

@@ -33,6 +33,10 @@ DEFAULTS=/etc/default/smokeping
 MODE=master
 DAEMON_ARGS=""
 
+# LC_ALL prevents resetting LC_NUMERIC which in turn interferes
+# with Smokeping internal regexps matching floating point numbers
+unset LC_ALL
+
 # Check whether the binary is still present:
 test -f "$DAEMON" || exit 0
 
