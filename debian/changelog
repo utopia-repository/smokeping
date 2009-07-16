@@ -4,6 +4,8 @@ smokeping (2.3.6-4) UNRELEASED; urgency=low
   * Depend on libconfig-grammar-perl instead of bundling it. (Closes: #531196)
   * Install the perl code in /usr/share/smokeping/lib instead of
     /usr/share/perl5/smokeping.
+  * Downgrade the exim4 | mail-transport agent dependency to a suggestion.
+    (Closes: #520350)
 
  -- Niko Tyni <ntyni@debian.org>  Thu, 16 Jul 2009 22:29:38 +0300
 
