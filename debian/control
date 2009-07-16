@@ -15,7 +15,10 @@ Depends: ${perl:Depends}, ${misc:Depends}, libwww-perl,
  fping (>= 2.4b2-to-ipv6-2), speedy-cgi-perl (>= 2.21-1), 
  debianutils (>= 1.7), adduser, 
  lsb-base (>= 3.0-6), libdigest-hmac-perl, ucf (>= 0.28),
- libconfig-grammar-perl
+ libconfig-grammar-perl,
+ libjs-cropper,
+ libjs-scriptaculous,
+ libjs-prototype
 Recommends: apache2 | httpd, libsocket6-perl, dnsutils, echoping
 Suggests: curl, libauthen-radius-perl, libnet-ldap-perl, libnet-dns-perl, 
  exim4 | mail-transport-agent,

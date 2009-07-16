@@ -7,6 +7,7 @@ smokeping (2.3.6-4) UNRELEASED; urgency=low
   * Downgrade the exim4 | mail-transport agent dependency to a suggestion.
     (Closes: #520350)
   * Remove the obsolete libnet-perl dependency.
+  * Depend on javascript libraries instead of bundling them. (Closes: #475285)
 
  -- Niko Tyni <ntyni@debian.org>  Thu, 16 Jul 2009 22:29:38 +0300
 
