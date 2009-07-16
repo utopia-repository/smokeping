@@ -1,3 +1,9 @@
+smokeping (2.3.6-4) UNRELEASED; urgency=low
+
+  * 
+
+ -- Niko Tyni <ntyni@debian.org>  Thu, 16 Jul 2009 22:29:38 +0300
+
 smokeping (2.3.6-3) unstable; urgency=low
 
   * Unset LC_ALL in the init script because the daemon needs to 
