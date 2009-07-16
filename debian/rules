@@ -35,22 +35,22 @@ install: build-stamp
 	dh_clean -k
 	dh_installdirs
 
-	install -d $(TMP)/usr/share/perl5/smokeping
-	install -m 644 lib/*pm $(TMP)/usr/share/perl5/smokeping
-	rm -f $(TMP)/usr/share/perl5/smokeping/BER.pm
-	rm -f $(TMP)/usr/share/perl5/smokeping/SNMP_*
+	install -d $(TMP)/usr/share/smokeping/lib
+	install -m 644 lib/*pm $(TMP)/usr/share/smokeping/lib
+	rm -f $(TMP)/usr/share/smokeping/lib/BER.pm
+	rm -f $(TMP)/usr/share/smokeping/lib/SNMP_*
 
-	install -d $(TMP)/usr/share/perl5/smokeping/Smokeping
-	install -m 644 lib/Smokeping/*pm $(TMP)/usr/share/perl5/smokeping/Smokeping
+	install -d $(TMP)/usr/share/smokeping/lib/Smokeping
+	install -m 644 lib/Smokeping/*pm $(TMP)/usr/share/smokeping/lib/Smokeping
 
-	install -d $(TMP)/usr/share/perl5/smokeping/Smokeping/probes
-	install -m 644 lib/Smokeping/probes/*pm $(TMP)/usr/share/perl5/smokeping/Smokeping/probes
+	install -d $(TMP)/usr/share/smokeping/lib/Smokeping/probes
+	install -m 644 lib/Smokeping/probes/*pm $(TMP)/usr/share/smokeping/lib/Smokeping/probes
 
-	install -d $(TMP)/usr/share/perl5/smokeping/Smokeping/matchers
-	install -m 644 lib/Smokeping/matchers/*pm $(TMP)/usr/share/perl5/smokeping/Smokeping/matchers
+	install -d $(TMP)/usr/share/smokeping/lib/Smokeping/matchers
+	install -m 644 lib/Smokeping/matchers/*pm $(TMP)/usr/share/smokeping/lib/Smokeping/matchers
 
-	install -d $(TMP)/usr/share/perl5/smokeping/Smokeping/sorters
-	install -m 644 lib/Smokeping/sorters/*pm $(TMP)/usr/share/perl5/smokeping/Smokeping/sorters
+	install -d $(TMP)/usr/share/smokeping/lib/Smokeping/sorters
+	install -m 644 lib/Smokeping/sorters/*pm $(TMP)/usr/share/smokeping/lib/Smokeping/sorters
 
 	install -d $(TMP)/usr/sbin/
 	install -m 755 bin/smokeping.dist $(TMP)/usr/sbin/smokeping

@@ -20,15 +20,14 @@ diff -urNad smokeping-2.2.4~/Makefile smokeping-2.2.4/Makefile
 diff -urNad smokeping-2.2.4~/bin/smokeping.dist smokeping-2.2.4/bin/smokeping.dist
 --- smokeping-2.2.4~/bin/smokeping.dist	2007-09-17 11:04:25.000000000 +0300
 +++ smokeping-2.2.4/bin/smokeping.dist	2007-09-17 11:04:29.000000000 +0300
-@@ -1,12 +1,12 @@
+@@ -1,12 +1,11 @@
 -#!/usr/sepp/bin/perl-5.8.4 -w
 +#!/usr/bin/perl -w
  # -*-perl-*-
  
 -use lib qw(/usr/pack/rrdtool-1.2.23-mo/lib/perl);
 -use lib qw(lib);
-+use lib qw(/usr/share/perl5/smokeping);
-+use lib qw(/usr/share/perl5);
++use lib qw(/usr/share/smokeping/lib);
  
  use Smokeping 2.003006;
   
@@ -46,7 +45,7 @@ diff -urNad smokeping-2.2.4~/bin/tSmoke.dist smokeping-2.2.4/bin/tSmoke.dist
  # Point the lib variables to your implementation
 -use lib qw(lib);
 -use lib "/usr/local/rrdtool-1.0.39/lib/perl";
-+use lib qw(/usr/share/perl5/smokeping);
++use lib qw(/usr/share/smokeping/lib);
  
  use Smokeping 2.003006 ;
  use Net::SMTP;
@@ -125,7 +124,7 @@ diff -urNad smokeping-2.2.4~/htdocs/smokeping.cgi.dist smokeping-2.2.4/htdocs/sm
  
 -use lib qw(/usr/pack/rrdtool-1.0.33-to/lib/perl);
 -use lib qw(/home/oetiker/data/projects/AADJ-smokeping/dist/lib);
-+use lib qw(/usr/share/perl5/smokeping);
++use lib qw(/usr/share/smokeping/lib);
  use CGI::Carp qw(fatalsToBrowser);
  
  use Smokeping 2.003006;
