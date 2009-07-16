@@ -1,6 +1,7 @@
 smokeping (2.3.6-4) UNRELEASED; urgency=low
 
   * Add missing build-dependency on cpio. (Closes: #537026)
+  * Depend on libconfig-grammar-perl instead of bundling it. (Closes: #531196)
 
  -- Niko Tyni <ntyni@debian.org>  Thu, 16 Jul 2009 22:29:38 +0300
 
