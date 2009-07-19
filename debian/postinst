@@ -87,6 +87,20 @@ setup_permissions() {
     chmod 2775 /var/lib/smokeping/__cgi
 }
 
+var_www_migration() {
+    # until the lenny release (2.3.6-3), the CGI wrote the images in /var/www
+    if [ -d /var/www/smokeping ]
+    then
+        for d in images javascript
+        do
+            if [ ! -e /var/www/smokeping/$d ]
+            then
+                ln -s /usr/share/smokeping/www/$d /var/www/smokeping/$d
+            fi
+        done
+    fi
+}
+
 do_ucf() {
     # install the configuration files and register them with ucfr
     [ -d /etc/smokeping ] || mkdir -p /etc/smokeping
@@ -120,6 +134,10 @@ case "$1" in
     then
         split_config "$2"
         migrate_cgi_directory
+    fi
+    if [ -n "$2" ] && dpkg --compare-versions "$2" le "2.3.6-3"
+    then
+        var_www_migration
     fi
     setup_permissions
     do_ucf
