@@ -9,7 +9,7 @@ smokeping (2.3.6-4) UNRELEASED; urgency=low
   * Depend on javascript libraries instead of bundling them. (Closes: #475285)
     + cpio not used anymore. (Closes: #537026)
   * Move away from /var/www but add compatibility symlinks on upgrades.
-    (Closes: #521333)
+    See NEWS.Debian. (Closes: #521333)
 
  -- Niko Tyni <ntyni@debian.org>  Thu, 16 Jul 2009 22:29:38 +0300
 

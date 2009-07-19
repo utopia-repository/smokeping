@@ -1,3 +1,21 @@
+smokeping (2.3.6-4) unstable; urgency=low
+
+  The file hierarchy available to the web server has been moved
+  away from /var/www, which was a non-standard location. The recommended 
+  way to set up the web part of Smokeping is to use the Apache2 configuration
+  supplied in /etc/smokeping/apache2.conf. See the README.Debian file.
+  .
+  Although the upgrade procedure tries to keep old setups working
+  with symlinks, make sure to merge the pathname changes in
+  /etc/smokeping/config.d/pathnames. Deleting /var/www/smokeping
+  afterwards should be safe if you have no manually added content there.
+  .
+  The recommended URL path to the CGI script is now /smokeping/smokeping.cgi
+  rather than /cgi-bin/smokeping.cgi. The latter is now just a symlink,
+  which will be removed after the next stable release ("squeeze").
+
+ -- Niko Tyni <ntyni@debian.org>  Mon, 20 Jul 2009 00:40:20 +0300
+
 smokeping (2.3.5-1) experimental; urgency=low
 
   The configuration file, /etc/smokeping/config, has been split into

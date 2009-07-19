@@ -15,6 +15,17 @@
 
 -- Jose Carlos Garcia Sogo <jsogo@debian.org>
 
+The web server configuration is not done automatically on new installations.
+The recommended way to enable the CGI is 
+
+ ln -s /etc/smokeping/apache2.conf /etc/apache2/conf.d/smokeping
+ invoke-rc.d apache2 restart
+
+See NEWS.Debian for more information on upgrades from older versions of
+the package.
+
+-- Niko Tyni <ntyni@debian.org> Mon, 20 Jul 2009 00:49:18 +0300
+
 If you have problems getting the CGI to reload your configuration
 file after changes, you may have to kill lingering speedy_backend
 processes. See #397609. This should not happen, but I haven't found
