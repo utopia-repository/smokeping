@@ -6,7 +6,10 @@ Uploaders: Niko Tyni <ntyni@debian.org>
 Build-Depends: debhelper (>= 5), dpatch (>= 2.0.9)
 Build-Depends-Indep: librrds-perl, groff-base, libhtml-parser-perl,
  libwww-perl, liburi-perl
-Standards-Version: 3.7.3
+Standards-Version: 3.8.2
+Homepage: http://smokeping.org/
+Vcs-Browser: http://git.debian.org/?p=collab-maint/smokeping.git
+Vcs-Git: git://git.debian.org/git/collab-maint/smokeping.git
 
 Package: smokeping
 Architecture: all

@@ -12,6 +12,8 @@ smokeping (2.3.6-4) UNRELEASED; urgency=low
     See NEWS.Debian. (Closes: #521333)
   * Serve UTF-8 by default. Thanks to Elmar Hoffmann. (Closes: #506978)
   * Don't ship /var/run/smokeping, it will be created at run time.
+  * Upgrade to Standards-Version 3.8.2.
+    + add Homepage, Vcs-Git, and Vcs-Browser information to debian/control. 
 
  -- Niko Tyni <ntyni@debian.org>  Thu, 16 Jul 2009 22:29:38 +0300
 
