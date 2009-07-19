@@ -78,10 +78,10 @@ migrate_cgi_directory () {
 
 setup_permissions() {
     # Smokeping.cgi is run as user www-data, so we need it to be able
-    # to write in /var/www/smokeping and in /var/lib/smokeping/__cgi
+    # to write in /var/cache/smokeping/images and in /var/lib/smokeping/__cgi
 
     chown smokeping:smokeping /var/lib/smokeping
-    chown www-data /var/www/smokeping
+    chown www-data /var/cache/smokeping/images
     chown smokeping /var/run/smokeping
     chown smokeping:www-data /var/lib/smokeping/__cgi
     chmod 2775 /var/lib/smokeping/__cgi

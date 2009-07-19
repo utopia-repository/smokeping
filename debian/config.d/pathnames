@@ -1,6 +1,6 @@
 sendmail = /usr/sbin/sendmail
-imgcache = /var/www/smokeping
-imgurl   = ../smokeping
+imgcache = /var/cache/smokeping/images
+imgurl   = ../smokeping/images
 datadir  = /var/lib/smokeping
 dyndir   = /var/lib/smokeping/__cgi
 piddir   = /var/run/smokeping

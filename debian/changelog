@@ -8,6 +8,7 @@ smokeping (2.3.6-4) UNRELEASED; urgency=low
   * Remove the obsolete libnet-perl dependency.
   * Depend on javascript libraries instead of bundling them. (Closes: #475285)
     + cpio not used anymore. (Closes: #537026)
+  * Move from /var/www to /var/cache/smokeping/images. (Closes: #521333)
 
  -- Niko Tyni <ntyni@debian.org>  Thu, 16 Jul 2009 22:29:38 +0300
 

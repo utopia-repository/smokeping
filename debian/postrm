@@ -23,7 +23,7 @@ case "$1" in
        purge)
 	
 	rm -rf /var/run/smokeping
-	rm -rf /var/www/smokeping
+	rm -rf /var/cache/smokeping
 	rm -rf /var/lib/smokeping
 
         for f in basepage.html smokemail tmail config
