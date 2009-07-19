@@ -75,11 +75,11 @@ install: build-stamp
 	install -d $(TMP)/usr/share/smokeping/cgi-bin
 	install -m 644 htdocs/smokeping.cgi.dist $(TMP)/usr/share/smokeping/cgi-bin/smokeping.cgi
 
-	install -d $(TMP)/usr/share/smokeping/htdocs
-	install -m 644 htdocs/cropper/smokeping-zoom.js $(TMP)/usr/share/smokeping/htdocs/
+	install -d $(TMP)/usr/share/smokeping/www/javascript
+	install -m 644 htdocs/cropper/smokeping-zoom.js $(TMP)/usr/share/smokeping/www/javascript/
 
 	for d in cropper prototype scriptaculous; do \
-		dh_link /usr/share/javascript/$$d /usr/share/smokeping/htdocs/$$d; \
+		dh_link /usr/share/javascript/$$d /usr/share/smokeping/www/javascript/$$d; \
 	done
 
 	install -d $(TMP)/usr/share/doc/$(PACKAGE)/html
