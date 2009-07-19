@@ -5,7 +5,7 @@ Maintainer: Jose Carlos Garcia Sogo <jsogo@debian.org>
 Uploaders: Niko Tyni <ntyni@debian.org>
 Build-Depends: debhelper (>= 5), dpatch (>= 2.0.9)
 Build-Depends-Indep: librrds-perl, groff-base, libhtml-parser-perl,
- libwww-perl, liburi-perl, cpio
+ libwww-perl, liburi-perl
 Standards-Version: 3.7.3
 
 Package: smokeping
