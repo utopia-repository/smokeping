@@ -1,5 +1,4 @@
 usr/sbin
 var/cache/smokeping/images
-var/run/smokeping
 var/lib/smokeping
 var/lib/smokeping/__cgi
