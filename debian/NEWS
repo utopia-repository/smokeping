@@ -13,9 +13,8 @@ smokeping (2.3.6-4) unstable; urgency=low
   The recommended URL path to the CGI script is now /smokeping/smokeping.cgi
   rather than /cgi-bin/smokeping.cgi. The latter is now just a symlink,
   which will be removed after the next stable release ("squeeze").
-
- -- Niko Tyni <ntyni@debian.org>  Mon, 20 Jul 2009 00:40:20 +0300
-
+  .
+  .
   The default character set in /etc/smokeping/config.d/Presentation has
   been changed to UTF-8. If you were relying on the former ISO-8859-15
   setting, just edit the file to reflect this.
