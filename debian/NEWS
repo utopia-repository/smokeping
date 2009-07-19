@@ -16,6 +16,12 @@ smokeping (2.3.6-4) unstable; urgency=low
 
  -- Niko Tyni <ntyni@debian.org>  Mon, 20 Jul 2009 00:40:20 +0300
 
+  The default character set in /etc/smokeping/config.d/Presentation has
+  been changed to UTF-8. If you were relying on the former ISO-8859-15
+  setting, just edit the file to reflect this.
+
+ -- Niko Tyni <ntyni@debian.org>  Mon, 20 Jul 2009 00:54:08 +0300
+
 smokeping (2.3.5-1) experimental; urgency=low
 
   The configuration file, /etc/smokeping/config, has been split into

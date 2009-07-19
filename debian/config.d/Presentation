@@ -1,6 +1,7 @@
 *** Presentation ***
 
 template = /etc/smokeping/basepage.html
+charset  = utf-8
 
 + charts
 
