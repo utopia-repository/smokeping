@@ -73,10 +73,13 @@ install: build-stamp
 	install -m 644 etc/tmail.dist $(TMP)/usr/share/smokeping/etc/
 
 	install -d $(TMP)/usr/share/smokeping/cgi-bin
-	install -m 644 htdocs/smokeping.cgi.dist $(TMP)/usr/share/smokeping/cgi-bin/smokeping.cgi
+	install -m 755 htdocs/smokeping.cgi.dist $(TMP)/usr/share/smokeping/cgi-bin/smokeping.cgi
+	dh_link /usr/share/smokeping/cgi-bin/smokeping.cgi /usr/lib/cgi-bin/smokeping.cgi
 
 	install -d $(TMP)/usr/share/smokeping/www/javascript
 	install -m 644 htdocs/cropper/smokeping-zoom.js $(TMP)/usr/share/smokeping/www/javascript/
+
+	dh_link /var/cache/smokeping/images /usr/share/smokeping/www/images
 
 	for d in cropper prototype scriptaculous; do \
 		dh_link /usr/share/javascript/$$d /usr/share/smokeping/www/javascript/$$d; \
