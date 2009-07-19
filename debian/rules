@@ -59,6 +59,9 @@ install: build-stamp
 	install -d $(TMP)/etc/default
 	install -m 644 debian/defaults $(TMP)/etc/default/smokeping
 
+	install -d $(TMP)/etc/smokeping
+	install -m 644 debian/apache2.conf $(TMP)/etc/smokeping/
+
 	# these are managed with ucf
 	install -d $(TMP)/usr/share/smokeping/etc
 	install -m 644 etc/basepage.html.dist $(TMP)/usr/share/smokeping/etc/
