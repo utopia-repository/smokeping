@@ -11,8 +11,8 @@ smokeping (2.3.6-4) unstable; urgency=low
   afterwards should be safe if you have no manually added content there.
   .
   The recommended URL path to the CGI script is now /smokeping/smokeping.cgi
-  rather than /cgi-bin/smokeping.cgi. The latter is now just a symlink,
-  which will be removed after the next stable release ("squeeze").
+  rather than /cgi-bin/smokeping.cgi. The latter should still work 
+  through a symlink.
   .
   .
   The default character set in /etc/smokeping/config.d/Presentation has
