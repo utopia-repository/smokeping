@@ -86,6 +86,26 @@ setup_permissions() {
     chmod 2775 /var/lib/smokeping/__cgi
 }
 
+setup_apache() {
+    # note that this is only done on initial installations
+    if [ -d /etc/apache2/conf.d ] && \
+       [ ! -e /etc/apache2/conf.d/smokeping ] && \
+       which apache2ctl >/dev/null 2>&1
+    then
+        if apache2ctl configtest 2>/dev/null; then
+            echo "enabling Apache configuration in /etc/apache2/conf.d/smokeping" 1>&2
+            ln -s /etc/smokeping/apache2.conf /etc/apache2/conf.d/smokeping
+            if apache2ctl configtest 2>/dev/null; then
+                invoke-rc.d apache2 force-reload || true
+            fi
+        else
+            echo "broken Apache configuration detected, not enabling /etc/smokeping/apache2.conf" 1>&2
+        fi
+    else
+        echo "non-standard Apache configuration or missing apache2ctl, not enabling /etc/smokeping/apache2.conf" 1>&2
+    fi
+}
+
 var_www_migration() {
     # until the lenny release (2.3.6-3), the CGI wrote the images in /var/www
     if [ -d /var/www/smokeping ]
@@ -137,6 +157,10 @@ case "$1" in
     if [ -n "$2" ] && dpkg --compare-versions "$2" le "2.3.6-3"
     then
         var_www_migration
+    fi
+    if [ -z "$2" ]
+    then
+        setup_apache
     fi
     setup_permissions
     do_ucf

@@ -43,6 +43,11 @@ case "$1" in
 
         [ ! -d /etc/smokeping/config.d ] || rmdir --ignore-fail-on-non-empty --parents /etc/smokeping/config.d
 
+        if [   -L /etc/apache2/conf.d/smokeping ] && \
+           [ ! -e /etc/apache2/conf.d/smokeping ]; then
+            rm -f /etc/apache2/conf.d/smokeping
+        fi
+
 esac
 
 # dh_installdeb will replace this with shell code automatically

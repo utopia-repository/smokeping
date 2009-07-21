@@ -3,7 +3,8 @@ smokeping (2.3.6-4) unstable; urgency=low
   The file hierarchy available to the web server has been moved
   away from /var/www, which was a non-standard location. The recommended 
   way to set up the web part of Smokeping is to use the Apache2 configuration
-  supplied in /etc/smokeping/apache2.conf. See the README.Debian file.
+  supplied in /etc/smokeping/apache2.conf. This is done automatically
+  on new installations, see the README.Debian file.
   .
   Although the upgrade procedure tries to keep old setups working
   with symlinks, make sure to merge the pathname changes in
@@ -19,7 +20,7 @@ smokeping (2.3.6-4) unstable; urgency=low
   been changed to UTF-8. If you were relying on the former ISO-8859-15
   setting, just edit the file to reflect this.
 
- -- Niko Tyni <ntyni@debian.org>  Mon, 20 Jul 2009 00:54:08 +0300
+ -- Niko Tyni <ntyni@debian.org>  Tue, 21 Jul 2009 20:17:24 +0300
 
 smokeping (2.3.5-1) experimental; urgency=low
 

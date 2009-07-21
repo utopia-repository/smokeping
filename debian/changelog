@@ -10,6 +10,8 @@ smokeping (2.3.6-4) UNRELEASED; urgency=low
     + cpio not used anymore. (Closes: #537026)
   * Move away from /var/www but add compatibility symlinks on upgrades.
     See NEWS.Debian. (Closes: #521333)
+    + automatically enable the web server configuration on new installations
+      where possible.
   * Serve UTF-8 by default. Thanks to Elmar Hoffmann. (Closes: #506978)
   * Don't ship /var/run/smokeping, it will be created at run time.
   * Upgrade to Standards-Version 3.8.2.
