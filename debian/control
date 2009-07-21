@@ -22,7 +22,7 @@ Depends: ${perl:Depends}, ${misc:Depends}, libwww-perl,
  libjs-cropper,
  libjs-scriptaculous,
  libjs-prototype
-Recommends: apache2 | httpd, libsocket6-perl, dnsutils, echoping
+Recommends: apache2 | httpd-cgi, libsocket6-perl, dnsutils, echoping
 Suggests: curl, libauthen-radius-perl, libnet-ldap-perl, libnet-dns-perl, 
  exim4 | mail-transport-agent,
  openssh-client, libio-socket-ssl-perl, libnet-telnet-perl

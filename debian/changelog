@@ -14,6 +14,7 @@ smokeping (2.3.6-4) UNRELEASED; urgency=low
   * Don't ship /var/run/smokeping, it will be created at run time.
   * Upgrade to Standards-Version 3.8.2.
     + add Homepage, Vcs-Git, and Vcs-Browser information to debian/control. 
+  * Change the alternate web server recommendation to httpd-cgi as per policy.
 
  -- Niko Tyni <ntyni@debian.org>  Thu, 16 Jul 2009 22:29:38 +0300
 
