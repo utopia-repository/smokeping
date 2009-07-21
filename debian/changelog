@@ -1,4 +1,4 @@
-smokeping (2.3.6-4) UNRELEASED; urgency=low
+smokeping (2.3.6-4) unstable; urgency=low
 
   * Depend on libconfig-grammar-perl instead of bundling it. (Closes: #531196)
   * Install the perl code in /usr/share/smokeping/lib instead of
@@ -18,7 +18,7 @@ smokeping (2.3.6-4) UNRELEASED; urgency=low
     + add Homepage, Vcs-Git, and Vcs-Browser information to debian/control. 
   * Change the alternate web server recommendation to httpd-cgi as per policy.
 
- -- Niko Tyni <ntyni@debian.org>  Thu, 16 Jul 2009 22:29:38 +0300
+ -- Niko Tyni <ntyni@debian.org>  Tue, 21 Jul 2009 21:11:01 +0300
 
 smokeping (2.3.6-3) unstable; urgency=low
 
