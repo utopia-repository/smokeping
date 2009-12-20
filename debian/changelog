@@ -1,9 +1,9 @@
-smokeping (2.3.6-5) UNRELEASED; urgency=low
+smokeping (2.3.6-5) unstable; urgency=medium
 
   * debian/patches/20_html-parser.dpatch: fix an incompatibility with
     recent versions of HTML::Parser. (Closes: #560562)
 
- -- Niko Tyni <ntyni@debian.org>  Sun, 20 Dec 2009 22:23:38 +0200
+ -- Niko Tyni <ntyni@debian.org>  Sun, 20 Dec 2009 22:38:16 +0200
 
 smokeping (2.3.6-4) unstable; urgency=low
 
