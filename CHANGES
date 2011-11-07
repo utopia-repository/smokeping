@@ -1,3 +1,126 @@
+2011/10/30 -- released version 2.6.5
+
+* improved configurability and generate config specific config.dist file
+  by Tim Wild
+
+2011/10/20 -- released version 2.6.4
+
+* fixed gettimeofday() in SSH.pm probe too as noted by Phillip Corchary
+
+2011/10/20 -- released version 2.6.3
+
+* make sure probes call gettimeofday with () as noted by Phillip Corchary
+
+2011/10/11 -- released version 2.6.2
+
+* migrated to github.com/oetiker/SmokePing
+* added missing files from cropper tree
+
+2011/09/28 -- released version 2.6.1
+
+* improved install documentation
+
+2011/09/28 -- released version 2.6.0
+
+* added automake support
+
+* fixed strftime to POSIX::strftime in Smokeping.pm -- reported by Joe Colin
+
+2011/09/26 -- released version 2.5.1
+
+* fixed version number in modules
+
+2011/09/25 -- released version 2.5.0
+
+* in zoom/ajax mode, do not exit ... fastcgis should not quit
+
+* Switch from using SpeedyCGI to FastCGI.
+
+* Added new OpenSSHJunOSPing probe to run ping from a juniper router via
+  ssh.  This work has been sponsored by Juniper.
+
+* Integrated Disman probe ( DISMAN-PING-MIB: RFC Ping ) by Bill Fenner. This
+  work has been sponsored by Juniper.
+  
+* removed smoketrace support. this and more functionality is now provided by
+  remocular (www.remocular.org)
+
+* give more advise when resetting LC_NUMERIC is not successful -- Lee Thompson 
+
+* allow alert patterns with lower AND upper limit  >a<b or >=A%<B% or ...
+  -- tobi idea by Justin LeMay
+
+* new probe for SIP Ping test based on sipsak tool 
+  -- tobi sponsored by ANI Networks
+
+* bandaid fix for timeout issue in CiscoRTTMonEchoICMP probe ...
+  since the probe needs a longer timeout, the basefork parent needs to wait
+  longer too ... a local timeout configurable with higher default should fix
+  this. -- tobi
+
+* make the build system compatible with HTML::Parser >= 3.64 
+  --niko, reported as Debian bug #560562
+
+* update prototype and scriptaculous libraries to make zooming work again on
+  ff3.5, to make it work, make sure to update the basepage.html to include
+
+    cropper/lib/scriptaculous.js?load=builder,effects,dragdrop
+
+ --tobi
+
+* fixed url in alert  messages triggered from slaves. as reported by Nathan
+  Long --tobi
+
+* fix a typo in configuration example 4, spotted by Guglielmo Bondioni
+  <guglielmo.bondioni *gmail.com> --niko
+
+* the Radius probe now has an 'allowreject' variable that makes it treat
+  rejected RADIUS authentications as OK. 
+  Patch by Jeremy Laidman <jlaidman *rebel-it.com.au> --niko
+
+* help --static to work a bit better by fixing the dummy script_name
+  implementation -- tobi
+
+* disable __DIE__ handler inside evals -- tobi
+
+* fix broken FPing.pm error message call -- tobi
+
+* smokeinfo: new tool to extract numeric data from a smokeping installation
+  creation sponsored by Swisscom Hospitality -- tobi
+
+* new matcher:  ExpLoss.pm matcher.
+  It produces an exponential weighted average and supports RMON-like
+  thresholds to obtain stable node status detection. -- Veniamin Konoplev V.Konoplev rssi.ru
+
+
+* let cgi processes die on config change this provides for smoother
+  behaviour than a horde of instances going for a cfg reload. --tobi
+
+* tune speedy parameters for a more reasonable behaviour --tobi
+
+* rewrite storing of multiple slave updates for better performance --tobi
+
+* fix bug in storage of slave updatesL: when the local smokeping daemon
+  running only the first update could be read back, the others were hidden
+  in the storeable. --tobi
+
+* set sig child to IGNORE for automatic reaping of zombies -- tobi
+
+2008/7/24 -- released version 2.4.2
+
+* added strict to both wrappers and fixed some followup errors -- tobi
+
+* kill taint error in Smokeping.pm -- tobi
+
+* better master/slave secrets documentation -- tobi
+
+* do not load :sys_wait_h from POSIX perl module since this seems to
+  be missing in some linux distros and we can do alright without.
+
+2008/6/13 -- released version 2.4.1
+
+* fixed js packaging error ...  s/VERSION/x/ was a bad idea
+
 2008/6/10 -- released version 2.4.0
 
 * building a --static version of the smokeping page is broken. Make

@@ -8,7 +8,9 @@ use Pod::Usage;
 use Digest::MD5 qw(md5_base64);
 use SNMP_util;
 use SNMP_Session;
-use POSIX;
+# enable locale??
+#use locale;
+use POSIX qw(locale_h signal_h sys_wait_h);
 use Smokeping::Config;
 use RRDs;
 use Sys::Syslog qw(:DEFAULT setlogsock);
@@ -26,9 +28,36 @@ setlogsock('unix')
 # make sure we do not end up with , in odd places where one would expect a '.'
 # we set the environment variable so that our 'kids' get the benefit too
 
-$ENV{LC_NUMERIC}='C';
-if (POSIX::setlocale(&POSIX::LC_NUMERIC,"") ne "C") {
-    die("Resetting LC_NUMERIC failed - try removing LC_ALL from the environment");
+$ENV{'LC_NUMERIC'}='C';
+if (setlocale(LC_NUMERIC,"") ne "C") {
+    if ($ENV{'LC_ALL'} eq 'C') {
+        # This has got to be a bug in perl/mod_perl, apache or libc
+        die("Your internalization implementation on your operating system is "
+          . "not responding to your setup of LC_ALL to \"C\" as LC_NUMERIC is "
+          . "coming up as \"" . setlocale(LC_NUMERIC, "") . "\" leaving "
+          . "smokeping unable to compare numbers...");
+    }
+    elsif ($ENV{'LC_ALL'} ne "") {
+        # This error is most likely setup related and easy to fix with proper 
+        # setup of the operating system or multilanguage locale setup.  Hint,
+        # setting LANG is better than setting LC_ALL...
+        die("Resetting LC_NUMERIC failed probably because your international "
+          . "setup of the LC_ALL to \"". $ENV{'LC_ALL'} . "\" is overridding "
+          . "LC_NUMERIC.  Setting LC_ALL is not compatible with smokeping...");
+    }
+    else {
+        # This is pretty nasty to figure out.  Seems there are still lots
+        # of bugs in LOCALE behavior and if you get this error, you are
+        # affected by it.  The worst is when "setlocale" is reading the
+        # environment variables of your webserver and not reading the PERL
+        # %ENV array like it should.
+        die("Something is wrong with the internalization setup of your "
+          . "operating system, webserver, or the perl plugin to your webserver "
+          . "(like mod_perl) and smokeping can not compare numbers correctly.  "
+          . "On unix, check your /etc/locale.gen and run sudo locale-gen, set "
+          . "LC_NUMERIC in your perl plugin config or even your webserver "
+          . "startup script to potentially fix or work around the problem...");
+    }
 }
 
 
@@ -38,7 +67,8 @@ use Smokeping::RRDtools;
 
 # globale persistent variables for speedy
 use vars qw($cfg $probes $VERSION $havegetaddrinfo $cgimode);
-$VERSION="2.004000";
+
+$VERSION = "";
 
 # we want opts everywhere
 my %opt;
@@ -73,7 +103,7 @@ sub dummyCGI::param {
 }
 
 sub dummyCGI::script_name {
-    return wantarray ? () : "";
+    return "sorry_no_script_name_when_running_offline";
 }
 
 sub load_probes ($){
@@ -311,11 +341,14 @@ FOR
                 for(1..$multis){
                     $extra .= "-\$i$_";
                 };
-                /^(==|!=|<|>|<=|>=|\*)(\d+(?:\.\d*)?|U|S|\d*\*)(%?)$/
+                /^(==|!=|<|>|<=|>=|\*)(\d+(?:\.\d*)?|U|S|\d*\*)(%?)(?:(<|>|<=|>=)(\d+(?:\.\d*)?)(%?))?$/
                     or die "ERROR: Alert $al pattern entry '$_' is invalid\n";
                 my $op = $1;
                 my $value = $2;
                 my $perc = $3;
+                my $op2 = $4;
+                my $value2 = $5;
+                my $perc2 = $6;
                 if ($op eq '*') {
                     if ($value =~ /^([1-9]\d*)\*$/) {
                         $value = $1;
@@ -336,17 +369,17 @@ FOR
                 } elsif ($value eq 'U') {
                     if ($op eq '==') {
                         $sub .= "$it        next if defined \$y->[$i$extra];\n";
-                } elsif ($op eq '!=') {
-                    $sub .= "$it        next unless defined \$y->[$i$extra];\n";
-                } else {
-                    die "ERROR: invalid operator $op in connection U in Alert $al definition\n";
-                }
+                    } elsif ($op eq '!=') {
+                        $sub .= "$it        next unless defined \$y->[$i$extra];\n";
+                    } else {
+                        die "ERROR: invalid operator $op in connection U in Alert $al definition\n";
+                    }
                 } elsif ($value eq 'S') {
                     if ($op eq '==') {
                         $sub .= "$it        next unless defined \$y->[$i$extra] and \$y->[$i$extra] eq 'S';\n";
                     } else {
                         die "ERROR: S is only valid with == operator in Alert $al definition\n";
-                }
+                    }
                 } elsif ($value eq '*') {
                     if ($op ne '==') {
                         die "ERROR: operator $op makes no sense with * in Alert $al definition\n";
@@ -354,16 +387,27 @@ FOR
                 } else {
                     if ( $x->{type} eq 'loss') {
                         die "ERROR: loss should be specified in % (alert $al pattern)\n" unless $perc eq "%";
-                } elsif ( $x->{type} eq 'rtt' ) {
-                    $value /= 1000;
-                } else {
-                    die "ERROR: unknown alert type $x->{type}\n";
-                }
+                    } elsif ( $x->{type} eq 'rtt' ) {
+                        $value /= 1000;
+                    } else {
+                        die "ERROR: unknown alert type $x->{type}\n";
+                    }
                     $sub .= <<IF;
 $it        next unless defined \$y->[$i$extra]
 $it                        and \$y->[$i$extra] =~ /^\\d/
-$it                        and \$y->[$i$extra] $op $value;
+$it                        and \$y->[$i$extra] $op $value
 IF
+                    if ($op2){
+                       if ( $x->{type} eq 'loss') {
+                          die "ERROR: loss should be specified in % (alert $al pattern)\n" unless $perc2 eq "%";
+                       } elsif ( $x->{type} eq 'rtt' ) {
+                          $value2 /= 1000;
+                       }                    
+                       $sub  .= <<IF;
+$it                        and \$y->[$i$extra] $op2 $value2            
+IF
+                    }
+                    $sub .= "$it                             ;";
                 }
                 $i++;
             }
@@ -1000,7 +1044,7 @@ sub get_detail ($$$$;$){
     my $tree = shift;
     my $open = shift;
     my $mode = shift || $q->param('displaymode') || 's';
-
+    
     my $phys_tree = $tree;
     my $phys_open = $open;    
     if ($tree->{__tree_link}){
@@ -1326,7 +1370,8 @@ sub get_detail ($$$$;$){
                '--height',$cfg->{Presentation}{detail}{height},
                '--width',$cfg->{Presentation}{detail}{width},
                '--title',$desc.$from,
-               '--rigid','--upper-limit', $max->{$s}{$start},
+               '--rigid',
+               '--upper-limit', $max->{$s}{$start},
                @log,
                '--lower-limit',(@log ? ($max->{$s}{$start} > 0.01) ? '0.001' : '0.0001' : '0'),
                '--vertical-label',$ProbeUnit,
@@ -1376,7 +1421,7 @@ sub get_detail ($$$$;$){
              print "Content-Length: ".length($data)."\n\n";
              print $data;
              unlink "${imgbase}_${end}_${start}.png";
-             exit;
+             return undef;
         } 
         elsif ($mode eq 'n'){ # navigator mode
 #           $page .= qq|<div class="zoom" style="cursor: crosshair;">|;
@@ -1547,7 +1592,16 @@ sub hierarchy_switcher($$){
 sub display_webpage($$){
     my $cfg = shift;
     my $q = shift;
-    my ($path,$slave) = split(/~/,$q->param('target') || '');
+    my $targ = '';
+    if ( $q->param('target') and $q->param('target') !~ /\.\./ and $q->param('target') =~ /(\S+)/){
+        $targ = $1;
+    }
+    my ($path,$slave) = split(/~/,$targ);
+    if ($slave and $slave =~ /(\S+)/){
+        die "ERROR: slave '$slave' is not defined in the '*** Slaves ***' section!\n"
+            unless defined $cfg->{Slaves}{$slave};
+        $slave = $1;
+    }
     my $hierarchy = $q->param('hierarchy');
     die "ERROR: unknown hierarchy $hierarchy\n" 
 	if $hierarchy and not $cfg->{Presentation}{hierarchies}{$hierarchy};
@@ -1797,10 +1851,9 @@ sub check_alerts {
                 $line =~ s|^$base/||;
                 $line =~ s|/host$||;
                 $line =~ s|/|.|g;
-                $line .= "[from $slave]" if $slave;
-                    do_log("Alert $_ $what for $line");
-                my $urlline = $line;
-                $urlline =  $cfg->{General}{cgiurl}."?target=".$line;
+                my $urlline = $cfg->{General}{cgiurl}."?target=".$line;
+                $line .= " [from $slave]" if $slave;
+                do_log("Alert $_ $what for $line");
                 my $loss = "loss: ".join ", ",map {defined $_ ? (/^\d/ ? sprintf "%.0f%%", $_ :$_):"U" } @{$x->{loss}};
                 my $rtt = "rtt: ".join ", ",map {defined $_ ? (/^\d/ ? sprintf "%.0fms", $_*1000 :$_):"U" } @{$x->{rtt}}; 
                         my $time = time;
@@ -1864,7 +1917,7 @@ DOC
                               RTT   => $rtt,
                               COMMENT => $alert->{comment}
                                       },$default_mail) || "Subject: smokeping failed to open mailtemplate '$alert->{mailtemplate}'\n\nsee subject\n";
-                    my $rfc2822stamp =  strftime("%a, %e %b %Y %H:%M:%S %z", @stamp);
+                    my $rfc2822stamp =  POSIX::strftime("%a, %e %b %Y %H:%M:%S %z", @stamp);
                                 my $to = join ",",@to;
                                     sendmail $cfg->{Alerts}{from},$to, <<ALERT;
 To: $to
@@ -3196,6 +3249,11 @@ You can write
 to detect lines that have been losing more than 20% of the packets for two
 periods after startup.
 
+If you want to make sure a value within a certain range you can use two conditions
+in one element
+
+ >45%<=55%
+
 Sometimes it may be that conditions occur at irregular intervals. But still
 you only want to throw an alert if they occur several times within a certain
 amount of times. The operator B<*X*> will ignore up to I<X> values and still
@@ -3610,7 +3668,7 @@ sub daemonize_me ($) {
         open STDERR, '>/dev/null' or die "ERROR: Redirecting STDERR to /dev/null: $!";
         # send warnings and die messages to log
         $SIG{__WARN__} = sub { do_log ((shift)."\n") };
-        $SIG{__DIE__} = sub { do_log ((shift)."\n"); }; 
+        $SIG{__DIE__} = sub { return if $^S; do_log ((shift)."\n"); exit 1 }; 
     }
 }
 
@@ -3709,10 +3767,11 @@ sub daemonize_me ($) {
 sub load_cfg ($;$) { 
     my $cfgfile = shift;
     my $noinit = shift;
-    my $cfmod = (stat $cfgfile)[9] || die "ERROR: calling stat on $cfgfile: $!\n";
+    my $cfmod = (stat $cfgfile)[9] || die "ERROR: loading smokeping configuration file $cfgfile: $!\n";
     # when running under speedy this will prevent reloading on every run
     # if cfgfile has been modified we will still run.
-    if (not defined $cfg or not defined $probes or $cfg->{__last} < $cfmod ){
+    if (not defined $cfg or not defined $probes # or $cfg->{__last} < $cfmod
+        ){
         $cfg = undef;
         my $parser = get_parser;
         $cfg = get_config $parser, $cfgfile;       
@@ -3834,11 +3893,12 @@ ${e}cut
 POD
 
 }
-sub cgi ($) {
+sub cgi ($$) {
+    my $cfgfile = shift;
+    my $q = shift;
     $cgimode = 'yes';
     umask 022;
-    load_cfg shift;
-    my $q=new CGI;
+    load_cfg $cfgfile;
     initialize_cgilog();
     if ($q->param(-name=>'slave')) { # a slave is calling in
         Smokeping::Master::answer_slave($cfg,$q);
@@ -3854,6 +3914,10 @@ sub cgi ($) {
         if (not $q->param('displaymode') or $q->param('displaymode') ne 'a'){ #in ayax mode we do not issue a header YET
         }
         display_webpage $cfg,$q;
+    }
+    if ((stat $cfgfile)[9] > $cfg->{__last}){
+        # we die if the cfgfile is newer than our in memory copy
+        kill -9, $$;
     }
 }
 
