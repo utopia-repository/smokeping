@@ -5,7 +5,7 @@ Maintainer: Antoine Beaupré <anarcat@debian.org>
 Uploaders: Niko Tyni <ntyni@debian.org>, Jose Carlos Garcia Sogo <jsogo@debian.org>
 Build-Depends: debhelper (>= 5), dpatch (>= 2.0.9)
 Build-Depends-Indep: librrds-perl, groff-base, libhtml-parser-perl,
- libwww-perl, liburi-perl
+ libwww-perl, liburi-perl, libcgi-fast-perl, libconfig-grammar-perl
 Standards-Version: 3.8.2
 Homepage: http://smokeping.org/
 Vcs-Browser: http://git.debian.org/?p=collab-maint/smokeping.git
@@ -15,7 +15,7 @@ Package: smokeping
 Architecture: all
 Depends: ${perl:Depends}, ${misc:Depends}, libwww-perl,
  libsnmp-session-perl (>= 0.86), librrds-perl (>= 1.2), liburi-perl,
- fping (>= 2.4b2-to-ipv6-2), speedy-cgi-perl (>= 2.21-1), 
+ fping (>= 2.4b2-to-ipv6-2), libcgi-fast-perl,
  debianutils (>= 1.7), adduser, 
  lsb-base (>= 3.0-6), libdigest-hmac-perl, ucf (>= 0.28),
  libconfig-grammar-perl,
