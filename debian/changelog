@@ -8,6 +8,7 @@ smokeping (2.6.5-1) unstable; urgency=low
     * 20_html-parser.dpatch - obsolete
   * strip down patch:
     * 10_path_changes.dpatch - only fix the HTML paths
+  * switch to 3.0 (quilt) format
 
  -- Antoine Beaupré <anarcat@debian.org>  Sun, 06 Nov 2011 23:18:24 -0500
 
