@@ -1,3 +1,16 @@
+smokeping (2.6.5-1) unstable; urgency=low
+
+  * new upstream release (Closes: #485977).
+  * take over maintainership, leaving previous maintainer as uploader
+    (Closes: #568742).
+  * remove patches:
+    * 15_clean_makefile.dpatch - makefile is now clean
+    * 20_html-parser.dpatch - obsolete
+  * strip down patch:
+    * 10_path_changes.dpatch - only fix the HTML paths
+
+ -- Antoine Beaupré <anarcat@debian.org>  Sun, 06 Nov 2011 23:18:24 -0500
+
 smokeping (2.3.6-5) unstable; urgency=medium
 
   * debian/patches/20_html-parser.dpatch: fix an incompatibility with
