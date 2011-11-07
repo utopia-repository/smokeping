@@ -28,9 +28,12 @@ DOC
               description => <<DOC,
 Integrates FPing as a probe into smokeping. The variable B<binary> must 
 point to your copy of the FPing program.  If it is not installed on 
-your system yet, you can get it from L<http://www.fping.com/>.
+your system yet, you can get a slightly enhanced version from L<www.smokeping.org/pub>.
   
 The (optional) B<packetsize> option lets you configure the packetsize for the pings sent.
+
+In B<blazemode>, FPing sends one more ping than requested, and discards
+the first RTT value returned as it's likely to be an outlier.
 
 The FPing manpage has the following to say on this topic:
 
@@ -41,6 +44,8 @@ timestamp).  The reported received data size includes the IP header
 40 bytes.  Default is 56, as in ping. Maximum is the theoretical maximum IP
 datagram size (64K), though most systems limit this to a smaller,
 system-dependent number.
+
+
 DOC
 		authors => <<'DOC',
 Tobias Oetiker <tobi@oetiker.ch>
@@ -60,15 +65,16 @@ sub new($$$)
 	my $testhost = $self->testhost;
         my $return = `$binary -C 1 $testhost 2>&1`;
         $self->{enable}{S} = (`$binary -h 2>&1` =~ /\s-S\s/);
+        $self->{enable}{O} = (`$binary -h 2>&1` =~ /\s-O\s/);
         croak "ERROR: fping ('$binary -C 1 $testhost') could not be run: $return"
             if $return =~ m/not found/;
         croak "ERROR: FPing must be installed setuid root or it will not work\n" 
             if $return =~ m/only.+root/;
 
         if ($return =~ m/bytes, ([0-9.]+)\sms\s+.*\n.*\n.*:\s+([0-9.]+)/ and $1 > 0){
-            $self->{pingfactor} = 1000 * $1/$2;
+            $self->{pingfactor} = 1000 * $2/$1;
             if ($1 != $2){
-                warn "### fping seems to report in ", $1/$2, " milliseconds (old version?)";
+                warn "### fping seems to report in ", $2/$1, " milliseconds (old version?)";
             }
         } else {
             $self->{pingfactor} = 1000; # Gives us a good-guess default
@@ -115,13 +121,22 @@ sub ping ($){
     push @params, "-i" . int(1000 * $self->{properties}{mininterval});
     push @params, "-p" . int(1000 * $self->{properties}{hostinterval}) if $self->{properties}{hostinterval};
     if ($self->rounds_count == 1 and $self->{properties}{sourceaddress} and not $self->{enable}{S}){
-       do_log("WARNING: your fping binary doesn't support source address setting (-S), I will ignore any sourceaddress configurations - see  http://bugs.debian.org/198486.");
+       $self->do_log("WARNING: your fping binary doesn't support source address setting (-S), I will ignore any sourceaddress configurations - see  http://bugs.debian.org/198486.");
     }
     push @params, "-S$self->{properties}{sourceaddress}" if $self->{properties}{sourceaddress} and $self->{enable}{S};
-            
+
+    if ($self->rounds_count == 1 and $self->{properties}{tos} and not $self->{enable}{O}){
+       $self->do_log("WARNING: your fping binary doesn't support type of service setting (-O), I will ignore any tos configurations.");
+    }
+    push @params, "-O$self->{properties}{tos}" if $self->{properties}{tos} and $self->{enable}{O};
+
+    my $pings =  $self->pings;
+    if (($self->{properties}{blazemode} || '') eq 'true'){
+        $pings++;
+    }
     my @cmd = (
                     $self->binary,
-                    '-C', $self->pings, '-q','-B1','-r1',
+                    '-C', $pings, '-q','-B1','-r1',
 		    @params,
                     @{$self->addresses});
     $self->do_debug("Executing @cmd");
@@ -134,7 +149,9 @@ sub ping ($){
         my @times = split /\s+/;
         my $ip = shift @times;
         next unless ':' eq shift @times; #drop the colon
-        
+        if (($self->{properties}{blazemode} || '') eq 'true'){     
+             shift @times;
+        }
         @times = map {sprintf "%.10e", $_ / $self->{pingfactor}} sort {$a <=> $b} grep /^\d/, @times;
         map { $self->{rtts}{$_} = [@times] } @{$self->{addrlookup}{$ip}} ;
     }
@@ -169,6 +186,12 @@ sub probevars {
 				return undef;
 			},
 			_doc => "The ping packet size (in the range of 12-64000 bytes).",
+
+		},
+		blazemode => {
+			_re => '(true|false)',
+			_example => 'true',
+			_doc => "Send an extra ping and then discarge the first answer since the first is bound to be an outliner.",
 
 		},
 		timeout => {
@@ -210,6 +233,15 @@ DOC
 The fping "-S" parameter . From fping(1):
 
 Set source address.
+DOC
+		},
+		tos => {
+			_re => '\d+|0x[0-9a-zA-Z]+',
+			_example => '0x20',
+			_doc => <<DOC,
+Set the type of service (TOS) of outgoing ICMP packets.
+You need at laeast fping-2.4b2_to3-ipv6 for this to work. Find
+a copy on www.smokeping.org/pub.
 DOC
 		},
 	});
