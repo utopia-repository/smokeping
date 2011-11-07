@@ -16,6 +16,7 @@ The following issues need to be fixed:
 * remove extra files:
 -       rm -f $(TMP)/usr/share/smokeping/lib/BER.pm
 -       rm -f $(TMP)/usr/share/smokeping/lib/SNMP_*
+* review upstream changes since last release, esp. config changes
 
 A lot of the above was taken care of by the old rules file, reuse
 that.
