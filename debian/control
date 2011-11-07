@@ -1,8 +1,8 @@
 Source: smokeping
 Section: net
 Priority: extra
-Maintainer: Jose Carlos Garcia Sogo <jsogo@debian.org>
-Uploaders: Niko Tyni <ntyni@debian.org>
+Maintainer: Antoine Beaupré <anarcat@debian.org>
+Uploaders: Niko Tyni <ntyni@debian.org>, Jose Carlos Garcia Sogo <jsogo@debian.org>
 Build-Depends: debhelper (>= 5), dpatch (>= 2.0.9)
 Build-Depends-Indep: librrds-perl, groff-base, libhtml-parser-perl,
  libwww-perl, liburi-perl
