@@ -13,3 +13,9 @@ The following issues need to be fixed:
 - etc/smokeping/config.dist and fellows
 * examples are installed in etc/smokeping/examples, they should be in
   usr/share/doc/smokeping/examples
+* remove extra files:
+-       rm -f $(TMP)/usr/share/smokeping/lib/BER.pm
+-       rm -f $(TMP)/usr/share/smokeping/lib/SNMP_*
+
+A lot of the above was taken care of by the old rules file, reuse
+that.
