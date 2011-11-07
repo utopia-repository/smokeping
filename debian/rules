@@ -1,144 +1,24 @@
 #!/usr/bin/make -f
+# -*- makefile -*-
 # Sample debian/rules that uses debhelper.
-# GNU copyright 1997 to 1999 by Joey Hess.
+#
+# This file was originally written by Joey Hess and Craig Small.
+# As a special exception, when this file is copied by dh-make into a
+# dh-make output file, you may use that output file without restriction.
+# This special exception was added by Craig Small in version 0.37 of dh-make.
+#
+# Modified to make a template file for a multi-binary package with separated
+# build-arch and build-indep targets  by Bill Allombert 2001
 
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
-PACKAGE=smokeping
-TMP=$(CURDIR)/debian/$(PACKAGE)
+# This has to be exported to make some magic below work.
+export DH_OPTIONS
 
-include /usr/share/dpatch/dpatch.make
+override_dh_auto_configure:
+	autoconf
+	./configure --prefix=/usr --with-htdocs-dir=/usr/share/smokeping --bindir=/usr/sbin --sysconfdir=/etc/smokeping --libdir=/usr/lib/perl5
 
-build: build-stamp
-build-stamp: patch-stamp
-
-	$(MAKE) docdirs man html txt rename-man
-	touch build-stamp
-
-clean: clean-patched unpatch
-
-clean-patched:
-	dh_testdir
-	dh_testroot
-	
-	dh_clean
-
-	$(MAKE) killdoc
-	$(RM) doc/pod2htm[di].tmp
-
-	rm -f build-stamp
-	
-install: build-stamp
-	dh_testdir
-	dh_testroot
-	dh_clean -k
-	dh_installdirs
-
-	install -d $(TMP)/usr/share/smokeping/lib
-	install -m 644 lib/*pm $(TMP)/usr/share/smokeping/lib
-	rm -f $(TMP)/usr/share/smokeping/lib/BER.pm
-	rm -f $(TMP)/usr/share/smokeping/lib/SNMP_*
-
-	install -d $(TMP)/usr/share/smokeping/lib/Smokeping
-	install -m 644 lib/Smokeping/*pm $(TMP)/usr/share/smokeping/lib/Smokeping
-
-	install -d $(TMP)/usr/share/smokeping/lib/Smokeping/probes
-	install -m 644 lib/Smokeping/probes/*pm $(TMP)/usr/share/smokeping/lib/Smokeping/probes
-
-	install -d $(TMP)/usr/share/smokeping/lib/Smokeping/matchers
-	install -m 644 lib/Smokeping/matchers/*pm $(TMP)/usr/share/smokeping/lib/Smokeping/matchers
-
-	install -d $(TMP)/usr/share/smokeping/lib/Smokeping/sorters
-	install -m 644 lib/Smokeping/sorters/*pm $(TMP)/usr/share/smokeping/lib/Smokeping/sorters
-
-	install -d $(TMP)/usr/sbin/
-	install -m 755 bin/smokeping.dist $(TMP)/usr/sbin/smokeping
-	install -m 755 bin/tSmoke.dist $(TMP)/usr/sbin/tSmoke
-
-	install -d $(TMP)/etc/default
-	install -m 644 debian/defaults $(TMP)/etc/default/smokeping
-
-	install -d $(TMP)/etc/smokeping
-	install -m 644 debian/apache2.conf $(TMP)/etc/smokeping/
-
-	# these are managed with ucf
-	install -d $(TMP)/usr/share/smokeping/etc
-	install -m 644 etc/basepage.html.dist $(TMP)/usr/share/smokeping/etc/
-	install -m 644 debian/basepage.html.dist.md5sum $(TMP)/usr/share/smokeping/etc/
-	install -m 644 debian/default-config $(TMP)/usr/share/smokeping/etc/
-	install -m 644 debian/default-config.md5sum $(TMP)/usr/share/smokeping/etc/
-	install -d $(TMP)/usr/share/smokeping/etc/config.d
-	install -m 644 debian/config.d/* $(TMP)/usr/share/smokeping/etc/config.d/
-	cp -R debian/oldconfigs $(TMP)/usr/share/smokeping/oldconfigs
-	cp -R debian/config.d.md5sums $(TMP)/usr/share/smokeping/etc/config.d.md5sums
-	install -m 644 etc/smokemail.dist $(TMP)/usr/share/smokeping/etc/
-	install -m 644 etc/tmail.dist $(TMP)/usr/share/smokeping/etc/
-
-	install -d $(TMP)/usr/share/smokeping/cgi-bin
-	install -m 755 htdocs/smokeping.cgi.dist $(TMP)/usr/share/smokeping/cgi-bin/smokeping.cgi
-	dh_link /usr/share/smokeping/cgi-bin/smokeping.cgi /usr/lib/cgi-bin/smokeping.cgi
-
-	install -d $(TMP)/usr/share/smokeping/www/javascript
-	install -m 644 htdocs/cropper/smokeping-zoom.js $(TMP)/usr/share/smokeping/www/javascript/
-
-	dh_link /var/cache/smokeping/images /usr/share/smokeping/www/images
-
-	for d in cropper prototype scriptaculous; do \
-		dh_link /usr/share/javascript/$$d /usr/share/smokeping/www/javascript/$$d; \
-	done
-
-	install -d $(TMP)/usr/share/doc/$(PACKAGE)/html
-	install -d $(TMP)/usr/share/doc/$(PACKAGE)/html/Smokeping
-	install -d $(TMP)/usr/share/doc/$(PACKAGE)/html/Smokeping/probes
-	install -d $(TMP)/usr/share/doc/$(PACKAGE)/html/Smokeping/matchers
-	install -d $(TMP)/usr/share/doc/$(PACKAGE)/html/Smokeping/sorters
-	install -d $(TMP)/usr/share/doc/$(PACKAGE)/txt
-	install -d $(TMP)/usr/share/doc/$(PACKAGE)/txt/Smokeping
-	install -d $(TMP)/usr/share/doc/$(PACKAGE)/txt/Smokeping/probes
-	install -d $(TMP)/usr/share/doc/$(PACKAGE)/txt/Smokeping/matchers
-	install -d $(TMP)/usr/share/doc/$(PACKAGE)/txt/Smokeping/sorters
-
-	install -m 644 doc/*.txt $(TMP)/usr/share/doc/$(PACKAGE)/txt
-	install -m 644 doc/Smokeping/*.txt $(TMP)/usr/share/doc/$(PACKAGE)/txt/Smokeping
-	install -m 644 doc/Smokeping/probes/*.txt $(TMP)/usr/share/doc/$(PACKAGE)/txt/Smokeping/probes
-	install -m 644 doc/Smokeping/matchers/*.txt $(TMP)/usr/share/doc/$(PACKAGE)/txt/Smokeping/matchers
-	install -m 644 doc/Smokeping/sorters/*.txt $(TMP)/usr/share/doc/$(PACKAGE)/txt/Smokeping/sorters
-	
-	install -m 644 doc/*.html $(TMP)/usr/share/doc/$(PACKAGE)/html
-	install -m 644 doc/Smokeping/*.html $(TMP)/usr/share/doc/$(PACKAGE)/html/Smokeping
-	install -m 644 doc/Smokeping/probes/*.html $(TMP)/usr/share/doc/$(PACKAGE)/html/Smokeping/probes
-	install -m 644 doc/Smokeping/matchers/*.html $(TMP)/usr/share/doc/$(PACKAGE)/html/Smokeping/matchers
-	install -m 644 doc/Smokeping/sorters/*.html $(TMP)/usr/share/doc/$(PACKAGE)/html/Smokeping/sorters
-
-	for s in 1 3 5 7;\
-	do\
-		install -d $(TMP)/usr/share/man/man$$s;\
-		find doc -path doc/Config -prune -o \( -name \*.$$s -print \) | \
-		 while read f; do install -m 644 $$f $(TMP)/usr/share/man/man$$s; done ; \
-	done
-
-binary-indep: build install
-	dh_testdir
-	dh_testroot
-	dh_installdocs
-	dh_installexamples
-
-	# We should start later than ssh (20), so the SSH probe can test against localhost.
-	# Just in case, delay initialization even after apache (91).
-	dh_installinit -- defaults 92 20
-
-	dh_installman
-	dh_installchangelogs CHANGES
-	dh_link
-	dh_strip
-	dh_compress
-	dh_fixperms
-	dh_perl
-	dh_installdeb
-	dh_gencontrol
-	dh_md5sums
-	dh_builddeb
-
-binary: binary-indep
-.PHONY: clean binary-indep binary install build
+%:
+	dh $@ #DH7_ADDON#
