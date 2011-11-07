@@ -7,5 +7,5 @@ Description: fix path for perl libs
  EXTRA_DIST = $(PM) $(SP) $(SORT) $(PROBE) $(MATCH)
  
 -perllibdir = $(prefix)/lib
-+perllibdir = $(prefix)/lib/perl5
++perllibdir = $(prefix)/share/perl5
  nobase_perllib_DATA = $(EXTRA_DIST)
