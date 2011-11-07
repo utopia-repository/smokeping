@@ -1,0 +1,11 @@
+Description: fix path for perl libs
+
+--- smokeping-2.6.5.orig/lib/Makefile.am
++++ smokeping-2.6.5/lib/Makefile.am
+@@ -31,5 +31,5 @@ MATCH := $(wildcard Smokeping/matchers/*
+ 
+ EXTRA_DIST = $(PM) $(SP) $(SORT) $(PROBE) $(MATCH)
+ 
+-perllibdir = $(prefix)/lib
++perllibdir = $(prefix)/lib/perl5
+ nobase_perllib_DATA = $(EXTRA_DIST)
