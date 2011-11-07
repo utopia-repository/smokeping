@@ -1,0 +1,15 @@
+This package is being rebuilt with latest packaging tricks (dh7 and
+quilt) and with the latest upstream versions. Things may not work at
+all right now.
+
+The following issues need to be fixed:
+
+* this needs testing! no way this really works now
+* fast-cgi should be default
+* cgi should be in /usr/lib/cgi-bin/smokeping.cgi
+* docbase is screwed up, docs is all man now?
+* lots of .dist files are installed, install real configs by default:
+- usr/share/smokeping/smokeping.fcgi.dist
+- etc/smokeping/config.dist and fellows
+* examples are installed in etc/smokeping/examples, they should be in
+  usr/share/doc/smokeping/examples
