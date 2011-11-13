@@ -8,10 +8,11 @@ This doesn't need to be sent upstream
  # since all files under cgi-bin will be executed ... this is not
  # good for images.
 -imgcache = @prefix@/cache
-+imgcache = /var/cache/smokeping
- imgurl   = cache
+-imgurl   = cache
 -datadir  = @prefix@/data
 -piddir  = @prefix@/var
++imgcache = /var/cache/smokeping/images
++imgurl   = ../smokeping/images
 +datadir  = /var/lib/smokeping
 +piddir  = /var/run/smokeping
  cgiurl   = http://some.url/smokeping.cgi
@@ -31,10 +32,6 @@ This doesn't need to be sent upstream
  
  + charts
  
-diff --git a/etc/config.dist.in b/etc/config.dist.in
-index 6d7bce9..8a6c8be 100644
---- a/etc/config.dist.in
-+++ b/etc/config.dist.in
 @@ -105,10 +105,10 @@ unison_tolerance = 2
  
  + FPing
