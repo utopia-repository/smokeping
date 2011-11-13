@@ -5,27 +5,20 @@ Author: Antoine Beaupré <anarcat@debian.org>
 
 --- smokeping-2.6.5.orig/etc/config.dist.in
 +++ smokeping-2.6.5/etc/config.dist.in
-@@ -105,17 +105,17 @@ unison_tolerance = 2
- 
- + FPing
- 
--binary = /usr/sbin/fping
-+binary = /usr/bin/fping
+@@ -109,13 +109,13 @@ binary = /usr/sbin/fping
  
  *** Slaves ***
--secrets=@prefix@/etc/smokeping_secrets.dist
+ secrets=@prefix@/etc/smokeping_secrets.dist
 -+boomer
 -display_name=boomer
 -color=0000ff
--
--+slave2
--display_name=another
--color=00ff00
-+#secrets=/etc/smokeping/smokeping_secrets
 +#+boomer
 +#display_name=boomer
 +#color=0000ff
-+
+ 
+-+slave2
+-display_name=another
+-color=00ff00
 +#+slave2
 +#display_name=another
 +#color=00ff00
