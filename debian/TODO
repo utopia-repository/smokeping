@@ -6,13 +6,7 @@ The following issues need to be fixed:
 
 * this needs testing! no way this really works now
 * fast-cgi should be default
-* cgi should be in /usr/lib/cgi-bin/smokeping.cgi
 * docbase is screwed up, docs is all man now?
-* lots of .dist files are installed, install real configs by default:
-- usr/share/smokeping/smokeping.fcgi.dist
-* remove extra files:
--       rm -f $(TMP)/usr/share/smokeping/lib/BER.pm
--       rm -f $(TMP)/usr/share/smokeping/lib/SNMP_*
 * review upstream changes since last release, esp. config changes
 
 A lot of the above was taken care of by the old rules file, reuse
