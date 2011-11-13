@@ -9,7 +9,7 @@ echo "splitting the monolithic config into separate sections..." 1>&2
 for sec in General Alerts Database Presentation Probes Slaves Targets
 do
     if [ ! -f ${DESTDIR}/etc/smokeping/config.d/$sec ]; then
-       sed -n "1,/^\*\*\* $sec \*\*\*/{h;d}; \${g;p;q}; /^\*\*\*/{g;p;q}; H" \
+       sed -n "0,/^\*\*\* $sec \*\*\*/{h;d}; \${g;p;q}; /^\*\*\*/{g;p;q}; H" \
        < ${DESTDIR}/etc/smokeping/config > ${DESTDIR}/etc/smokeping/config.d/$sec
     fi
 done
