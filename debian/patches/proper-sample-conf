@@ -1,6 +1,6 @@
 Description: setup a proper sample configuration
- This assumes that fping is in /usr/bin, disables slaves and setups
- targets that are sure to work (no slaves, localhost).
+ This disables slaves and setups targets that are sure to work (no
+ slaves, localhost).
 Author: Antoine Beaupré <anarcat@debian.org>
 
 --- smokeping-2.6.5.orig/etc/config.dist.in
