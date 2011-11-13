@@ -31,7 +31,7 @@ PIDFILE=/var/run/smokeping/$NAME.pid
 DAEMON_USER=smokeping
 DEFAULTS=/etc/default/smokeping
 MODE=master
-DAEMON_ARGS=""
+DAEMON_ARGS="--config=/etc/smokeping/config"
 
 # LC_ALL prevents resetting LC_NUMERIC which in turn interferes
 # with Smokeping internal regexps matching floating point numbers
