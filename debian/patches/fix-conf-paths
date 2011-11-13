@@ -44,7 +44,7 @@ index 6d7bce9..8a6c8be 100644
  
  *** Slaves ***
 -secrets=@prefix@/etc/smokeping_secrets.dist
-+secrets=/etc/smokeping_secrets
++secrets=/etc/smokeping/smokeping_secrets
  #+boomer
  #display_name=boomer
  #color=0000ff
