@@ -53,27 +53,6 @@ setup_apache() {
     fi
 }
 
-do_ucf() {
-    # install the configuration files and register them with ucfr
-    [ -d /etc/smokeping ] || mkdir -p /etc/smokeping
-    for f in basepage.html smokemail tmail
-    do
-        ucf --debconf-ok --three-way /usr/share/smokeping/etc/${f}.dist /etc/smokeping/$f
-        ucfr smokeping /etc/smokeping/$f
-    done
-
-    [ -d /etc/smokeping/config.d ] || mkdir -p /etc/smokeping/config.d
-    for f in /usr/share/smokeping/etc/config.d/*
-    do
-        ucf --debconf-ok --three-way --src-dir /usr/share/smokeping/etc/config.d.md5sums/ \
-            $f /etc/smokeping/config.d/$(basename $f)
-        ucfr smokeping /etc/smokeping/config.d/$(basename $f)
-    done
-
-    # do the main config last so the admin won't be quite so surprised
-    ucf --debconf-ok --three-way /usr/share/smokeping/etc/default-config /etc/smokeping/config
-    ucfr smokeping /etc/smokeping/config
-}
 
 # OK, let's go
 case "$1" in
@@ -86,7 +65,6 @@ case "$1" in
         setup_apache
     fi
     setup_permissions
-    do_ucf
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
