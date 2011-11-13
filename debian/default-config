@@ -5,3 +5,4 @@
 @include /etc/smokeping/config.d/Probes
 @include /etc/smokeping/config.d/Slaves
 @include /etc/smokeping/config.d/Targets
+@include /etc/smokeping/config.d/pathnames
