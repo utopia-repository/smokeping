@@ -6,7 +6,6 @@ The following issues need to be fixed:
 
 * this needs testing! no way this really works now
 * fast-cgi should be default
-* docbase is screwed up, docs is all man now?
 * review upstream changes since last release, esp. config changes
 
 A lot of the above was taken care of by the old rules file, reuse
