@@ -29,8 +29,6 @@ override_dh_auto_install:
 	rm -f $(CURDIR)/debian/smokeping/usr/share/perl5/BER.pm $(TMP)/usr/share/perl5/SNMP_*
 	mv $(CURDIR)/debian/smokeping/usr/sbin/smokeping_cgi $(CURDIR)/debian/smokeping/usr/lib/cgi-bin/smokeping.cgi
 	install -m 644 $(CURDIR)/debian/apache2.conf $(CURDIR)/debian/smokeping/etc/smokeping
-	install -d $(CURDIR)/debian/smokeping/usr/share/smokeping/etc/config.d
-	install -m 644 $(CURDIR)/debian/config.d/* $(CURDIR)/debian/smokeping/usr/share/smokeping/etc/config.d/
 	$(CURDIR)/debian/split_config $(CURDIR)/debian/smokeping
 
 %:
