@@ -25,7 +25,7 @@ override_dh_auto_configure:
 override_dh_auto_install:
 	dh_auto_install
 	mv $(CURDIR)/debian/smokeping/usr/share/doc/smokeping/*.dist $(CURDIR)/debian/smokeping/etc/smokeping/
-	rename 's/\.dist$$//' $(CURDIR)/debian/smokeping/etc/smokeping/*.dist
+	rename 's/\.dist$$//' $(CURDIR)/debian/smokeping/etc/smokeping/*.dist $(CURDIR)/debian/smokeping/usr/share/smokeping/smokeping.fcgi.dist
 
 %:
 	dh $@ #DH7_ADDON#
