@@ -4,9 +4,9 @@
 #
 ### BEGIN INIT INFO
 # Provides:          smokeping
-# Required-Start:    $syslog $network
+# Required-Start:    $syslog $network $remote_fs
 # Should-Start:      sshd apache
-# Required-Stop:     $syslog $network
+# Required-Stop:     $syslog $network $remote_fs
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
 # Short-Description: Start or stop the smokeping latency logging system daemon
