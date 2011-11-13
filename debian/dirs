@@ -1,4 +1,5 @@
 etc/smokeping
+etc/smokeping/config.d
 usr/sbin
 var/cache/smokeping/images
 var/lib/smokeping
