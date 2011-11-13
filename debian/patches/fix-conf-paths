@@ -1,5 +1,6 @@
 Description: use Debian paths instead of silly ones
 
+This doesn't need to be sent upstream
 --- smokeping-2.6.5.orig/etc/config.dist.in
 +++ smokeping-2.6.5/etc/config.dist.in
 @@ -7,13 +7,13 @@ sendmail = @SENDMAIL@
@@ -30,3 +31,20 @@ Description: use Debian paths instead of silly ones
  
  + charts
  
+diff --git a/etc/config.dist.in b/etc/config.dist.in
+index 6d7bce9..8a6c8be 100644
+--- a/etc/config.dist.in
++++ b/etc/config.dist.in
+@@ -105,10 +105,10 @@ unison_tolerance = 2
+ 
+ + FPing
+ 
+-binary = /usr/sbin/fping
++binary = /usr/bin/fping
+ 
+ *** Slaves ***
+-secrets=@prefix@/etc/smokeping_secrets.dist
++secrets=/etc/smokeping_secrets
+ #+boomer
+ #display_name=boomer
+ #color=0000ff
