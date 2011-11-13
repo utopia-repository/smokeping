@@ -28,9 +28,9 @@ override_dh_auto_install:
 	dh_auto_install
 
 	rm -r $(TMP)/usr/share/smokeping/www/cropper
-	dh_link /var/cache/smokeping/images $(TMP)/usr/share/smokeping/www/images
+	dh_link /var/cache/smokeping/images /usr/share/smokeping/www/images
 	for d in cropper prototype scriptaculous; do \
-	        dh_link /usr/share/javascript/$$d $(TMP)/usr/share/smokeping/www/$$d; \
+	        dh_link /usr/share/javascript/$$d /usr/share/smokeping/www/$$d; \
 	done
 
 	mv $(TMP)/usr/share/doc/smokeping/*.dist $(TMP)/etc/smokeping/
