@@ -11,6 +11,9 @@ smokeping (2.6.5-1) unstable; urgency=low
   may have problems migrating your configuration. Make sure you at least
   hit 2.3.6 packages to have a smooth upgrade as some compatibility bits
   have been removed.
+  .
+  This package has not been well tested yet and may break your
+  installation.
 
  -- Antoine Beaupré <anarcat@debian.org>  Sun, 13 Nov 2011 18:28:22 -0500
 
