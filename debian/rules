@@ -42,6 +42,7 @@ override_dh_auto_install:
 	install -m 644 $(CURDIR)/debian/config.d/pathnames $(TMP)/etc/smokeping/config.d
 	install -m 644 $(CURDIR)/debian/config.d/General $(TMP)/etc/smokeping/config.d
 	install -m 644 $(CURDIR)/debian/default-config $(TMP)/etc/smokeping/config
+	sed -i 's#template =.*#template = /etc/smokeping/basepage.html#' $(TMP)/etc/smokeping/config.d/Presentation
 
 %:
 	dh $@
