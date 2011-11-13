@@ -1,0 +1,66 @@
+Description: setup a proper sample configuration
+ This assumes that fping is in /usr/bin, disables slaves and setups
+ targets that are sure to work (no slaves, localhost).
+Author: Antoine Beaupré <anarcat@debian.org>
+
+--- smokeping-2.6.5.orig/etc/config.dist.in
++++ smokeping-2.6.5/etc/config.dist.in
+@@ -105,17 +105,17 @@ unison_tolerance = 2
+ 
+ + FPing
+ 
+-binary = /usr/sbin/fping
++binary = /usr/bin/fping
+ 
+ *** Slaves ***
+-secrets=@prefix@/etc/smokeping_secrets.dist
+-+boomer
+-display_name=boomer
+-color=0000ff
+-
+-+slave2
+-display_name=another
+-color=00ff00
++#secrets=/etc/smokeping/smokeping_secrets
++#+boomer
++#display_name=boomer
++#color=0000ff
++
++#+slave2
++#display_name=another
++#color=00ff00
+ 
+ *** Targets ***
+ 
+@@ -126,21 +126,16 @@ title = Network Latency Grapher
+ remark = Welcome to the SmokePing website of xxx Company. \
+          Here you will learn all about the latency of our network.
+ 
+-+ Test
+-menu= Targets
+-#parents = owner:/Test/James location:/
+++ Local
+ 
+-++ James
++menu = Local
++title = Local Network
++#parents = owner:/Test/James location:/
+ 
+-menu = James
+-title =James
+-alerts = someloss
+-slaves = boomer slave2
+-host = james.address
+-
+-++ MultiHost
+-
+-menu = Multihost
+-title = James and James as seen from Boomer
+-host = /Test/James /Test/James~boomer
++++ LocalMachine
+ 
++menu = Local Machine
++title = This host
++host = localhost
++#alerts = someloss
++#slaves = boomer slave2
