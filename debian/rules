@@ -26,11 +26,11 @@ override_dh_auto_install:
 	dh_auto_install
 	mv $(CURDIR)/debian/smokeping/usr/share/doc/smokeping/*.dist $(CURDIR)/debian/smokeping/etc/smokeping/
 	rename 's/\.dist$$//' $(CURDIR)/debian/smokeping/etc/smokeping/*.dist $(CURDIR)/debian/smokeping/usr/share/smokeping/smokeping.fcgi.dist
-	rm -f $(CURDIR)/debian/smokeping/usr/share/smokeping/lib/BER.pm $(TMP)/usr/share/smokeping/lib/SNMP_*
+	rm -f $(CURDIR)/debian/smokeping/usr/share/perl5/BER.pm $(TMP)/usr/share/perl5/SNMP_*
 	mv $(CURDIR)/debian/smokeping/usr/sbin/smokeping_cgi $(CURDIR)/debian/smokeping/usr/lib/cgi-bin/smokeping.cgi
 	install -m 644 $(CURDIR)/debian/apache2.conf $(CURDIR)/debian/smokeping/etc/smokeping
 	install -d $(CURDIR)/debian/smokeping/usr/share/smokeping/etc/config.d
 	install -m 644 $(CURDIR)/debian/config.d/* $(CURDIR)/debian/smokeping/usr/share/smokeping/etc/config.d/
 
 %:
-	dh $@ #DH7_ADDON#
+	dh $@
