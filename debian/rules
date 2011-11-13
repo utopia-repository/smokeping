@@ -19,7 +19,9 @@ export DH_OPTIONS
 override_dh_auto_configure:
 	autoconf
 	automake
-	./configure --prefix=/usr --with-htdocs-dir=/usr/share/smokeping --bindir=/usr/sbin --sysconfdir=/etc/smokeping
+	./configure --prefix=/usr --with-htdocs-dir=/usr/share/smokeping --bindir=/usr/sbin --sysconfdir=/usr/share/doc/smokeping/
+	mv $(CURDIR)/debian/smokeping/usr/share/doc/smokeping/*.dist $(CURDIR)/debian/smokeping/etc/smokeping/
+	rename 's/\.dist$//' $(CURDIR)/debian/smokeping/etc/smokeping/*.dist
 
 %:
 	dh $@ #DH7_ADDON#
