@@ -39,7 +39,8 @@ override_dh_auto_install:
 	mv $(TMP)/usr/sbin/smokeping_cgi $(TMP)/usr/lib/cgi-bin/smokeping.cgi
 	install -m 644 $(CURDIR)/debian/apache2.conf $(TMP)/etc/smokeping
 	$(CURDIR)/debian/split_config $(TMP)
-	cp $(CURDIR)/debian/default-config $(TMP)/etc/smokeping/config
+	install -m 644 $(CURDIR)/debian/config.d/pathnames $(TMP)/etc/smokeping/config.d
+	install -m 644 $(CURDIR)/debian/default-config $(TMP)/etc/smokeping/config
 
 %:
 	dh $@
