@@ -1,4 +1,4 @@
-smokeping (2.6.5-1) UNRELEASED; urgency=low
+smokeping (2.6.5-1) experimental; urgency=low
 
   * new upstream release (Closes: #485977).
   * take over maintainership, leaving previous maintainer as uploader
