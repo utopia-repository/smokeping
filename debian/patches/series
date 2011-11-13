@@ -1,3 +1,4 @@
 path_changes
 fix-perl-lib
 fcgi_destdir
+fix-js-prefix

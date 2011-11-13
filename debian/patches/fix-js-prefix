@@ -1,0 +1,19 @@
+diff --git a/etc/basepage.html.dist b/etc/basepage.html.dist
+index ff347c1..f4414c5 100644
+--- a/etc/basepage.html.dist
++++ b/etc/basepage.html.dist
+@@ -53,10 +53,10 @@ a.menulink:hover       {
+ -->
+ </STYLE>
+ 
+-<script src="cropper/lib/prototype.js" type="text/javascript"></script>      
+-<script src="cropper/lib/scriptaculous.js?load=builder,effects,dragdrop" type="text/javascript"></script>
+-<script src="cropper/cropper.js" type="text/javascript"></script>
+-<script src="cropper/smokeping-zoom.js" type="text/javascript"></script>
++<script src="/smokeping/cropper/lib/prototype.js" type="text/javascript"></script>
++<script src="/smokeping/cropper/lib/scriptaculous.js?load=builder,effects,dragdrop" type="text/javascript"></script>
++<script src="/smokeping/cropper/cropper.js" type="text/javascript"></script>
++<script src="/smokeping/cropper/smokeping-zoom.js" type="text/javascript"></script>
+ 
+ 
+ 
