@@ -1,3 +1,19 @@
+smokeping (2.6.5-1) unstable; urgency=low
+
+  This is a major update to this package, with major changes. Instead of
+  bundling our own configuration which constantly had to be maintained in
+  sync with upstream, we ship modified versions of the upstream
+  configuration files, which are now automatically split in separate
+  sections during build. This may mean you get extra debconf prompts for
+  your configuration files while no real change has taken place.
+  .
+  If you are upgrading from versions previous to 2.3.6-5 (in Lenny!), you
+  may have problems migrating your configuration. Make sure you at least
+  hit 2.3.6 packages to have a smooth upgrade as some compatibility bits
+  have been removed.
+
+ -- Antoine Beaupré <anarcat@debian.org>  Sun, 13 Nov 2011 18:28:22 -0500
+
 smokeping (2.3.6-4) unstable; urgency=low
 
   The file hierarchy available to the web server has been moved
