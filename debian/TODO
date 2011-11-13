@@ -10,9 +10,6 @@ The following issues need to be fixed:
 * docbase is screwed up, docs is all man now?
 * lots of .dist files are installed, install real configs by default:
 - usr/share/smokeping/smokeping.fcgi.dist
-- etc/smokeping/config.dist and fellows
-* examples are installed in etc/smokeping/examples, they should be in
-  usr/share/doc/smokeping/examples
 * remove extra files:
 -       rm -f $(TMP)/usr/share/smokeping/lib/BER.pm
 -       rm -f $(TMP)/usr/share/smokeping/lib/SNMP_*
