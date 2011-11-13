@@ -16,6 +16,8 @@
 # This has to be exported to make some magic below work.
 export DH_OPTIONS
 
+TMP=$(CURDIR)/debian/smokeping
+
 override_dh_auto_configure:
 	autoconf
 	automake
@@ -24,13 +26,19 @@ override_dh_auto_configure:
 
 override_dh_auto_install:
 	dh_auto_install
-	mv $(CURDIR)/debian/smokeping/usr/share/doc/smokeping/*.dist $(CURDIR)/debian/smokeping/etc/smokeping/
-	rename 's/\.dist$$//' $(CURDIR)/debian/smokeping/etc/smokeping/*.dist $(CURDIR)/debian/smokeping/usr/share/smokeping/smokeping.fcgi.dist
-	rm -f $(CURDIR)/debian/smokeping/usr/share/perl5/BER.pm $(TMP)/usr/share/perl5/SNMP_*
-	mv $(CURDIR)/debian/smokeping/usr/sbin/smokeping_cgi $(CURDIR)/debian/smokeping/usr/lib/cgi-bin/smokeping.cgi
-	install -m 644 $(CURDIR)/debian/apache2.conf $(CURDIR)/debian/smokeping/etc/smokeping
-	$(CURDIR)/debian/split_config $(CURDIR)/debian/smokeping
-	mv $(CURDIR)/debian/default-config $(CURDIR)/debian/smokeping/etc/smokeping/
+
+	dh_link /var/cache/smokeping/images $(TMP)/usr/share/smokeping/www/images
+	for d in cropper prototype scriptaculous; do \
+	        dh_link /usr/share/javascript/$$d $(TMP)/usr/share/smokeping/www/$$d; \
+	done
+
+	mv $(TMP)/usr/share/doc/smokeping/*.dist $(TMP)/etc/smokeping/
+	rename 's/\.dist$$//' $(TMP)/etc/smokeping/*.dist $(TMP)/usr/share/smokeping/smokeping.fcgi.dist
+	rm -f $(TMP)/usr/share/perl5/BER.pm $(TMP)/usr/share/perl5/SNMP_*
+	mv $(TMP)/usr/sbin/smokeping_cgi $(TMP)/usr/lib/cgi-bin/smokeping.cgi
+	install -m 644 $(CURDIR)/debian/apache2.conf $(TMP)/etc/smokeping
+	$(CURDIR)/debian/split_config $(TMP)
+	mv $(CURDIR)/debian/default-config $(TMP)/etc/smokeping/
 
 %:
 	dh $@
