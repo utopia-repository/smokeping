@@ -1,0 +1,15 @@
+Description: hardcode the path to the config file in CGI
+Author: Antoine Beaupré <anarcat@debian.org>
+Forwarded: no
+
+--- smokeping-2.6.5.orig/bin/smokeping_cgi
++++ smokeping-2.6.5/bin/smokeping_cgi
+@@ -18,7 +18,7 @@ use Smokeping;
+ 
+ use CGI::Fast;
+ 
+-my $cfg = (shift @ARGV) || "$FindBin::Bin/../etc/config";
++my $cfg = (shift @ARGV) || "/etc/smokeping/config";
+ 
+ 
+ while (my $q = new CGI::Fast) {
