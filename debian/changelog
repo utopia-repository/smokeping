@@ -14,6 +14,7 @@ smokeping (2.6.5-1~experimental0) experimental; urgency=low
     * fix-conf-paths - fix paths in main config
     * fix-perl-lib - fix path to PERLIB
     * proper-sample-conf - have a proper sample config
+    * fix typo in mail template - (Closes: #642197)
   * rewrite debian/rules with debhelper 7
   * remove our custom config.d files, instead we split the upstream config
     in multiple files during the build, our modifications are now patches
