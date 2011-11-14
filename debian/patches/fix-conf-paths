@@ -29,7 +29,7 @@ This doesn't need to be sent upstream
  
 -template = @prefix@/etc/basepage.html.dist
 +template = /etc/smokeping/basepage.html
- charset = utf-8
+ charset  = utf-8
  
  + charts
 @@ -105,10 +105,10 @@ unison_tolerance = 2

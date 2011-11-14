@@ -9,7 +9,7 @@ Author: Antoine Beaupré <anarcat@debian.org>
  *** Presentation ***
  
  template = @prefix@/etc/basepage.html.dist
-+charset = utf-8
++charset  = utf-8
  
  + charts
  
