@@ -1,10 +1,18 @@
 Description: setup a proper sample configuration
  This disables slaves and setups targets that are sure to work (no
- slaves, localhost).
+ slaves, localhost). It also sets up utf8
 Author: Antoine Beaupré <anarcat@debian.org>
 
 --- smokeping-2.6.5.orig/etc/config.dist.in
 +++ smokeping-2.6.5/etc/config.dist.in
+@@ -48,6 +48,7 @@
+ *** Presentation ***
+ 
+ template = @prefix@/etc/basepage.html.dist
++charset = utf-8
+ 
+ + charts
+ 
 @@ -109,13 +109,13 @@ binary = /usr/sbin/fping
  
  *** Slaves ***
