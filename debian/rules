@@ -32,6 +32,7 @@ override_dh_auto_install:
 	for d in cropper prototype scriptaculous; do \
 	        dh_link /usr/share/javascript/$$d /usr/share/smokeping/www/$$d; \
 	done
+	install -m 644 $(CURDIR)/htdocs/cropper/smokeping-zoom.js $(TMP)/usr/share/smokeping/www
 
 	mv $(TMP)/usr/share/doc/smokeping/*.dist $(TMP)/etc/smokeping/
 	rename 's/\.dist$$//' $(TMP)/etc/smokeping/*.dist $(TMP)/usr/share/smokeping/smokeping.fcgi.dist
