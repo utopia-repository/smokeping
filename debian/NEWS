@@ -4,8 +4,12 @@ smokeping (2.6.5-1) experimental; urgency=low
   bundling our own configuration which constantly had to be maintained in
   sync with upstream, we ship modified versions of the upstream
   configuration files, which are now automatically split in separate
-  sections during build. This may mean you get extra debconf prompts for
+  sections during build. This may give extra debconf prompts for
   your configuration files while no real change has taken place.
+  .
+  For example, the /etc/smokeping/config.d/pathnames file is deprecated
+  and is now ignored, which may give you extraneous diffs in your
+  ../config.d/General config file.
   .
   If you are upgrading from versions previous to 2.3.6-5 (in Lenny!), you
   may have problems migrating your configuration. Make sure you at least
