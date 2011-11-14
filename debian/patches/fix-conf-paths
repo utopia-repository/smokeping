@@ -23,15 +23,15 @@ This doesn't need to be sent upstream
  # specify this to get syslog logging
  syslogfacility = local0
  # each probe is now run in its own process
-@@ -47,7 +47,7 @@ AVERAGE  0.5 144   720
+@@ -47,7 +47,7 @@
  
  *** Presentation ***
  
 -template = @prefix@/etc/basepage.html.dist
 +template = /etc/smokeping/basepage.html
+ charset = utf-8
  
  + charts
- 
 @@ -105,10 +105,10 @@ unison_tolerance = 2
  
  + FPing
