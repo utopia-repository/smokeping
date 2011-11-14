@@ -1,4 +1,4 @@
-smokeping (2.6.5-1) experimental; urgency=low
+smokeping (2.6.5-1~experimental0) experimental; urgency=low
 
   * new upstream release (Closes: #485977).
   * take over maintainership, leaving previous maintainer as uploader
@@ -8,6 +8,18 @@ smokeping (2.6.5-1) experimental; urgency=low
     * 20_html-parser.dpatch - obsolete
   * strip down patch:
     * 10_path_changes.dpatch - only fix the HTML paths
+  * add patches:
+    * fcgi_destdir - setup the fcgi script properly
+    * fix-conf-path-cgi - hardcode the path to the config in the CGI script
+    * fix-conf-paths - fix paths in main config
+    * fix-perl-lib - fix path to PERLIB
+    * proper-sample-conf - have a proper sample config
+  * rewrite debian/rules with debhelper 7
+  * remove our custom config.d files, instead we split the upstream config
+    in multiple files during the build, our modifications are now patches
+    to the default config
+  * remove old (pre 2.3.6) compatibility code, now that even oldstable is
+    running that release
   * switch to 3.0 (quilt) format
 
  -- Antoine Beaupré <anarcat@debian.org>  Mon, 07 Nov 2011 00:15:53 -0500
