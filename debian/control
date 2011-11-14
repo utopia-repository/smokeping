@@ -5,7 +5,7 @@ Maintainer: Antoine Beaupré <anarcat@debian.org>
 Uploaders: Niko Tyni <ntyni@debian.org>, Jose Carlos Garcia Sogo <jsogo@debian.org>
 Build-Depends: debhelper (>= 7.0.50~), autoconf, automake
 Build-Depends-Indep: librrds-perl, groff-base, libhtml-parser-perl,
- libwww-perl, liburi-perl, libcgi-fast-perl, libconfig-grammar-perl
+ libdigest-hmac-perl, libwww-perl, liburi-perl, libcgi-fast-perl, libconfig-grammar-perl
 Standards-Version: 3.8.2
 Homepage: http://smokeping.org/
 Vcs-Browser: http://git.debian.org/?p=collab-maint/smokeping.git
