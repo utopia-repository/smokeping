@@ -4,7 +4,7 @@ all right now.
 
 The following issues need to be fixed:
 
-* this needs testing! no way this really works now
+* upgrades need to be tested
 * fast-cgi should be default
 * review upstream changes since last release, esp. config changes
 
