@@ -1,0 +1,29 @@
+Description: fix default yearly display
+
+ Default Database configuration file is defined so that only 360 days
+ of data could be stored:
+ .
+ max(steps * total) / (secs_in_a_day / step) =
+ 144 * 720 / (86400 / 300) =
+ 360
+ .
+ But Presentation configuration file defines the 4th graph as 400d,
+ thus making it always missing 40 oldest days of data.
+Author: Dmitry Semyonov <linulin@gmail.com>
+Origin: debian BTS
+Bug-Debian: http://bugs.debian.org/618851
+Forwarded: no
+Reviewed-By: Antoine Beaupré <anarcat@debian.org>
+Last-Update: 2011-03-19
+
+--- smokeping-2.6.5.orig/etc/config.dist.in
++++ smokeping-2.6.5/etc/config.dist.in
+@@ -94,7 +94,7 @@ unison_tolerance = 2
+ "Last 3 Hours"    3h
+ "Last 30 Hours"   30h
+ "Last 10 Days"    10d
+-"Last 400 Days"   400d
++"Last 360 Days"   360d
+ 
+ #+ hierarchies
+ #++ owner
