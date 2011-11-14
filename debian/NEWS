@@ -1,23 +1,19 @@
-smokeping (2.6.5-1~experimental0) experimental; urgency=low
+smokeping (2.6.5-1) unstable; urgency=low
 
-  This is a major update to this package, with major changes. Instead of
-  bundling our own configuration which constantly had to be maintained in
-  sync with upstream, we ship modified versions of the upstream
-  configuration files, which are now automatically split in separate
-  sections during build. This may give extra debconf prompts for
-  your configuration files while no real change has taken place.
+  Instead of bundling our own configuration which constantly had to be
+  maintained in sync with upstream, we ship modified versions of the
+  upstream configuration files, which are now automatically split in
+  separate sections during build. This will lead to false positive in
+  configuration file changes, but just this one time.
   .
-  For example, the /etc/smokeping/config.d/pathnames file is deprecated
-  and is now ignored, which may give you extraneous diffs in your
-  ../config.d/General config file.
+  The /etc/smokeping/config.d/pathnames file is now merged back into the
+  General file. The file is kept but ignored, feel free to remove it once
+  you have finished the upgrade.
   .
   If you are upgrading from versions previous to 2.3.6-5 (in Lenny!), you
   may have problems migrating your configuration. Make sure you at least
   hit 2.3.6 packages to have a smooth upgrade as some compatibility bits
   have been removed.
-  .
-  This package has not been well tested yet and may break your
-  installation.
 
  -- Antoine Beaupré <anarcat@debian.org>  Sun, 13 Nov 2011 18:28:22 -0500
 
