@@ -131,12 +131,6 @@ case "$1" in
         STATUS=$?
         set -e
 
-        if [ "$STATUS" = 0 ]
-        then
-            rm -f $PIDFILE
-            pkill -u www-data speedy_backend || true
-        fi
-
         log_end_msg $STATUS
         exit $STATUS
         ;;
