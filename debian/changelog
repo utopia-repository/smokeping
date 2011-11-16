@@ -1,6 +1,9 @@
 smokeping (2.6.5-1~experimental1) experimental; urgency=low
 
   * fix reload in startup script
+  * forgot in previous changelog: stop using ucf now that we generate
+    config files during build, which leads to extra prompts during
+    upgrades.
 
  -- Antoine Beaupré <anarcat@debian.org>  Wed, 16 Nov 2011 11:59:33 -0500
 
