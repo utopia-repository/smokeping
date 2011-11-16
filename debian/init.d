@@ -154,7 +154,7 @@ case "$1" in
 
     check_config
     set +e
-    $DAEMON --reload | logger -p daemon.notice -t smokeping
+    $DAEMON --reload $DAEMON_ARGS | logger -p daemon.notice -t smokeping
     STATUS=$?
     set -e
 
