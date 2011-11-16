@@ -1,12 +1,10 @@
-This package is being rebuilt with latest packaging tricks (dh7 and
-quilt) and with the latest upstream versions. Things may not work at
-all right now.
-
 The following issues need to be fixed:
 
-* upgrades need to be tested
 * fast-cgi should be default
 * review upstream changes since last release, esp. config changes
-
-A lot of the above was taken care of by the old rules file, reuse
-that.
+* do not prompt for modifications on the files:
+- Slaves
+- General
+- basepage.html
+-> apparently if we have a .dpkg-orig file next to those, based on the
+   proper conffiles in 2.3.6, dpkg will be happy.
