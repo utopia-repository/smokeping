@@ -4,7 +4,8 @@ smokeping (2.6.5-1~experimental0) experimental; urgency=low
   maintained in sync with upstream, we ship modified versions of the
   upstream configuration files, which are now automatically split in
   separate sections during build. This will lead to false positive in
-  configuration file changes, but just this one time.
+  configuration file changes, but just this one time, as we transition
+  away from ucf for config file management.
   .
   The /etc/smokeping/config.d/pathnames file is now merged back into the
   General file. The file is kept but ignored, feel free to remove it once
