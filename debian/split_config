@@ -14,8 +14,8 @@ do
     fi
 done
 
-egrep 'imgcache|imgurl|datadir|piddir|smokemail|tmail' ${DESTDIR}/etc/smokeping/config.d/General > ${DESTDIR}/etc/smokeping/config.d/pathnames
+egrep 'sendmail|imgcache|imgurl|datadir|piddir|smokemail|tmail' ${DESTDIR}/etc/smokeping/config.d/General > ${DESTDIR}/etc/smokeping/config.d/pathnames
 
-sed -i '/imgcache\|imgurl\|datadir\|piddir\|smokemail\|tmail/d' ${DESTDIR}/etc/smokeping/config.d/General
+sed -i '/sendmail\|imgcache\|imgurl\|datadir\|piddir\|smokemail\|tmail/d' ${DESTDIR}/etc/smokeping/config.d/General
 
 echo '@include /etc/smokeping/config.d/pathnames' >> ${DESTDIR}/etc/smokeping/config.d/General
