@@ -7,10 +7,6 @@ smokeping (2.6.5-1~experimental0) experimental; urgency=low
   configuration file changes, but just this one time, as we transition
   away from ucf for config file management.
   .
-  The /etc/smokeping/config.d/pathnames file is now merged back into the
-  General file. The file is kept but ignored, feel free to remove it once
-  you have finished the upgrade.
-  .
   If you are upgrading from versions previous to 2.3.6-5 (in Lenny!), you
   may have problems migrating your configuration. Make sure you at least
   hit 2.3.6 packages to have a smooth upgrade as some compatibility bits
