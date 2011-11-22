@@ -3,7 +3,12 @@ Description: use Debian paths instead of silly ones
 This doesn't need to be sent upstream
 --- smokeping-2.6.5.orig/etc/config.dist.in
 +++ smokeping-2.6.5/etc/config.dist.in
-@@ -7,13 +7,13 @@ sendmail = @SENDMAIL@
+@@ -3,17 +3,17 @@
+ owner    = Peter Random
+ contact  = some@address.nowhere
+ mailhost = my.mail.host
+-sendmail = @SENDMAIL@
++sendmail = /usr/sbin/sendmail
  # NOTE: do not put the Image Cache below cgi-bin
  # since all files under cgi-bin will be executed ... this is not
  # good for images.
