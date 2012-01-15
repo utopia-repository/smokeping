@@ -20,7 +20,15 @@ case "$1" in
 
     upgrade)
         IFS=":"
-        ucfq -w /etc/smokeping/basepage.html | while read file package exists changed; do
+        ucfq -w /etc/smokeping/basepage.html \
+                /etc/smokeping/smokemail \
+                /etc/smokeping/config.d/Alerts \
+                /etc/smokeping/config.d/Presentation \
+                /etc/smokeping/config.d/pathnames \
+                /etc/smokeping/config.d/Targets \
+                /etc/smokeping/config.d/General \
+                /etc/smokeping/config.d/Slaves \
+                | while read file package exists changed; do
             if [ "$package" = "smokeping" -a "$changed" = "No" ]; then
                 rm -f "$file"
             fi
