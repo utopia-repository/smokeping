@@ -5,6 +5,7 @@ smokeping (2.6.5-2) unstable; urgency=low
     by simply removing ucf config files that were not changed before
     installing them.
   * fix lintian warning by refering explicitely to GPL-2
+  * update standards version to 3.9.2, no change
 
  -- Antoine Beaupré <anarcat@debian.org>  Sun, 15 Jan 2012 18:17:16 -0500
 
