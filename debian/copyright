@@ -46,7 +46,7 @@ All files expect those mentioned below share the GPL license:
   along with this program; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
 	      
-You can find a copy of GPL license at /usr/share/common-licenses/GPL
+You can find a copy of GPL license at /usr/share/common-licenses/GPL-2
 
 The files in the lib/Config directory belong the bundled Config::Grammar
 Perl module and share the following copyright and license:
