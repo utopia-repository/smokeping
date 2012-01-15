@@ -16,6 +16,9 @@
 # This has to be exported to make some magic below work.
 export DH_OPTIONS
 
+# smokeping doesn't like building with your locale
+unexport LC_ALL
+
 TMP=$(CURDIR)/debian/smokeping
 
 override_dh_auto_configure:

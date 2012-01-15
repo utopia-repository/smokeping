@@ -6,6 +6,7 @@ smokeping (2.6.5-2) unstable; urgency=low
     installing them.
   * fix lintian warning by refering explicitly to GPL-2
   * update standards version to 3.9.2, no change
+  * unset locale (LC_ALL) when building to please the build process
 
  -- Antoine Beaupré <anarcat@debian.org>  Sun, 15 Jan 2012 18:17:16 -0500
 
