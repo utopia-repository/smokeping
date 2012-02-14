@@ -1,3 +1,14 @@
+* be more careful in handling input from the web to prevent xss. Thanks to
+  Russ McRee <holisticinfosec@gmail.com> for pointing this out.
+
+* Updated TCPPing probe -- Chris Wilson chris aptivate.org
+
+* Make Median matcher work without complaint at startup and if unknown data elements occur in the stream.
+
+2011/11/12 -- released version 2.6.6
+
+* fixed embedded version number in Smokeping.pm
+
 2011/10/30 -- released version 2.6.5
 
 * improved configurability and generate config specific config.dist file
@@ -34,7 +45,7 @@
 
 * in zoom/ajax mode, do not exit ... fastcgis should not quit
 
-* Switch from using SpeedyCGI to FastCGI.
+* Switch from using SpeedyCGI to FastCGI. inspired by a patch from Ken Dreyer
 
 * Added new OpenSSHJunOSPing probe to run ping from a juniper router via
   ssh.  This work has been sponsored by Juniper.
