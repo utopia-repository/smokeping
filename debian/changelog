@@ -1,3 +1,9 @@
+smokeping (2.6.7-1) unstable; urgency=high
+
+  * New upstream release to fix CVE-2012-0790 (Closes: #659899)
+
+ -- Antoine Beaupré <anarcat@debian.org>  Tue, 14 Feb 2012 13:30:29 -0500
+
 smokeping (2.6.5-2) unstable; urgency=low
 
   * Bug fix: "prompting due to modified conffiles which where not modified
