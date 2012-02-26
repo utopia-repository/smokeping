@@ -1,0 +1,9 @@
+smokeping for Debian
+--------------------
+
+This package is maintained through git, but patches are applied through
+quilt, in debian/patches/.
+
+To update to the new upstream, use git-import-orig --uscan.
+
+ -- Antoine Beaupré <anarcat@debian.org>, Sat, 26 Feb 2012 13:20:51 -0500
