@@ -1,3 +1,9 @@
+smokeping (2.6.8-1) unstable; urgency=low
+
+  * New upstream release
+
+ -- Antoine Beaupré <anarcat@debian.org>  Sun, 26 Feb 2012 13:25:13 -0500
+
 smokeping (2.6.7-1) unstable; urgency=high
 
   * New upstream release to fix CVE-2012-0790 (Closes: #659899)
