@@ -68,7 +68,7 @@ use Smokeping::RRDtools;
 # globale persistent variables for speedy
 use vars qw($cfg $probes $VERSION $havegetaddrinfo $cgimode);
 
-$VERSION = "2.006007";
+$VERSION = "2.006008";
 
 # we want opts everywhere
 my %opt;
