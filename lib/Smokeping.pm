@@ -28,6 +28,8 @@ setlogsock('unix')
 # make sure we do not end up with , in odd places where one would expect a '.'
 # we set the environment variable so that our 'kids' get the benefit too
 
+my $xssBadRx = qr/[<>%&'";]/;
+
 $ENV{'LC_NUMERIC'}='C';
 if (setlocale(LC_NUMERIC,"") ne "C") {
     if ($ENV{'LC_ALL'} eq 'C') {
@@ -68,7 +70,7 @@ use Smokeping::RRDtools;
 # globale persistent variables for speedy
 use vars qw($cfg $probes $VERSION $havegetaddrinfo $cgimode);
 
-$VERSION = "2.006008";
+$VERSION = "2.006009";
 
 # we want opts everywhere
 my %opt;
@@ -170,7 +172,7 @@ sub hierarchy ($){
     my $hierarchy = '';
     my $h = $q->param('hierarchy');
     if ($q->param('hierarchy')){
-       $h =~ s/[<>&%]/./g;
+       $h =~ s/$xssBadRx/_/g;
        $hierarchy = 'hierarchy='.$h.';';
     }; 
     return $hierarchy;
@@ -212,7 +214,7 @@ sub update_dynaddr ($$){
     my $address = $ENV{REMOTE_ADDR};
     my $targetptr = $cfg->{Targets};
     foreach my $step (@target){
-        $step =~ s/[<>&%]/./g; 
+        $step =~ s/$xssBadRx/_/g; 
         return "Error: Unknown target $step" 
           unless defined $targetptr->{$step};
         $targetptr =  $targetptr->{$step};
@@ -726,6 +728,8 @@ sub target_menu($$$$;$){
              if ($menuextra){
                  $menuextra =~ s/{HOST}/#$host/g;
                  $menuextra =~ s/{CLASS}/$menuclass/g;
+                 $menuextra =~ s/{HASH}/#/g;
+                 $menuextra =~ s/{HOSTNAME}/$host/g;
                  $menuextra = '&nbsp;'.$menuextra;
              } else {
                  $menuextra = '';
@@ -971,6 +975,7 @@ sub findmax ($$) {
         $start = exp2seconds($start);        
         my ($graphret,$xs,$ys) = RRDs::graph
           ("dummy", '--start', -$start, 
+           '--width',$cfg->{Presentation}{overview}{width},
            '--end','-'.int($start / $cfg->{Presentation}{detail}{width}),
            "DEF:maxping=${rrd}:median:AVERAGE",
            'PRINT:maxping:MAX:%le' );
@@ -1047,7 +1052,7 @@ sub get_detail ($$$$;$){
     my $tree = shift;
     my $open = shift;
     my $mode = shift || $q->param('displaymode') || 's';
-    $mode =~ s/[<>&%]/./g; 
+    $mode =~ s/$xssBadRx/_/g; 
     my $phys_tree = $tree;
     my $phys_open = $open;    
     if ($tree->{__tree_link}){
@@ -1155,7 +1160,8 @@ sub get_detail ($$$$;$){
 
 	$q->param('epoch_start',parse_datetime($q->param('start')));
 	$q->param('epoch_end',parse_datetime($q->param('end')));
-        @tasks = (["Navigator Graph".$name, parse_datetime($q->param('start')),parse_datetime($q->param('end'))]);
+    my $title = $q->param('title') || ("Navigator Graph".$name);
+    @tasks = ([$title, parse_datetime($q->param('start')),parse_datetime($q->param('end'))]);
         my ($graphret,$xs,$ys) = RRDs::graph
           ("dummy", 
            '--start', $tasks[0][1],
@@ -1447,7 +1453,7 @@ sub get_detail ($$$$;$){
             $startstr =~ s/\s/%20/g;
             $endstr =~ s/\s/%20/g;
             my $t = $q->param('target');
-            $t =~ s/[<>&%]/./g; 
+            $t =~ s/$xssBadRx/_/g; 
             for my $slave (@slaves){
                 my $s = $slave ? "~$slave" : "";
                 $page .= "<div>";
@@ -1601,7 +1607,7 @@ sub display_webpage($$){
     my $t = $q->param('target');
     if ( $t and $t !~ /\.\./ and $t =~ /(\S+)/){
         $targ = $1;
-        $targ =~ s/[<>;%]/./g;
+        $targ =~ s/$xssBadRx/_/g;
     }
     my ($path,$slave) = split(/~/,$targ);
     if ($slave and $slave =~ /(\S+)/){
@@ -1610,7 +1616,7 @@ sub display_webpage($$){
         $slave = $1;
     }
     my $hierarchy = $q->param('hierarchy');
-    $hierarchy =~ s/[<>;%]/./g;
+    $hierarchy =~ s/$xssBadRx/_/g;
     die "ERROR: unknown hierarchy $hierarchy\n" 
         if $hierarchy and not $cfg->{Presentation}{hierarchies}{$hierarchy};
     my $open = [ (split /\./,$path||'') ];
@@ -1677,6 +1683,7 @@ sub display_webpage($$){
 
     my $display_tree = $tree->{__tree_link} ? $tree->{__tree_link} : $tree;
 
+    my $authuser = $ENV{REMOTE_USER} || 'Guest';
     my $page = fill_template
       ($cfg->{Presentation}{template},
        {
@@ -1700,6 +1707,7 @@ sub display_webpage($$){
         step => $step,
         rrdlogo => '<A HREF="http://oss.oetiker.ch/rrdtool/"><img border="0" src="'.$cfg->{General}{imgurl}.'/rrdtool.png"></a>',
         smokelogo => '<A HREF="http://oss.oetiker.ch/smokeping/counter.cgi/'.$VERSION.'"><img border="0" src="'.$cfg->{General}{imgurl}.'/smokeping.png"></a>',
+        authuser => $authuser,
        }
        );
     my $expi = $cfg->{Database}{step} > 120 ? $cfg->{Database}{step} : 120;
@@ -1866,17 +1874,27 @@ sub check_alerts {
                 my $rtt = "rtt: ".join ", ",map {defined $_ ? (/^\d/ ? sprintf "%.0fms", $_*1000 :$_):"U" } @{$x->{rtt}}; 
                         my $time = time;
                 my @stamp = localtime($time);
-                        my $stamp = localtime($time);
-                        my @to;
-                        foreach my $addr (map {$_ ? (split /\s*,\s*/,$_) : ()} $cfg->{Alerts}{to},$tree->{alertee},$alert->{to}){
-                        next unless $addr;
-                        if ( $addr =~ /^\|(.+)/) {
+                my $stamp = localtime($time);
+                my @to;
+                foreach my $addr (map {$_ ? (split /\s*,\s*/,$_) : ()} $cfg->{Alerts}{to},$tree->{alertee},$alert->{to}){
+                    next unless $addr;
+                    if ( $addr =~ /^\|(.+)/) {
                         my $cmd = $1;
-                        if ($edgetrigger) {
-                                        system $cmd,$_,$line,$loss,$rtt,$tree->{host}, ($what =~/raise/);
-                        } else {
-                                        system $cmd,$_,$line,$loss,$rtt,$tree->{host};
+                        # fork them in case they take a long time
+                        my $pid;
+                        unless ($pid = fork) {
+                            unless (fork) {
+                                $SIG{CHLD} = 'DEFAULT';
+                                if ($edgetrigger) {
+                                   exec $cmd,$_,$line,$loss,$rtt,$tree->{host}, ($what =~/raise/);
+                                } else {
+                                   exec $cmd,$_,$line,$loss,$rtt,$tree->{host};
+                                }
+                                die "exec failed!";
+                            }
+                            exit 0;
                         }
+                        waitpid($pid, 0);
                     }
                     elsif ( $addr =~ /^snpp:(.+)/ ) {
                                     sendsnpp $1, <<SNPPALERT;
@@ -2290,10 +2308,14 @@ DOC
 The slave names must match the slaves you have setup in the slaves section.
 DOC
            menuextra => { 
-                        _doc => <<DOC },
-HTML String to be added to the end of each menu entry. The C<{HOST}> entry will be replaced by the
-host property of the relevant section. The C<{CLASS}> entry will be replaced by the same
-class as the other tags in the manu line.
+                        _doc => <<'DOC' },
+HTML String to be added to the end of each menu entry. The following tags will be replaced:
+
+  {HOST}     -> #$hostname
+  {HOSTNAME} -> $hostname
+  {CLASS}    -> same class as the other tags in the menu line
+  {HASH}     -> #
+
 DOC
            probe => {
                         _sub => sub {
@@ -3945,6 +3967,7 @@ sub gen_page  ($$$) {
     my $step = $probes->{$tree->{probe}}->step();
     my $readversion = "?";
     $VERSION =~ /(\d+)\.(\d{3})(\d{3})/ and $readversion = sprintf("%d.%d.%d",$1,$2,$3);
+    my $authuser = $ENV{REMOTE_USER} || 'Guest';
     $page = fill_template
         ($cfg->{Presentation}{template},
          {
@@ -3963,6 +3986,7 @@ sub gen_page  ($$$) {
           step => $step,
           rrdlogo => '<A HREF="http://oss.oetiker.ch/rrdtool/"><img border="0" src="'.$cfg->{General}{imgurl}.'/rrdtool.png"></a>',
           smokelogo => '<A HREF="http://oss.oetiker.ch/smokeping/counter.cgi/'.$VERSION.'"><img border="0" src="'.$cfg->{General}{imgurl}.'/smokeping.png"></a>',
+          authuser => $authuser,
          });
 
     print PAGEFILE $page || "<HTML><BODY>ERROR: Reading page template ".$cfg->{Presentation}{template}."</BODY></HTML>";

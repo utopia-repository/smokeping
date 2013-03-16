@@ -17,7 +17,7 @@ my $Revision = $1;
 sub main()
 {
     # parse options
-    my %opt = (mode=>'plain',separator=>';',format=>'%le',start=>'end-24h');
+    my %opt = (mode=>'plain',separator=>';',format=>'%le',start=>'end-24h',end=>'now');
 
     GetOptions(\%opt, 'help|h', 'man', 'version', 'noaction|no-action|n','no-head',
         'start=s','end=s','filter=s','mode=s','separator=s','format=s') or exit(1);
@@ -33,7 +33,7 @@ sub main()
     print '# ',join $opt{separator}, 'node_path',@rows if not $opt{'no-head'};
     print "\n";
     for my $node (@$nodes) {
-        my $data = $si->stat_node($node,'end-24h','now');
+        my $data = $si->stat_node($node,$opt{start},$opt{end});
 	print join $opt{separator},$node->{path},map {defined $data->{$_} ? sprintf($opt{format},$data->{$_}) : '?'} @rows;
 	print "\n";
     }
