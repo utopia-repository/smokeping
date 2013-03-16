@@ -1,3 +1,10 @@
+smokeping (2.6.9-1~exp0) experimental; urgency=high
+
+  * New upstream release to properly fix CVE-2012-0790 (Closes: #659899)
+  * Acknowledge the NMU, thanks gregor!
+
+ -- Antoine Beaupré <anarcat@debian.org>  Sat, 16 Mar 2013 11:34:03 -0400
+
 smokeping (2.6.8-1.1) unstable; urgency=low
 
   * Non-maintainer upload.
