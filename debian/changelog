@@ -1,3 +1,14 @@
+smokeping (2.6.8-1.1) unstable; urgency=low
+
+  * Non-maintainer upload.
+  * Fix "fails to install, remove, distupgrade, and install again":
+    remove ucf config files also on install (not only on upgrade); cf. the
+    changelog entry for 2.6.5-2 and #655968.
+    (Closes: #668383)
+  * Remove Niko Tyni from Uploaders as per his request in #668383.
+
+ -- gregor herrmann <gregoa@debian.org>  Mon, 30 Jul 2012 21:02:52 +0200
+
 smokeping (2.6.8-1) unstable; urgency=low
 
   * New upstream release

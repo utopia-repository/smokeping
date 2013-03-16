@@ -15,10 +15,7 @@ set -e
 
 
 case "$1" in
-    install)
-    ;;
-
-    upgrade)
+    install|upgrade)
         IFS=":"
         ucfq -w /etc/smokeping/basepage.html \
                 /etc/smokeping/smokemail \
