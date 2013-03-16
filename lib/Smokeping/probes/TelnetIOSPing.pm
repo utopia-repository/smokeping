@@ -113,7 +113,7 @@ sub new($$$)
     # no need for this if we run as a cgi
     unless ( $ENV{SERVER_SOFTWARE} ) {
 	$self->{pingfactor} = 1000; # Gives us a good-guess default
-	print "### assuming you are using an IOS reporting in miliseconds\n";
+	print "### assuming you are using an IOS reporting in milliseconds\n";
     };
 
     return $self;
@@ -137,13 +137,14 @@ sub pingone ($$){
     my $pssword = $target->{vars}{iospass};
     my $bytes = $self->{properties}{packetsize};
     my $pings = $self->pings($target);
+    my $timeout = $self->{properties}{timeout};
 
     # do NOT call superclass ... the ping method MUST be overwriten
     my %upd;
     my @args = ();
 
 
-     my $telnet = Net::Telnet->new();
+     my $telnet = Net::Telnet->new( Timeout    => $timeout );
 #               These are for debugging
 #               $telnet->errmode("TIPreturn");
 #               $telnet->input_log("TIPinlog");

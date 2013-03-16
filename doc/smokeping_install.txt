@@ -147,6 +147,9 @@ DDEESSCCRRIIPPTTIIOONN
            link to the SmokePing counter and my name from the template.  The
            content of the template will be renderd by smokeping.cgi.  This
            means that all embedded links must be relative to smokeping.cgi.
+           If you are using HTTP authentication, then the template variable
+           "authuser" will be populated from the $ENV{REMOTE_USER} environment
+           variable.
 
        _e_t_c_/_s_m_o_k_e_m_a_i_l
            If you are going to use the DDYYNNAAMMIICC IP support, customize the
@@ -196,4 +199,4 @@ AAUUTTHHOORR
 
 
 
-2.6.2                             2011-10-07              SMOKEPING_INSTALL(7)
+2.6.9                             2012-04-02              SMOKEPING_INSTALL(7)
