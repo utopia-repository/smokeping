@@ -6,3 +6,4 @@ fix-conf-paths
 fix-conf-path-cgi
 typo_642197
 fix-400d-graph
+CVE-2012-0790.patch

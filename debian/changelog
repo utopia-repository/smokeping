@@ -1,3 +1,10 @@
+smokeping (2.6.8-2) unstable; urgency=high
+
+  * Acknowledge gregor's NMU, thanks!
+  * Urgency high to fix CVE-2012-0790 again (Closes: #659899)
+
+ -- Antoine Beaupré <anarcat@debian.org>  Sat, 16 Mar 2013 20:19:34 -0400
+
 smokeping (2.6.8-1.1) unstable; urgency=low
 
   * Non-maintainer upload.
