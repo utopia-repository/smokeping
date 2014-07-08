@@ -1,0 +1,170 @@
+Index: smokeping-2.6.9/bin/smokeinfo
+===================================================================
+--- smokeping-2.6.9.orig/bin/smokeinfo
++++ smokeping-2.6.9/bin/smokeinfo
+@@ -2,11 +2,6 @@
+ use strict;
+ use warnings;
+ 
+-use FindBin;
+-# PERL5LIB
+-use lib "$FindBin::Bin/../thirdparty/lib/perl5";
+-use lib "$FindBin::Bin/../lib";
+-
+ use Smokeping::Info;
+ use Getopt::Long 2.25 qw(:config no_ignore_case);
+ use Pod::Usage 1.14;
+@@ -84,19 +79,19 @@
+ 
+ Get all data all nodes
+ 
+- smokeinfo etc/config 
++ smokeinfo /etc/smokeping/config 
+ 
+ Only show nodes directly under /Customers
+ 
+- smokeinfo --filter=/Customers/ etc/config
++ smokeinfo --filter=/Customers/ /etc/smokeping/config
+ 
+ Show all nodes under /Customers
+ 
+- smokeinfo --mode=recursive --filter=/Customers/ etc/config
++ smokeinfo --mode=recursive --filter=/Customers/ /etc/smokeping/config
+ 
+ Show all nodes with '_wlan_' in the name
+ 
+- smokeinfo --mode=regexp --filter=_wlan_ etc/config
++ smokeinfo --mode=regexp --filter=_wlan_ /etc/smokeping/config
+ 
+ =head1 COPYRIGHT
+ 
+Index: smokeping-2.6.9/bin/smokeping
+===================================================================
+--- smokeping-2.6.9.orig/bin/smokeping
++++ smokeping-2.6.9/bin/smokeping
+@@ -4,14 +4,9 @@
+ use strict;
+ use warnings;
+ 
+-use FindBin;
+-# PERL5LIB
+-use lib "$FindBin::Bin/../thirdparty/lib/perl5";
+-use lib "$FindBin::Bin/../lib";
+-
+ use Smokeping;
+  
+-Smokeping::main("$FindBin::Bin/../etc/config");
++Smokeping::main("/etc/smokeping/config");
+ 
+ =head1 NAME
+ 
+@@ -129,25 +124,6 @@
+ 
+ Please refer to L<the installation document|smokeping_install> for detailed setup instructions.
+ 
+-=head1 SETUP
+-
+-When installing SmokePing, this file has to be adjusted to fit your
+-local system. Three paths have to be entered.
+-
+-One pointing to your B<rrdtool> installation
+-
+- use lib qw(/usr/pack/rrdtool-1.0.33-to/lib/perl);
+-
+-One pointing to the place where you have installed the SmokePing libraries
+-
+- use lib qw(/home/oetiker/public_html/smokeping/lib);
+-
+-The third path is the argument to the Smokeping::main command. It points to
+-the SmokePing configuration file.
+-
+- use Smokeping;
+- Smokeping::main("/home/oetiker/.smokeping/config");
+-
+ =head1 COPYRIGHT
+ 
+ Copyright (c) 2002 by Tobias Oetiker. All right reserved.
+Index: smokeping-2.6.9/bin/smokeping_cgi
+===================================================================
+--- smokeping-2.6.9.orig/bin/smokeping_cgi
++++ smokeping-2.6.9/bin/smokeping_cgi
+@@ -4,11 +4,6 @@
+ use strict;
+ use warnings;
+ 
+-use FindBin;
+-# PERL5LIB
+-use lib "$FindBin::Bin/../thirdparty/lib/perl5";
+-use lib "$FindBin::Bin/../lib";
+-
+ # don't bother with zombies
+ $SIG{CHLD} = 'IGNORE';
+ 
+Index: smokeping-2.6.9/bin/tSmoke
+===================================================================
+--- smokeping-2.6.9.orig/bin/tSmoke
++++ smokeping-2.6.9/bin/tSmoke
+@@ -49,12 +49,6 @@
+ # -- Smokeping libraries
+ # -- RRDTool
+ # -- Getopt::Long
+-#
+-# Point the lib variables to your implementation
+-use FindBin;
+-# PERL5LIB
+-use lib "$FindBin::Bin/../thirdparty/lib/perl5";
+-use lib "$FindBin::Bin/../lib";
+ 
+ use Smokeping;
+ use Net::SMTP;
+@@ -63,7 +57,7 @@
+ use RRDs;
+ 
+ # Point to your Smokeping config file
+-my $cfgfile = "etc/config.dist";
++my $cfgfile = "/etc/smokeping/config";
+ 
+ # global variables
+ my $cfg;
+@@ -478,39 +472,9 @@
+ Typical crontab used to invoke this are
+ 
+  # Quick morning alert to see what's down
+- 0 6 * * * /usr/local/smokeping/bin/tSmoke.pl --q --to=mobilephone@att.net.invalid --morning
++ 0 6 * * * /usr/sbin/tSmoke --q --to=mobilephone@att.net.invalid --morning
+  # Weekly report on the percent availability of network systems with no detail
+- 0 8 * * * /usr/local/smokeping/bin/tSmoke.pl --q --to=mailbox@company.com.invalid --weekly --detail=0
+-
+-=head1 SETUP
+-
+-When installing tSmoke, some variables must be adjusted to fit your local system.
+-
+-We need to use the following B<libraries>:
+-
+-=over
+-
+-=item Smokeping
+-
+-=item RRDTool Perl bindings
+-
+-=item Getopt::Long
+-
+-=back
+-
+-Set up your libraries:
+-
+- use lib "/usr/local/smokeping/lib";
+- use lib "/usr/local/rrdtool-1.0.39/lib/perl";
+-
+-Point to your Smokeping B<config> file
+-
+- my $cfgfile = "/usr/local/smokeping/etc/config";
+-
+-Modify the Smokeping config file to include a path for tmail in the
+-General section:
+-
+- tmail = /usr/local/smokeping/etc/tmail
++ 0 8 * * * /usr/sbin/tSmoke --q --to=mailbox@company.com.invalid --weekly --detail=0
+ 
+ =head1 COPYRIGHT
+ 
