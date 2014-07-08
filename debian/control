@@ -3,9 +3,18 @@ Section: net
 Priority: extra
 Maintainer: Antoine Beaupré <anarcat@debian.org>
 Uploaders: Jose Carlos Garcia Sogo <jsogo@debian.org>
-Build-Depends: debhelper (>= 7.0.50~), autoconf, automake, dh-autoreconf
-Build-Depends-Indep: librrds-perl, groff-base, libhtml-parser-perl,
- libdigest-hmac-perl, libwww-perl, liburi-perl, libcgi-fast-perl, libconfig-grammar-perl
+Build-Depends: debhelper (>= 7.0.50~)
+ , autoconf
+ , automake
+ , dh-autoreconf
+Build-Depends-Indep: librrds-perl
+ , groff-base
+ , libhtml-parser-perl
+ , libdigest-hmac-perl
+ , libwww-perl
+ , liburi-perl
+ , libcgi-fast-perl
+ , libconfig-grammar-perl
 Standards-Version: 3.9.5
 Homepage: http://smokeping.org/
 Vcs-Browser: http://anonscm.debian.org/gitweb/?p=collab-maint/smokeping.git
@@ -13,19 +22,34 @@ Vcs-Git: git://anonscm.debian.org/collab-maint/smokeping.git
 
 Package: smokeping
 Architecture: all
-Depends: ${perl:Depends}, ${misc:Depends}, libwww-perl,
- libsnmp-session-perl (>= 0.86), librrds-perl (>= 1.2), liburi-perl,
- fping (>= 2.4b2-to-ipv6-2), libcgi-fast-perl,
- debianutils (>= 1.7), adduser, 
- lsb-base (>= 3.0-6), libdigest-hmac-perl, ucf (>= 0.28),
- libconfig-grammar-perl,
- libjs-cropper,
- libjs-scriptaculous,
- libjs-prototype
-Recommends: apache2 | httpd-cgi, libsocket6-perl, dnsutils, echoping
-Suggests: curl, libauthen-radius-perl, libnet-ldap-perl, libnet-dns-perl, 
- exim4 | mail-transport-agent,
- openssh-client, libio-socket-ssl-perl, libnet-telnet-perl
+Depends: ${perl:Depends}, ${misc:Depends}
+ , libwww-perl
+ , libsnmp-session-perl (>= 0.86)
+ , librrds-perl (>= 1.2)
+ , liburi-perl
+ , fping (>= 2.4b2-to-ipv6-2)
+ , libcgi-fast-perl
+ , debianutils (>= 1.7)
+ , adduser
+ , lsb-base (>= 3.0-6)
+ , libdigest-hmac-perl
+ , ucf (>= 0.28)
+ , libconfig-grammar-perl
+ , libjs-cropper
+ , libjs-scriptaculous
+ , libjs-prototype
+Recommends: apache2 | httpd-cgi
+ , libsocket6-perl
+ , dnsutils
+ , echoping
+Suggests: curl
+ , libauthen-radius-perl
+ , libnet-ldap-perl
+ , libnet-dns-perl
+ , exim4 | mail-transport-agent
+ , openssh-client
+ , libio-socket-ssl-perl
+ , libnet-telnet-perl
 Description: latency logging and graphing system
  SmokePing consists of a daemon process which organizes the 
  latency measurements and a CGI which presents the graphs. 
