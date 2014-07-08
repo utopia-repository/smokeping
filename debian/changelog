@@ -1,3 +1,26 @@
+smokeping (2.6.9-1) unstable; urgency=medium
+
+  * Upload to unstable
+  * Bug fix: missing "#MODE=slave" in /etc/default/smokeping, thanks to
+    xavier renaut for reporting and Rowan Thorpe for confirmation (Closes:
+    #685811).
+  * follow anonscm.d.o rename
+  * fix status doesn't use the pidfile (Closes: #699799)
+  * use dh_autoreconf to fix configure step, thanks to Rowan Thorpe
+    * Use dh_autoreconf to avoid errors about "missing xx" and to allow
+      rebuilding after first build (Closes: #724471)
+    * use dh_auto_configure rather than ./configure in rules, to only
+      override specified flags, not all
+  * add patches from Rowan Thorpe
+    * fix-paths-inside-executables - hardcode paths inside executables
+      (Closes: #707225)
+    * fix-pod-escaping - quote-protect a slash in a pod-link (Closes:
+      #752393)
+  * bump standards to 3.9.5, no change
+  * fix dependency list to ease diffs
+
+ -- Antoine Beaupré <anarcat@debian.org>  Mon, 07 Jul 2014 22:03:59 -0400
+
 smokeping (2.6.9-1~exp0) experimental; urgency=high
 
   * New upstream release to properly fix CVE-2012-0790 (Closes: #659899)
