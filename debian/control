@@ -6,7 +6,7 @@ Uploaders: Jose Carlos Garcia Sogo <jsogo@debian.org>
 Build-Depends: debhelper (>= 7.0.50~), autoconf, automake, dh-autoreconf
 Build-Depends-Indep: librrds-perl, groff-base, libhtml-parser-perl,
  libdigest-hmac-perl, libwww-perl, liburi-perl, libcgi-fast-perl, libconfig-grammar-perl
-Standards-Version: 3.9.2
+Standards-Version: 3.9.5
 Homepage: http://smokeping.org/
 Vcs-Browser: http://anonscm.debian.org/gitweb/?p=collab-maint/smokeping.git
 Vcs-Git: git://anonscm.debian.org/collab-maint/smokeping.git
