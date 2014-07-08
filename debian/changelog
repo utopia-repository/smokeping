@@ -1,6 +1,7 @@
 smokeping (2.6.9-1) unstable; urgency=medium
 
   * Upload to unstable
+  * remove jsogo as uploader, as I haven't heard from him in years
   * Bug fix: missing "#MODE=slave" in /etc/default/smokeping, thanks to
     xavier renaut for reporting and Rowan Thorpe for confirmation (Closes:
     #685811).

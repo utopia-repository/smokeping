@@ -2,7 +2,6 @@ Source: smokeping
 Section: net
 Priority: extra
 Maintainer: Antoine Beaupré <anarcat@debian.org>
-Uploaders: Jose Carlos Garcia Sogo <jsogo@debian.org>
 Build-Depends: debhelper (>= 7.0.50~)
  , autoconf
  , automake
