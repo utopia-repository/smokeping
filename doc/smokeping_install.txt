@@ -21,9 +21,7 @@ DDEESSCCRRIIPPTTIIOONN
            <http://oss.oetiker.ch/rrdtool/>
 
        FPing (optional)
-           The official site <http://fping.sourceforge.net/> seems to be a bit
-           unmaintained. You might want to grab an updated version of fping
-           from <http://oss.oetiker.ch/smokeping/pub/>.
+           Go to <http://www.fping.org/> to grab a copy.
 
            Note that fping must be installed setuid root. It seems that older
            versions of fping report round trip times in 0.1 milliseconds
@@ -199,4 +197,4 @@ AAUUTTHHOORR
 
 
 
-2.6.9                             2012-04-02              SMOKEPING_INSTALL(7)
+2.6.10                            2013-11-14              SMOKEPING_INSTALL(7)

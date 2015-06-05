@@ -70,7 +70,7 @@ use Smokeping::RRDtools;
 # globale persistent variables for speedy
 use vars qw($cfg $probes $VERSION $havegetaddrinfo $cgimode);
 
-$VERSION = "2.006009";
+$VERSION = "2.006011";
 
 # we want opts everywhere
 my %opt;
@@ -1028,8 +1028,9 @@ sub smokecol ($) {
 
 sub parse_datetime($){
     my $in = shift;
-    for ($in){
-	/^(\d+)$/ && do { my $value = $1; $value = time if $value > 2**32; return $value};
+    for ($in){ 
+        $in =~ s/$xssBadRx/_/g;
+        /^(\d+)$/ && do { my $value = $1; $value = time if $value > 2**32; return $value};
         /^\s*(\d{4})-(\d{1,2})-(\d{1,2})(?:\s+(\d{1,2}):(\d{2})(?::(\d{2}))?)?\s*$/  && 
             return POSIX::mktime($6||0,$5||0,$4||0,$3,$2-1,$1-1900,0,0,-1);
         /^now$/ && return time;
@@ -1943,7 +1944,10 @@ DOC
                               RTT   => $rtt,
                               COMMENT => $alert->{comment}
                                       },$default_mail) || "Subject: smokeping failed to open mailtemplate '$alert->{mailtemplate}'\n\nsee subject\n";
+                    my $oldLocale = POSIX::setlocale(LC_TIME);
+                    POSIX::setlocale(LC_TIME,"en_US");
                     my $rfc2822stamp =  POSIX::strftime("%a, %e %b %Y %H:%M:%S %z", @stamp);
+                    POSIX::setlocale(LC_TIME,$oldLocale);
                                 my $to = join ",",@to;
                                     sendmail $cfg->{Alerts}{from},$to, <<ALERT;
 To: $to
@@ -2631,7 +2635,7 @@ DOC
 The base directory where SmokePing keeps the files related to the DYNAMIC function.
 This directory must be writeable by the WWW server. It is also used for temporary
 storage of slave polling results by the master in 
-L<the master/slave mode|smokeping_master_slave>.
+L<the masterE<sol>slave mode|smokeping_master_slave>.
 
 If this variable is not specified, the value of C<datadir> will be used instead.
 DOC
