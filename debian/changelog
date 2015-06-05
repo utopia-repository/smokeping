@@ -1,3 +1,10 @@
+smokeping (2.6.11-1) unstable; urgency=medium
+
+  * new upstream release, see https://oss.oetiker.ch/smokeping/pub/CHANGES
+    (Closes: #708615, #759483, #783229)
+
+ -- Antoine Beaupré <anarcat@debian.org>  Thu, 04 Jun 2015 22:53:39 -0400
+
 smokeping (2.6.9-1) unstable; urgency=medium
 
   * Upload to unstable
