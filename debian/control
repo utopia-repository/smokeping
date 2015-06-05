@@ -7,6 +7,7 @@ Build-Depends: debhelper (>= 7.0.50~)
  , autoconf
  , automake
  , dh-autoreconf
+ , dh-apache2
 Build-Depends-Indep: librrds-perl
  , groff-base
  , libhtml-parser-perl
@@ -42,6 +43,7 @@ Recommends: apache2 | httpd-cgi
  , libsocket6-perl
  , dnsutils
  , echoping
+ , ${misc:Recommends}
 Suggests: curl
  , libauthen-radius-perl
  , libnet-ldap-perl

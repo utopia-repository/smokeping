@@ -3,6 +3,7 @@ smokeping (2.6.11-1) unstable; urgency=medium
   * new upstream release, see https://oss.oetiker.ch/smokeping/pub/CHANGES
     (Closes: #708615, #759483, #783229)
   * do not ship incorrect .fcgi file (Closes: #695438)
+  * port to apache 2.4 (Closes: #669799)
 
  -- Antoine Beaupré <anarcat@debian.org>  Thu, 04 Jun 2015 22:53:39 -0400
 

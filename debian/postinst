@@ -35,26 +35,6 @@ setup_permissions() {
     chmod 640 /etc/smokeping/smokeping_secrets
 }
 
-setup_apache() {
-    # note that this is only done on initial installations
-    if [ -d /etc/apache2/conf.d ] && \
-       [ ! -e /etc/apache2/conf.d/smokeping ] && \
-       which apache2ctl >/dev/null 2>&1
-    then
-        if apache2ctl configtest 2>/dev/null; then
-            echo "enabling Apache configuration in /etc/apache2/conf.d/smokeping" 1>&2
-            ln -s /etc/smokeping/apache2.conf /etc/apache2/conf.d/smokeping
-            if apache2ctl configtest 2>/dev/null; then
-                invoke-rc.d apache2 force-reload || true
-            fi
-        else
-            echo "broken Apache configuration detected, not enabling /etc/smokeping/apache2.conf" 1>&2
-        fi
-    else
-        echo "non-standard Apache configuration or missing apache2ctl, not enabling /etc/smokeping/apache2.conf" 1>&2
-    fi
-}
-
 
 # OK, let's go
 case "$1" in
@@ -62,10 +42,6 @@ case "$1" in
 
     getent passwd smokeping > /dev/null || \
       adduser --system --group --home /var/lib/smokeping --no-create-home --gecos "SmokePing daemon" smokeping
-    if [ -z "$2" ]
-    then
-        setup_apache
-    fi
     setup_permissions
     ;;
 

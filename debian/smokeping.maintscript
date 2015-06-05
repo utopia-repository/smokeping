@@ -1,0 +1,1 @@
+mv_conffile /etc/smokeping/apache2.conf /etc/apache2/conf-available/smokeping.conf
