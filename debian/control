@@ -16,6 +16,12 @@ Build-Depends-Indep: librrds-perl
  , liburi-perl
  , libcgi-fast-perl
  , libconfig-grammar-perl
+ , libnet-openssh-perl
+ , libnet-snmp-perl
+ , libnet-ldap-perl
+ , libnet-dns-perl
+ , libnet-telnet-perl
+ , libio-pty-perl
 Standards-Version: 3.9.5
 Homepage: http://smokeping.org/
 Vcs-Browser: http://anonscm.debian.org/gitweb/?p=collab-maint/smokeping.git
