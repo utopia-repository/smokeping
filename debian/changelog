@@ -1,3 +1,10 @@
+smokeping (2.6.8-2+deb7u1) oldstable-security; urgency=high
+
+  * security fix for CVE-2015-0859: code execution via CGI arguments due
+    to Debian Apache configuration
+
+ -- Antoine Beaupré <anarcat@debian.org>  Tue, 10 Nov 2015 13:51:56 -0500
+
 smokeping (2.6.8-2) unstable; urgency=high
 
   * Acknowledge gregor's NMU, thanks!
