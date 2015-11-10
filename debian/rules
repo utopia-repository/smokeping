@@ -38,7 +38,8 @@ override_dh_auto_install:
 	rename 's/\.dist$$//' $(TMP)/etc/smokeping/*.dist
 	rm -f $(TMP)/usr/share/smokeping/smokeping.fcgi.dist
 	rm -f $(TMP)/usr/share/perl5/BER.pm $(TMP)/usr/share/perl5/SNMP_*
-	mv $(TMP)/usr/sbin/smokeping_cgi $(TMP)/usr/lib/cgi-bin/smokeping.cgi
+	mv $(TMP)/usr/sbin/smokeping_cgi $(TMP)/usr/share/smokeping/smokeping.cgi
+	install -m 755 $(CURDIR)/debian/smokeping.cgi $(TMP)/usr/lib/cgi-bin/smokeping.cgi
 	$(CURDIR)/debian/split_config $(TMP)
 	install -m 644 $(CURDIR)/debian/default-config $(TMP)/etc/smokeping/config
 
