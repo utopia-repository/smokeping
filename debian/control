@@ -23,7 +23,7 @@ Build-Depends-Indep: librrds-perl
  , libnet-dns-perl
  , libnet-telnet-perl
  , libio-pty-perl
-Standards-Version: 3.9.5
+Standards-Version: 3.9.6
 Homepage: http://smokeping.org/
 Vcs-Browser: http://anonscm.debian.org/gitweb/?p=collab-maint/smokeping.git
 Vcs-Git: git://anonscm.debian.org/collab-maint/smokeping.git
