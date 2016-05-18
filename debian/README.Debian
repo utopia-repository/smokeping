@@ -1,6 +1,5 @@
-After installing the package you have to edit the file
-/etc/smokeping/config to set your preferences. You can follow the
-example provided.
+After installing the package you have to edit the files in
+/etc/smokeping/config.d to set your preferences.
 
 Note that the domain names are bogus to avoid all the people who
 install the package DoSing the same servers, but at the same time an
@@ -13,4 +12,4 @@ needs.
 Please refer to the smokeping_config man page to see all the available
 options.
 
- -- Antoine Beaupré <anarcat@debian.org>, Wed, 18 May 2016 17:56:20 -0400
+ -- Antoine Beaupré <anarcat@debian.org>, Wed, 18 May 2016 18:09:52 -0400
