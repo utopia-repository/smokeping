@@ -1,37 +1,16 @@
+After installing the package you have to edit the file
+/etc/smokeping/config to set your preferences. You can follow the
+example provided.
 
-  After installing the package you have to edit the file 
- /etc/smokeping/config to set your preferences. You can follow
- the example provided. 
- Note that the domain names are bogus to avoid all the people 
- who install the package DoSing the same servers, but at the same time
- an fping probe in localhost is enabled, so you can check if smokeping
- works for you.
+Note that the domain names are bogus to avoid all the people who
+install the package DoSing the same servers, but at the same time an
+fping probe in localhost is enabled, so you can check if smokeping
+works for you.
 
-  You can also edit the file /etc/smokeping/basepage.html to suit 
- your needs.
+You can also edit the file /etc/smokeping/basepage.html to suit your
+needs.
 
-  Anyway, please refer to the smokeping_config man page to see
- all the available options.
+Please refer to the smokeping_config man page to see all the available
+options.
 
--- Jose Carlos Garcia Sogo <jsogo@debian.org>
-
-The web server configuration is done automatically on new installations
-when possible. If that doesn't happen, the recommended way to get the
-CGI script working is 
-
- ln -s /etc/smokeping/apache2.conf /etc/apache2/conf.d/smokeping
- invoke-rc.d apache2 restart
-
-See NEWS.Debian for information on upgrades from older versions of
-the package.
-
--- Niko Tyni <ntyni@debian.org> Tue, 21 Jul 2009 20:16:42 +0300
-
-If you have problems getting the CGI to reload your configuration
-file after changes, you may have to kill lingering speedy_backend
-processes. See #397609. This should not happen, but I haven't found
-the bug yet. If you have a reproducible way to trigger this, 
-please send me your configuration files before and after the change.
-
--- Niko Tyni <ntyni@iki.fi> Mon, 14 May 2007 23:14:10 +0300
-
+ -- Antoine Beaupré <anarcat@debian.org>, Wed, 18 May 2016 17:56:20 -0400
