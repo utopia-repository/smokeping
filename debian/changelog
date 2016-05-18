@@ -1,3 +1,11 @@
+smokeping (2.6.11-3) unstable; urgency=medium
+
+  * remove outdated information from README.Debian (Closes: #804384)
+  * fix permissions error on default config, enable CGI module in postinst
+    (Closes: #760474, #821925)
+
+ -- Antoine Beaupré <anarcat@debian.org>  Wed, 18 May 2016 17:59:06 -0400
+
 smokeping (2.6.11-2) unstable; urgency=high
 
   * security fix for CVE-2015-0859: code execution via CGI arguments due
