@@ -5,6 +5,7 @@ smokeping (2.6.11-3) unstable; urgency=medium
     (Closes: #760474, #821925)
   * remove Rowan Thorpe from Uploaders, I haven't heard from him in over a
     year
+  * fix lintian warnings
 
  -- Antoine Beaupré <anarcat@debian.org>  Wed, 18 May 2016 17:59:06 -0400
 
