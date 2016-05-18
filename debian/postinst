@@ -43,7 +43,10 @@ case "$1" in
         getent passwd smokeping > /dev/null || \
             adduser --system --group --home /var/lib/smokeping --no-create-home --gecos "SmokePing daemon" smokeping
         setup_permissions
-        a2enmod cgi
+         if [ -e /usr/share/apache2/apache2-maintscript-helper ] ; then
+             . /usr/share/apache2/apache2-maintscript-helper
+             apache2_invoke enmod cgi
+         fi
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
