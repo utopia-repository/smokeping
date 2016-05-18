@@ -6,6 +6,7 @@ smokeping (2.6.11-3) unstable; urgency=medium
   * remove Rowan Thorpe from Uploaders, I haven't heard from him in over a
     year
   * fix lintian warnings
+  * depend on default-mta to fix default config on fresh installs
 
  -- Antoine Beaupré <anarcat@debian.org>  Wed, 18 May 2016 17:59:06 -0400
 
