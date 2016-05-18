@@ -40,9 +40,9 @@ setup_permissions() {
 case "$1" in
     configure|reconfigure)
 
-    getent passwd smokeping > /dev/null || \
-      adduser --system --group --home /var/lib/smokeping --no-create-home --gecos "SmokePing daemon" smokeping
-    setup_permissions
+        getent passwd smokeping > /dev/null || \
+            adduser --system --group --home /var/lib/smokeping --no-create-home --gecos "SmokePing daemon" smokeping
+        setup_permissions
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
