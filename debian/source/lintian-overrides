@@ -1,3 +1,2 @@
-# just bad code
+# the source *is* available, lintian just can't find it
 smokeping: source-is-missing htdocs/cropper/cropper.js line length is 567 characters (>512)
-
