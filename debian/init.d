@@ -79,6 +79,7 @@ check_slave() {
 }
 
 check_config () {
+    echo "Checking smokeping configuration file syntax..."
     # Check whether the configuration file is available
     if [ ! -r "$CONFIG" ] && [ "$MODE" = "master" ]
     then
@@ -86,12 +87,18 @@ check_config () {
         log_end_msg 6 # program is not configured
         exit 6
     fi
+    if [ ! -d /var/run/smokeping ]; then
+        mkdir /var/run/smokeping
+        chown ${DAEMON_USER}.root /var/run/smokeping
+        chmod 0755 /var/run/smokeping
+    fi
+    ${DAEMON} --config=${CONFIG} --check || exit 6
 }
 
 case "$1" in
     start)
-        log_daemon_msg "Starting $DESC" $NAME
         check_config
+        log_daemon_msg "Starting $DESC" $NAME
         check_slave
         set +e
         pidofproc -p "$PIDFILE" "$DAEMON" > /dev/null
@@ -102,12 +109,6 @@ case "$1" in
             log_progress_msg "already running"
             log_end_msg $STATUS
             exit $STATUS
-        fi
-
-        if [ ! -d /var/run/smokeping ]; then
-            mkdir /var/run/smokeping
-            chown ${DAEMON_USER}.root /var/run/smokeping
-            chmod 0755 /var/run/smokeping
         fi
 
         set +e
@@ -144,9 +145,8 @@ case "$1" in
 
 
     reload|force-reload)
-        log_action_begin_msg "Reloading $DESC configuration"
-
         check_config
+        log_action_begin_msg "Reloading $DESC configuration"
         set +e
         $DAEMON --reload $DAEMON_ARGS | logger -p daemon.notice -t smokeping
         STATUS=$?
@@ -161,6 +161,9 @@ case "$1" in
         exit $STATUS
         ;;
 
+    check)
+	check_config
+	;;
 
     status)
         log_daemon_msg "Checking $DESC status" $NAME
