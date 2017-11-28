@@ -8,6 +8,7 @@ Build-Depends: debhelper (>= 7.0.50~)
  , dh-autoreconf
  , dh-apache2
  , apache2-dev
+ , rename
 Build-Depends-Indep: librrds-perl
  , groff-base
  , libhtml-parser-perl
