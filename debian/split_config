@@ -15,6 +15,7 @@ do
 done
 
 egrep 'sendmail|imgcache|imgurl|datadir|dyndir|piddir|smokemail|tmail' ${DESTDIR}/etc/smokeping/config.d/General > ${DESTDIR}/etc/smokeping/config.d/pathnames
+echo 'dyndir = /var/lib/smokeping/__cgi' >> ${DESTDIR}/etc/smokeping/config.d/pathnames
 
 sed -i '/sendmail\|imgcache\|imgurl\|datadir\|dyndir\|piddir\|smokemail\|tmail/d' ${DESTDIR}/etc/smokeping/config.d/General
 
