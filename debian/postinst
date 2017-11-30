@@ -31,7 +31,7 @@ setup_permissions() {
     chown www-data /var/cache/smokeping/images
     chown smokeping:www-data /var/lib/smokeping/__cgi
     chmod 2775 /var/lib/smokeping/__cgi
-    chown smokeping:smokeping /etc/smokeping/smokeping_secrets
+    chown smokeping:www-data /etc/smokeping/smokeping_secrets
     chmod 640 /etc/smokeping/smokeping_secrets
 }
 
