@@ -1,3 +1,12 @@
+smokeping (2.6.11-4) unstable; urgency=medium
+
+  * add missing build-dep on rename (Closes: #826056)
+  * check config file validity - thanks Matus UHLAR (Closes: #847924)
+  * fix slave permissions configuration - thanks Sven Hartge (Closes: #760945)
+  * bump dh compat, no change
+
+ -- Antoine Beaupré <anarcat@debian.org>  Tue, 28 Nov 2017 11:57:04 -0500
+
 smokeping (2.6.11-3) unstable; urgency=medium
 
   * remove outdated information from README.Debian (Closes: #804384)
