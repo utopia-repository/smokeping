@@ -16,9 +16,11 @@ Forwarded: no
 Reviewed-By: Antoine Beaupré <anarcat@debian.org>
 Last-Update: 2011-03-19
 
---- smokeping-2.6.5.orig/etc/config.dist.in
-+++ smokeping-2.6.5/etc/config.dist.in
-@@ -94,7 +94,7 @@ unison_tolerance = 2
+Index: b/etc/config.dist.in
+===================================================================
+--- a/etc/config.dist.in	2018-05-12 17:16:54.637077948 -0400
++++ b/etc/config.dist.in	2018-05-12 17:16:54.633077921 -0400
+@@ -95,7 +95,7 @@ unison_tolerance = 2
  "Last 3 Hours"    3h
  "Last 30 Hours"   30h
  "Last 10 Days"    10d

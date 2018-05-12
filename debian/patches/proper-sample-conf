@@ -3,37 +3,40 @@ Description: setup a proper sample configuration
  slaves, localhost). It also sets up utf8
 Author: Antoine Beaupré <anarcat@debian.org>
 
---- smokeping-2.6.5.orig/etc/config.dist.in
-+++ smokeping-2.6.5/etc/config.dist.in
-@@ -48,6 +48,7 @@
+Index: b/etc/config.dist.in
+===================================================================
+--- a/etc/config.dist.in	2018-05-12 17:09:30.386008068 -0400
++++ b/etc/config.dist.in	2018-05-12 17:13:09.471522001 -0400
+@@ -48,6 +48,7 @@ AVERAGE  0.5 144   720
  *** Presentation ***
  
- template = @prefix@/etc/basepage.html.dist
-+charset  = utf-8
+ template = /etc/smokeping/basepage.html
++charset = utf-8
+ htmltitle = yes
+ graphborders = no
  
- + charts
- 
-@@ -109,13 +109,13 @@ binary = /usr/sbin/fping
+@@ -111,13 +112,13 @@ binary = /usr/bin/fping
  
  *** Slaves ***
- secrets=@prefix@/etc/smokeping_secrets.dist
+ secrets=/etc/smokeping/smokeping_secrets
 -+boomer
 -display_name=boomer
 -color=0000ff
-+#+boomer
-+#display_name=boomer
-+#color=0000ff
- 
+-
 -+slave2
 -display_name=another
 -color=00ff00
++#+boomer
++#display_name=boomer
++#color=0000ff
++
 +#+slave2
 +#display_name=another
 +#color=00ff00
  
  *** Targets ***
  
-@@ -126,21 +126,16 @@ title = Network Latency Grapher
+@@ -128,21 +129,16 @@ title = Network Latency Grapher
  remark = Welcome to the SmokePing website of xxx Company. \
           Here you will learn all about the latency of our network.
  

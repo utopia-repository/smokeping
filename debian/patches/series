@@ -1,9 +1,8 @@
 path_changes
 fix-perl-lib
-proper-sample-conf
-fix-conf-paths
 fix-conf-path-cgi
-typo_642197
 fix-400d-graph
 fix-paths-inside-executables
 missing-VERSION
+fix-conf-paths
+proper-sample-conf

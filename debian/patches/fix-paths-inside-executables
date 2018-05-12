@@ -1,64 +1,22 @@
-Index: smokeping-2.6.9/bin/smokeinfo
+Index: b/bin/smokeping
 ===================================================================
---- smokeping-2.6.9.orig/bin/smokeinfo
-+++ smokeping-2.6.9/bin/smokeinfo
-@@ -2,11 +2,6 @@
- use strict;
+--- a/bin/smokeping	2018-05-12 17:04:04.175753876 -0400
++++ b/bin/smokeping	2018-05-12 17:05:08.868200917 -0400
+@@ -5,12 +5,10 @@ use strict;
  use warnings;
  
+ use lib (split /:/, q{}); # PERL5LIB
 -use FindBin;
--# PERL5LIB
--use lib "$FindBin::Bin/../thirdparty/lib/perl5";
--use lib "$FindBin::Bin/../lib";
--
- use Smokeping::Info;
- use Getopt::Long 2.25 qw(:config no_ignore_case);
- use Pod::Usage 1.14;
-@@ -84,19 +79,19 @@
+-use lib "$FindBin::RealBin/../lib";use lib "$FindBin::RealBin/../thirdparty/lib/perl5"; # LIBDIR
  
- Get all data all nodes
- 
-- smokeinfo etc/config 
-+ smokeinfo /etc/smokeping/config 
- 
- Only show nodes directly under /Customers
- 
-- smokeinfo --filter=/Customers/ etc/config
-+ smokeinfo --filter=/Customers/ /etc/smokeping/config
- 
- Show all nodes under /Customers
- 
-- smokeinfo --mode=recursive --filter=/Customers/ etc/config
-+ smokeinfo --mode=recursive --filter=/Customers/ /etc/smokeping/config
- 
- Show all nodes with '_wlan_' in the name
- 
-- smokeinfo --mode=regexp --filter=_wlan_ etc/config
-+ smokeinfo --mode=regexp --filter=_wlan_ /etc/smokeping/config
- 
- =head1 COPYRIGHT
- 
-Index: smokeping-2.6.9/bin/smokeping
-===================================================================
---- smokeping-2.6.9.orig/bin/smokeping
-+++ smokeping-2.6.9/bin/smokeping
-@@ -4,14 +4,9 @@
- use strict;
- use warnings;
- 
--use FindBin;
--# PERL5LIB
--use lib "$FindBin::Bin/../thirdparty/lib/perl5";
--use lib "$FindBin::Bin/../lib";
--
  use Smokeping;
   
--Smokeping::main("$FindBin::Bin/../etc/config");
+-Smokeping::main("$FindBin::RealBin/../etc/config");
 +Smokeping::main("/etc/smokeping/config");
  
  =head1 NAME
  
-@@ -129,25 +124,6 @@
+@@ -128,25 +126,6 @@ L<documentation on the SmokePing configu
  
  Please refer to L<the installation document|smokeping_install> for detailed setup instructions.
  
@@ -84,40 +42,19 @@ Index: smokeping-2.6.9/bin/smokeping
  =head1 COPYRIGHT
  
  Copyright (c) 2002 by Tobias Oetiker. All right reserved.
-Index: smokeping-2.6.9/bin/smokeping_cgi
+Index: b/bin/tSmoke
 ===================================================================
---- smokeping-2.6.9.orig/bin/smokeping_cgi
-+++ smokeping-2.6.9/bin/smokeping_cgi
-@@ -4,11 +4,6 @@
- use strict;
- use warnings;
+--- a/bin/tSmoke	2018-05-12 17:04:04.175753876 -0400
++++ b/bin/tSmoke	2018-05-12 17:06:18.924685024 -0400
+@@ -53,7 +53,6 @@ use warnings;
+ # Point the lib variables to your implementation
  
--use FindBin;
--# PERL5LIB
--use lib "$FindBin::Bin/../thirdparty/lib/perl5";
--use lib "$FindBin::Bin/../lib";
--
- # don't bother with zombies
- $SIG{CHLD} = 'IGNORE';
+ use lib (split /:/, q{}); # PERL5LIB
+-use FindBin;use lib "$FindBin::RealBin/../lib";use lib "$FindBin::RealBin/../thirdparty/lib/perl5"; # LIBDIR
  
-Index: smokeping-2.6.9/bin/tSmoke
-===================================================================
---- smokeping-2.6.9.orig/bin/tSmoke
-+++ smokeping-2.6.9/bin/tSmoke
-@@ -49,12 +49,6 @@
- # -- Smokeping libraries
- # -- RRDTool
- # -- Getopt::Long
--#
--# Point the lib variables to your implementation
--use FindBin;
--# PERL5LIB
--use lib "$FindBin::Bin/../thirdparty/lib/perl5";
--use lib "$FindBin::Bin/../lib";
  
  use Smokeping;
- use Net::SMTP;
-@@ -63,7 +57,7 @@
+@@ -63,7 +62,7 @@ use Pod::Usage;
  use RRDs;
  
  # Point to your Smokeping config file
@@ -126,7 +63,7 @@ Index: smokeping-2.6.9/bin/tSmoke
  
  # global variables
  my $cfg;
-@@ -478,39 +472,9 @@
+@@ -498,39 +497,9 @@ past week and past month including an ov
  Typical crontab used to invoke this are
  
   # Quick morning alert to see what's down
@@ -165,6 +102,42 @@ Index: smokeping-2.6.9/bin/tSmoke
 -
 - tmail = /usr/local/smokeping/etc/tmail
 + 0 8 * * * /usr/sbin/tSmoke --q --to=mailbox@company.com.invalid --weekly --detail=0
+ 
+ =head1 COPYRIGHT
+ 
+diff --git a/bin/smokeinfo b/bin/smokeinfo
+index 7c56c0f..83a346e 100755
+--- a/bin/smokeinfo
++++ b/bin/smokeinfo
+@@ -3,7 +3,6 @@ use strict;
+ use warnings;
+ 
+ use lib (split /:/, q{}); # PERL5LIB
+-use FindBin;use lib "$FindBin::RealBin/../lib";use lib "$FindBin::RealBin/../thirdparty/lib/perl5"; # LIBDIR
+ 
+ use Smokeping::Info;
+ use Getopt::Long 2.25 qw(:config no_ignore_case);
+@@ -82,19 +81,19 @@ they work on the same syntax.
+ 
+ Get all data all nodes
+ 
+- smokeinfo etc/config 
++ smokeinfo /etc/smokeping/config
+ 
+ Only show nodes directly under /Customers
+ 
+- smokeinfo --filter=/Customers/ etc/config
++ smokeinfo --filter=/Customers/ /etc/smokeping/config
+ 
+ Show all nodes under /Customers
+ 
+- smokeinfo --mode=recursive --filter=/Customers/ etc/config
++ smokeinfo --mode=recursive --filter=/Customers/ /etc/smokeping/config
+ 
+ Show all nodes with '_wlan_' in the name
+ 
+- smokeinfo --mode=regexp --filter=_wlan_ etc/config
++ smokeinfo --mode=regexp --filter=_wlan_ /etc/smokeping/config
  
  =head1 COPYRIGHT
  

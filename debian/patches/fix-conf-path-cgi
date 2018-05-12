@@ -2,9 +2,20 @@ Description: hardcode the path to the config file in CGI
 Author: Antoine Beaupré <anarcat@debian.org>
 Forwarded: no
 
---- smokeping-2.6.5.orig/bin/smokeping_cgi
-+++ smokeping-2.6.5/bin/smokeping_cgi
-@@ -18,7 +18,7 @@ use Smokeping;
+Index: b/bin/smokeping_cgi
+===================================================================
+--- a/bin/smokeping_cgi	2018-05-12 17:02:02.090910241 -0400
++++ b/bin/smokeping_cgi	2018-05-12 17:05:36.224389954 -0400
+@@ -5,8 +5,6 @@ use strict;
+ use warnings;
+ 
+ use lib (split /:/, q{}); # PERL5LIB
+-use FindBin;
+-use lib "$FindBin::RealBin/../lib";use lib "$FindBin::RealBin/../thirdparty/lib/perl5"; # LIBDIR
+ 
+ # don't bother with zombies
+ $SIG{CHLD} = 'IGNORE';
+@@ -17,7 +15,7 @@ use Smokeping;
  
  use CGI::Fast;
  

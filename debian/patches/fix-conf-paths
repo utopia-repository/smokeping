@@ -1,8 +1,10 @@
 Description: use Debian paths instead of silly ones
 
 This doesn't need to be sent upstream
---- smokeping-2.6.5.orig/etc/config.dist.in
-+++ smokeping-2.6.5/etc/config.dist.in
+Index: b/etc/config.dist.in
+===================================================================
+--- a/etc/config.dist.in	2018-05-12 17:07:16.029079629 -0400
++++ b/etc/config.dist.in	2018-05-12 17:08:53.349752138 -0400
 @@ -3,17 +3,17 @@
  owner    = Peter Random
  contact  = some@address.nowhere
@@ -28,16 +30,16 @@ This doesn't need to be sent upstream
  # specify this to get syslog logging
  syslogfacility = local0
  # each probe is now run in its own process
-@@ -47,7 +47,7 @@
+@@ -47,7 +47,7 @@ AVERAGE  0.5 144   720
  
  *** Presentation ***
  
 -template = @prefix@/etc/basepage.html.dist
 +template = /etc/smokeping/basepage.html
- charset  = utf-8
+ htmltitle = yes
+ graphborders = no
  
- + charts
-@@ -105,10 +105,10 @@ unison_tolerance = 2
+@@ -107,10 +107,10 @@ unison_tolerance = 2
  
  + FPing
  
@@ -47,6 +49,6 @@ This doesn't need to be sent upstream
  *** Slaves ***
 -secrets=@prefix@/etc/smokeping_secrets.dist
 +secrets=/etc/smokeping/smokeping_secrets
- #+boomer
- #display_name=boomer
- #color=0000ff
+ +boomer
+ display_name=boomer
+ color=0000ff

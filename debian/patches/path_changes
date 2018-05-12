@@ -1,20 +1,22 @@
 Description: fix the paths to javascript files
 Author: Antoine Beaupré <anarcat@debian.org>
 
---- smokeping-2.6.5.orig/etc/basepage.html.dist
-+++ smokeping-2.6.5/etc/basepage.html.dist
-@@ -53,10 +53,10 @@ a.menulink:hover       {
- -->
- </STYLE>
+Index: b/etc/basepage.html.dist
+===================================================================
+--- a/etc/basepage.html.dist	2018-05-12 16:58:37.101493715 -0400
++++ b/etc/basepage.html.dist	2018-05-12 16:58:50.869588855 -0400
+@@ -47,10 +47,10 @@
+     <p><small>Maintained by <a href="mailto:<##contact##>"><##owner##></a></small></p>
+ </div>
  
--<script src="cropper/lib/prototype.js" type="text/javascript"></script>      
--<script src="cropper/lib/scriptaculous.js?load=builder,effects,dragdrop" type="text/javascript"></script>
--<script src="cropper/cropper.js" type="text/javascript"></script>
--<script src="cropper/smokeping-zoom.js" type="text/javascript"></script>
-+<script src="/smokeping/prototype/prototype.js" type="text/javascript"></script>      
+-<script src="js/prototype.js" type="text/javascript"></script>
+-<script src="js/scriptaculous/scriptaculous.js?load=builder,effects,dragdrop" type="text/javascript"></script>
+-<script src="js/cropper/cropper.js" type="text/javascript"></script>
+-<script src="js/smokeping.js" type="text/javascript"></script>
++<script src="/smokeping/prototype/prototype.js" type="text/javascript"></script>
 +<script src="/smokeping/scriptaculous/scriptaculous.js?load=builder,effects,dragdrop" type="text/javascript"></script>
 +<script src="/smokeping/cropper/cropper.js" type="text/javascript"></script>
-+<script src="/smokeping/smokeping-zoom.js" type="text/javascript"></script>
++<script src="/smokeping/smokeping.js" type="text/javascript"></script>
  
- 
- 
+ </body>
+ </html>
