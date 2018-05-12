@@ -1,3 +1,16 @@
+smokeping (2.6.11-5) unstable; urgency=medium
+
+  [ Gabriel Filion ]
+  * Add a directory index to show the cgi instead of a 403 (Closes:
+    #885699, #882987)
+
+  [ Antoine Beaupré ]
+  * document FastCGI configuration (Closes: #684870)
+  * repository migrated to salsa
+  * add Gabriel as maintainer
+
+ -- Antoine Beaupré <anarcat@debian.org>  Sat, 12 May 2018 15:48:07 -0400
+
 smokeping (2.6.11-4) unstable; urgency=medium
 
   * add missing build-dep on rename (Closes: #826056)
