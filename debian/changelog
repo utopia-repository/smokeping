@@ -1,3 +1,11 @@
+smokeping (2.7.2-1) unstable; urgency=medium
+
+  * new upstream release
+  * switch repository to salsa
+  * add Gabriel Fillion as maintainer
+
+ -- Antoine Beaupré <anarcat@debian.org>  Sat, 12 May 2018 14:45:37 -0400
+
 smokeping (2.6.11-4) unstable; urgency=medium
 
   * add missing build-dep on rename (Closes: #826056)
