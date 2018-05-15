@@ -3,7 +3,7 @@ smokeping (2.7.2-1) experimental; urgency=medium
   * new upstream release (Closes: #898580)
   * drop patch typo_642197 fixed upstream
 
- -- Antoine Beaupré <anarcat@debian.org>  Sat, 12 May 2018 14:45:37 -0400
+ -- Antoine Beaupré <anarcat@debian.org>  Tue, 15 May 2018 12:21:26 -0400
 
 smokeping (2.6.11-5) unstable; urgency=medium
 
