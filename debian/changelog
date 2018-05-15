@@ -1,4 +1,4 @@
-smokeping (2.7.2-1) unstable; urgency=medium
+smokeping (2.7.2-1) experimental; urgency=medium
 
   * new upstream release (Closes: #898580)
   * drop patch typo_642197 fixed upstream
