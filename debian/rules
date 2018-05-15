@@ -21,11 +21,19 @@ unexport LC_ALL
 
 TMP=$(CURDIR)/debian/smokeping
 
+SUBDIRS="doc etc htdocs lib bin"
+
 override_dh_auto_configure:
 	dh_auto_configure -- --prefix=/usr --with-htdocs-dir=/usr/share/smokeping/www --bindir=/usr/sbin --sysconfdir=/usr/share/doc/smokeping/
 
+override_dh_auto_build:
+	dh_auto_build -- SUBDIRS=$(SUBDIRS)
+
+override_dh_auto_test:
+	dh_auto_test -- SUBDIRS=$(SUBDIRS)
+
 override_dh_auto_install:
-	dh_auto_install
+	dh_auto_install -- SUBDIRS=$(SUBDIRS)
 
 	rm -r $(TMP)/usr/share/smokeping/www/cropper
 	dh_link /var/cache/smokeping/images /usr/share/smokeping/www/images
