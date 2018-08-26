@@ -1,0 +1,49 @@
+Description: Add parameter to choose IP protocol version with FPing
+ Mark Kamichoff reported in #905752 that FPing had changed its behaviour since
+ 3.16 and that it was now impossible to force smokeping to check IPv4 or IPv6
+ specifically. This patch adds a parameter to the FPing probe that lets you
+ specify the protocol version.
+ .
+ smokeping (2.7.2-1) experimental; urgency=medium
+ .
+   * new upstream release (Closes: #898580)
+   * drop patch typo_642197 fixed upstream
+Author: Gabriel Filion <gabster@lelutin.ca>
+Bug-Debian: https://bugs.debian.org/905752
+Forwarded: https://github.com/oetiker/SmokePing/issues/95
+Reviewed-By: Antoine Beaupré <anarcat@debian.org>
+Last-Update: 2018-08-26
+
+--- smokeping-2.7.2.orig/lib/Smokeping/probes/FPing.pm
++++ smokeping-2.7.2/lib/Smokeping/probes/FPing.pm
+@@ -119,6 +119,7 @@ sub ping ($){
+     # pinging nothing is pointless
+     return unless @{$self->addresses};
+     my @params = () ;
++    push @params, "-$self->{properties}{protocol}";
+     push @params, "-b$self->{properties}{packetsize}" if $self->{properties}{packetsize};
+     push @params, "-t" . int(1000 * $self->{properties}{timeout}) if $self->{properties}{timeout};
+     push @params, "-i" . int(1000 * $self->{properties}{mininterval});
+@@ -198,6 +199,12 @@ sub probevars {
+ 			_doc => "Send an extra ping and then discarge the first answer since the first is bound to be an outliner.",
+ 
+ 		},
++		protocol => {
++			_re => '(4|6)',
++			_example => '4',
++			_doc => "Choose if the ping should use IPv4 or IPv6.",
++
++		},
+ 		usestdout => {
+ 			_re => '(true|false)',
+ 			_example => 'true',
+--- smokeping-2.7.2.orig/lib/Smokeping/probes/FPing6.pm
++++ smokeping-2.7.2/lib/Smokeping/probes/FPing6.pm
+@@ -46,6 +46,7 @@ sub probevars {
+       my $self = shift;
+       my $h = $self->SUPER::probevars;
+       $h->{binary}{_example} = "/usr/bin/fping6";
++      $h->{protocol}{_example} = "6";
+       $h->{sourceaddress}{_re} = "[0-9A-Fa-f:.]+";
+       $h->{sourceaddress}{_example} = "::1";
+       return $h;
