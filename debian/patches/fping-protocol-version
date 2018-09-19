@@ -14,9 +14,9 @@ Forwarded: https://github.com/oetiker/SmokePing/issues/95
 Reviewed-By: Antoine Beaupré <anarcat@debian.org>
 Last-Update: 2018-08-26
 
---- smokeping-2.7.2.orig/lib/Smokeping/probes/FPing.pm
-+++ smokeping-2.7.2/lib/Smokeping/probes/FPing.pm
-@@ -119,6 +119,7 @@ sub ping ($){
+--- a/lib/Smokeping/probes/FPing.pm
++++ b/lib/Smokeping/probes/FPing.pm
+@@ -119,6 +119,7 @@
      # pinging nothing is pointless
      return unless @{$self->addresses};
      my @params = () ;
@@ -24,26 +24,28 @@ Last-Update: 2018-08-26
      push @params, "-b$self->{properties}{packetsize}" if $self->{properties}{packetsize};
      push @params, "-t" . int(1000 * $self->{properties}{timeout}) if $self->{properties}{timeout};
      push @params, "-i" . int(1000 * $self->{properties}{mininterval});
-@@ -198,6 +199,12 @@ sub probevars {
+@@ -198,6 +199,13 @@
  			_doc => "Send an extra ping and then discarge the first answer since the first is bound to be an outliner.",
  
  		},
 +		protocol => {
 +			_re => '(4|6)',
 +			_example => '4',
++			_default => '4',
 +			_doc => "Choose if the ping should use IPv4 or IPv6.",
 +
 +		},
  		usestdout => {
  			_re => '(true|false)',
  			_example => 'true',
---- smokeping-2.7.2.orig/lib/Smokeping/probes/FPing6.pm
-+++ smokeping-2.7.2/lib/Smokeping/probes/FPing6.pm
-@@ -46,6 +46,7 @@ sub probevars {
+--- a/lib/Smokeping/probes/FPing6.pm
++++ b/lib/Smokeping/probes/FPing6.pm
+@@ -46,6 +46,8 @@
        my $self = shift;
        my $h = $self->SUPER::probevars;
        $h->{binary}{_example} = "/usr/bin/fping6";
 +      $h->{protocol}{_example} = "6";
++      $h->{protocol}{_default} = "6";
        $h->{sourceaddress}{_re} = "[0-9A-Fa-f:.]+";
        $h->{sourceaddress}{_example} = "::1";
        return $h;
