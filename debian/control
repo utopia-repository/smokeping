@@ -62,10 +62,10 @@ Suggests: curl
  , libio-socket-ssl-perl
  , libnet-telnet-perl
 Description: latency logging and graphing system
- SmokePing consists of a daemon process which organizes the 
- latency measurements and a CGI which presents the graphs. 
+ SmokePing consists of a daemon process which organizes the
+ latency measurements and a CGI which presents the graphs.
  .
- With SmokePing you can measure latency and packet loss in your network. 
+ With SmokePing you can measure latency and packet loss in your network.
  SmokePing uses RRDtool to maintain a longterm datastore and to draw pretty
- graphs giving up to the minute information on the state of each 
+ graphs giving up to the minute information on the state of each
  network connection.
