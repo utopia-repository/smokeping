@@ -1,3 +1,9 @@
+smokeping (2.7.2-3) UNRELEASED; urgency=medium
+
+  * d/control: Deprecating priority extra as per policy 4.0.1
+
+ -- Ondřej Nový <onovy@debian.org>  Mon, 01 Oct 2018 09:50:56 +0200
+
 smokeping (2.7.2-2) unstable; urgency=medium
 
   [ Gabriel Filion ]

@@ -1,6 +1,6 @@
 Source: smokeping
 Section: net
-Priority: extra
+Priority: optional
 Maintainer: Gabriel Filion <gabriel@koumbit.org>
 Uploaders: Antoine Beaupré <anarcat@debian.org>
 Build-Depends: debhelper (>= 10~)
