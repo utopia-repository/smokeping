@@ -6,7 +6,7 @@ smokeping (2.7.2-3) unstable; urgency=medium
   * d/control: Remove trailing whitespaces
 
   [ Gabriel Filion ]
-  * Update patch fping-protocol-version: setup default values (Closes #908674)
+  * Update patch fping-protocol-version: setup default values (Closes: #908674)
 
  -- Gabriel Filion <gabriel@koumbit.org>  Thu, 11 Oct 2018 19:22:32 -0400
 
