@@ -8,6 +8,9 @@ smokeping (2.7.2-3) unstable; urgency=medium
   [ Gabriel Filion ]
   * Update patch fping-protocol-version: setup default values (Closes: #908674)
 
+  [ Antoine Beaupré ]
+  * Update lintian bypass for embedded javascript
+
  -- Gabriel Filion <gabriel@koumbit.org>  Thu, 11 Oct 2018 19:22:32 -0400
 
 smokeping (2.7.2-2) unstable; urgency=medium
