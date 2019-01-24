@@ -21,7 +21,6 @@ use IPC::Open2 qw(open2);
 use JSON::PP qw(decode_json);
 use Path::Tiny qw(path);
 use Scalar::Util qw(looks_like_number);
-use Switch;
 use Symbol qw(gensym);
 use Time::HiRes qw(usleep gettimeofday tv_interval);
 
@@ -55,7 +54,7 @@ set). Otherwise, there can be a deadlock while B<readfrom> targets wait for thei
 corresponding B<writeto> target to complete, which may never start.
 DOC
 		authors => <<'DOC',
-Pete Heist <pete@eventide.io>
+Pete Heist <pete@heistp.net>
 DOC
 	};
 }

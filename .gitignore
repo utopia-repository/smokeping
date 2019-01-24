@@ -1,4 +1,0 @@
-doc/*
-!doc/*.pod
-doc/smokeping_examples.pod
-doc/smokeping_config.pod

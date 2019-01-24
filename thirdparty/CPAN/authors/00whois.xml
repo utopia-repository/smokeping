@@ -11,12 +11,32 @@
     <has_cpandir>1</has_cpandir>
   </cpanid>
   <cpanid>
+    <id>ISHIGAKI</id>
+    <type>author</type>
+    <has_cpandir>1</has_cpandir>
+  </cpanid>
+  <cpanid>
+    <id>PEVANS</id>
+    <type>author</type>
+    <has_cpandir>1</has_cpandir>
+  </cpanid>
+  <cpanid>
     <id>PETDANCE</id>
     <type>author</type>
     <has_cpandir>1</has_cpandir>
   </cpanid>
   <cpanid>
     <id>PORTAONE</id>
+    <type>author</type>
+    <has_cpandir>1</has_cpandir>
+  </cpanid>
+  <cpanid>
+    <id>PORTAONE</id>
+    <type>author</type>
+    <has_cpandir>1</has_cpandir>
+  </cpanid>
+  <cpanid>
+    <id>DAGOLDEN</id>
     <type>author</type>
     <has_cpandir>1</has_cpandir>
   </cpanid>
@@ -41,6 +61,11 @@
     <has_cpandir>1</has_cpandir>
   </cpanid>
   <cpanid>
+    <id>NLNETLABS</id>
+    <type>author</type>
+    <has_cpandir>1</has_cpandir>
+  </cpanid>
+  <cpanid>
     <id>TODDR</id>
     <type>author</type>
     <has_cpandir>1</has_cpandir>
@@ -52,6 +77,11 @@
   </cpanid>
   <cpanid>
     <id>MIKEM</id>
+    <type>author</type>
+    <has_cpandir>1</has_cpandir>
+  </cpanid>
+  <cpanid>
+    <id>MIYAGAWA</id>
     <type>author</type>
     <has_cpandir>1</has_cpandir>
   </cpanid>
@@ -141,6 +171,16 @@
     <has_cpandir>1</has_cpandir>
   </cpanid>
   <cpanid>
+    <id>SULLR</id>
+    <type>author</type>
+    <has_cpandir>1</has_cpandir>
+  </cpanid>
+  <cpanid>
+    <id>SALVA</id>
+    <type>author</type>
+    <has_cpandir>1</has_cpandir>
+  </cpanid>
+  <cpanid>
     <id>SALVA</id>
     <type>author</type>
     <has_cpandir>1</has_cpandir>
@@ -162,6 +202,26 @@
   </cpanid>
   <cpanid>
     <id>OALDERS</id>
+    <type>author</type>
+    <has_cpandir>1</has_cpandir>
+  </cpanid>
+  <cpanid>
+    <id>OALDERS</id>
+    <type>author</type>
+    <has_cpandir>1</has_cpandir>
+  </cpanid>
+  <cpanid>
+    <id>OALDERS</id>
+    <type>author</type>
+    <has_cpandir>1</has_cpandir>
+  </cpanid>
+  <cpanid>
+    <id>ETHER</id>
+    <type>author</type>
+    <has_cpandir>1</has_cpandir>
+  </cpanid>
+  <cpanid>
+    <id>ETHER</id>
     <type>author</type>
     <has_cpandir>1</has_cpandir>
   </cpanid>
@@ -206,12 +266,27 @@
     <has_cpandir>1</has_cpandir>
   </cpanid>
   <cpanid>
+    <id>LEEJO</id>
+    <type>author</type>
+    <has_cpandir>1</has_cpandir>
+  </cpanid>
+  <cpanid>
     <id>RJBS</id>
     <type>author</type>
     <has_cpandir>1</has_cpandir>
   </cpanid>
   <cpanid>
     <id>UMEMOTO</id>
+    <type>author</type>
+    <has_cpandir>1</has_cpandir>
+  </cpanid>
+  <cpanid>
+    <id>UMEMOTO</id>
+    <type>author</type>
+    <has_cpandir>1</has_cpandir>
+  </cpanid>
+  <cpanid>
+    <id>ABH</id>
     <type>author</type>
     <has_cpandir>1</has_cpandir>
   </cpanid>
