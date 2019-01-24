@@ -6,4 +6,3 @@ fix-paths-inside-executables
 missing-VERSION
 fix-conf-paths
 proper-sample-conf
-fping-protocol-version
