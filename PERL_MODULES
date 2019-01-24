@@ -1,0 +1,16 @@
+FCGI
+CGI
+CGI::Fast
+Config::Grammar
+Socket6
+IO::Socket::SSL
+Digest::HMAC_MD5
+Net::Telnet
+Net::OpenSSH
+Net::SNMP
+Net::LDAP
+Net::DNS
+IO::Pty
+LWP
+Authen::Radius
+Path::Tiny

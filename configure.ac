@@ -17,19 +17,51 @@
 #
 
 
-AC_INIT([smokeping],[2.6.9],[tobi@oetiker.ch])
+AC_INIT([smokeping],m4_esyscmd([tr -d '\n' < VERSION]),[tobi@oetiker.ch])
 AC_PREREQ([2.59])
 AC_CONFIG_AUX_DIR(conftools)
-AC_CANONICAL_TARGET
-m4_version_prereq(2.60, [AC_USE_SYSTEM_EXTENSIONS], [#])
-AM_INIT_AUTOMAKE(1.9)
+
+# need this to allow long path names
+AM_INIT_AUTOMAKE([1.9 tar-ustar foreign no-dependencies no-installinfo no-texinfo.tex nostdinc ])
 AM_MAINTAINER_MODE
+
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 
-AC_PREFIX_DEFAULT(/opt/smokeping-$PACKAGE_VERSION)
+AC_PREFIX_DEFAULT(/opt/$PACKAGE_NAME-$PACKAGE_VERSION)
 
 AC_ARG_VAR(PERL,   [Path to local perl binary])
 AC_PATH_PROG(PERL, perl, no)
+AC_PATH_PROG(CURL, curl, no)
+AC_PATH_PROG(WGET, wget, no)
+
+URL_CAT="neither curl nor wget found"
+
+if test -x "$CURL"; then
+    URL_CAT="$CURL --location --insecure"
+else
+    if test -x "$WGET"; then
+        URL_CAT="$WGET -O -"
+    fi
+fi
+
+AC_SUBST(URL_CAT)
+
+ac_perl_version="5.10.1"
+
+if test "x$PERL" != "x"; then
+  AC_MSG_CHECKING(for perl version greater than or equal to $ac_perl_version)
+  $PERL -e "use $ac_perl_version;" >/dev/null 2>&1
+  if test $? -ne 0; then
+    AC_MSG_RESULT(no);
+    AC_MSG_ERROR(at least version 5.10.1 is required to run mojolicious)
+  else
+    AC_MSG_RESULT(ok);
+  fi
+else
+  AC_MSG_ERROR(could not find perl)
+fi
+
+
 AC_PATH_PROG(SED, sed, no)
 AC_PATH_PROG(GREP, grep, no)
 AC_PATH_PROG(ECHO, echo, no)
@@ -60,16 +92,13 @@ AC_SUBST(enable_pkgonly)
 # $prefix stores the value of the --prefix command line option, or
 # NONE if the option wasn't set.  In the case that it wasn't set, make
 # it be the default, so that we can use it to expand directories now.
-if test "x$prefix" = "xNONE"; then
-  prefix=$ac_default_prefix
-fi
 
-# and similarly for $exec_prefix
-if test "x$exec_prefix" = "xNONE"; then
-  exec_prefix=$prefix
+actual_prefix=$prefix
+if test x$actual_prefix = xNONE; then
+    actual_prefix=$ac_default_prefix
 fi
-
-HTDOCSDIR=${prefix}/htdocs
+    
+HTDOCSDIR=${actual_prefix}/htdocs
 AC_ARG_WITH(htdocs-dir,AC_HELP_STRING([--with-htdocs-dir=DIR],[Where to install htdocs [PREFIX/htdocs]]), [HTDOCSDIR=$withval])
 AC_SUBST(HTDOCSDIR)
 
@@ -81,44 +110,40 @@ AC_SUBST(PERL5LIB)
 
 mod_ok=1
 if test "$enable_pkgonly" != yes; then
-   for module in RRDs FCGI CGI CGI::Fast Config::Grammar Digest::HMAC_MD5 LWP; do
-     AC_MSG_CHECKING([checking for perl module '$module'])
-     if ${PERL} -I$prefix/thirdparty/lib/perl5 -e 'use '$module 2>/dev/null ; then
+    AC_MSG_CHECKING([checking for RRDs perl module])
+    if ${PERL} -e 'use RRDs' 2>/dev/null ; then
          AC_MSG_RESULT([Ok])
-     else
+    else
          AC_MSG_RESULT([Failed])
          mod_ok=0
-     fi
-   done
-   if test x$mod_ok = x0; then
-        cat <<NOTES
-
-** Aborting Configure ******************************
-   
-   If you know where perl can find the missing modules, set
-   the PERL5LIB environment variable accordingly.
-
-   FIRST though, make sure that 'perl' starts the perl
-   binary you want to use for SmokePing.
-
-   Now you can install local copies of the missing modules 
-   by running
-
-     ./setup/build-perl-modules.sh ${prefix}/thirdparty
-
-   The RRDs perl module is part of RRDtool. Either use the rrdtool
-   package provided by your OS or install rrdtool from source. 
-   If you install from source, the RRDs module is located
-   PREFIX/lib/perl
-
-NOTES
-      exit 1
-   fi
-
+    fi
 fi
 
+if test x$mod_ok = x0; then
+   cat <<NOTES
 
-AC_CONFIG_FILES([Makefile bin/Makefile doc/Makefile htdocs/Makefile etc/Makefile lib/Makefile etc/config.dist])
+** Aborting Configure ******************************
+
+   Smokeping requires a copy of rrdtool and its perl module RRDs
+   installed for Smokeping to work. Installing rrdtool
+   is outside the scope of the package. The easiest is
+   to simply install rrdtool from your distro:
+
+   on ubuntu
+
+      sudo apt install rrdtool librrds-perl
+
+   on redhat
+
+      sudo yum install rrdtool perl-rrdtool
+
+   if you install rrdtool from source into a non-standard location
+   set PERL5LIB accordingly.
+NOTES
+   exit 1
+fi
+
+AC_CONFIG_FILES([Makefile bin/Makefile doc/Makefile htdocs/Makefile etc/Makefile lib/Makefile thirdparty/Makefile etc/config.dist])
 
 AC_SUBST(VERSION)
 

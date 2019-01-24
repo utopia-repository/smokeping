@@ -20,10 +20,16 @@ DDEESSCCRRIIPPTTIIOONN
            you want to get the latest and greatest version, compile your own:
            <http://oss.oetiker.ch/rrdtool/>
 
+           Ubuntu:
+
+            sudo apt install rrdtool librrds-perl
+
+           RedHat:
+
+            sudo yum install rrdtool perl-rrdtool
+
        FPing (optional)
-           The official site <http://fping.sourceforge.net/> seems to be a bit
-           unmaintained. You might want to grab an updated version of fping
-           from <http://oss.oetiker.ch/smokeping/pub/>.
+           Go to <http://www.fping.org/> to grab a copy.
 
            Note that fping must be installed setuid root. It seems that older
            versions of fping report round trip times in 0.1 milliseconds
@@ -32,7 +38,7 @@ DDEESSCCRRIIPPTTIIOONN
            gets it wrong.
 
        EchoPing  (Optional)
-           <http://echoping.sourceforge.net/>
+           <https://github.com/bortzmeyer/echoping/>
 
            You need this to run the EchoPing probes
 
@@ -63,54 +69,16 @@ DDEESSCCRRIIPPTTIIOONN
            <http://httpd.apache.org/docs/2.2/mod/mod_suexec.html> for more
            information on this.
 
-       Perl 5.8.8 or later.
+       Perl 5.10.1 or later.
            If you still have an older version, maybe have a look at perlbrew.
 
-       Various Perl modules (Many are optional)
-           The modules are all available from <http://www.cpan.org> and you
-           may be able to get them as packages from your distro's repository.
-           There is also a script provided in the setup folder to install the
-           missing bits.  You will be instructed later on how to use the
-           script.
+           Ubuntu:
 
-           FCGI
-               The module for supporting FastCGI operation.
+            sudo apt install perl
 
-           CGI, CGI::Fast
-               Perl CGI/FastCGI support. Might already be installed localy.
+           RedHat:
 
-           Config::Grammar
-               The configuration file parser used in smokeping
-
-           LWP The master/slave functionality introduced a dependency on
-               LWP::UserAgent from the libwww-perl (also known as LWP)
-               library.  The module is required even if the master/slave mode
-               is not enabled.
-
-           Socket6 (optional)
-               The Socket6 module enables smokeping to check hostnames that
-               only resolve to an IPv6 address. If you probe such hosts using
-               ie. the FPing6 probe and get warnings that those hosts don't
-               resolve to an IP address, you need to install it.
-
-           Net::Telnet (optional)
-               You need this for the TelnetIOSPing probe.
-
-           Net::OpenSSH (optional)
-               You need this for the OpenSSHJunOSPing probe.
-
-           Net::DNS (optional)
-               You need this for the AnotherDNS probe.
-
-           Net::LDAP (optional)
-               You need this for the LDAP probe.
-
-           IO::Socket::SSL (optional)
-               You need this if you want the LDAP probe to be able to use the
-               'starttls' command.
-
-           Authen::Radius (optional)
-               You need this for the Radius probe.
+            sudo yum install perl-core
 
    IInnssttaallllaattiioonn
        Once the tools listed above are in place, you can start setting up
@@ -199,4 +167,4 @@ AAUUTTHHOORR
 
 
 
-2.6.9                             2012-04-02              SMOKEPING_INSTALL(7)
+2.8.0                             2018-01-30              SMOKEPING_INSTALL(7)
