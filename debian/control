@@ -6,7 +6,6 @@ Uploaders: Antoine Beaupré <anarcat@debian.org>
 Build-Depends: debhelper (>= 10~)
  , autoconf
  , automake
- , dh-autoreconf
  , dh-apache2
  , apache2-dev
  , rename
