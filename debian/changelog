@@ -1,3 +1,11 @@
+smokeping (2.7.3-1) unstable; urgency=medium
+
+  * use https in watch file
+  * new upstream release
+  * remove patch merged upstream
+
+ -- Gabriel Filion <gabriel@koumbit.org>  Wed, 23 Jan 2019 19:26:45 -0500
+
 smokeping (2.7.2-3) unstable; urgency=medium
 
   [ Ondřej Nový ]
