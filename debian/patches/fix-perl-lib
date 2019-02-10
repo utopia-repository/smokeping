@@ -1,5 +1,10 @@
 Description: fix path for perl libs
 
+  Debian packages drop libraries in a different place than upstream
+
+Forwarded: not-needed
+Last-Update: 2019-02-10
+
 --- smokeping-2.6.5.orig/lib/Makefile.am
 +++ smokeping-2.6.5/lib/Makefile.am
 @@ -31,5 +31,5 @@ MATCH := $(wildcard Smokeping/matchers/*
