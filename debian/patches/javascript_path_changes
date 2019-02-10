@@ -1,5 +1,7 @@
 Description: fix the paths to javascript files
 Author: Antoine Beaupré <anarcat@debian.org>
+Forwarded: not-needed
+Last-Update: 2019-02-10
 
 Index: b/etc/basepage.html.dist
 ===================================================================
