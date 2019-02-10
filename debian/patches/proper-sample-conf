@@ -2,6 +2,8 @@ Description: setup a proper sample configuration
  This disables slaves and setups targets that are sure to work (no
  slaves, localhost). It also sets up utf8
 Author: Antoine Beaupré <anarcat@debian.org>
+Forwarded: not-needed
+Last-Update: 2019-02-10
 
 Index: b/etc/config.dist.in
 ===================================================================
