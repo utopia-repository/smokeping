@@ -12,9 +12,9 @@ Description: fix default yearly display
 Author: Dmitry Semyonov <linulin@gmail.com>
 Origin: debian BTS
 Bug-Debian: http://bugs.debian.org/618851
-Forwarded: no
+Forwarded: https://github.com/oetiker/SmokePing/pull/156
 Reviewed-By: Antoine Beaupré <anarcat@debian.org>
-Last-Update: 2011-03-19
+Last-Update: 2019-02-10
 
 Index: b/etc/config.dist.in
 ===================================================================
