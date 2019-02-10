@@ -1,14 +1,14 @@
 Description: hardcode version because of missing VERSION file
 
  since upstream 2.6.10, the build system assumes a VERSION file is
- available in the tree. it's support to hold the version number of the
+ available in the tree. it's supposed to hold the version number of the
  package, but is not present. this hardcodes the version number to
  work around the issue.
 
 Author: Antoine Beaupré <anarcat@debian.org>
 Origin: debian
-Forwarded: no
-Last-Update: 2015-06-04
+Forwarded: https://github.com/oetiker/SmokePing/issues/155
+Last-Update: 2019-02-10
 
 --- smokeping-2.6.11.orig/configure.ac
 +++ smokeping-2.6.11/configure.ac
@@ -17,7 +17,7 @@ Last-Update: 2015-06-04
  
  
 -AC_INIT([smokeping],m4_esyscmd([tr -d '\n' < VERSION]),[tobi@oetiker.ch])
-+AC_INIT([smokeping],[2.6.11],[tobi@oetiker.ch])
++AC_INIT([smokeping],[2.7.3],[tobi@oetiker.ch])
  AC_PREREQ([2.59])
  AC_CONFIG_AUX_DIR(conftools)
  
