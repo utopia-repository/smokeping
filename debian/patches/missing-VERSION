@@ -8,6 +8,7 @@ Description: hardcode version because of missing VERSION file
 Author: Antoine Beaupré <anarcat@debian.org>
 Origin: debian
 Forwarded: https://github.com/oetiker/SmokePing/issues/155
+Applied-Upstream: https://github.com/oetiker/SmokePing/commit/904619e6a6c61681d8f872e04612651a8494448d
 Last-Update: 2019-02-10
 
 --- smokeping-2.6.11.orig/configure.ac

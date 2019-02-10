@@ -13,6 +13,7 @@ Author: Dmitry Semyonov <linulin@gmail.com>
 Origin: debian BTS
 Bug-Debian: http://bugs.debian.org/618851
 Forwarded: https://github.com/oetiker/SmokePing/pull/156
+Applied-Upstream: https://github.com/oetiker/SmokePing/commit/525be0bacbd799e2dbf350f0c09ce8cabb6b8a88
 Reviewed-By: Antoine Beaupré <anarcat@debian.org>
 Last-Update: 2019-02-10
 
