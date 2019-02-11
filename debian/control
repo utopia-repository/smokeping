@@ -23,7 +23,7 @@ Build-Depends-Indep: librrds-perl
  , libnet-dns-perl
  , libnet-telnet-perl
  , libio-pty-perl
-Standards-Version: 3.9.8
+Standards-Version: 4.3.0
 Homepage: https://smokeping.org/
 Vcs-Browser: https://salsa.debian.org/debian/smokeping
 Vcs-Git: https://salsa.debian.org/debian/smokeping.git
