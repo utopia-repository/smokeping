@@ -36,21 +36,21 @@ override_dh_auto_install:
 	dh_auto_install -- SUBDIRS=$(SUBDIRS)
 
 	dh_link /var/cache/smokeping/images /usr/share/smokeping/www/images
-	install -m 644 $(CURDIR)/htdocs/js/smokeping.js $(TMP)/usr/share/smokeping/www/js
+	install -v -m 644 $(CURDIR)/htdocs/js/smokeping.js $(TMP)/usr/share/smokeping/www/js
 	for d in cropper prototype scriptaculous; do \
-		rm -rf $(TMP)/usr/share/smokeping/www/js/$$d ; \
+		rm -vrf $(TMP)/usr/share/smokeping/www/js/$$d ; \
 	        dh_link /usr/share/javascript/$$d /usr/share/smokeping/www/js/$$d; \
 	done
-	rm -f $(TMP)/usr/share/smokeping/www/js/prototype.js
+	rm -vf $(TMP)/usr/share/smokeping/www/js/prototype.js
 
-	mv $(TMP)/usr/share/doc/smokeping/*.dist $(TMP)/etc/smokeping/
-	rename 's/\.dist$$//' $(TMP)/etc/smokeping/*.dist
-	rm -f $(TMP)/usr/share/smokeping/smokeping.fcgi.dist
-	rm -f $(TMP)/usr/share/perl5/BER.pm $(TMP)/usr/share/perl5/SNMP_*
-	mv $(TMP)/usr/sbin/smokeping_cgi $(TMP)/usr/share/smokeping/smokeping.cgi
-	install -m 755 $(CURDIR)/debian/smokeping.cgi $(TMP)/usr/lib/cgi-bin/smokeping.cgi
+	mv -v $(TMP)/usr/share/doc/smokeping/*.dist $(TMP)/etc/smokeping/
+	rename -v 's/\.dist$$//' $(TMP)/etc/smokeping/*.dist
+	rm -vf $(TMP)/usr/share/smokeping/smokeping.fcgi.dist
+	rm -vf $(TMP)/usr/share/perl5/BER.pm $(TMP)/usr/share/perl5/SNMP_*
+	mv -v $(TMP)/usr/sbin/smokeping_cgi $(TMP)/usr/share/smokeping/smokeping.cgi
+	install -v -m 755 $(CURDIR)/debian/smokeping.cgi $(TMP)/usr/lib/cgi-bin/smokeping.cgi
 	$(CURDIR)/debian/split_config $(TMP)
-	install -m 644 $(CURDIR)/debian/default-config $(TMP)/etc/smokeping/config
+	install -v -m 644 $(CURDIR)/debian/default-config $(TMP)/etc/smokeping/config
 
 %:
 	dh $@ --with autoreconf,apache2
