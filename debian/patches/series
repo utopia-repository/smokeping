@@ -1,6 +1,5 @@
 javascript_path_changes
 fix-perl-lib
-fix-conf-path-cgi
 fix-400d-graph
 fix-paths-inside-executables
 missing-VERSION
