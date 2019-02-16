@@ -4,15 +4,22 @@ Documentation=man:smokeping(1)
 After=network.target
 
 [Service]
-ExecStartPre=/bin/mkdir -p /run/smokeping
+# It would in theory be simpler to run smokeping with the --nodaemon option and
+# Type=simple, but smokeping does not work properly when in "slave" mode with
+# --nodaemon set.
+Type=forking
+RuntimeDirectory=smokeping
+PIDFile=/run/smokeping/smokeping.pid
+User=smokeping
+Group=smokeping
+StandardError=syslog
+
 ExecStart=/usr/sbin/smokeping --pid-dir=/run/smokeping
 # If running service in master/slave setup, you might want to override
 # ExecStart with something like the following:
 #ExecStart=/usr/sbin/smokeping --master-url=http://127.0.0.1/smokeping.fcgi --cache-dir=/var/lib/smokeping --shared-secret=/etc/smokeping/smokeping_secrets --pid-dir=/run/smokeping
+
 ExecReload=/bin/kill -HUP $MAINPID
-StandardError=syslog
-Type=forking
-PIDFile=/run/smokeping/smokeping.pid
 
 [Install]
 WantedBy=multi-user.target
