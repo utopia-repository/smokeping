@@ -1,2 +1,3 @@
 doc/examples/*
 etc/smokeping_secrets.dist
+debian/systemd

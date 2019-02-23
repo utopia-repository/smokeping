@@ -1,6 +1,6 @@
 [Unit]
 Description=Latency Logging and Graphing System
-Documentation=man:smokeping(1)
+Documentation=man:smokeping(1) file:/usr/share/doc/smokeping/examples/systemd/slave_mode.conf
 After=network.target
 
 [Service]
@@ -14,10 +14,9 @@ User=smokeping
 Group=smokeping
 StandardError=syslog
 
+# If you need to run smokeping in slave/master mode, see the example unit
+# override in /usr/share/doc/smokeping/examples/systemd/slave_mode.conf
 ExecStart=/usr/sbin/smokeping --pid-dir=/run/smokeping
-# If running service in master/slave setup, you might want to override
-# ExecStart with something like the following:
-#ExecStart=/usr/sbin/smokeping --master-url=http://127.0.0.1/smokeping.fcgi --cache-dir=/var/lib/smokeping --shared-secret=/etc/smokeping/smokeping_secrets --pid-dir=/run/smokeping
 
 ExecReload=/bin/kill -HUP $MAINPID
 
