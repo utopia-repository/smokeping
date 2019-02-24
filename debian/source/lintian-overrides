@@ -11,3 +11,5 @@ smokeping: source-is-missing htdocs/js/scriptaculous/scriptaculous.js line lengt
 smokeping: source-is-missing htdocs/js/scriptaculous/slider.js line length is 6530 characters (>512)
 smokeping: source-is-missing htdocs/js/scriptaculous/sound.js line length is 1585 characters (>512)
 smokeping: source-is-missing htdocs/js/scriptaculous/unittest.js line length is 12510 characters (>512)
+# As of upstream version 2.7.3 no test suite is present
+smokeping: testsuite-autopkgtest-missing
