@@ -56,7 +56,6 @@ Suggests: curl
  , libauthen-radius-perl
  , libnet-ldap-perl
  , libnet-dns-perl
- , exim4 | mail-transport-agent
  , openssh-client
  , libio-socket-ssl-perl
  , libnet-telnet-perl
