@@ -1,6 +1,6 @@
 Description: use Debian paths instead of silly ones
+Forwarded: not-needed
 
-This doesn't need to be sent upstream
 Index: b/etc/config.dist.in
 ===================================================================
 --- a/etc/config.dist.in	2018-05-12 17:07:16.029079629 -0400

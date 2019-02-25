@@ -1,7 +1,5 @@
 Description: fix path for perl libs
-
-  Debian packages drop libraries in a different place than upstream
-
+ Debian packages drop libraries in a different place than upstream
 Forwarded: not-needed
 Last-Update: 2019-02-10
 

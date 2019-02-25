@@ -1,9 +1,7 @@
 Description: fix the paths to javascript files
-
-  We're using javascript libraries from debian packages instead of the ones
-  vendored by upstream. Because of this some paths to libraries might differ a
-  bit.
-
+ We're using javascript libraries from debian packages instead of the ones
+ vendored by upstream. Because of this some paths to libraries might differ a
+ bit.
 Author: Antoine Beaupré <anarcat@debian.org>
 Forwarded: not-needed
 Last-Update: 2019-02-10

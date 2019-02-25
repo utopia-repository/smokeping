@@ -1,10 +1,8 @@
 Description: hardcode version because of missing VERSION file
-
  since upstream 2.6.10, the build system assumes a VERSION file is
  available in the tree. it's supposed to hold the version number of the
  package, but is not present. this hardcodes the version number to
  work around the issue.
-
 Author: Antoine Beaupré <anarcat@debian.org>
 Origin: debian
 Forwarded: https://github.com/oetiker/SmokePing/issues/155

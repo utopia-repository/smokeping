@@ -1,5 +1,4 @@
 Description: fix default yearly display
-
  Default Database configuration file is defined so that only 360 days
  of data could be stored:
  .
