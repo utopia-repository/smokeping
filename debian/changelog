@@ -1,6 +1,14 @@
 smokeping (2.7.3-2) UNRELEASED; urgency=medium
 
   [ Gabriel Filion ]
+  * systemd: run service as smokeping user
+    The systemd service unit file that was introduced in 2.7.3-1 didn't setup
+    user and group properly for the service, and the daemon was running as root.
+    This is now corrected, but it might mean that some files were created by and
+    are owned by root. To fix this, you can use the following command:
+    .
+    find /var/lib/smokeping/ -mindepth 1 -name '__cgi' -prune -o \
+      -exec chown smokeping:smokeping {} \;
   * missing-VERSION forwarded and merged upstream
   * patch "fix-400d-graph" forwarded and merged upstream
   * rename patch path_changes to make its name more meaningful
@@ -12,7 +20,6 @@ smokeping (2.7.3-2) UNRELEASED; urgency=medium
   * Bump Standards-Version to 4.3.0
   * merge both patches that hardcode config path
   * init.d: match on pidfile only prevents service stop (closes: #922395)
-  * systemd: run service as smokeping user
   * systemd: move example for slave mode in the examples dir
   * control: erroneous and duplicated mention of default mta
 
