@@ -1,3 +1,9 @@
+smokeping (2.7.3-3) UNRELEASED; urgency=medium
+
+  * start generating smokeinfo manpage
+
+ -- Gabriel Filion <gabriel@koumbit.org>  Mon, 04 Mar 2019 21:17:31 -0500
+
 smokeping (2.7.3-2) unstable; urgency=medium
 
   [ Gabriel Filion ]
