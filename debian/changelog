@@ -1,6 +1,7 @@
 smokeping (2.7.3-3) UNRELEASED; urgency=medium
 
   * start generating smokeinfo manpage
+  * make css and js load from the /smokeping alias (closes: #929515)
 
  -- Gabriel Filion <gabriel@koumbit.org>  Mon, 04 Mar 2019 21:17:31 -0500
 
