@@ -21,7 +21,7 @@ Index: b/etc/config.dist.in
 +imgcache = /var/cache/smokeping/images
 +imgurl   = ../smokeping/images
 +datadir  = /var/lib/smokeping
-+piddir  = /var/run/smokeping
++piddir  = /run/smokeping
  cgiurl   = http://some.url/smokeping.cgi
 -smokemail = @prefix@/etc/smokemail.dist
 -tmail = @prefix@/etc/tmail.dist
