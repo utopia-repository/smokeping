@@ -6,3 +6,4 @@ missing-VERSION
 fix-conf-paths
 proper-sample-conf
 smokeinfo_man
+fix-alert-edgetriggers
