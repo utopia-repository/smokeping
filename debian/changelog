@@ -1,10 +1,14 @@
-smokeping (2.7.3-3) unstable; urgency=medium
+smokeping (2.7.3-3) UNRELEASED; urgency=medium
 
+  [ Gabriel Filion ]
   * start generating smokeinfo manpage
   * postrm: purge, removal of apache2/conf.d/smokeping not needed anymore
   * make css and js load from the /smokeping alias (closes: #929515)
   * change fix-conf-paths patch to point the daemon to /run/smokeping for its
     pid indead of /var/run/smokeping
+
+  [ Matteo F. Vescovi ]
+  * debian/patches/: fix-alert-edgetriggers added (Closes: #934170)
 
  -- Gabriel Filion <gabriel@koumbit.org>  Fri, 01 May 2020 19:55:50 -0400
 
