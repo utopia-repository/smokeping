@@ -1,4 +1,4 @@
-smokeping (2.7.3-3) UNRELEASED; urgency=medium
+smokeping (2.7.3-3) unstable; urgency=medium
 
   [ Gabriel Filion ]
   * start generating smokeinfo manpage
@@ -10,7 +10,7 @@ smokeping (2.7.3-3) UNRELEASED; urgency=medium
   [ Matteo F. Vescovi ]
   * debian/patches/: fix-alert-edgetriggers added (Closes: #934170)
 
- -- Gabriel Filion <gabriel@koumbit.org>  Fri, 01 May 2020 19:55:50 -0400
+ -- Gabriel Filion <gabriel@koumbit.org>  Sat, 11 Jul 2020 00:00:19 +0200
 
 smokeping (2.7.3-2) unstable; urgency=medium
 
