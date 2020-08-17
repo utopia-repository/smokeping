@@ -3,7 +3,7 @@ Section: net
 Priority: optional
 Maintainer: Gabriel Filion <gabriel@koumbit.org>
 Uploaders: Antoine Beaupré <anarcat@debian.org>
-Build-Depends: debhelper (>= 12~)
+Build-Depends: debhelper-compat (= 12)
  , autoconf
  , automake
  , dh-apache2
