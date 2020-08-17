@@ -4,6 +4,7 @@ smokeping (2.7.3-4) UNRELEASED; urgency=low
   * Bump debhelper from old 10 to 12.
   * Set debhelper-compat version in Build-Depends.
   * Drop unnecessary dependency on dh-autoreconf.
+  * Update standards version to 4.5.0, no changes needed.
 
  -- Debian Janitor <janitor@jelmer.uk>  Mon, 17 Aug 2020 01:23:47 -0000
 
