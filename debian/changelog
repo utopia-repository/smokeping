@@ -1,3 +1,9 @@
+smokeping (2.7.3-4) UNRELEASED; urgency=low
+
+  * Trim trailing whitespace.
+
+ -- Debian Janitor <janitor@jelmer.uk>  Mon, 17 Aug 2020 01:23:47 -0000
+
 smokeping (2.7.3-3) unstable; urgency=medium
 
   [ Gabriel Filion ]
@@ -953,4 +959,3 @@ smokeping (1.1-1) unstable; urgency=low
   * Initial Release. (Closes: #133824)
 
  -- Jose Carlos Garcia Sogo <jsogo@debian.org>  Wed, 13 Feb 2002 23:11:07 +0100
-
