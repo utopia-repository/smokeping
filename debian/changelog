@@ -1,6 +1,7 @@
 smokeping (2.7.3-4) UNRELEASED; urgency=low
 
   * Trim trailing whitespace.
+  * Bump debhelper from old 10 to 12.
 
  -- Debian Janitor <janitor@jelmer.uk>  Mon, 17 Aug 2020 01:23:47 -0000
 
