@@ -53,4 +53,4 @@ override_dh_auto_install:
 	install -v -m 644 $(CURDIR)/debian/default-config $(TMP)/etc/smokeping/config
 
 %:
-	dh $@ --with autoreconf,apache2
+	dh $@ --with apache2
