@@ -30,6 +30,7 @@ Vcs-Git: https://salsa.debian.org/debian/smokeping.git
 
 Package: smokeping
 Architecture: all
+Pre-Depends: ${misc:Pre-Depends}
 Depends: ${perl:Depends}, ${misc:Depends}
  , libwww-perl
  , libsnmp-session-perl (>= 0.86)
