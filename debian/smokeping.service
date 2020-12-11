@@ -12,7 +12,6 @@ RuntimeDirectory=smokeping
 PIDFile=/run/smokeping/smokeping.pid
 User=smokeping
 Group=smokeping
-StandardError=syslog
 
 # If you need to run smokeping in slave/master mode, see the example unit
 # override in /usr/share/doc/smokeping/examples/systemd/slave_mode.conf
