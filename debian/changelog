@@ -1,12 +1,16 @@
 smokeping (2.7.3-4) UNRELEASED; urgency=low
 
+  [ Debian Janitor ]
   * Trim trailing whitespace.
   * Bump debhelper from old 10 to 12.
   * Set debhelper-compat version in Build-Depends.
   * Drop unnecessary dependency on dh-autoreconf.
   * Update standards version to 4.5.0, no changes needed.
 
- -- Debian Janitor <janitor@jelmer.uk>  Mon, 17 Aug 2020 01:23:47 -0000
+  [ Gabriel Filion ]
+  * Import patch that disables refresh while zooming [Closes:#981348]
+
+ -- Gabriel Filion <gabriel@koumbit.org>  Wed, 17 Feb 2021 19:33:16 -0500
 
 smokeping (2.7.3-3) unstable; urgency=medium
 

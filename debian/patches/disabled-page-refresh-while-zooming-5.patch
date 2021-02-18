@@ -1,0 +1,40 @@
+Author: n0rc <cr0n@cypherpunks.cc>
+Origin: Upstream
+Last-Updated: Wed, 13 Mar 2019 15:35:48 +0100
+Subject: [PATCH] disabled page refresh while zooming (#5)
+Bug-Debian: disabled-page-refresh-while-zooming-5.patch
+Applied-Upstream: https://github.com/oetiker/SmokePing/commit/ef1a7eac0a2f0baaf2cf1dc47703a73cdd936752
+
+---
+ htdocs/js/smokeping.js | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/htdocs/js/smokeping.js b/htdocs/js/smokeping.js
+index 59410cc..eb34e5e 100644
+--- a/htdocs/js/smokeping.js
++++ b/htdocs/js/smokeping.js
+@@ -26,12 +26,20 @@ var EndEpoch = 0;
+ 
+ function changeRRDImage(coords,dimensions){
+ 
++    // disable reloading the RRD image while zoomed in
++    try {
++        window.stop();
++    } catch (exception) {
++        // fallback for IE
++        document.execCommand('Stop');
++    }
++    
+     var SelectLeft = Math.min(coords.x1,coords.x2);
+ 
+     var SelectRight = Math.max(coords.x1,coords.x2);
+ 
+     if (SelectLeft == SelectRight)
+-         return; // abort if nothing is selected.
++        return; // abort if nothing is selected.
+ 
+     var RRDLeft  = 67;        // difference between left border of RRD image and content
+     var RRDRight = 26;        // difference between right border of RRD image and content
+-- 
+2.30.0
+

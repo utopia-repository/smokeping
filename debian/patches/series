@@ -7,3 +7,4 @@ fix-conf-paths
 proper-sample-conf
 smokeinfo_man
 fix-alert-edgetriggers
+disabled-page-refresh-while-zooming-5.patch
