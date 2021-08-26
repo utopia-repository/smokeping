@@ -33,16 +33,16 @@ Architecture: all
 Pre-Depends: ${misc:Pre-Depends}
 Depends: ${perl:Depends}, ${misc:Depends}
  , libwww-perl
- , libsnmp-session-perl (>= 0.86)
+ , libsnmp-session-perl
  , librrds-perl (>= 1.2)
  , liburi-perl
- , fping (>= 2.4b2-to-ipv6-2)
+ , fping
  , libcgi-fast-perl
- , debianutils (>= 1.7)
+ , debianutils
  , adduser
  , lsb-base (>= 3.0-6)
  , libdigest-hmac-perl
- , ucf (>= 0.28)
+ , ucf
  , libconfig-grammar-perl
  , libjs-cropper
  , libjs-scriptaculous
