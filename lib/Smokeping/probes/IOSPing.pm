@@ -98,7 +98,7 @@ sub pingone ($$){
     my $self = shift;
     my $target = shift;
     my $bytes = $self->{properties}{packetsize};
-    # do NOT call superclass ... the ping method MUST be overwriten
+    # do NOT call superclass ... the ping method MUST be overridden
     my %upd;
     my $inh = gensym;
     my $outh = gensym;
@@ -181,6 +181,8 @@ sub pingone ($$){
     @times = map {sprintf "%.10e", $_ / $self->{pingfactor}} sort {$a <=> $b} @times;
 
     waitpid $pid,0;
+    my $rc = $?;
+    carp join(" ",@args) . " returned with exit code $rc. run with debug enabled to get more information" unless $rc == 0;
     close $inh;
     close $outh;
 

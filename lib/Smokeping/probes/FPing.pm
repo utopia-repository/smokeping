@@ -83,6 +83,10 @@ sub new($$$)
             $self->{pingfactor} = 1000; # Gives us a good-guess default
             warn "### assuming you are using an fping copy reporting in milliseconds\n";
         }
+
+        # fping only has -4 and -6 switches starting with 3.16 and the binary refuses
+        # to run if the switches are passed in to older versions.
+        $self->{enable}{proto} = (`$binary -v 2>&1` =~ /Version (3.1[6-9]|[4-9])/);
     };
 
     return $self;
@@ -107,7 +111,7 @@ sub testhost {
 
 sub ping ($){
     my $self = shift;
-    # do NOT call superclass ... the ping method MUST be overwriten
+    # do NOT call superclass ... the ping method MUST be overridden
 
     # increment the internal 'rounds' counter
     $self->increment_rounds_count;
@@ -119,11 +123,12 @@ sub ping ($){
     # pinging nothing is pointless
     return unless @{$self->addresses};
     my @params = () ;
-    push @params, "-$self->{properties}{protocol}";
+    push @params, "-$self->{properties}{protocol}" if $self->{properties}{protocol} and $self->{enable}{proto};
     push @params, "-b$self->{properties}{packetsize}" if $self->{properties}{packetsize};
     push @params, "-t" . int(1000 * $self->{properties}{timeout}) if $self->{properties}{timeout};
     push @params, "-i" . int(1000 * $self->{properties}{mininterval});
     push @params, "-p" . int(1000 * $self->{properties}{hostinterval}) if $self->{properties}{hostinterval};
+    push @params, "--iface=$self->{properties}{interface}" if $self->{properties}{interface};
     if ($self->rounds_count == 1 and $self->{properties}{sourceaddress} and not $self->{enable}{S}){
        $self->do_log("WARNING: your fping binary doesn't support source address setting (-S), I will ignore any sourceaddress configurations - see  http://bugs.debian.org/198486.");
     }
@@ -161,6 +166,16 @@ sub ping ($){
         map { $self->{rtts}{$_} = [@times] } @{$self->{addrlookup}{$ip}} ;
     }
     waitpid $pid,0;
+    # Exit status (of fping) is
+    #   0 if all the hosts are reachable,
+    #   1 if some hosts were unreachable,
+    #   2 if any IP addresses were not found,
+    #   3 for invalid command line arguments, and
+    #   4 for a system call failure.
+    # Don't log 0 or 1 as an unreachable host is not unexpected for a monitoring software
+    my $rc = $?;
+    my $status = $rc >> 8;
+    carp join(" ",@cmd) . " returned with exit code $rc. run with debug enabled to get more information" unless $status == 0 or $status == 1;
     close $inh;
     close $outh;
     close $errh;
@@ -196,13 +211,12 @@ sub probevars {
 		blazemode => {
 			_re => '(true|false)',
 			_example => 'true',
-			_doc => "Send an extra ping and then discarge the first answer since the first is bound to be an outliner.",
+			_doc => "Send an extra ping and then discard the first answer since the first is bound to be an outlier.",
 
 		},
 		protocol => {
 			_re => '(4|6)',
 			_example => '4',
-			_default => '4',
 			_doc => "Choose if the ping should use IPv4 or IPv6.",
 
 		},
@@ -261,6 +275,10 @@ Set the type of service (TOS) of outgoing ICMP packets.
 You need at laeast fping-2.4b2_to3-ipv6 for this to work. Find
 a copy on www.smokeping.org/pub.
 DOC
+		},
+		interface => {
+			_example => 'eth0',
+			_doc => "The name of the network interface to perform the ping on.",
 		},
 	});
 }
