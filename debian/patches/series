@@ -1,11 +1,5 @@
 asset_path_changes
 fix-perl-lib
-fix-400d-graph
 fix-paths-inside-executables
-missing-VERSION
 fix-conf-paths
 proper-sample-conf
-smokeinfo_man
-fix-alert-edgetriggers
-disabled-page-refresh-while-zooming-5.patch
-ssh_probe_drop_rsa1.patch
