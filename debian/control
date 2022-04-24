@@ -37,7 +37,6 @@ Depends: ${perl:Depends}, ${misc:Depends}
  , liburi-perl
  , fping
  , libcgi-fast-perl
- , debianutils
  , adduser
  , lsb-base (>= 3.0-6)
  , libdigest-hmac-perl
