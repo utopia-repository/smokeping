@@ -1,4 +1,4 @@
-smokeping (2.7.3-4) UNRELEASED; urgency=low
+smokeping (2.7.3-4) unstable; urgency=low
 
   [ Debian Janitor ]
   * Trim trailing whitespace.
@@ -12,7 +12,7 @@ smokeping (2.7.3-4) UNRELEASED; urgency=low
   * Import patch disabling rsa1 and enabling ecdsa for ssh probe (Closes:
     #962225)
 
- -- Gabriel Filion <gabriel@koumbit.org>  Wed, 17 Feb 2021 19:33:16 -0500
+ -- Gabriel Filion <gabriel@koumbit.org>  Sun, 24 Apr 2022 14:44:58 -0400
 
 smokeping (2.7.3-3) unstable; urgency=medium
 
