@@ -8,3 +8,4 @@ proper-sample-conf
 smokeinfo_man
 fix-alert-edgetriggers
 disabled-page-refresh-while-zooming-5.patch
+ssh_probe_drop_rsa1.patch

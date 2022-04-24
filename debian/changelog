@@ -8,7 +8,9 @@ smokeping (2.7.3-4) UNRELEASED; urgency=low
   * Update standards version to 4.5.0, no changes needed.
 
   [ Gabriel Filion ]
-  * Import patch that disables refresh while zooming [Closes:#981348]
+  * Import patch that disables refresh while zooming (Closes:#981348)
+  * Import patch disabling rsa1 and enabling ecdsa for ssh probe (Closes:
+    #962225)
 
  -- Gabriel Filion <gabriel@koumbit.org>  Wed, 17 Feb 2021 19:33:16 -0500
 
