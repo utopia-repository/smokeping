@@ -10,5 +10,3 @@ smokeping: source-is-missing htdocs/js/scriptaculous/scriptaculous.js
 smokeping: source-is-missing htdocs/js/scriptaculous/slider.js
 smokeping: source-is-missing htdocs/js/scriptaculous/sound.js
 smokeping: source-is-missing htdocs/js/scriptaculous/unittest.js
-# As of upstream version 2.7.3 no test suite is present
-smokeping: testsuite-autopkgtest-missing
