@@ -1,15 +1,14 @@
 # the source is available in other debian packages, in Depends
 # binary package installs those as symlinks
-smokeping: source-is-missing htdocs/js/prototype.js line length is 32768 characters (>512)
-smokeping: source-is-missing htdocs/js/cropper/cropper.js line length is 13689 characters (>512)
-smokeping: source-is-missing htdocs/js/cropper/cropper.uncompressed.js line length is 757 characters (>512)
-smokeping: source-is-missing htdocs/js/scriptaculous/builder.js line length is 2383 characters (>512)
-smokeping: source-is-missing htdocs/js/scriptaculous/controls.js line length is 21015 characters (>512)
-smokeping: source-is-missing htdocs/js/scriptaculous/dragdrop.js line length is 18590 characters (>512)
-smokeping: source-is-missing htdocs/js/scriptaculous/effects.js line length is 24031 characters (>512)
-smokeping: source-is-missing htdocs/js/scriptaculous/scriptaculous.js line length is 996 characters (>512)
-smokeping: source-is-missing htdocs/js/scriptaculous/slider.js line length is 6530 characters (>512)
-smokeping: source-is-missing htdocs/js/scriptaculous/sound.js line length is 1585 characters (>512)
-smokeping: source-is-missing htdocs/js/scriptaculous/unittest.js line length is 12510 characters (>512)
+smokeping: source-is-missing htdocs/js/cropper/cropper.js
+smokeping: source-is-missing htdocs/js/prototype.js
+smokeping: source-is-missing htdocs/js/scriptaculous/builder.js
+smokeping: source-is-missing htdocs/js/scriptaculous/controls.js
+smokeping: source-is-missing htdocs/js/scriptaculous/dragdrop.js
+smokeping: source-is-missing htdocs/js/scriptaculous/effects.js
+smokeping: source-is-missing htdocs/js/scriptaculous/scriptaculous.js
+smokeping: source-is-missing htdocs/js/scriptaculous/slider.js
+smokeping: source-is-missing htdocs/js/scriptaculous/sound.js
+smokeping: source-is-missing htdocs/js/scriptaculous/unittest.js
 # As of upstream version 2.7.3 no test suite is present
 smokeping: testsuite-autopkgtest-missing
