@@ -7,11 +7,12 @@ Index: b/bin/smokeping_cgi
 ===================================================================
 --- a/bin/smokeping_cgi	2018-05-12 17:02:02.090910241 -0400
 +++ b/bin/smokeping_cgi	2018-05-12 17:05:36.224389954 -0400
-@@ -5,8 +5,6 @@ use strict;
+@@ -4,9 +4,7 @@
+ use strict;
  use warnings;
  
- use lib (split /:/, q{}); # PERL5LIB
 -use FindBin;
+ use lib (split /:/, q{}); # PERL5LIB
 -use lib "$FindBin::RealBin/../lib";use lib "$FindBin::RealBin/../thirdparty/lib/perl5"; # LIBDIR
  
  # don't bother with zombies
@@ -29,21 +30,23 @@ Index: b/bin/smokeping
 ===================================================================
 --- a/bin/smokeping	2018-05-12 17:04:04.175753876 -0400
 +++ b/bin/smokeping	2018-05-12 17:05:08.868200917 -0400
-@@ -5,12 +5,10 @@ use strict;
+@@ -4,13 +4,11 @@
+ use strict;
  use warnings;
  
- use lib (split /:/, q{}); # PERL5LIB
 -use FindBin;
+ use lib (split /:/, q{}); # PERL5LIB
 -use lib "$FindBin::RealBin/../lib";use lib "$FindBin::RealBin/../thirdparty/lib/perl5"; # LIBDIR
  
  use Smokeping;
-  
+- 
 -Smokeping::main("$FindBin::RealBin/../etc/config");
++
 +Smokeping::main("/etc/smokeping/config");
  
  =head1 NAME
  
-@@ -128,25 +126,6 @@ L<documentation on the SmokePing configu
+@@ -128,25 +126,6 @@ L<documentation on the SmokePing configuration file|smokeping_config>.
  
  Please refer to L<the installation document|smokeping_install> for detailed setup instructions.
  
@@ -66,9 +69,9 @@ Index: b/bin/smokeping
 - use Smokeping;
 - Smokeping::main("/home/oetiker/.smokeping/config");
 -
- =head1 COPYRIGHT
+ =head1 SEE ALSO
  
- Copyright (c) 2002 by Tobias Oetiker. All right reserved.
+ L<smokeping_config(5)>, L<smokeping_examples(5)>, L<smokeping_cgi(1)>,
 Index: b/bin/tSmoke
 ===================================================================
 --- a/bin/tSmoke	2018-05-12 17:04:04.175753876 -0400
@@ -85,12 +88,12 @@ Index: b/bin/tSmoke
  use RRDs;
  
  # Point to your Smokeping config file
--my $cfgfile = "etc/config.dist";
-+my $cfgfile = "/etc/smokeping/config";
+-my $cfgfile = (shift @ARGV) || "$FindBin::Bin/../etc/config";
++my $cfgfile = (shift @ARGV) || "/etc/smokeping/config";
  
  # global variables
  my $cfg;
-@@ -498,39 +497,9 @@ past week and past month including an ov
+@@ -498,39 +497,9 @@ past week and past month including an overview.
  Typical crontab used to invoke this are
  
   # Quick morning alert to see what's down
@@ -130,7 +133,7 @@ Index: b/bin/tSmoke
 - tmail = /usr/local/smokeping/etc/tmail
 + 0 8 * * * /usr/sbin/tSmoke --q --to=mailbox@company.com.invalid --weekly --detail=0
  
- =head1 COPYRIGHT
+ =head1 SEE ALSO
  
 diff --git a/bin/smokeinfo b/bin/smokeinfo
 index 7c56c0f..83a346e 100755
@@ -166,5 +169,5 @@ index 7c56c0f..83a346e 100755
 - smokeinfo --mode=regexp --filter=_wlan_ etc/config
 + smokeinfo --mode=regexp --filter=_wlan_ /etc/smokeping/config
  
- =head1 COPYRIGHT
+ =head1 SEE ALSO
  
