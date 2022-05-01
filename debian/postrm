@@ -29,15 +29,23 @@ case "$1" in
         for f in basepage.html smokemail tmail config
         do
             file=/etc/smokeping/$f
-            ucf --purge $file || true
-            ucfr --purge smokeping $file || true
+            if command -v ucf >/dev/null 2>&1; then
+                ucf --purge $file || true
+            fi
+            if command -v ucfr >/dev/null 2>&1; then
+                ucfr --purge smokeping $file || true
+            fi
             rm -f $file $file.ucf-old $file.ucf-new $file.ucf-dist
         done
         for f in Alerts Database General pathnames Presentation Probes Slaves Targets
         do
             file=/etc/smokeping/config.d/$f
-            ucf --purge $file || true
-            ucfr --purge smokeping $file || true
+            if command -v ucf >/dev/null 2>&1; then
+                ucf --purge $file || true
+            fi
+            if command -v ucfr >/dev/null 2>&1; then
+                ucfr --purge smokeping $file || true
+            fi
             rm -f $file $file.ucf-old $file.ucf-new $file.ucf-dist
         done
 
