@@ -1,3 +1,4 @@
 doc/examples/*
 etc/smokeping_secrets.dist
 debian/systemd
+debian/lighttpd_45-smokeping.conf
