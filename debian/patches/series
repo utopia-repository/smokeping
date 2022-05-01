@@ -3,3 +3,4 @@ fix-perl-lib
 fix-paths-inside-executables
 fix-conf-paths
 proper-sample-conf
+fix_curl_probe.patch
