@@ -1,6 +1,6 @@
 smokeping (2.8.2+ds-1) UNRELEASED; urgency=medium
 
-  * New upstream version
+  * New upstream version (Closes: 1004308)
   * All patches that were merged upstream were removed
 
  -- Gabriel Filion <gabriel@koumbit.org>  Sun, 24 Apr 2022 15:10:36 -0400
