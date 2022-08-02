@@ -1,7 +1,7 @@
 Source: smokeping
 Section: net
 Priority: optional
-Maintainer: Gabriel Filion <gabriel@koumbit.org>
+Maintainer: Gabriel Filion <gabster@lelutin.ca>
 Build-Depends: debhelper-compat (= 12)
  , autoconf
  , automake
