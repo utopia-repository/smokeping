@@ -38,19 +38,6 @@ License: Artistic-2.0
 Comment: These files are not used in the Debian version. The mentioned
  "Artistic" license file is not present in the source repository.
 
-Files: htdocs/js/cropper/cropper.js htdocs/js/cropper/cropper.uncompressed.js
-Copyright: 2006-2011 David Spurr (http://www.defusion.org.uk/)
-License: BSD-3-clause
-Comment: cropper.js is a "minified" version of cropper.uncompressed.js.
- The upstream website now seems to be the following URL, however the source
- code cannot be found there or on the author's github account anymore:
- .
- https://defusion.org.uk/code/javascript-image-cropper-ui-using-prototype-scriptaculous/
-
-Files: htdocs/js/prototype.js
-Copyright: 2013 jQuery Foundation, Inc. and other contributors
-License: Expat
-
 Files: debian/*
 Copyright: Wed, 13 Feb 2002 23:11:07 +0100 Jose Carlos Garcia Sogo <jsogo@debian.org>
  2018-2020 Gabriel Filion <gabster@lelutin.ca>
