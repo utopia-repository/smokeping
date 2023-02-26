@@ -62,6 +62,7 @@ Suggests: curl
  , libio-pty-perl
  , libpath-tiny-perl
  , libinfluxdb-lineprotocol-perl
+ , libobject-result-perl
 Description: latency logging and graphing system
  SmokePing consists of a daemon process which organizes the
  latency measurements and a CGI which presents the graphs.
