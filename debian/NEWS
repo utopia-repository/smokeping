@@ -1,4 +1,4 @@
-smokeping (2.6.5-1~experimental0) experimental; urgency=low
+smokeping (2.6.5-1) unstable; urgency=low
 
   Instead of bundling our own configuration which constantly had to be
   maintained in sync with upstream, we ship modified versions of the
