@@ -1,6 +1,12 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: SmokePing
 Source: https://github.com/oetiker/SmokePing
+Comment:
+ The upstream source tarball is repacked to drop vendored javascript libraries.
+Files-Excluded:
+ htdocs/js/cropper/*
+ htdocs/js/prototype.js
+ htdocs/js/scriptaculous/*
 
 Files: *
 Copyright: 2001-2005 Tobias Oetiker <tobi@oetiker.ch>

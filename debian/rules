@@ -35,13 +35,7 @@ override_dh_auto_test:
 override_dh_auto_install:
 	dh_auto_install -- SUBDIRS=$(SUBDIRS)
 
-	dh_link /var/cache/smokeping/images /usr/share/smokeping/www/images
 	install -v -m 644 $(CURDIR)/htdocs/js/smokeping.js $(TMP)/usr/share/smokeping/www/js
-	for d in cropper prototype scriptaculous; do \
-		rm -vrf $(TMP)/usr/share/smokeping/www/js/$$d ; \
-	        dh_link /usr/share/javascript/$$d /usr/share/smokeping/www/js/$$d; \
-	done
-	rm -vf $(TMP)/usr/share/smokeping/www/js/prototype.js
 
 	mv -v $(TMP)/usr/share/doc/smokeping/*.dist $(TMP)/etc/smokeping/
 	rename -v 's/\.dist$$//' $(TMP)/etc/smokeping/*.dist

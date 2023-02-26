@@ -1,0 +1,4 @@
+/var/cache/smokeping/images /usr/share/smokeping/www/images
+/usr/share/javascript/cropper /usr/share/smokeping/www/js/cropper
+/usr/share/javascript/prototype /usr/share/smokeping/www/js/prototype
+/usr/share/javascript/scriptaculous /usr/share/smokeping/www/js/scriptaculous
