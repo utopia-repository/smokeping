@@ -1,12 +1,24 @@
-smokeping (2.8.2+ds-1) UNRELEASED; urgency=medium
+smokeping (2.8.2+ds-1) unstable; urgency=medium
 
+  [ Gabriel Filion ]
   * New upstream version (Closes: #1004308, #740852)
   * All patches that were merged upstream were removed
   * Add an example lighttpd configuration file for smokeping (Closes: #961950)
   * Import upstream patch to fix curl probes (Closes: #986068)
   * Avoid errors with ucf/ucfr during postrm (Closes: #1005807)
+  * New required library libobject-result-perl for influxdb
+  * Remove obsolete dependency on lsb-base
+  * fix lintian warning about unmatched news entry
+  * lintian-overrides are now obsolete
+  * Clear out copyright details for files removed in repack
+  * Patch out building of 3rd-party js libs
+  * Revert "fix lintian warning about unmatched news entry"
 
- -- Gabriel Filion <gabster@lelutin.ca>  Sun, 24 Apr 2022 15:10:36 -0400
+  [ Debian Janitor ]
+  * Bump debhelper from old 12 to 13.
+  * Update standards version to 4.6.1, no changes needed.
+
+ -- Gabriel Filion <gabster@lelutin.ca>  Sun, 04 Feb 2024 14:51:29 -0500
 
 smokeping (2.7.3-4) unstable; urgency=low
 
