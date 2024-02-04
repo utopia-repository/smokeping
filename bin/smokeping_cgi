@@ -4,8 +4,8 @@
 use strict;
 use warnings;
 
-use lib (split /:/, q{}); # PERL5LIB
 use FindBin;
+use lib (split /:/, q{}); # PERL5LIB
 use lib "$FindBin::RealBin/../lib";use lib "$FindBin::RealBin/../thirdparty/lib/perl5"; # LIBDIR
 
 # don't bother with zombies
@@ -52,12 +52,17 @@ Please refer to the installation document for detailed setup instructions.
 
 There is a sample F<htdocs> directory in your smokeping installation root. 
 Copy its content to the place where your webserver expects its files.  The
-fcgi script shows the preferred method for runnig smokeping.  You can also
+fcgi script shows the preferred method for running smokeping.  You can also
 run smokeping as a cgi.  But make sure to still use the wrapper as exposing
 ARGV to the webserver represents a security vulnerability you may rather not
 want to deal with.
 
 Adjust the paths in the script and you should be ready to go.
+
+=head1 SEE ALSO
+
+L<smokeping_config(5)>, L<smokeping(1)>, L<smokeping_install(7)>,
+L<smokeping_upgrade(7)>
 
 =head1 COPYRIGHT
 

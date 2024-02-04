@@ -28,8 +28,7 @@ DOC
               description => <<DOC,
 Integrates TCPPing as a probe into smokeping. The variable B<binary> must
 point to your copy of the TCPPing program. If it is not installed on
-your system yet, you can get it from http://www.vdberg.org/~richard/tcpping.
-You can also get it from http://www.darkskies.za.net/~norman/scripts/tcpping.
+your system yet, you can get it from https://github.com/deajan/tcpping.
 
 The (optional) port option lets you configure the port for the pings sent.
 The TCPPing manpage has the following to say on this topic:
@@ -128,7 +127,7 @@ sub targetvars {
 sub pingone ($){
     my $self = shift;
     my $target = shift;
-    # do NOT call superclass ... the ping method MUST be overwriten
+    # do NOT call superclass ... the ping method MUST be overridden
     my $inh = gensym;
     my $outh = gensym;
     my $errh = gensym;
@@ -158,6 +157,8 @@ sub pingone ($){
         @times = map {sprintf "%.10e", $_ / $self->{pingfactor}} sort {$a <=> $b} grep /^\d/, @times;
     }
     waitpid $pid,0;
+    my $rc = $?;
+    carp join(" ",@cmd) . " returned with exit code $rc. run with debug enabled to get more information" unless $rc == 0;
     close $inh;
     close $outh;
     close $errh;

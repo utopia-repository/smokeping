@@ -8,7 +8,7 @@ Smokeping::sorters::base - Base Class for implementing SmokePing Sorters
  
 Sorters are at the core of the SmokePing Charts feature, where the most
 interesting graphs are presented on a single page. The Sorter decides which
-graphs are considerd interesting.
+graphs are considered interesting.
 
 Every sorter must inherit from the base class and provide it's own
 methods for the 'business' logic.
@@ -81,9 +81,9 @@ sub Desc ($) {
 
 Returns an array of 'targets'. It is up to the sorter to decide how many
 entries the list should contain. If the list is empty, the whole entry will
-be supressed in the webfrontend. 
+be suppressed in the webfrontend. 
 
-The methode gets access to all the targets in the system, together with the
+The method gets access to all the targets in the system, together with the
 last data set acquired for each target.
 
 =cut
@@ -101,7 +101,7 @@ sub SortTree($$) {
 
 =head2 CalcValues
 
-Figure out the curent sorting value using te following input.
+Figure out the current sorting value using te following input.
 
  $info = { uptime => w,
   	   loss   => x,
@@ -110,7 +110,7 @@ Figure out the curent sorting value using te following input.
            pings  => [qw(a b c d)] }
 
 The output can have any structure you want. It will be returned to the
-sorter method for further processng.
+sorter method for further processing.
 
 =cut
 

@@ -15,12 +15,12 @@ average drops under the "falling" threshold.
 Call the matcher with the following sequence:
 
  type = matcher
- pattern =  CheckLoss(hist => <hist>, rising=><rising> \
-                     [,falling => <falling>] [,skip=><stat>] [,fast=><fast>])
+ pattern = ExpLoss(hist => <hist>, rising=><rising> \
+                  [,falling => <falling>] [,skip=><stat>] [,fast=><fast>])
 
 Arguments:
  hist    - number of samples to weight against; weight will be disposed with
-           exponetial decreasing manner from newest to oldest, so that the
+           exponential decreasing manner from newest to oldest, so that the
            oldest sample would have 1% significance;
  rising  - rising threshold for packet loss, 0-100%
  falling - falling threshold for packet loss, default is <rising>
@@ -72,7 +72,7 @@ sub new(@) {
     my $rules = {
         hist => '\d+',
         rising => '\d+(\.\d+)?',
-	falling => '\d+(\.\d+)?',
+        falling => '\d+(\.\d+)?',
         skip => '\d+',
         fast => '\d+',
     };
@@ -94,7 +94,7 @@ sub Test($$) {
     my $self   = shift;
     my $data   = shift;               # @{$data->{rtt}} and @{$data->{loss}}
 
-    my $hist = $self->{param}{hist}; # history lengh
+    my $hist = $self->{param}{hist}; # history length
     my $skip = ($self->{param}{skip} || 0); # skip <skip> samples before start
     my $fast = ($self->{param}{fast} || 0); # use last <fast> samples for fast alerts
 
@@ -105,7 +105,7 @@ sub Test($$) {
     my $alfa = 1-0.01**(1/$hist);
 
     my $rising = $self->{param}{rising};
-    my $falling = (defined $self->{param}{falling} || $rising);
+    my $falling = $self->{param}{falling} // $rising;
 
     my $result = 0; # initialize the filter as zero;
     my $loss;

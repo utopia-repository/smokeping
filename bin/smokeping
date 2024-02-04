@@ -4,8 +4,8 @@
 use strict;
 use warnings;
 
-use lib (split /:/, q{}); # PERL5LIB
 use FindBin;
+use lib (split /:/, q{}); # PERL5LIB
 use lib "$FindBin::RealBin/../lib";use lib "$FindBin::RealBin/../thirdparty/lib/perl5"; # LIBDIR
 
 use Smokeping;
@@ -146,6 +146,13 @@ the SmokePing configuration file.
 
  use Smokeping;
  Smokeping::main("/home/oetiker/.smokeping/config");
+
+=head1 SEE ALSO
+
+L<smokeping_config(5)>, L<smokeping_examples(5)>, L<smokeping_cgi(1)>,
+L<tSmoke(1)>, L<smokeping_master_slave(7)>, L<smokeping_extend(7)>,
+L<smokeping_install(7)>, L<smokeping_upgrade(7)>,
+How to read the graphs https://oss.oetiker.ch/smokeping/doc/reading.en.html
 
 =head1 COPYRIGHT
 
