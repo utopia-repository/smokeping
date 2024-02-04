@@ -18,7 +18,7 @@ smokeping (2.8.2+ds-1) unstable; urgency=medium
   * Bump debhelper from old 12 to 13.
   * Update standards version to 4.6.1, no changes needed.
 
- -- Gabriel Filion <gabster@lelutin.ca>  Sun, 04 Feb 2024 14:51:29 -0500
+ -- Gabriel Filion <gabster@lelutin.ca>  Sun, 04 Feb 2024 14:54:09 -0500
 
 smokeping (2.7.3-4) unstable; urgency=low
 
