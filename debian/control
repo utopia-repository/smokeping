@@ -60,6 +60,7 @@ Suggests: curl
  , libnet-openssh-perl
  , libio-pty-perl
  , libpath-tiny-perl
+ , libinfluxdb-http-perl
  , libinfluxdb-lineprotocol-perl
  , libobject-result-perl
 Description: latency logging and graphing system
