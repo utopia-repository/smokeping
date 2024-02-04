@@ -185,10 +185,13 @@ sub run_pinger {
 	if($fh->eof) {
 	  $self->do_log("fping process exited - restarting");
 	  waitpid $fping_pid,0;
+	  my $rc = $?;
+	  carp "fping process returned with exit code $rc. run with debug enabled to get more information" unless $rc == 0;
 	  close($fping_stdin);
 	  close($fping_stdout);
 	  close($fping_stderr);
-	  $select->remove($fh);
+	  $select->remove($fping_stdout);
+	  $select->remove($fping_stderr);
 	  %results=();
 	  foreach my $address(@{$self->addresses}) {
 	    $results{$address}{results}=[];
@@ -225,7 +228,13 @@ sub run_pinger {
 	    # We can forget about any assumed drops since we have handles actual packet loss above
 	    $results{$address}{assumed_drops}=0;
 	  } else {
-	    $self->do_log("Unknown input data: $data");
+	    # We only care about input from either stdin or stderr.  We need to
+	    # clear data from both to avoid deadlocks, but we only want to log
+	    # garbage data from the fd that is generating the good data
+	    my $data_fh = ( $self->{properties}{usestdout} || '') ne 'false' ? $fping_stdout : $fping_stderr;
+	    if($fh->fileno == $data_fh->fileno) {
+	      $self->do_log("Unknown input data: $data");
+	    }
 	  }
 	}
       }
@@ -240,10 +249,13 @@ sub run_pinger {
       } else {
 	$self->do_log("fping process exited - restarting");
 	waitpid $fping_pid,0;
+	my $rc = $?;
+	carp "fping process returned with exit code $rc. run with debug enabled to get more information" unless $rc == 0;
 	close($fping_stdin);
 	close($fping_stdout);
 	close($fping_stderr);
-	$select->remove($fh);
+	$select->remove($fping_stdout);
+	$select->remove($fping_stderr);
 	%results=();
 	foreach my $address(@{$self->addresses}) {
 	  $results{$address}{results}=[];
@@ -285,17 +297,18 @@ sub run_fping {
 	            );
     $self->do_debug("Executing @cmd");
     my $pid = open3($inh,$outh,$errh, @cmd);
-    my $fh = ( $self->{properties}{usestdout} || '') ne 'false' ? $outh : $errh;
-    $fh->blocking(0);
+    $outh->blocking(0);
+    $errh->blocking(0);
     $inh->autoflush(1);
-    $select->add($fh);
+    $select->add($outh);
+    $select->add($errh);
 
     return ($inh,$outh,$errh,$pid);
 }
 
 sub ping ($){
     my $self = shift;
-    # do NOT call superclass ... the ping method MUST be overwriten
+    # do NOT call superclass ... the ping method MUST be overridden
 
     # pinging nothing is pointless
     return unless @{$self->addresses};

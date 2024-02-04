@@ -100,8 +100,10 @@ if 'dyndir' is not present.
 
 sub slavedatadir ($) {
     my $cfg = shift;
-    return $cfg->{General}{dyndir}  ||
+    my $dir = $cfg->{General}{dyndir}  ||
            $cfg->{General}{datadir};
+    $dir =~ s{/*$}{};
+    return $dir;
 }
 
 sub save_updates {
@@ -200,7 +202,7 @@ sub get_slaveupdates {
 
 =head3 get_secret
 
-Read the secrtes file and figure the secret for the slave which is talking to us.
+Read the secrets file and figure the secret for the slave which is talking to us.
 
 =cut
 

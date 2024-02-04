@@ -35,7 +35,7 @@ DOC
 The probe uses the Net::FTP perl client to run performance tests using an
 FTP server as a target. This probe is B<intrusive> as it transfers real
 data. By using real data we get a fair shot at figuring out what a link is
-capable of when it comes to transfering actual files.
+capable of when it comes to transferring actual files.
 
 The password can be specified either (in order of precedence, with
 the latter overriding the former) in the probe-specific variable
@@ -64,7 +64,7 @@ This probe has the capability for saturating your links, so don't use it
 unless you know what you are doing.
 
 The FTPtransfer probe measures bandwidth, but we report the number of
-seconds it took to transfer the 'reference' file. This is because curently
+seconds it took to transfer the 'reference' file. This is because currently
 the notion of I<Round Trip Time> is at the core of the application. It would
 take some re-engineering to split this out in plugins and thus make it
 configurable ...
@@ -147,7 +147,7 @@ sub pingone {
 		$ftp->quit;
 		$elapsed = ( $end - $start );
 		$ok or next;
-		$self->do_debug("$host - $mode mode transfered $size Bytes in ${elapsed}s");
+		$self->do_debug("$host - $mode mode transferred $size Bytes in ${elapsed}s");
 		push @times, $elapsed;
 	}
 	return sort { $a <=> $b } @times;
@@ -160,10 +160,10 @@ sub probevars {
 	$h->{timeout}{_doc} = <<DOC;
 The timeout is the maximum amount of time you will allow the probe to
 transfer the file. If the probe does not succeed to transfer in the time specified,
-it will get killed and a 'loss' will be loged.
+it will get killed and a 'loss' will be logged.
 
 Since FTPtransfer is an invasive probe you should make sure you do not load
-the link for more than a few seconds anyway. Smokeping curently has a hard
+the link for more than a few seconds anyway. Smokeping currently has a hard
 limit of 180 seconds for any RTT.
 DOC
 

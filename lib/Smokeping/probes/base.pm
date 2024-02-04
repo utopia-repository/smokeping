@@ -313,7 +313,7 @@ offset parameter you can change the point in time when each probe will
 be run. Offset is specified in % of total interval, or alternatively as
 'random', and the offset from the 'General' section is used if nothing
 is specified here. Note that this does NOT influence the rrds itself,
-it is just a matter of when data acqusition is initiated.
+it is just a matter of when data acquisition is initiated.
 (This variable is only applicable if the variable 'concurrentprobes' is set
 in the 'General' section.)
 DOC
@@ -340,7 +340,15 @@ DOC
 }
 
 sub targetvars {
-	return {_mandatory => []};
+	return {_mandatory => [],
+		'/^influx_.+/' => {
+			_re => '.*',
+			_example => 'influx_location = In the basement',
+			_doc => <<DOC,
+This is a tag that will be sent to influxdb and has no impact on the probe measurement. The tag name will be sent without the "influx_" prefix, which will be replaced with "tag_" instead. Tags can be used for filtering.
+DOC
+		},
+	};
 }
 
 # a helper method that combines two var hash references

@@ -118,6 +118,8 @@ sub pinghost($$) {
         $time = $1;
     }
     waitpid $pid,0;
+    my $rc = $?;
+    carp join(" ",@cmd) . " returned with exit code $rc. run with debug enabled to get more information" unless $rc == 0;
     close $inh;
     close $outh;
     close $errh;
@@ -151,7 +153,7 @@ DOC
 			_re => '\d+',
 			_example => 27970,
 			_doc => <<DOC,
-The game server port to check. It can also be overriden by adding :port to the host parameter in the Target config.
+The game server port to check. It can also be overridden by adding :port to the host parameter in the Target config.
 DOC
 		},
 		timeout => {

@@ -22,6 +22,11 @@ use Smokeping::RRDhelpers;
 use Smokeping::Graphs;
 use URI::Escape;
 use Time::HiRes;
+use Data::Dumper;
+# optional dependencies
+# will be imported in case InfluxDB host is configured
+# InfluxDB::HTTP
+# InfluxDB::LineProtocol
 
 setlogsock('unix')
    if grep /^ $^O $/xo, ("linux", "openbsd", "freebsd", "netbsd");
@@ -35,7 +40,7 @@ $ENV{'LC_NUMERIC'}='C';
 if (setlocale(LC_NUMERIC,"") ne "C") {
     if ($ENV{'LC_ALL'} eq 'C') {
         # This has got to be a bug in perl/mod_perl, apache or libc
-        die("Your internalization implementation on your operating system is "
+        die("Your internationalization implementation on your operating system is "
           . "not responding to your setup of LC_ALL to \"C\" as LC_NUMERIC is "
           . "coming up as \"" . setlocale(LC_NUMERIC, "") . "\" leaving "
           . "smokeping unable to compare numbers...");
@@ -45,7 +50,7 @@ if (setlocale(LC_NUMERIC,"") ne "C") {
         # setup of the operating system or multilanguage locale setup.  Hint,
         # setting LANG is better than setting LC_ALL...
         die("Resetting LC_NUMERIC failed probably because your international "
-          . "setup of the LC_ALL to \"". $ENV{'LC_ALL'} . "\" is overridding "
+          . "setup of the LC_ALL to \"". $ENV{'LC_ALL'} . "\" is overriding "
           . "LC_NUMERIC.  Setting LC_ALL is not compatible with smokeping...");
     }
     else {
@@ -54,7 +59,7 @@ if (setlocale(LC_NUMERIC,"") ne "C") {
         # affected by it.  The worst is when "setlocale" is reading the
         # environment variables of your webserver and not reading the PERL
         # %ENV array like it should.
-        die("Something is wrong with the internalization setup of your "
+        die("Something is wrong with the internationalization setup of your "
           . "operating system, webserver, or the perl plugin to your webserver "
           . "(like mod_perl) and smokeping can not compare numbers correctly.  "
           . "On unix, check your /etc/locale.gen and run sudo locale-gen, set "
@@ -68,10 +73,10 @@ use File::Basename;
 use Smokeping::Examples;
 use Smokeping::RRDtools;
 
-# globale persistent variables for speedy
+# global persistent variables for speedy
 use vars qw($cfg $probes $VERSION $havegetaddrinfo $cgimode);
 
-$VERSION = "2.007003";
+$VERSION = "2.008002";
 
 # we want opts everywhere
 my %opt;
@@ -85,6 +90,7 @@ BEGIN {
 my $DEFAULTPRIORITY = 'info'; # default syslog priority
 
 my $logging = 0; # keeps track of whether we have a logging method enabled
+my $influx = undef; # a handle to the InfluxDB::HTTP object (if any)
 
 sub find_libdir {
     # find the directory where the probe and matcher modules are located
@@ -274,7 +280,7 @@ sub sendmail ($$$){
         print M $body;
         close M;
     } else {
-        warn "ERROR: not sending mail to $to, as all methodes failed\n";
+        warn "ERROR: not sending mail to $to, as all methods failed\n";
     }
 }
 
@@ -294,6 +300,29 @@ sub sendsnpp ($$){
 sub min ($$) {
         my ($a, $b) = @_;
         return $a < $b ? $a : $b;
+}
+
+sub max ($$) {
+    my ($a, $b) = @_;
+    return $a < $b ? $b : $a;
+}
+
+sub display_range ($$) {
+    # Turn inputs into range, i.e. (10,19) is turned into "10-19"
+    my $lower = shift;
+    my $upper = shift;
+    my $ret;
+
+    # Only return actual range when there is a difference, otherwise return just lower bound
+    if ($upper < $lower) {
+        # Edgecase: Happens when $pings is less than 6 since there is no minimum value imposed on it
+        $ret = $upper;
+    } elsif ($upper > $lower) {
+        $ret = "$lower-$upper";
+    } else {
+        $ret = $lower;
+    }
+    return $ret;
 }
 
 sub init_alerts ($){
@@ -783,6 +812,7 @@ sub fill_template ($$;$){
 
 sub exp2seconds ($) {
     my $x = shift;
+    $x =~/(\d+)s/ && return $1;
     $x =~/(\d+)m/ && return $1*60;
     $x =~/(\d+)h/ && return $1*60*60;
     $x =~/(\d+)d/ && return $1*60*60*24;
@@ -871,6 +901,7 @@ sub get_overview ($$$$){
         my $i = 0;
         my @colors = split /\s+/, $cfg->{Presentation}{multihost}{colors};
         my $ProbeUnit = $probe->ProbeUnit();
+        my $ProbeDesc = $probe->ProbeDesc();
         for my $slave (@slaves){
             $i++;
             my $rrd;
@@ -888,11 +919,23 @@ sub get_overview ($$$$){
                 $probe = $probes->{$tree->{probe}};
                 $pings = $probe->_pings($tree);
                 $label = $tree->{menu};
-                # if there are multiple units ... lets say so ... 
-                if ($ProbeUnit ne $probe->ProbeUnit()){
-                    $ProbeUnit = 'var units';
+
+                # if there are multiple probes ... lets say so ...
+                my $XProbeDesc = $probe->ProbeDesc();
+                if (not $ProbeDesc or $ProbeDesc eq $XProbeDesc){
+                    $ProbeDesc = $XProbeDesc;
                 }
-                
+                else {
+                    $ProbeDesc = "various probes";
+                }
+                my $XProbeUnit = $probe->ProbeUnit();
+                if (not $ProbeUnit or $ProbeUnit eq $XProbeUnit){
+                    $ProbeUnit = $XProbeUnit;
+                }
+                else {
+                    $ProbeUnit = "various units";
+                }
+
                 if ($real_slave){
                     $label .= "<".  $cfg->{Slaves}{$real_slave}{display_name};
                 }
@@ -952,7 +995,8 @@ sub get_overview ($$$$){
            '--rigid',
            '--lower-limit','0',
            @G,
-           "COMMENT:$date\\r");
+           "COMMENT:$ProbeDesc",
+           "COMMENT:$date\\j");
         my $ERROR = RRDs::error();
         $page .= "<div class=\"panel\">";
         $page .= "<div class=\"panel-heading\"><h2>".$phys_tree->{title}."</h2></div>"
@@ -1220,15 +1264,24 @@ sub get_detail ($$$$;$){
             my ($num,$col,$txt) = @{$_};
             $lc{$num} = [ $txt, "#".$col ];
         }
-    } else {  
+    } else {
+
         my $p = $pings;
-        %lc =  (0          => ['0',   '#26ff00'],
-                1          => ["1/$p",  '#00b8ff'],
-                2          => ["2/$p",  '#0059ff'],
-                3          => ["3/$p",  '#5e00ff'],
-                4          => ["4/$p",  '#7e00ff'],
-                int($p/2)  => [int($p/2)."/$p", '#dd00ff'],
-                $p-1       => [($p-1)."/$p",    '#ff0000'],
+        # Return either approximate percentage or impose a minimum value
+        my $per01 = max(int(0.01 * $p), 1);
+        my $per05 = max(int(0.05 * $p), 2);
+        my $per10 = max(int(0.10 * $p), 3);
+        my $per25 = max(int(0.25 * $p), 4);
+        my $per50 = max(int(0.50 * $p), 5);
+
+        %lc =  (0         => ['0',                                  '#26ff00'],
+                $per01    => [display_range(1         , $per01),    '#00b8ff'],
+                $per05    => [display_range($per01 + 1, $per05),    '#0059ff'],
+                $per10    => [display_range($per05 + 1, $per10),    '#7e00ff'],
+                $per25    => [display_range($per10 + 1, $per25),    '#ff00ff'],
+                $per50    => [display_range($per25 + 1, $per50),    '#ff5500'],
+                $p-1      => [display_range($per50 + 1, ($p-1)),    '#ff0000'],
+                $p        => ["$p/$p",                              '#a00000']
                 );
     };
     # determine a more 'pastel' version of the ping colours; this is 
@@ -1316,7 +1369,7 @@ sub get_detail ($$$$;$){
             my @losssmoke = ();
             my $last = -1;        
             foreach my $loss (sort {$a <=> $b} keys %lc){
-                next if $loss >= $pings;
+                next if $loss > $pings;
                 my $lvar = $loss; $lvar =~ s/\./d/g ;
                 push @median, 
                    (
@@ -1379,7 +1432,7 @@ sub get_detail ($$$$;$){
             my $timer_start = time();
             my $title = "";
             if ($cfg->{Presentation}{htmltitle} ne 'yes') {
-                $title = "$desc from " . ($s ? $cfg->{Slaves}{$slave}{display_name}: $cfg->{General}{display_name} || hostname);
+                $title = "$desc from " . ($s ? $cfg->{Slaves}{$slave}{display_name}: $cfg->{General}{display_name} || hostname) . " to $phys_tree->{title}";
             }
             my @task =
                ("${imgbase}${s}_${end}_${start}.png",
@@ -1413,7 +1466,7 @@ sub get_detail ($$$$;$){
                  ()),
                  'HRULE:0#000000',
                  "COMMENT:probe${BS}:       $pings $ProbeDesc every ${step}s",
-                 'COMMENT:end\: '.$date.'\j' );
+                 "COMMENT:$date\\j");
 #       do_log ("***** begin task ***** <br />");
 #       do_log (@task);
 #       do_log ("***** end task ***** <br />");
@@ -1830,6 +1883,16 @@ sub save_sortercache($$$){
     rename "$dir/new$ext","$dir/data$ext.storable"
 }
 
+sub rfc2822timedate($) {
+    my $time = shift;
+    my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = gmtime($time);
+    my @rfc2822_months = ("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",
+        "Aug", "Sep", "Oct", "Nov", "Dec");
+    my @rfc2822_wdays = ("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat");
+    return sprintf("%s, %02d %s %04d %02d:%02d:%02d GMT", $rfc2822_wdays[$wday],
+        $mday, $rfc2822_months[$mon], $year + 1900, $hour, $min, $sec);
+}
+
 sub check_alerts {
     my $cfg = shift;
     my $tree = shift;
@@ -1879,7 +1942,7 @@ sub check_alerts {
                 $gotalert = $match unless $gotalert;
             my $edgetrigger = $alert->{edgetrigger} eq 'yes';
             my $what;
-            if ($edgetrigger and $prevmatch != $match) {
+            if ($edgetrigger and ($prevmatch ? 0 : 1 ) != ($match ? 0 : 1)) {
                 $what = ($prevmatch == 0 ? "was raised" : "was cleared");
             }
             if (not $edgetrigger and $match) {
@@ -1914,7 +1977,7 @@ sub check_alerts {
                             unless (fork) {
                                 $SIG{CHLD} = 'DEFAULT';
                                 if ($edgetrigger) {
-                                   exec $cmd,$_,$line,$loss,$rtt,$tree->{host}, ($what =~/raise/);
+                                   exec $cmd,$_,$line,$loss,$rtt,$tree->{host}, (($what =~/raise/)? 1 : 0);
                                 } else {
                                    exec $cmd,$_,$line,$loss,$rtt,$tree->{host};
                                 }
@@ -2002,18 +2065,15 @@ DOC
                               RTT   => $rtt,
                               COMMENT => $alert->{comment}
                                       },$default_mail) || "Subject: smokeping failed to open mailtemplate '$alert->{mailtemplate}'\n\nsee subject\n";
-                    my $oldLocale = POSIX::setlocale(LC_TIME);
-                    POSIX::setlocale(LC_TIME,"en_US");
-                    my $rfc2822stamp =  POSIX::strftime("%a, %e %b %Y %H:%M:%S %z", @stamp);
-                    POSIX::setlocale(LC_TIME,$oldLocale);
-                                my $to = join ",",@to;
-                                    sendmail $cfg->{Alerts}{from},$to, <<ALERT;
+                    my $rfc2822stamp = rfc2822timedate($time);
+                    my $to = join ",",@to;
+                    sendmail $cfg->{Alerts}{from},$to, <<ALERT;
 To: $to
 From: $cfg->{Alerts}{from}
 Date: $rfc2822stamp
 $mail
 ALERT
-                            }
+                    }
             } else {
                         do_debuglog("Alert \"$_\": no match for target $name\n");
             }
@@ -2042,7 +2102,7 @@ sub update_rrds($$$$$$) {
         if (ref $tree->{$prop} eq 'HASH'){
             update_rrds $cfg, $probes, $tree->{$prop}, $name."/$prop", $justthisprobe, $sortercache;
         } 
-            # if we are looking down a branche where no probe property is set there is no sense
+            # if we are looking down a branch where no probe property is set there is no sense
         # in further exploring it
         next unless defined $probe;
         next if defined $justthisprobe and $probe ne $justthisprobe;
@@ -2083,11 +2143,136 @@ sub update_rrds($$$$$$) {
                 RRDs::update ( @rrdupdate );
                 my $ERROR = RRDs::error();
                 do_log "RRDs::update ERROR: $ERROR\n" if $ERROR;
+
+                # insert in influxdb if needed
+                update_influxdb($name, $s, $pings, $tree, $update) if (defined $influx);
+
                     # check alerts
                 my ($loss,$rtt) = (split /:/, $update->[2])[1,2];
                     my $gotalert = check_alerts $cfg,$tree,$pings,$name,$prop,$loss,$rtt,$update->[0];
                     update_sortercache $cfg,$sortercache,$name.$s,$update->[2],$gotalert;
                 }
+        }
+    }
+}
+
+sub update_influxdb($$$$$);
+sub update_influxdb($$$$$) {
+    my $name = shift;
+    my $s = shift;
+    my $pings = shift;
+    my $tree = shift;
+    my $update = shift;
+
+    #for a slave cut out the first tilda
+    $s=~s/^~//;
+
+    my @influx_data;
+    my %idata;
+    my %itags;
+    #measurements are stored in $update->[2]
+    #do_log("DBG: update->[2]: ".Dumper(\$update->[2]));
+    #do_log("DBG: update: ".Dumper(\$update));
+    #timestamp is $update->[1] in unix timestamp format
+    my $unixtimestamp = $update->[1];
+    my @measurements = split(/:/, $update->[2]);
+    my $i = 1;
+
+    #Note, we force all measurement data to be float (scientific notation), 
+    #because the data type is derived from the first ever data point, which might be wrong.
+    #in case of measurements with no value (e.g. 'U'), we skip the data point so that influx
+    #knows it's lacking a datapoint and can act accordingly
+
+    #first 3 data points are as follows
+    $idata{uptime} = sprintf('%e', $measurements[0]) if($measurements[0] ne "U");
+
+    #if loss is indexed, it's easily searchable, but doesn't show up in Grafana graphs
+    #so save it both ways (loss is an integer, no need to make it float)
+    #loss is always a number, even when all other are unreachable, so no special treatment
+    my $loss = $measurements[1];
+    $itags{loss} = $loss;
+    $idata{loss} = $loss;
+    #calculate loss as a percentage as well
+    my $loss_percent = int($loss/$pings*100);
+    $itags{loss_percent} = $loss_percent;
+    $idata{loss_percent} = $loss_percent;
+
+    $idata{median} = sprintf('%e', $measurements[2]) if($measurements[2] ne "U");
+
+    #skip the first 3 items, since they were processed
+    splice(@measurements, 0, 3);
+
+    my $min = $measurements[1]; #first value
+    my $max = undef;
+
+    for (0..$pings-1){
+        if ($measurements[$_] ne "U"){
+            $idata{'ping'.(${_}+1)} = sprintf('%e', $measurements[$_]);
+            $min = $measurements[$_] if($measurements[$_] < $min);
+            $max = $measurements[$_] if($measurements[$_] > $max);
+        }
+    }
+    if ($min ne 'U'){
+        $idata{min} = sprintf('%e', $min);
+    }
+    if (defined $max && $max ne 'U' ){
+        $idata{"max"} = sprintf('%e', $max);
+    }
+
+
+    $itags{host} = $tree->{host};
+    $itags{title} = $tree->{title};
+    # remove datadir as a prefix
+    $itags{path} = $name;
+    $itags{path} =~ s/$cfg->{General}{datadir}//;
+    if ($s ne ""){
+        #this is a slave
+        $itags{slave} = $s;
+    }
+    else{
+        #to improve filtering in grafana, mark the master
+        $itags{slave} = "master";
+    }
+
+    #send also probe configuration parameters that are prefixed with influx_. 
+    for my $parameter (sort keys %$tree){
+        if($parameter=~/^influx_(.+)/){
+            my $tag = "tag_".$1;
+            #only non-empty parameters get sent
+            if($tree->{$parameter} ne ""){
+                #tags will be in the form "tag_location", based on what the user supplied
+                $itags{$tag} = $tree->{$parameter};
+            }
+        }
+    }
+
+    #for some reason, InfluxDB::HTTP has a bug and stores 0.000000e+00 as a string, not a float.
+    #this will cause measurement loss in InfluxDB
+    #so, we'll do a dirty hack and convert it to a very small non-zero value
+    # 'U' values are not affected by this (not inserted)
+
+    for my $key (sort keys %idata){
+        if($idata{$key} == 0){
+            next if ($key eq "loss" or $key eq "loss_percent"); #loss was not a float, so no need for this
+            $idata{$key} = "0.1e-100"; #an arbitrary small number
+        }
+    } 
+
+    #do_debuglog("DBG: idata:".Dumper(\%idata).", itags:".Dumper(\%itags));
+    #convert unixtimestamp from seconds to ms (since rrd have only second precision)
+    $unixtimestamp = $unixtimestamp."000"; #avoid a multiply
+
+    push @influx_data, data2line( $tree->{probe}, \%idata, \%itags, $unixtimestamp);
+
+    if(defined $influx){
+        #do_debuglog("DBG: About to insert to influxdb: ".Dumper(\@influx_data));
+        my $insert = $influx->write(
+            \@influx_data,
+            database => $cfg->{InfluxDB}{'database'},
+            precision => 'ms'
+        );
+        if(! $insert){
+            do_log("Error inserting measurement into influxdb: $insert for ".Dumper(\@influx_data))
         }
     }
 }
@@ -2214,7 +2399,7 @@ DOC
                      _doc => <<DOC,
 Set the hide property to 'yes' to hide this host from the navigation menu
 and from search results. Note that if you set the hide property on a non
-leaf entry all subordinate entries will also disapear in the menu structure.
+leaf entry all subordinate entries will also disappear in the menu structure.
 If you know a direct link to a page it is still accessible. Pages which are
 hidden from the menu due to a parent being hidden will still show up in
 search results and in alternate hierarchies where they are below a non
@@ -2229,7 +2414,7 @@ DOC
 Use this in a master/slave setup where the master must not poll a particular
 target. The master will now skip this entry in its polling cycle.
 Note that if you set the hide property on a non leaf entry
-all subordinate entries will also disapear in the menu structure. You can
+all subordinate entries will also disappear in the menu structure. You can
 still access them via direct link or via an alternate hierarchy.
 
 If you have no master/slave setup this will have a similar effect to the
@@ -2260,7 +2445,7 @@ are required to regularly contact the SmokePing server to confirm their IP addre
 B<--email> it will add a secret password to each of the B<DYNAMIC>
 host lines and send a script to the owner of each host. This script
 must be started periodically (cron) on the host in question to let smokeping know
-where the host is curently located. If the target machine supports
+where the host is currently located. If the target machine supports
 SNMP SmokePing will also query the hosts
 sysContact, sysName and sysLocation properties to make sure it is
 still the same host.
@@ -2345,7 +2530,7 @@ DOC
            },
            parents => {
                         _re => "${KEYD_RE}:/(?:${KEYD_RE}(?:/${KEYD_RE})*)?(?: ${KEYD_RE}:/(?:${KEYD_RE}(?:/${KEYD_RE})*)?)*",
-                        _re_error => "Use hierarcy:/parent/path syntax",
+                        _re_error => "Use hierarchy:/parent/path syntax",
                         _doc => <<DOC
 After setting up a hierarchy in the Presentation section of the
 configuration file you can use this property to assign an entry to alternate
@@ -2600,7 +2785,7 @@ DOC
     my $parser = Smokeping::Config->new 
       (
        {
-        _sections  => [ qw(General Database Presentation Probes Targets Alerts Slaves) ],
+        _sections  => [ qw(General Database Presentation Probes Targets Alerts Slaves InfluxDB) ],
         _mandatory => [ qw(General Database Presentation Probes Targets) ],
         General => 
         {
@@ -2682,7 +2867,7 @@ DOC
          {
           _doc => <<DOC,
 If you have a SNPP (Simple Network Pager Protocol) server at hand, you can have alerts
-sent there too. Use the syntax B<snpp:someaddress> to use a snpp address in any place where you can use a mail address otherwhise.
+sent there too. Use the syntax B<snpp:someaddress> to use a snpp address in any place where you can use a mail address otherwise.
 DOC
           _sub => sub { require Net::SNPP ||return "ERROR: loading Net::SNPP"; return undef; }
          },
@@ -2720,7 +2905,7 @@ DOC
         {
          %$DIRCHECK_SUB,
          _doc => <<DOC,
-The directory where SmokePing keeps its pid when daemonised.
+The directory where SmokePing keeps its pid when daemonized.
 DOC
          },
          sendmail => 
@@ -2828,7 +3013,7 @@ hitting your network all at the same time. Using the offset parameter you
 can change the point in time when the probes are run. Offset is specified
 in % of total interval, or alternatively as 'random'. I recommend to use
 'random'. Note that this does NOT influence the rrds itself, it is just a
-matter of when data acqusition is initiated.  The default offset is 'random'.
+matter of when data acquisition is initiated.  The default offset is 'random'.
 DOC
          },
          concurrentprobes => {
@@ -2970,6 +3155,70 @@ DOC
                }
          }
         },
+
+	InfluxDB =>
+        {
+         _vars => [ qw(host port timeout database username password) ],
+         _mandatory => [ qw(host database) ],
+         _doc => <<DOC,
+If you want to export data to an InfluxDB database, fill in this section.
+DOC
+
+         host =>
+         {
+           _re => '\S+',
+           _doc => <<DOC,
+The FQDN or IP address of your InfluxDB server.
+For example 'localhost', 'influx.example.org' or '127.0.0.1'
+DOC
+         },
+         port  =>
+         {
+           _re => '\d+',
+	   _default => '8086',
+	   _sub => sub {
+		        return "Invalid InfluxDB port (needs to be between 1-65535)" unless $_[ 0 ] > 0 and  $_[ 0 ] < 65536;
+			return undef;
+	   }, 
+           _doc => <<DOC,
+The port of your InfluxDB server. Default is 8086
+DOC
+         },
+         timeout  =>
+	 {%$INTEGER_SUB,
+	   _default => '15',
+           _doc => <<DOC,
+Connection timeout to InfluxDB in seconds. Default is 15s.
+Too big of a timeout will cause polling errors when InfluxDB is down.
+DOC
+         },
+         database  =>
+         {
+           _re => '\S+',
+           _doc => <<DOC,
+Database name (where to write the data) within InfluxDB.
+If it doesn't exist, it will be created when writing data.
+DOC
+         },
+         username  =>
+         {
+          _re => '\S+',
+          _doc => <<DOC,
+Username for authentication to InfluxDB.
+If not supplied, no authentication is attempted.
+DOC
+         },
+         password  =>
+         {
+           _re => '\S+',
+           _doc => <<DOC,
+Password for authentication to InfluxDB.
+If not supplied, no authentication is attempted.
+DOC
+         }
+        },
+
+
         Presentation => 
         { 
          _doc => <<DOC,
@@ -3046,7 +3295,7 @@ DOC
                _mandatory => [ qw(menu title sorter) ],
                menu => { _doc => 'Menu entry' },
                title => { _doc => 'Page title' },
-               format => { _doc => 'sprintf format string to format curent value' },
+               format => { _doc => 'sprintf format string to format current value' },
                sorter => { _re => '\S+\(\S+\)',
                            _re_error => 'use a sorter call here: Sorter(arg1=>val1,arg2=>val2)',
                            _doc => 'sorter for this charts sections',
@@ -3061,7 +3310,8 @@ DOC
 The Overview section defines how the Overview graphs should look.
 DOC
             max_rtt => {    _doc => <<DOC },
-Any roundtrip time larger than this value will cropped in the overview graph
+Any roundtrip time larger than this value will be cropped in the overview graph.
+Units is seconds (for example, 0.800).
 DOC
             median_color => {    _doc => <<DOC,
 By default the median line is drawn in red. Override it here with a hex color
@@ -3183,7 +3433,8 @@ EOF
                        _sub => sub { return "tolerance must be larger than 1" if $_[0] <= 1; return undef},
                              },
          max_rtt => {    _doc => <<DOC },
-Any roundtrip time larger than this value will cropped in the detail graph
+Any roundtrip time larger than this value will be cropped in the detail graph.
+Units is seconds (for example, 0.800).
 DOC
          width    => { _doc => 'How many pixels wide should detail graphs be',
                        _sub => sub {
@@ -3221,7 +3472,7 @@ DOC
                           0 => 
                           {
                            _doc => <<DOC,
-Activate when the number of losst pings is larger or equal to this number
+Activate when the number of lost pings is larger or equal to this number
 DOC
                            _re       => '\d+.?\d*',
                            _re_error =>
@@ -3310,12 +3561,12 @@ DOC
            hierarchies => {
               _doc => <<DOC,
 Provide an alternative presentation hierarchy for your smokeping data. After setting up a hierarchy in this
-section. You can use it in each tagets parent property. A drop-down menu in the smokeping website lets
+section. You can use it in each target's parent property. A drop-down menu in the smokeping website lets
 the user switch presentation hierarchy.
 DOC
               _sections => [ "/$KEYD_RE/" ],
               "/$KEYD_RE/" => {
-                  _doc => "Identifier of the hierarchie. Use this as prefix in the targets parent property",
+                  _doc => "Identifier of the hierarchies. Use this as prefix in the targets parent property",
                   _vars => [ qw(title) ],
                   _mandatory => [ qw(title) ],
                   title => {
@@ -3383,8 +3634,8 @@ in one element
 
 Sometimes it may be that conditions occur at irregular intervals. But still
 you only want to throw an alert if they occur several times within a certain
-amount of times. The operator B<*X*> will ignore up to I<X> values and still
-let the pattern match:
+time period. The operator B<*X*> will ignore up to I<X> values and still let
+the pattern match:
 
   >10%,*10*,>10%
 
@@ -3567,7 +3818,7 @@ END_DOC
                  return undef;
               },
               _doc => <<END_DOC,
-The slave secrets file contines one line per slave with the name of the slave followed by a colon
+The slave secrets file contains one line per slave with the name of the slave followed by a colon
 and the secret:
 
  slave1:secret1
@@ -3615,7 +3866,7 @@ END_DOC
                   _doc => <<END_DOC,
 If part of the configuration information must be overwritten to match the
 settings of the you can specify this in this section. A setting is
-overwritten by giveing the full path of the configuration variable. If you
+overwritten by giving the full path of the configuration variable. If you
 have this configuration in the Probes section:
 
  *** Probes ***
@@ -3909,6 +4160,35 @@ sub load_cfg ($;$) {
                die "ERROR: Could not load Storable Support. This is required for the Charts feature - $@\n" if $@;
            load_sorters $cfg->{Presentation}{charts};
         }
+        #initiate a connection to InfluxDB (if needed)
+        if(! defined $influx && defined $cfg->{'InfluxDB'}{'host'}) {
+            do_log("DBG: Setting up a new InfluxDB connection");
+            my $rc = eval
+            {
+              require InfluxDB::HTTP;
+              InfluxDB::HTTP->import();
+              require InfluxDB::LineProtocol;
+              InfluxDB::LineProtocol->import(qw(data2line precision=ms));
+              1;
+            };
+            die "ERROR: Could not import InfluxDB modules, but InfluxDB host was configured: $@\n" if ! $rc;
+
+            $influx = InfluxDB::HTTP->new(
+                host => $cfg->{'InfluxDB'}{'host'},
+                port => $cfg->{'InfluxDB'}{'port'},
+                timeout => $cfg->{'InfluxDB'}{'timeout'}
+            );
+            if (defined $cfg->{'InfluxDB'}{'username'} && defined $cfg->{'InfluxDB'}{'password'}) {
+                do_log("DBG: Setting credentials for InfluxDB connection");
+                my $ua = $influx->get_lwp_useragent();
+                $ua->credentials(
+                    $cfg->{'InfluxDB'}{'host'} . ':' . $cfg->{'InfluxDB'}{'port'},
+                    'InfluxDB',
+                    $cfg->{'InfluxDB'}{'username'},
+                    $cfg->{'InfluxDB'}{'password'}
+                );
+            }
+        }
         $cfg->{__parser} = $parser;
         $cfg->{__last} = $cfmod;
         $cfg->{__cfgfile} = $cfgfile;
@@ -3950,7 +4230,7 @@ Its location must be hardcoded in the smokeping script and smokeping.cgi.
 The contents of this manual is generated directly from the configuration
 file parser.
 
-The Parser for the Configuration file is written using David Schweikers
+The Parser for the Configuration file is written using David Schweikert
 Config::Grammar module. Read all about it in L<Config::Grammar>.
 
 The Configuration file has a tree-like structure with section headings at
@@ -3974,7 +4254,7 @@ space will be inserted between the concatenated lines.
 
 '${a}include filename' is used to include another file.
 
-'${a}define a some value' will replace all occurences of 'a' in the following text
+'${a}define a some value' will replace all occurrences of 'a' in the following text
 with 'some value'.
 
 Fields in tables that contain white space can be enclosed in either C<'> or C<">.
@@ -3989,6 +4269,49 @@ POD
 
     $retval .= $parser->makepod;
     $retval .= <<POD;
+
+${e}head1 SEE ALSO
+
+L<smokeping(1)>,L<smokeping_master_slave(7)>,L<smokeping_cgi(1)>
+
+Matchers:
+
+L<Smokeping_matchers_Avgratio(3)>, L<Smokeping_matchers_CheckLatency(3)>,
+L<Smokeping_matchers_CheckLoss(3)>, L<Smokeping_matchers_ExpLoss(3)>,
+L<Smokeping_matchers_Median(3)>, L<Smokeping_matchers_Medratio(3)>,
+L<Smokeping_matchers_base(3)>
+
+Probes:
+
+L<Smokeping_probes_CiscoRTTMonDNS(3)>,
+L<Smokeping_probes_CiscoRTTMonEchoICMP(3)>,
+L<Smokeping_probes_CiscoRTTMonTcpConnect(3)>, L<Smokeping_probes_Curl(3)>,
+L<Smokeping_probes_DNS(3)>, L<Smokeping_probes_DismanPing(3)>,
+L<Smokeping_probes_EchoPing(3)>, L<Smokeping_probes_EchoPingChargen(3)>,
+L<Smokeping_probes_EchoPingDNS(3)>, L<Smokeping_probes_EchoPingDiscard(3)>,
+L<Smokeping_probes_EchoPingHttp(3)>, L<Smokeping_probes_EchoPingHttps(3)>,
+L<Smokeping_probes_EchoPingIcp(3)>, L<Smokeping_probes_EchoPingLDAP(3)>,
+L<Smokeping_probes_EchoPingPlugin(3)>, L<Smokeping_probes_EchoPingSmtp(3)>,
+L<Smokeping_probes_EchoPingWhois(3)>, L<Smokeping_probes_FPing(3)>,
+L<Smokeping_probes_FPing6(3)>, L<Smokeping_probes_FPingContinuous(3)>,
+L<Smokeping_probes_FTPtransfer(3)>, L<Smokeping_probes_IOSPing(3)>,
+L<Smokeping_probes_IRTT(3)>, L<Smokeping_probes_LDAP(3)>,
+L<Smokeping_probes_NFSping(3)>, L<Smokeping_probes_OpenSSHEOSPing(3)>,
+L<Smokeping_probes_OpenSSHJunOSPing(3)>, L<Smokeping_probes_Qstat(3)>,
+L<Smokeping_probes_Radius(3)>, L<Smokeping_probes_RemoteFPing(3)>,
+L<Smokeping_probes_SSH(3)>, L<Smokeping_probes_SendEmail(3)>,
+L<Smokeping_probes_SipSak(3)>, L<Smokeping_probes_TCPPing(3)>,
+L<Smokeping_probes_TacacsPlus(3)>, L<Smokeping_probes_TelnetIOSPing(3)>,
+L<Smokeping_probes_TelnetJunOSPing(3)>, L<Smokeping_probes_TraceroutePing(3)>,
+L<Smokeping_probes_WebProxyFilter(3)>, L<Smokeping_probes_base(3)>,
+L<Smokeping_probes_basefork(3)>, L<Smokeping_probes_basevars(3)>,
+L<Smokeping_probes_passwordchecker(3)>, L<Smokeping_probes_skel(3)>
+
+Sorters:
+
+L<Smokeping_sorters_Loss(3)>, L<Smokeping_sorters_Max(3)>,
+L<Smokeping_sorters_Median(3)>, L<Smokeping_sorters_StdDev(3)>,
+L<Smokeping_sorters_base(3)>
 
 ${e}head1 COPYRIGHT
 
@@ -4741,6 +5064,10 @@ figure heads allowing to hardcode some pathnames.
 
 If you feel like documenting what is happening within this library you are
 most welcome todo so.
+
+=head1 SEE ALSO
+
+L<smokeping_extend(7)>, L<smokeping(1)>, L<smokeping_config(5)>
 
 =head1 COPYRIGHT
 

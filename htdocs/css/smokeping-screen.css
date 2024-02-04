@@ -53,12 +53,16 @@ img {
 }
 
 .sidebar-menu {
-	overflow-x: hidden;
+	overflow-x: auto;
 	overflow-y: auto;
 	position: absolute;
 	top: 51px;
 	bottom: 0px;
 	width: 249px;
+}
+
+.sidebar-menu img {
+	margin-left: 15px;
 }
 
 .sidebar .filter-label,

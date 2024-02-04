@@ -22,11 +22,11 @@ DDEESSCCRRIIPPTTIIOONN
 
            Ubuntu:
 
-            sudo apt install rrdtool librrds-perl
+            sudo apt install rrdtool librrds-perl libssl-dev
 
            RedHat:
 
-            sudo yum install rrdtool perl-rrdtool
+            sudo yum install rrdtool perl-rrdtool openssl-devel
 
        FPing (optional)
            Go to <http://www.fping.org/> to grab a copy.
@@ -111,9 +111,9 @@ DDEESSCCRRIIPPTTIIOONN
            use the _s_m_o_k_e_p_i_n_g_._c_g_i script.
 
        _e_t_c_/_b_a_s_e_p_a_g_e_._h_t_m_l
-           Edit the html template to your likings. Please do not remove the
+           Edit the html template to your liking. Please do not remove the
            link to the SmokePing counter and my name from the template.  The
-           content of the template will be renderd by smokeping.cgi.  This
+           content of the template will be rendered by smokeping.cgi.  This
            means that all embedded links must be relative to smokeping.cgi.
            If you are using HTTP authentication, then the template variable
            "authuser" will be populated from the $ENV{REMOTE_USER} environment
@@ -130,7 +130,7 @@ DDEESSCCRRIIPPTTIIOONN
 
         ./bin/smokeping --config=/opt/smokeping/etc/config --debug
 
-       once all is well, start it up as a daemon. I would recomend you enable
+       once all is well, start it up as a daemon. I would recommend you enable
        the logfile option so that you can see if it runs into trouble.
 
         ./bin/smokeping --config=/opt/smokeping/etc/config --logfile=smoke.log
@@ -167,4 +167,4 @@ AAUUTTHHOORR
 
 
 
-2.8.0                             2018-01-30              SMOKEPING_INSTALL(7)
+2.7.3                             2019-02-10              SMOKEPING_INSTALL(7)
