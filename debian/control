@@ -33,7 +33,7 @@ Pre-Depends: ${misc:Pre-Depends}
 Depends: ${perl:Depends}, ${misc:Depends}
  , libwww-perl
  , libsnmp-session-perl
- , librrds-perl (>= 1.2)
+ , librrds-perl
  , liburi-perl
  , fping
  , libcgi-fast-perl
