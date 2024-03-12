@@ -40,11 +40,17 @@ Comment: These files are not used in the Debian version. The mentioned
 
 Files: debian/*
 Copyright: Wed, 13 Feb 2002 23:11:07 +0100 Jose Carlos Garcia Sogo <jsogo@debian.org>
- 2018-2020 Gabriel Filion <gabster@lelutin.ca>
+ 2018-2024 Gabriel Filion <gabster@lelutin.ca>
 License: GPL-2+
 Comment: The copyright mention was not updated throughout the years and there
  are more authors and contributors that donated their time to maintaining those
  files.
+
+Files: debian/nginx_example.conf
+Copyright: 2024 Alexey Vazhnov <vazhnov@boot-keys.org>
+License: Expat
+Comment: File originally in https://gitlab.com/vazhnov/smokeping_nginx and
+  submitted to debian via salsa by the person owning this github repository.
 
 License: GPL-2+
  On Debian systems, the full text of the GNU General Public
