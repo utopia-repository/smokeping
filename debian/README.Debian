@@ -9,14 +9,17 @@ works for you.
 You can also edit the file /etc/smokeping/basepage.html to suit your
 needs.
 
-A FastCGI configuration might be desirable for large sites. Simply add
-this to the Apache configuration, in /etc/apache2/conf-available/smokeping.conf:
-
-    <Location /smokeping/smokeping.cgi>
-            SetHandler fcgid-script
-    </Location>
-
 Please refer to the smokeping_config man page to see all the available
 options.
 
  -- Antoine Beaupré <anarcat@debian.org>, Sat, 12 May 2018 16:02:25 -0400
+
+By default, the apache2 configuration currently uses fcgi with
+libapache2-mod-fcgid, which makes rendering certain pages on larger installs a
+bit faster.
+
+Example configurations for other web servers are also available in
+/usr/share/doc/smokeping/examples . For those other web servers, you might need
+the help of another package to wrap the cgi script as an fcgi process. For
+example, using the `fcgiwrapper` package.
+
