@@ -45,7 +45,7 @@ Depends: ${perl:Depends}, ${misc:Depends}
  , libjs-scriptaculous
  , libjs-prototype
  , default-mta | mail-transport-agent
-Recommends: apache2 | httpd-cgi
+Recommends: apache2, libapache2-mod-fcgid | httpd-cgi
  , libsocket6-perl
  , dnsutils
  , echoping
