@@ -48,7 +48,6 @@ Depends: ${perl:Depends}, ${misc:Depends}
 Recommends: apache2, libapache2-mod-fcgid | httpd-cgi
  , libsocket6-perl
  , dnsutils
- , echoping
  , ${misc:Recommends}
 Suggests: curl
  , libauthen-radius-perl
