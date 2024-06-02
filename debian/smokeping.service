@@ -1,7 +1,7 @@
 [Unit]
 Description=Latency Logging and Graphing System
 Documentation=man:smokeping(1) file:/usr/share/doc/smokeping/examples/systemd/slave_mode.conf
-After=network.target
+After=nss-lookup.target
 
 [Service]
 # It would in theory be simpler to run smokeping with the --nodaemon option and
