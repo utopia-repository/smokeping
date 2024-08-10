@@ -1,5 +1,6 @@
 smokeping (2.8.2+git50~0e77c05-0utopia1) unstable; urgency=medium
 
+  * Utopia Repository upload.
   * New upstream git snapshot.
     - Add option to treat filter menu queries as literal strings
   * Refresh patches
