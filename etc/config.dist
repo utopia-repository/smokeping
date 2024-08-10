@@ -3,17 +3,17 @@
 owner    = Peter Random
 contact  = some@address.nowhere
 mailhost = my.mail.host
-sendmail = /sbin/sendmail
+sendmail = /usr/sbin/sendmail
 # NOTE: do not put the Image Cache below cgi-bin
 # since all files under cgi-bin will be executed ... this is not
 # good for images.
-imgcache = /tmp/sp28/cache
+imgcache = /opt/smokeping/cache
 imgurl   = cache
-datadir  = /tmp/sp28/data
-piddir  = /tmp/sp28/var
+datadir  = /opt/smokeping/data
+piddir  = /opt/smokeping/var
 cgiurl   = http://some.url/smokeping.cgi
-smokemail = /tmp/sp28/etc/smokemail.dist
-tmail = /tmp/sp28/etc/tmail.dist
+smokemail = /opt/smokeping/etc/smokemail.dist
+tmail = /opt/smokeping/etc/tmail.dist
 # specify this to get syslog logging
 syslogfacility = local0
 # each probe is now run in its own process
@@ -47,9 +47,11 @@ AVERAGE  0.5 144   2400
 
 *** Presentation ***
 
-template = /tmp/sp28/etc/basepage.html.dist
+template = /opt/smokeping/etc/basepage.html.dist
 htmltitle = yes
 graphborders = no
+# If enabled, treat all filter menu queries as literal strings instead of regex
+literalsearch = no
 
 + charts
 
@@ -110,7 +112,7 @@ unison_tolerance = 2
 binary = /usr/sbin/fping
 
 *** Slaves ***
-secrets=/tmp/sp28/etc/smokeping_secrets.dist
+secrets=/opt/smokeping/etc/smokeping_secrets.dist
 +boomer
 display_name=boomer
 color=0000ff

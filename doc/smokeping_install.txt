@@ -167,4 +167,4 @@ AAUUTTHHOORR
 
 
 
-2.7.3                             2019-02-10              SMOKEPING_INSTALL(7)
+2.8.2                             2024-08-04              SMOKEPING_INSTALL(7)
