@@ -3,5 +3,5 @@ fix-perl-lib
 fix-paths-inside-executables
 fix-conf-paths
 proper-sample-conf
-fix_curl_probe.patch
 dont_build_third_party_js.patch
+skip_dns_checks_on_startup.patch

@@ -1,0 +1,24 @@
+From: James Lu <james@overdrivenetworks.com>
+Date: Sat, 10 Aug 2024 12:58:30 -0700
+Subject: Skip DNS checks on startup
+
+This is a temporary fix, as this behaviour should probably be made optional.
+
+Bug: https://github.com/oetiker/SmokePing/issues/332
+Forwarded: not-needed
+---
+ lib/Smokeping.pm | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/lib/Smokeping.pm b/lib/Smokeping.pm
+index a952850..82d382a 100644
+--- a/lib/Smokeping.pm
++++ b/lib/Smokeping.pm
+@@ -2492,6 +2492,7 @@ ${e}back
+ DOC
+ 
+         _sub => sub {
++            return undef;  # HACK to skip DNS checks on startup
+             for ( shift ) {
+                 m|^DYNAMIC| && return undef;
+                 /^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/ && return undef;

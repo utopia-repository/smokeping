@@ -1,10 +1,16 @@
-Description: use Debian paths instead of silly ones
-Forwarded: not-needed
+From: Gabriel Filion <gabster@lelutin.ca>
+Date: Sat, 10 Aug 2024 12:42:15 -0700
+Subject: use Debian paths instead of silly ones
 
-Index: b/etc/config.dist.in
-===================================================================
---- a/etc/config.dist.in	2018-05-12 17:07:16.029079629 -0400
-+++ b/etc/config.dist.in	2018-05-12 17:08:53.349752138 -0400
+Forwarded: not-needed
+---
+ etc/config.dist.in | 20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
+
+diff --git a/etc/config.dist.in b/etc/config.dist.in
+index 607ecab..4a089e8 100644
+--- a/etc/config.dist.in
++++ b/etc/config.dist.in
 @@ -3,17 +3,17 @@
  owner    = Peter Random
  contact  = some@address.nowhere
@@ -30,7 +36,7 @@ Index: b/etc/config.dist.in
  # specify this to get syslog logging
  syslogfacility = local0
  # each probe is now run in its own process
-@@ -47,7 +47,7 @@ AVERAGE  0.5 144   720
+@@ -47,7 +47,7 @@ AVERAGE  0.5 144   2400
  
  *** Presentation ***
  
@@ -38,8 +44,8 @@ Index: b/etc/config.dist.in
 +template = /etc/smokeping/basepage.html
  htmltitle = yes
  graphborders = no
- 
-@@ -107,10 +107,10 @@ unison_tolerance = 2
+ # If enabled, treat all filter menu queries as literal strings instead of regex
+@@ -109,10 +109,10 @@ unison_tolerance = 2
  
  + FPing
  

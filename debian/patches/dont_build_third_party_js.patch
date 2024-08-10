@@ -1,13 +1,21 @@
-Description: Don't build js libraries from third parties
- These 3rd party libraries are getting excluded from the source through
- repacking since we instead include those from the debian packages that already
- exists for them. The build shouldn't try and process the non-existent files.
-Author: Gabriel Filion <gabster@lelutin.ca>
+From: Gabriel Filion <gabster@lelutin.ca>
+Date: Sat, 10 Aug 2024 12:42:15 -0700
+Subject: Don't build js libraries from third parties
+
 Forwarded: not-needed
 Origin: (upstream|backport|vendor|other), (<patch-url>|commit:<commit-id>)
 
---- smokeping-2.8.2+ds.orig/htdocs/Makefile.am
-+++ smokeping-2.8.2+ds/htdocs/Makefile.am
+These 3rd party libraries are getting excluded from the source through
+repacking since we instead include those from the debian packages that already
+exists for them. The build shouldn't try and process the non-existent files.
+---
+ htdocs/Makefile.am | 15 ---------------
+ 1 file changed, 15 deletions(-)
+
+diff --git a/htdocs/Makefile.am b/htdocs/Makefile.am
+index 27b9210..f626ae4 100644
+--- a/htdocs/Makefile.am
++++ b/htdocs/Makefile.am
 @@ -16,21 +16,6 @@
  # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA.
  

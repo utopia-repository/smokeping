@@ -1,35 +1,56 @@
-Description: hardcode the path to the config file in CGI
-Author: Antoine Beaupré <anarcat@debian.org>
+From: =?utf-8?q?Antoine_Beaupr=C3=A9?= <anarcat@debian.org>
+Date: Sat, 10 Aug 2024 12:42:15 -0700
+Subject: hardcode the path to the config file in CGI
+
 Forwarded: not-needed
 Last-Update: 2019-02-16
+---
+ bin/smokeinfo     |  9 ++++-----
+ bin/smokeping     | 25 ++-----------------------
+ bin/smokeping_cgi |  4 +---
+ bin/tSmoke        | 38 +++-----------------------------------
+ 4 files changed, 10 insertions(+), 66 deletions(-)
 
-Index: b/bin/smokeping_cgi
-===================================================================
---- a/bin/smokeping_cgi	2018-05-12 17:02:02.090910241 -0400
-+++ b/bin/smokeping_cgi	2018-05-12 17:05:36.224389954 -0400
-@@ -4,9 +4,7 @@
- use strict;
+diff --git a/bin/smokeinfo b/bin/smokeinfo
+index 2b38b86..6b91b3a 100755
+--- a/bin/smokeinfo
++++ b/bin/smokeinfo
+@@ -3,7 +3,6 @@ use strict;
  use warnings;
  
--use FindBin;
  use lib (split /:/, q{}); # PERL5LIB
--use lib "$FindBin::RealBin/../lib";use lib "$FindBin::RealBin/../thirdparty/lib/perl5"; # LIBDIR
+-use FindBin;use lib "$FindBin::RealBin/../lib";use lib "$FindBin::RealBin/../thirdparty/lib/perl5"; # LIBDIR
  
- # don't bother with zombies
- $SIG{CHLD} = 'IGNORE';
-@@ -17,7 +15,7 @@ use Smokeping;
+ use Smokeping::Info;
+ use Getopt::Long 2.25 qw(:config no_ignore_case);
+@@ -82,19 +81,19 @@ they work on the same syntax.
  
- use CGI::Fast;
+ Get all data all nodes
  
--my $cfg = (shift @ARGV) || "$FindBin::Bin/../etc/config";
-+my $cfg = (shift @ARGV) || "/etc/smokeping/config";
+- smokeinfo etc/config 
++ smokeinfo /etc/smokeping/config
  
+ Only show nodes directly under /Customers
  
- while (my $q = new CGI::Fast) {
-Index: b/bin/smokeping
-===================================================================
---- a/bin/smokeping	2018-05-12 17:04:04.175753876 -0400
-+++ b/bin/smokeping	2018-05-12 17:05:08.868200917 -0400
+- smokeinfo --filter=/Customers/ etc/config
++ smokeinfo --filter=/Customers/ /etc/smokeping/config
+ 
+ Show all nodes under /Customers
+ 
+- smokeinfo --mode=recursive --filter=/Customers/ etc/config
++ smokeinfo --mode=recursive --filter=/Customers/ /etc/smokeping/config
+ 
+ Show all nodes with '_wlan_' in the name
+ 
+- smokeinfo --mode=regexp --filter=_wlan_ etc/config
++ smokeinfo --mode=regexp --filter=_wlan_ /etc/smokeping/config
+ 
+ =head1 SEE ALSO
+ 
+diff --git a/bin/smokeping b/bin/smokeping
+index 1dae42a..2fc5e90 100755
+--- a/bin/smokeping
++++ b/bin/smokeping
 @@ -4,13 +4,11 @@
  use strict;
  use warnings;
@@ -72,19 +93,43 @@ Index: b/bin/smokeping
  =head1 SEE ALSO
  
  L<smokeping_config(5)>, L<smokeping_examples(5)>, L<smokeping_cgi(1)>,
-Index: b/bin/tSmoke
-===================================================================
---- a/bin/tSmoke	2018-05-12 17:04:04.175753876 -0400
-+++ b/bin/tSmoke	2018-05-12 17:06:18.924685024 -0400
-@@ -53,7 +53,6 @@ use warnings;
+diff --git a/bin/smokeping_cgi b/bin/smokeping_cgi
+index 610118c..6c10202 100755
+--- a/bin/smokeping_cgi
++++ b/bin/smokeping_cgi
+@@ -4,9 +4,7 @@
+ use strict;
+ use warnings;
+ 
+-use FindBin;
+ use lib (split /:/, q{}); # PERL5LIB
+-use lib "$FindBin::RealBin/../lib";use lib "$FindBin::RealBin/../thirdparty/lib/perl5"; # LIBDIR
+ 
+ # don't bother with zombies
+ $SIG{CHLD} = 'IGNORE';
+@@ -17,7 +15,7 @@ use Smokeping;
+ 
+ use CGI::Fast;
+ 
+-my $cfg = (shift @ARGV) || "$FindBin::Bin/../etc/config";
++my $cfg = (shift @ARGV) || "/etc/smokeping/config";
+ 
+ 
+ while (my $q = new CGI::Fast) {
+diff --git a/bin/tSmoke b/bin/tSmoke
+index 8559189..b4177b7 100755
+--- a/bin/tSmoke
++++ b/bin/tSmoke
+@@ -53,8 +53,6 @@ use warnings;
  # Point the lib variables to your implementation
  
  use lib (split /:/, q{}); # PERL5LIB
--use FindBin;use lib "$FindBin::RealBin/../lib";use lib "$FindBin::RealBin/../thirdparty/lib/perl5"; # LIBDIR
+-use FindBin;
+-use lib "$FindBin::RealBin/../lib";use lib "$FindBin::RealBin/../thirdparty/lib/perl5"; # LIBDIR
  
  
  use Smokeping;
-@@ -63,7 +62,7 @@ use Pod::Usage;
+@@ -64,7 +62,7 @@ use Pod::Usage;
  use RRDs;
  
  # Point to your Smokeping config file
@@ -93,7 +138,7 @@ Index: b/bin/tSmoke
  
  # global variables
  my $cfg;
-@@ -498,39 +497,9 @@ past week and past month including an overview.
+@@ -499,39 +497,9 @@ past week and past month including an overview.
  Typical crontab used to invoke this are
  
   # Quick morning alert to see what's down
@@ -132,42 +177,6 @@ Index: b/bin/tSmoke
 -
 - tmail = /usr/local/smokeping/etc/tmail
 + 0 8 * * * /usr/sbin/tSmoke --q --to=mailbox@company.com.invalid --weekly --detail=0
- 
- =head1 SEE ALSO
- 
-diff --git a/bin/smokeinfo b/bin/smokeinfo
-index 7c56c0f..83a346e 100755
---- a/bin/smokeinfo
-+++ b/bin/smokeinfo
-@@ -3,7 +3,6 @@ use strict;
- use warnings;
- 
- use lib (split /:/, q{}); # PERL5LIB
--use FindBin;use lib "$FindBin::RealBin/../lib";use lib "$FindBin::RealBin/../thirdparty/lib/perl5"; # LIBDIR
- 
- use Smokeping::Info;
- use Getopt::Long 2.25 qw(:config no_ignore_case);
-@@ -82,19 +81,19 @@ they work on the same syntax.
- 
- Get all data all nodes
- 
-- smokeinfo etc/config 
-+ smokeinfo /etc/smokeping/config
- 
- Only show nodes directly under /Customers
- 
-- smokeinfo --filter=/Customers/ etc/config
-+ smokeinfo --filter=/Customers/ /etc/smokeping/config
- 
- Show all nodes under /Customers
- 
-- smokeinfo --mode=recursive --filter=/Customers/ etc/config
-+ smokeinfo --mode=recursive --filter=/Customers/ /etc/smokeping/config
- 
- Show all nodes with '_wlan_' in the name
- 
-- smokeinfo --mode=regexp --filter=_wlan_ etc/config
-+ smokeinfo --mode=regexp --filter=_wlan_ /etc/smokeping/config
  
  =head1 SEE ALSO
  

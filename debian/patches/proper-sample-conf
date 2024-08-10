@@ -1,56 +1,58 @@
-Description: setup a proper sample configuration
- This disables slaves and setups targets that are sure to work (no
- slaves, localhost). It also sets up utf8
-Author: Antoine Beaupré <anarcat@debian.org>
+From: =?utf-8?q?Antoine_Beaupr=C3=A9?= <anarcat@debian.org>
+Date: Sat, 10 Aug 2024 12:42:15 -0700
+Subject: setup a proper sample configuration
+
 Forwarded: not-needed
 Last-Update: 2019-02-10
 
-Index: b/etc/config.dist.in
-===================================================================
---- a/etc/config.dist.in	2018-05-12 17:09:30.386008068 -0400
-+++ b/etc/config.dist.in	2018-05-12 17:13:09.471522001 -0400
-@@ -48,6 +48,7 @@ AVERAGE  0.5 144   720
+This disables slaves and setups targets that are sure to work (no
+slaves, localhost). It also sets up utf8
+---
+ etc/config.dist.in | 38 +++++++++++++++++---------------------
+ 1 file changed, 17 insertions(+), 21 deletions(-)
+
+diff --git a/etc/config.dist.in b/etc/config.dist.in
+index 4a089e8..256190a 100644
+--- a/etc/config.dist.in
++++ b/etc/config.dist.in
+@@ -48,6 +48,7 @@ AVERAGE  0.5 144   2400
  *** Presentation ***
  
  template = /etc/smokeping/basepage.html
 +charset = utf-8
  htmltitle = yes
  graphborders = no
- 
-@@ -111,13 +112,13 @@ binary = /usr/bin/fping
+ # If enabled, treat all filter menu queries as literal strings instead of regex
+@@ -113,13 +114,13 @@ binary = /usr/bin/fping
  
  *** Slaves ***
  secrets=/etc/smokeping/smokeping_secrets
 -+boomer
 -display_name=boomer
 -color=0000ff
--
--+slave2
--display_name=another
--color=00ff00
 +#+boomer
 +#display_name=boomer
 +#color=0000ff
-+
+ 
+-+slave2
+-display_name=another
+-color=00ff00
 +#+slave2
 +#display_name=another
 +#color=00ff00
  
  *** Targets ***
  
-@@ -128,21 +129,16 @@ title = Network Latency Grapher
+@@ -130,21 +131,16 @@ title = Network Latency Grapher
  remark = Welcome to the SmokePing website of xxx Company. \
           Here you will learn all about the latency of our network.
  
 -+ Test
 -menu= Targets
 -#parents = owner:/Test/James location:/
-++ Local
- 
+-
 -++ James
-+menu = Local
-+title = Local Network
-+#parents = owner:/Test/James location:/
+++ Local
  
 -menu = James
 -title =James
@@ -59,7 +61,10 @@ Index: b/etc/config.dist.in
 -host = james.address
 -
 -++ MultiHost
--
++menu = Local
++title = Local Network
++#parents = owner:/Test/James location:/
+ 
 -menu = Multihost
 -title = James and James as seen from Boomer
 -host = /Test/James /Test/James~boomer
