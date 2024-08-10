@@ -1,5 +1,27 @@
 smokeping (2.8.2+git50~0e77c05-0utopia1) unstable; urgency=medium
 
+  [ Gabriel Filion ]
+  * Add libinfluxdb-http-perl in suggests
+
+  [ Sebastien Badia ]
+  * d/control: Use apache2 fcgid handler by default
+
+  [ Gabriel Filion ]
+  * Import change proposed by Janitor
+  * Update README wrt fcgi
+
+  [ Alexey Vazhnov ]
+  * Add nginx_example.conf
+
+  [ Gabriel Filion ]
+  * displace example config file for nginx inside the debian dir
+  * Deploy example nginx configuration file to doc/examples/
+  * Add mention of authorship for nginx example config file
+  * echoping is no longer in debian archives [Closes: #1042953]
+  * Delay smokeping startup until hostname lookup is available [Closes: #996824]
+  * Also order after network-online.target
+
+  [ James Lu ]
   * Utopia Repository upload.
   * New upstream git snapshot.
     - Add option to treat filter menu queries as literal strings
