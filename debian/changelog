@@ -1,8 +1,12 @@
-smokeping (2.8.2+git50~0e77c05-0utopia1) UNRELEASED; urgency=medium
+smokeping (2.8.2+git50~0e77c05-0utopia1) unstable; urgency=medium
 
   * New upstream git snapshot.
+    - Add option to treat filter menu queries as literal strings
+  * Refresh patches
+  * Add skip_dns_checks_on_startup.patch to speed up startup by skipping DNS
+    checks
 
- -- James Lu <jlu@debian.org>  Sat, 10 Aug 2024 12:53:19 -0700
+ -- James Lu <jlu@debian.org>  Sat, 10 Aug 2024 13:25:45 -0700
 
 smokeping (2.8.2+ds-1) unstable; urgency=medium
 
